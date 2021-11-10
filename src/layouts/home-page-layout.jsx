@@ -40,21 +40,21 @@ import {
   ScaleIcon,
   ShieldCheckIcon,
   UserGroupIcon,
+  UserIcon,
+  SupportIcon,
   XIcon,
 } from '@heroicons/react/outline';
 import { CashIcon, CheckCircleIcon, ChevronDownIcon, ChevronRightIcon, OfficeBuildingIcon, SearchIcon } from '@heroicons/react/solid';
 
 const navigation = [
-  { name: 'Home', href: '#', icon: HomeIcon, current: true },
-  { name: 'History', href: '#', icon: ClockIcon, current: false },
-  { name: 'Balances', href: '#', icon: ScaleIcon, current: false },
-  { name: 'Cards', href: '#', icon: CreditCardIcon, current: false },
-  { name: 'Recipients', href: '#', icon: UserGroupIcon, current: false },
-  { name: 'Reports', href: '#', icon: DocumentReportIcon, current: false },
+  { name: 'Home', href: '/', icon: HomeIcon, current: true },
+  { name: 'Characters', href: '/characters', icon: UserIcon, current: false },
+  { name: 'Campaigns', href: '/campaigns', icon: UserGroupIcon, current: false },
+  { name: 'About', href: '#', icon: QuestionMarkCircleIcon, current: false },
 ];
 const secondaryNavigation = [
   { name: 'Settings', href: '#', icon: CogIcon },
-  { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
+  { name: 'Help', href: '#', icon: SupportIcon },
   { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
 ];
 
@@ -227,6 +227,7 @@ export default function HomePageLayout() {
                   </div>
                 </form>
               </div>
+
               <div className="ml-4 flex items-center md:ml-6">
                 <button type="button" className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500">
                   <span className="sr-only">View notifications</span>
