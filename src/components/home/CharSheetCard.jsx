@@ -14,16 +14,11 @@ const stats = [
   { label: 'Power', value: 12 },
   { label: 'Aptitude', value: 4 },
 ];
-const stats2 = [
-  { name: 'Total Subscribers', stat: '71,897' },
-  { name: 'Avg. Open Rate', stat: '58.16%' },
-  { name: 'Avg. Click Rate', stat: '24.57%' },
-];
 
 export default function CharSheetCard({ charSheet }) {
   const species = useRecoilValue(getSpecies);
 
-  console.log(species);
+  console.log('Species:', species);
 
   const getSpeciesName = speciesId => {
     const currSpecies = species.find(spec => spec.id === speciesId);
@@ -48,7 +43,7 @@ export default function CharSheetCard({ charSheet }) {
             </div>
           </div>
           <div className="mt-5 flex justify-center sm:mt-0">
-            <Link to={charSheet.id}>
+            <Link to={charSheet._id}>
               <button className="flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                 Manage character
               </button>
