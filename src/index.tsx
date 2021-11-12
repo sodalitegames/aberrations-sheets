@@ -26,9 +26,12 @@ import HelpPage from './pages/home/help';
 import PrivacyPage from './pages/home/privacy';
 
 import CharacterGameplayPage from './pages/characters/gameplay';
+import CharacterInventoryPage from './pages/characters/inventory';
+import CharacterCharacterPage from './pages/characters/character';
+import CharacterNotesPage from './pages/characters/notes';
+import CharacterResourcesPage from './pages/characters/resources';
 
 import './index.css';
-import CharacterInventoryPage from './pages/characters/inventory';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -51,11 +54,12 @@ ReactDOM.render(
                 <Route path="characters/:charId" element={<CharacterSheet />}>
                   <Route index element={<CharacterGameplayPage />} />
                   <Route path="inventory" element={<CharacterInventoryPage />} />
-                  <Route path="notes" element={<>notes</>} />
+                  <Route path="character" element={<CharacterCharacterPage />} />
+                  <Route path="notes" element={<CharacterNotesPage />} />
+                  <Route path="resources" element={<CharacterResourcesPage />} />
                 </Route>
-                <Route path="campaign/:campId" element={<CampaignSheet />}>
-                  <Route index element={<CharacterGameplayPage />} />
-                  <Route path="notes" element={<>notes</>} />
+                <Route path="campaigns/:campId" element={<CampaignSheet />}>
+                  <Route index element={<></>} />
                 </Route>
               </Route>
             </Routes>

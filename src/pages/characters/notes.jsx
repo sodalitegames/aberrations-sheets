@@ -5,7 +5,7 @@ import { getCharSheet } from '../../recoil/character/character.selectors';
 import PanelSection from '../../components/characters/PanelSection';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-const CharacterInventoryPage = () => {
+const CharacterNotesPage = () => {
   const charSheet = useRecoilValue(getCharSheet);
 
   if (!charSheet) {
@@ -13,13 +13,11 @@ const CharacterInventoryPage = () => {
   }
 
   return (
-    <SheetPageContent title="Inventory" columns={4}>
-      <PanelSection title="Weapons"></PanelSection>
-      <PanelSection title="Wearables"></PanelSection>
-      <PanelSection title="Consumables"></PanelSection>
-      <PanelSection title="Usables"></PanelSection>
+    <SheetPageContent title="Notes" columns={3}>
+      <PanelSection title="All Notes"></PanelSection>
+      <PanelSection title="Note Title" colSpan={2}></PanelSection>
     </SheetPageContent>
   );
 };
 
-export default CharacterInventoryPage;
+export default CharacterNotesPage;

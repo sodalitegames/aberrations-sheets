@@ -1,4 +1,4 @@
-const Panel = ({ children }) => {
+const PagePanel = ({ children }) => {
   return (
     <div className="bg-white overflow-hidden shadow rounded-lg">
       {/* Panel header */}
@@ -15,4 +15,4 @@ const Panel = ({ children }) => {
   );
 };
 
-export default Panel;
+export default PagePanel;

@@ -31,7 +31,7 @@ export default function CharacterSheet() {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
-        <SheetPageHeader type="character" />
+        <SheetPageHeader type="campaign" />
         <main className="-mt-24 pb-8">
           <React.Suspense fallback={<Loading />}>
             <Outlet />

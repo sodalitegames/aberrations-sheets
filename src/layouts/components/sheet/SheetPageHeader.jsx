@@ -9,14 +9,16 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline';
 
 import classNames from '../../../utils/classNames';
 
-const navigation = [
-  { name: 'Gameplay', href: '' },
-  { name: 'Inventory', href: 'inventory' },
-  { name: 'Character', href: 'character' },
-  { name: 'Notes', href: 'notes' },
-  { name: 'Messages', href: 'messages' },
-  { name: 'Resources', href: 'resources' },
-];
+const navigation = {
+  character: [
+    { name: 'Gameplay', href: '' },
+    { name: 'Inventory', href: 'inventory' },
+    { name: 'Character', href: 'character' },
+    { name: 'Notes', href: 'notes' },
+    { name: 'Resources', href: 'resources' },
+  ],
+  campaign: [{ name: 'Gameplay', href: '' }],
+};
 const secondaryNavigation = [
   { name: 'Home', href: '/' },
   { name: 'Your Profile', href: '/profile' },
@@ -63,7 +65,7 @@ const MobileNavigation = ({ type, user }) => {
                   </div>
                 </div>
                 <div className="mt-3 px-2 space-y-1">
-                  {navigation.map(item => (
+                  {navigation[type].map(item => (
                     <NavLink
                       key={item.name}
                       to={item.href}
@@ -109,14 +111,14 @@ const MobileNavigation = ({ type, user }) => {
   );
 };
 
-const DesktopNavigation = () => {
+const DesktopNavigation = ({ type }) => {
   return (
     <div className="w-full py-5 mb-8 lg:border-t lg:border-white lg:border-opacity-20">
       <div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-center">
         {/* Primary navigation */}
         <div className="hidden lg:block lg:col-span-2">
           <nav className="flex space-x-4">
-            {navigation.map(item => (
+            {navigation[type].map(item => (
               <NavLink
                 key={item.name}
                 to={item.href}
@@ -214,7 +216,7 @@ const SheetPageHeader = ({ type }) => {
               {/* Right section on desktop */}
               <RightSectionOnDesktop type={type} user={currentUser} />
               {/* Desktop navigation */}
-              <DesktopNavigation />
+              <DesktopNavigation type={type} />
               {/* Menu button */}
               <MenuButton open={open} />
             </div>

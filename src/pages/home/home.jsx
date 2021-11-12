@@ -1,13 +1,13 @@
 import PageContent from '../../layouts/components/home/PageContent';
 import PageSection from '../../layouts/components/home/PageSection';
 
-import Panel from '../../layouts/components/shared/Panel';
+import PagePanel from '../../layouts/components/home/PagePanel';
 
 const HomePage = () => {
   return (
     <PageContent heading="Welcome back, Pongo McDughartey">
       <PageSection heading="Overview">
-        <Panel>{/* Panel content goes here... */}</Panel>
+        <PagePanel>{/* Panel content goes here... */}</PagePanel>
       </PageSection>
     </PageContent>
   );
