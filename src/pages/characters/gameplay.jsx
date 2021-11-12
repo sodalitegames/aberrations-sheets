@@ -1,14 +1,17 @@
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { getCharSheet } from '../../recoil/character/character.selectors';
+import { modalState, slideOverState } from '../../recoil/app/app.atoms';
+import { charSheetState } from '../../recoil/character/character.atoms';
 
 import classNames from '../../utils/classNames';
+import ModalTypes from '../../utils/ModalTypes';
 
 import PanelSection from '../../components/characters/PanelSection';
 import Stats from '../../components/characters/Stats';
 import Button from '../../components/characters/Button';
 import Chip from '../../components/characters/Chip';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
+import SlideOverTypes from '../../utils/SlideOverTypes';
 
 const equippedWeapons = [
   {
@@ -93,7 +96,9 @@ const equippedUsables = [
 ];
 
 const CharacterGameplayPage = () => {
-  const charSheet = useRecoilValue(getCharSheet);
+  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
+  const setModal = useSetRecoilState(modalState);
+  const setSlideOver = useSetRecoilState(slideOverState);
 
   if (!charSheet) {
     return <div>Collecting character sheet data...</div>;
@@ -277,8 +282,10 @@ const CharacterGameplayPage = () => {
             <span className="text-sm font-medium text-gray-500 uppercase">You're in good condition</span>
           </div>
           <div className="mt-6">
-            <Button>Take Damage</Button>
-            <Button classes="mt-2">Heal Damage</Button>
+            <Button onClick={() => setModal({ type: ModalTypes.takeDamage })}>Take Damage</Button>
+            <Button onClick={() => setModal({ type: ModalTypes.healDamage })} classes="mt-2">
+              Heal Damage
+            </Button>
           </div>
         </PanelSection>
 
@@ -290,8 +297,10 @@ const CharacterGameplayPage = () => {
             <span className="text-sm font-medium text-gray-500 uppercase">Cash on your person</span>
           </div>
           <div className="mt-6">
-            <Button>Recieve Money</Button>
-            <Button classes="mt-2">Pay Money</Button>
+            <Button onClick={() => setModal({ type: ModalTypes.recieveMoney })}>Recieve Money</Button>
+            <Button onClick={() => setModal({ type: ModalTypes.payMoney })} classes="mt-2">
+              Pay Money
+            </Button>
           </div>
         </PanelSection>
 
@@ -309,11 +318,20 @@ const CharacterGameplayPage = () => {
                 <li key={aug._id} className="py-5">
                   <h3 className="text-sm font-semibold text-gray-800">{aug.name}</h3>
                   <p className="mt-1 text-sm text-gray-600 line-clamp-2">{aug.description}</p>
+                  <div className="flex justify-end space-x-1 mt-2">
+                    <button
+                      type="button"
+                      className="inline-flex items-center px-1.5 py-1.5 text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      onClick={() => setModal({ type: ModalTypes.deleteAugmentation })}
+                    >
+                      Remove
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
             <div className="mt-6">
-              <Button>Purchase a new Augmentation</Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.augmentationForm })}>Purchase a new Augmentation</Button>
             </div>
           </div>
         </PanelSection>

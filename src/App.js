@@ -3,8 +3,9 @@ import { Outlet } from 'react-router-dom';
 import { RecoilRoot, atom, selector, useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { getCurrentUser } from './recoil/user/user.selectors';
-// import SlideOver from './layouts/components/app/SlideOver';
-// import Modal from './layouts/components/app/Modal';
+
+import SlideOver from './layouts/components/app/SlideOver';
+import Modal from './layouts/components/app/Modal';
 // import Notification from './layouts/components/app/Notification';
 
 //import './App.css';
@@ -43,9 +44,9 @@ function App() {
   return (
     <>
       <Outlet />
-      {/* <SlideOver />
+      <SlideOver />
       <Modal />
-      <Notification /> */}
+      {/* <Notification />  */}
     </>
   );
 }

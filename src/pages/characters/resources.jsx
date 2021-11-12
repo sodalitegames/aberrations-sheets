@@ -1,8 +1,8 @@
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { AcademicCapIcon, BadgeCheckIcon, CashIcon, ClockIcon, ReceiptRefundIcon, UsersIcon } from '@heroicons/react/outline';
 
-import { getCharSheet } from '../../recoil/character/character.selectors';
+import { charSheetState } from '../../recoil/character/character.atoms';
 
 import classNames from '../../utils/classNames';
 
@@ -49,7 +49,7 @@ const actions = [
 ];
 
 const CharacterResourcesPage = () => {
-  const charSheet = useRecoilValue(getCharSheet);
+  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
 
   if (!charSheet) {
     return <div>Collecting character sheet data...</div>;

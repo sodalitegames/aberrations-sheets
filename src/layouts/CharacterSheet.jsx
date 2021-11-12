@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
-import { charIdState } from '../recoil/character/character.atoms';
+import { charIdState, charSheetState } from '../recoil/character/character.atoms';
 import { getCharSheet } from '../recoil/character/character.selectors';
 
 import Loading from './components/app/Loading';
@@ -20,7 +20,7 @@ const CharacterSheet = () => {
     }
   });
 
-  const charSheet = useRecoilValue(getCharSheet);
+  const charSheet = useRecoilValue(charSheetState);
 
   console.log('Character Sheet:', charSheet);
 

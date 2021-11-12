@@ -11,4 +11,8 @@ const sheetsApi = Axios.create({
   },
 });
 
+export const updateCharSheet = (charId, body) => sheetsApi.patch(`/characters/${charId}`, body);
+
+export const createNewResource = (resource, charId, body) => sheetsApi.post(`/characters/${charId}/${resource}`, { sheetId: charId, ...body });
+
 export default sheetsApi;

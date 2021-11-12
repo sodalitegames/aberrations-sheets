@@ -1,12 +1,12 @@
-import { useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 
-import { getCharSheet } from '../../recoil/character/character.selectors';
+import { charSheetState } from '../../recoil/character/character.atoms';
 
 import PanelSection from '../../components/characters/PanelSection';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
 const CharacterInventoryPage = () => {
-  const charSheet = useRecoilValue(getCharSheet);
+  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
 
   if (!charSheet) {
     return <div>Collecting character sheet data...</div>;
