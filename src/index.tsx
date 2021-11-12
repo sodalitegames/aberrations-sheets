@@ -28,6 +28,7 @@ import PrivacyPage from './pages/home/privacy';
 import CharacterGameplayPage from './pages/characters/gameplay';
 
 import './index.css';
+import CharacterInventoryPage from './pages/characters/inventory';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -49,6 +50,7 @@ ReactDOM.render(
                 </Route>
                 <Route path="characters/:charId" element={<CharacterSheet />}>
                   <Route index element={<CharacterGameplayPage />} />
+                  <Route path="inventory" element={<CharacterInventoryPage />} />
                   <Route path="notes" element={<>notes</>} />
                 </Route>
                 <Route path="campaign/:campId" element={<CampaignSheet />}>

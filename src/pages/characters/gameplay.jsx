@@ -1,12 +1,5 @@
-import { Fragment, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
-import { Menu, Popover, Transition } from '@headlessui/react';
-import { AcademicCapIcon, BadgeCheckIcon, BellIcon, CashIcon, ClockIcon, MenuIcon, ReceiptRefundIcon, UsersIcon, XIcon } from '@heroicons/react/outline';
-import { SearchIcon } from '@heroicons/react/solid';
-
-import { charIdState } from '../../recoil/character/character.atoms';
 import { getCharSheet } from '../../recoil/character/character.selectors';
 
 import classNames from '../../utils/classNames';
@@ -19,6 +12,8 @@ import EquippedWeaponsPanel from '../../components/characters/EquippedWeaponsPan
 import EquippedConsumablesPanel from '../../components/characters/EquippedConsumablesPanel';
 import EquippedUsablesPanel from '../../components/characters/EquippedUsablesPanel';
 import EquippedWearablesPanel from '../../components/characters/EquippedWearablesPanel';
+import PanelSection from '../../components/characters/PanelSection';
+import Panel from '../../layouts/components/shared/Panel';
 
 const user = {
   name: 'Chelsea Hagon',
@@ -31,58 +26,9 @@ const stats = [
   { label: 'Sick days left', value: 4 },
   { label: 'Personal days left', value: 2 },
 ];
-const actions = [
-  {
-    icon: ClockIcon,
-    name: 'Request time off',
-    href: '#',
-    iconForeground: 'text-teal-700',
-    iconBackground: 'bg-teal-50',
-  },
-  {
-    icon: BadgeCheckIcon,
-    name: 'Benefits',
-    href: '#',
-    iconForeground: 'text-purple-700',
-    iconBackground: 'bg-purple-50',
-  },
-  {
-    icon: UsersIcon,
-    name: 'Schedule a one-on-one',
-    href: '#',
-    iconForeground: 'text-sky-700',
-    iconBackground: 'bg-sky-50',
-  },
-  { icon: CashIcon, name: 'Payroll', href: '#', iconForeground: 'text-yellow-700', iconBackground: 'bg-yellow-50' },
-  {
-    icon: ReceiptRefundIcon,
-    name: 'Submit an expense',
-    href: '#',
-    iconForeground: 'text-rose-700',
-    iconBackground: 'bg-rose-50',
-  },
-  {
-    icon: AcademicCapIcon,
-    name: 'Training',
-    href: '#',
-    iconForeground: 'text-indigo-700',
-    iconBackground: 'bg-indigo-50',
-  },
-];
 
 const CharacterGameplayPage = () => {
-  let { charId } = useParams();
-  let setCharId = useSetRecoilState(charIdState);
-
-  useEffect(() => {
-    if (charId) {
-      setCharId(charId);
-    }
-  });
-
   const charSheet = useRecoilValue(getCharSheet);
-
-  console.log(charSheet);
 
   if (!charSheet) {
     return <div>Collecting character sheet data...</div>;
@@ -102,15 +48,25 @@ const CharacterGameplayPage = () => {
                 Profile Overview
               </h2>
               <div className="bg-white p-6">
-                <div className="sm:flex sm:items-center sm:justify-between">
+                <div className="sm:flex sm:items-center sm:justify-between pb-6">
                   <div className="sm:flex sm:space-x-5">
-                    <div className="flex-shrink-0">
-                      <img className="mx-auto h-20 w-20 rounded-full" src={user.imageUrl} alt="" />
-                    </div>
                     <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
-                      <p className="text-sm font-medium text-gray-600">Welcome back,</p>
                       <p className="text-xl font-bold text-gray-900 sm:text-2xl">{charSheet.characterName}</p>
-                      <p className="text-sm font-medium text-gray-600">{user.role}</p>
+                      <p className="text-sm font-medium text-gray-500">Once per day, you may reroll the dice after seeing the roll.</p>
+                      {/* <dl>
+                        <dt className="text-sm font-medium text-gray-500">Species Name</dt>
+                        <dd>
+                          <div className="text-sm font-normal text-gray-900">Kuma</div>
+                        </dd>
+                        <dt className="text-sm font-medium text-gray-500 mt-2">Species Ability</dt>
+                        <dd>
+                          <div className="text-sm font-normal text-gray-900">Here is the fake speice ability that I am typin gion akfjr asdf</div>
+                        </dd>
+                        <dt className="text-sm font-medium text-gray-500 mt-2">Power</dt>
+                        <dd>
+                          <div className="text-sm font-normal text-gray-900">12</div>
+                        </dd>
+                      </dl> */}
                     </div>
                   </div>
                   <div className="mt-5 flex justify-center sm:mt-0">
@@ -118,88 +74,103 @@ const CharacterGameplayPage = () => {
                   </div>
                 </div>
               </div>
-              <div className="border-t border-gray-200 bg-gray-50 grid grid-cols-1 divide-y divide-gray-200 sm:grid-cols-3 sm:divide-y-0 sm:divide-x">
-                {stats.map(stat => (
-                  <div key={stat.label} className="px-6 py-5 text-sm font-medium text-center">
-                    <span className="text-gray-900">{stat.value}</span> <span className="text-gray-600">{stat.label}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           </section>
 
-          <section className="lg:col-span-2">
+          <PanelSection colSpan={2}>
             <ActiveStatsPanel
               generalExhaustion={charSheet.generalExhaustion}
+              power={charSheet.power}
               stats={[
-                { name: 'Fortitude', ...charSheet.fortitude },
-                { name: 'Agility', ...charSheet.agility },
+                { name: 'Fortitude', passive: { name: 'Max Hp', calc: 'Fortitude * 5', value: charSheet.maxHp }, ...charSheet.fortitude },
+                { name: 'Agility', passive: { name: 'Dodge Value', calc: 'Agility / 3 (Rd. Down)', value: charSheet.dodgeValue }, ...charSheet.agility },
                 { name: 'Persona', ...charSheet.persona },
                 { name: 'Aptitude', ...charSheet.aptitude },
               ]}
             />
-          </section>
+          </PanelSection>
 
-          <section className="lg:col-span-2">
+          <section className="space-y-4">
             {/* Equipped Belongings */}
             <EquippedWeaponsPanel />
-          </section>
 
-          <section>
-            <EquippedConsumablesPanel />
-            <EquippedUsablesPanel />
-          </section>
-
-          <section>
             <EquippedWearablesPanel />
           </section>
 
-          {/* Actions panel */}
-          <section aria-labelledby="quick-links-title">
-            <div className="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px">
-              <h2 className="sr-only" id="quick-links-title">
-                Quick links
-              </h2>
-              {actions.map((action, actionIdx) => (
-                <div
-                  key={action.name}
-                  className={classNames(
-                    actionIdx === 0 ? 'rounded-tl-lg rounded-tr-lg sm:rounded-tr-none' : '',
-                    actionIdx === 1 ? 'sm:rounded-tr-lg' : '',
-                    actionIdx === actions.length - 2 ? 'sm:rounded-bl-lg' : '',
-                    actionIdx === actions.length - 1 ? 'rounded-bl-lg rounded-br-lg sm:rounded-bl-none' : '',
-                    'relative group bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-cyan-500'
-                  )}
-                >
-                  <div>
-                    <span className={classNames(action.iconBackground, action.iconForeground, 'rounded-lg inline-flex p-3 ring-4 ring-white')}>
-                      <action.icon className="h-6 w-6" aria-hidden="true" />
-                    </span>
-                  </div>
-                  <div className="mt-8">
-                    <h3 className="text-lg font-medium">
-                      <a href={action.href} className="focus:outline-none">
-                        {/* Extend touch target to entire panel */}
-                        <span className="absolute inset-0" aria-hidden="true" />
-                        {action.name}
-                      </a>
-                    </h3>
-                    <p className="mt-2 text-sm text-gray-500">Doloribus dolores nostrum quia qui natus officia quod et dolorem. Sit repellendus qui ut at blanditiis et quo et molestiae.</p>
-                  </div>
-                  <span className="pointer-events-none absolute top-6 right-6 text-gray-300 group-hover:text-gray-400" aria-hidden="true">
-                    <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M20 4h1a1 1 0 00-1-1v1zm-1 12a1 1 0 102 0h-2zM8 3a1 1 0 000 2V3zM3.293 19.293a1 1 0 101.414 1.414l-1.414-1.414zM19 4v12h2V4h-2zm1-1H8v2h12V3zm-.707.293l-16 16 1.414 1.414 16-16-1.414-1.414z" />
-                    </svg>
-                  </span>
-                </div>
-              ))}
-            </div>
+          <section className="space-y-4">
+            <EquippedConsumablesPanel />
+            <EquippedUsablesPanel />
           </section>
         </div>
 
         {/* Right column */}
         <div className="grid grid-cols-1 gap-4">
-          <PassiveStatsPanel maxHp={charSheet.maxHp} currentHp={charSheet.currentHp} dodgeValue={charSheet.dodgeValue} wallet={charSheet.wallet} />
+          {/* <PanelSection title="Kuma">
+            {/* <h3 className="text-sm font-semibold text-gray-800"> */}
+          {/* Extend touch target to entire panel */}
+          {/* <span className="absolute inset-0" aria-hidden="true" />
+              Kuma
+            </h3> */}
+          {/*</div><p className="text-sm text-gray-600 line-clamp-2">Once per day, you may reroll the dice after seeing the roll.</p>
+          </PanelSection> */}
+          {/* Health */}
+          <PanelSection>
+            <div className="flex flex-col items-center flex-shrink-0 justify-between text-5xl font-semibold text-gray-900 relative">
+              <h5 className="font-normal text-xl">Current Health</h5>
+              <span className={classNames(charSheet.currentHp >= charSheet.maxHp / 2 ? 'text-green-600' : '', charSheet.currentHp >= charSheet.maxHp / 4 ? 'text-yellow-600' : 'text-red-600')}>
+                {charSheet.currentHp} / {charSheet.maxHp}
+              </span>
+              <span className="ml-2 text-sm font-medium text-gray-500 uppercase">You're in good condition</span>
+            </div>
+            <div className="mt-4">
+              <Button>Take Damage</Button>
+              <Button classes="mt-2">Heal Damage</Button>
+            </div>
+          </PanelSection>
+
+          <PanelSection>
+            <div className="flex flex-col items-center flex-shrink-0 justify-between text-5xl font-semibold text-gray-900 relative">
+              <h5 className="font-normal text-xl">Wallet</h5>
+              <span>{charSheet.wallet}</span>
+              <span className="ml-2 text-sm font-medium text-gray-500 uppercase">Cash on your person</span>
+            </div>
+            <div className="mt-4">
+              <Button>Recieve Money</Button>
+              <Button classes="mt-2">Pay Money</Button>
+            </div>
+          </PanelSection>
+          {/* <div className="px-4 py-5 sm:p-6">
+          <dd className="mt-1 flex flex-col justify-between items-top md:block lg:flex">
+            <div className="flex flex-col items-center flex-shrink-0 items-start text-5xl font-semibold text-gray-900 relative">
+              <h5 className="font-normal text-xl">Wallet</h5>
+              <span>{wallet}</span>
+              <span className="ml-2 text-sm font-medium text-gray-500">CASH ON YOUR PERSON</span>
+            </div>
+
+            <div className="mt-4">
+              <Button>Recieve Money</Button>
+              <Button classes="mt-2">Pay Money</Button>
+            </div>
+          </dd>
+        </div> */}
+
+          {/* Basic Info */}
+          {/* <PanelSection title="Basic Info">
+            <dl>
+              <dt className="text-sm font-medium text-gray-500">Species Name</dt>
+              <dd>
+                <div className="text-sm font-normal text-gray-900">Kuma</div>
+              </dd>
+              <dt className="text-sm font-medium text-gray-500 mt-2">Species Ability</dt>
+              <dd>
+                <div className="text-sm font-normal text-gray-900">Here is the fake speice ability that I am typin gion akfjr asdf</div>
+              </dd>
+            </dl>
+          </PanelSection> */}
+
+          {/* <PanelSection title="alsdk;f">
+            <PassiveStatsPanel maxHp={charSheet.maxHp} currentHp={charSheet.currentHp} dodgeValue={charSheet.dodgeValue} wallet={charSheet.wallet} />
+          </PanelSection> */}
 
           {/* Augmentations */}
           <AugmentationsPanel augmentations={charSheet.augmentations} upgradePoints={charSheet.upgradePoints} />

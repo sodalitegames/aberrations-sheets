@@ -10,12 +10,14 @@ const AugmentationsPanel = ({ augmentations, upgradePoints }) => {
             <h2 className="text-base font-medium text-gray-900" id="augmentations-title">
               Augmentations
             </h2>
-            <Chip color={upgradePoints ? 'green' : 'yellow'}>{upgradePoints} Upgrade Points</Chip>
+            <Chip editable color={upgradePoints ? 'green' : 'yellow'}>
+              {upgradePoints} Upgrade Points
+            </Chip>
           </div>
           <div className="flow-root mt-6">
             <ul className="-my-5 divide-y divide-gray-200">
               {augmentations.map(aug => (
-                <li key={aug.id} className="py-5">
+                <li key={aug._id} className="py-5">
                   <div className="relative focus-within:ring-2 focus-within:ring-cyan-500">
                     <h3 className="text-sm font-semibold text-gray-800">
                       {/* Extend touch target to entire panel */}

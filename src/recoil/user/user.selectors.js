@@ -7,7 +7,7 @@ export const getCurrentUser = selector({
   key: 'getCurrentUser',
   get: async () => {
     const response = await authApi.get('/users/getMe');
-    return response.data;
+    return response.data.data.user;
   },
 });
 

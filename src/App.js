@@ -34,7 +34,7 @@ function Species() {
 function App() {
   const currentUser = useRecoilValue(getCurrentUser);
 
-  console.log(currentUser);
+  console.log('Current User:', currentUser);
 
   if (!currentUser) {
     return <div>You need to log in to your account to proceed.</div>;
