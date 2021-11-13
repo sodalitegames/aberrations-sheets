@@ -11,11 +11,12 @@ import ModalTypes from '../../../utils/ModalTypes';
 
 import TakeDamage from '../../../components/characters/forms/modal/TakeDamage';
 import HealDamage from '../../../components/characters/forms/modal/HealDamage';
-import DeleteCharacterLog from '../../../components/characters/forms/modal/DeleteCharacterLog';
 import RecieveMoney from '../../../components/characters/forms/modal/RecieveMoney';
 import PayMoney from '../../../components/characters/forms/modal/PayMoney';
 import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoints';
 import GeneralExhaustion from '../../../components/characters/forms/modal/GeneralExhaustion';
+import EditStat from '../../../components/characters/forms/modal/EditStat';
+import ConfirmDelete from '../../../components/characters/forms/modal/ConfirmDelete';
 
 export const ModalForm = ({ type, title, submitText, submitHandler, children }) => {
   const setModal = useSetRecoilState(modalState);
@@ -29,7 +30,7 @@ export const ModalForm = ({ type, title, submitText, submitHandler, children }) 
             <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
           </div>
         ) : null}
-        <div className="mt-2 flex flex-col px-4">
+        <div className="mt-2 flex flex-col px-4 mr-6">
           {/* Title */}
           <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
             {title}
@@ -65,10 +66,6 @@ export const ModalForm = ({ type, title, submitText, submitHandler, children }) 
 const Modal = () => {
   const [modal, setModal] = useRecoilState(modalState);
 
-  if (!modal) {
-    return null;
-  }
-
   return (
     <Transition.Root show={!!modal} as={Fragment}>
       <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={setModal}>
@@ -102,29 +99,22 @@ const Modal = () => {
                 </button>
               </div>
               {/* Forms */}
-              {modal.type === ModalTypes.displayWeapon ? 'Not built yet' : null}
-              {modal.type === ModalTypes.displayWearable ? 'Not built yet' : null}
-              {modal.type === ModalTypes.displayConsumable ? 'Not built yet' : null}
-              {modal.type === ModalTypes.displayUsable ? 'Not built yet' : null}
-              {modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
-              {modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
-              {modal.type === ModalTypes.recieveMoney ? <RecieveMoney /> : null}
-              {modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
-              {modal.type === ModalTypes.editUpgradePoints ? <UpgradePoints /> : null}
-              {modal.type === ModalTypes.removeAugmentation ? 'Not built yet' : null}
-              {modal.type === ModalTypes.editGeneralExhaustion ? <GeneralExhaustion /> : null}
-              {modal.type === ModalTypes.editStat ? 'Not built yet' : null}
-              {modal.type === ModalTypes.editStatsExperience ? 'Not built yet' : null}
-              {modal.type === ModalTypes.editStatsExhaustion ? 'Not built yet' : null}
-              {modal.type === ModalTypes.deleteWeapon ? 'Not built yet' : null}
-              {modal.type === ModalTypes.deleteWearable ? 'Not built yet' : null}
-              {modal.type === ModalTypes.deleteConsumable ? 'Not built yet' : null}
-              {modal.type === ModalTypes.deleteUsable ? 'Not built yet' : null}
-              {modal.type === ModalTypes.deleteCharacterLog ? <DeleteCharacterLog id={modal.id} /> : null}
-              {modal.type === ModalTypes.acceptInvite ? 'Not built yet' : null}
-              {modal.type === ModalTypes.declineInvite ? 'Not built yet' : null}
-              {modal.type === ModalTypes.leaveCampaign ? 'Not built yet' : null}
-              {modal.type === ModalTypes.deleteNote ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.displayBelonging ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.displayWeapon ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.displayWearable ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.displayConsumable ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.displayUsable ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
+              {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
+              {modal && modal.type === ModalTypes.recieveMoney ? <RecieveMoney /> : null}
+              {modal && modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
+              {modal && modal.type === ModalTypes.editUpgradePoints ? <UpgradePoints /> : null}
+              {modal && modal.type === ModalTypes.editGeneralExhaustion ? <GeneralExhaustion /> : null}
+              {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
+              {modal && modal.type === ModalTypes.confirmDelete ? <ConfirmDelete id={modal.id} data={modal.data} /> : null}
+              {modal && modal.type === ModalTypes.acceptInvite ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.declineInvite ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.leaveCampaign ? 'Not built yet' : null}
             </div>
           </Transition.Child>
         </div>

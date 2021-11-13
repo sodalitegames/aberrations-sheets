@@ -262,7 +262,21 @@ const CharacterGameplayPage = () => {
             <span className={classNames(charSheet.currentHp >= charSheet.maxHp / 2 ? 'text-green-800' : '', charSheet.currentHp >= charSheet.maxHp / 4 ? 'text-yellow-800' : 'text-red-800')}>
               {charSheet.currentHp} / {charSheet.maxHp}
             </span>
-            <span className="text-sm font-medium text-gray-500 uppercase">You're in good condition</span>
+            <span className="text-sm font-medium text-gray-500 uppercase">
+              {charSheet.currentHp <= 0
+                ? `You're as dead as a doornail`
+                : charSheet.currentHp === 1
+                ? `You're as good as dead`
+                : charSheet.currentHp < charSheet.maxHp / 4
+                ? `You're in mauled condition`
+                : charSheet.currentHp < charSheet.maxHp / 2
+                ? `You're in bloodied condition`
+                : charSheet.currentHp >= (charSheet.maxHp / 4) * 3
+                ? `You're in great condition`
+                : charSheet.currentHp >= (charSheet.maxHp / 4) * 2
+                ? `You're in good condition`
+                : `You're in perfect condition`}
+            </span>
           </div>
           <div className="mt-6">
             <Button onClick={() => setModal({ type: ModalTypes.takeDamage })}>Take Damage</Button>
@@ -305,7 +319,13 @@ const CharacterGameplayPage = () => {
                     <button
                       type="button"
                       className="inline-flex items-center px-1.5 py-1.5 text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      onClick={() => setModal({ type: ModalTypes.removeAugmentation })}
+                      onClick={() =>
+                        setModal({
+                          type: ModalTypes.confirmDelete,
+                          id: aug._id,
+                          data: { type: 'augmentations', title: `Are you sure you want to remove ${aug.name}?`, submitText: `Yes, remove ${aug.name}` },
+                        })
+                      }
                     >
                       Remove
                     </button>

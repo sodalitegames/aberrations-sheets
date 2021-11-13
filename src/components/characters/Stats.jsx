@@ -1,7 +1,6 @@
 import { useSetRecoilState } from 'recoil';
 
-import { CheckIcon } from '@heroicons/react/outline';
-import { ArrowSmDownIcon, ArrowSmUpIcon, PencilIcon } from '@heroicons/react/solid';
+import { PencilIcon } from '@heroicons/react/solid';
 
 import { modalState } from '../../recoil/app/app.atoms';
 
@@ -18,15 +17,11 @@ const Stats = ({ stats, power, generalExhaustion }) => {
         <h3 className="text-lg font-medium text-gray-900">Stats</h3>
         {/* Chips */}
         <div className="space-x-2">
-          {generalExhaustion ? (
-            <Chip color="red" editable={{ type: ModalTypes.editGeneralExhaustion }}>
-              {generalExhaustion} General Exhaustion
-            </Chip>
-          ) : (
-            <Chip color="green" editable={{ type: ModalTypes.editGeneralExhaustion }}>
-              {generalExhaustion} General Exhaustion
-            </Chip>
-          )}
+          {/* General exhaustion */}
+          <Chip color={generalExhaustion ? 'red' : 'green'} editable={{ type: ModalTypes.editGeneralExhaustion }}>
+            {generalExhaustion} General Exhaustion
+          </Chip>
+          {/* Power */}
           <Chip color="green">{power} Power</Chip>
         </div>
         {/* End Chips */}
@@ -41,7 +36,7 @@ const Stats = ({ stats, power, generalExhaustion }) => {
                 <div className="flex flex-col items-center flex-shrink-0 items-start text-5xl font-semibold text-gray-900 relative">
                   <h5 className="font-normal text-xl flex items-center">
                     {stat.name}
-                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editStat, id: stat.name })}>
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editStat, id: stat.name.toLowerCase() })}>
                       <PencilIcon
                         className="ml-2 mr-2 flex-shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"
@@ -63,29 +58,11 @@ const Stats = ({ stats, power, generalExhaustion }) => {
 
                 <div className="flex flex-col mt-4 space-y-2">
                   {/* Experience */}
-                  {stat.experience >= stat.points ? (
-                    <Chip editable={{ type: ModalTypes.editStatsExperience, id: stat.name }} color="green">
-                      <CheckIcon className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-green-800 invisible" aria-hidden="true" />
-                      {stat.experience} / {stat.points} Experience
-                    </Chip>
-                  ) : (
-                    <Chip editable={{ type: ModalTypes.editStatsExperience, id: stat.name }} color="yellow">
-                      <ArrowSmUpIcon className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-yellow-800 invisible" aria-hidden="true" />
-                      {stat.experience} / {stat.points} Experience
-                    </Chip>
-                  )}
+                  <Chip color={stat.experience >= stat.points ? 'green' : 'yellow'}>
+                    {stat.experience} / {stat.points} Experience
+                  </Chip>
                   {/* Exhaustion */}
-                  {stat.exhaustion ? (
-                    <Chip editable={{ type: ModalTypes.editStatsExhaustion, id: stat.name }} color="red">
-                      <ArrowSmDownIcon className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-red-800 invisible" aria-hidden="true" />
-                      {stat.exhaustion} Exhaustion
-                    </Chip>
-                  ) : (
-                    <Chip editable={{ type: ModalTypes.editStatsExhaustion, id: stat.name }} color="green">
-                      <CheckIcon className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-green-800 invisible" aria-hidden="true" />
-                      {stat.exhaustion} Exhaustion
-                    </Chip>
-                  )}
+                  <Chip color={stat.exhaustion ? 'red' : 'green'}>{stat.exhaustion} Exhaustion</Chip>
                 </div>
               </dd>
             </div>

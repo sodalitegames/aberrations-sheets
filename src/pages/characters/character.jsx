@@ -83,7 +83,13 @@ const CharacterCharacterPage = () => {
                   <button
                     type="button"
                     className="inline-flex items-center px-1.5 py-1.5 text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={() => setModal({ type: ModalTypes.deleteCharacterLog, id: log._id })}
+                    onClick={() =>
+                      setModal({
+                        type: ModalTypes.confirmDelete,
+                        id: log._id,
+                        data: { type: 'logs', property: 'characterLogs', title: 'Are you sure you want to delete this character log?', submitText: 'Yes, delete this character log' },
+                      })
+                    }
                   >
                     Delete
                   </button>

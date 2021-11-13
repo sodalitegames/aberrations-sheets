@@ -67,10 +67,6 @@ export const SlideOverForm = ({ title, description, submitText, submitHandler, c
 const SlideOver = () => {
   const [slideOver, setSlideOver] = useRecoilState(slideOverState);
 
-  if (!slideOver) {
-    return null;
-  }
-
   return (
     <Transition.Root show={!!slideOver} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={setSlideOver}>
@@ -88,19 +84,19 @@ const SlideOver = () => {
             >
               <div className="w-screen max-w-2xl">
                 {/* Forms */}
-                {slideOver.type === SlideOverTypes.rollDice ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.manageEquippedWeapons ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.manageEquippedWearables ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.manageEquippedConsumables ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.manageEquippedUsables ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.purchaseAugmentation ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.weaponForm ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.wearableForm ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.consumableForm ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.usableForm ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
-                {slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
-                {slideOver.type === SlideOverTypes.charLogForm ? <CharacterLog id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.rollDice ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedWeapons ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedConsumables ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedUsables ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.weaponForm ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.usableForm ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.charLogForm ? <CharacterLog id={slideOver.id} /> : null}
               </div>
             </Transition.Child>
           </div>

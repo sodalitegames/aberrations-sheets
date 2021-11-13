@@ -25,7 +25,6 @@ const CharacterInventoryPage = () => {
         </div>
       </PanelSection>
       <PanelSection title="Wearables">
-        {' '}
         <div className="flow-root mt-2">
           <div className="mb-6">
             <Button onClick={() => setSlideOver({ type: SlideOverTypes.wearableForm })}>Add a new Wearable</Button>
@@ -34,7 +33,6 @@ const CharacterInventoryPage = () => {
         </div>
       </PanelSection>
       <PanelSection title="Consumables">
-        {' '}
         <div className="flow-root mt-2">
           <div className="mb-6">
             <Button onClick={() => setSlideOver({ type: SlideOverTypes.consumableForm })}>Add a new Consumable</Button>
@@ -43,7 +41,6 @@ const CharacterInventoryPage = () => {
         </div>
       </PanelSection>
       <PanelSection title="Usables">
-        {' '}
         <div className="flow-root mt-2">
           <div className="mb-6">
             <Button onClick={() => setSlideOver({ type: SlideOverTypes.usableForm })}>Add a new Usable</Button>
