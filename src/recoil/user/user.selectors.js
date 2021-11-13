@@ -1,12 +1,12 @@
 import { selector } from 'recoil';
 
-import authApi from '../../apis/auth.api';
-import sheetsApi from '../../apis/sheets.api';
+import { getUser } from '../../apis/auth.api';
+import { getSheetsForPlayer } from '../../apis/sheets.api';
 
 export const getCurrentUser = selector({
   key: 'getCurrentUser',
   get: async () => {
-    const response = await authApi.get('/users/getMe');
+    const response = await getUser();
     return response.data.data.user;
   },
 });
@@ -14,7 +14,7 @@ export const getCurrentUser = selector({
 export const getUsersCharacters = selector({
   key: 'getUsersCharacters',
   get: async () => {
-    const response = await sheetsApi.get('/players/characters');
+    const response = await getSheetsForPlayer('characters');
     return response.data.data.sheets;
   },
 });
@@ -22,7 +22,7 @@ export const getUsersCharacters = selector({
 export const getUsersCampaigns = selector({
   key: 'getUsersCampaigns',
   get: async () => {
-    const response = await sheetsApi.get('/players/campaigns');
+    const response = await getSheetsForPlayer('campaigns');
     return response.data.data.sheets;
   },
 });

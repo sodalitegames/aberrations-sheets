@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
-import { getCurrentUser } from '../../../recoil/user/user.selectors';
+import { currentUserState } from '../../../recoil/user/user.atoms';
 
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
@@ -201,11 +201,11 @@ const Logo = () => {
 };
 
 const SheetPageHeader = ({ type }) => {
-  const currentUser = useRecoilValue(getCurrentUser);
+  const currentUser = useRecoilValue(currentUserState);
   return (
     <Popover
       as="header"
-      className={classNames(type === 'character' ? 'bg-gradient-to-r from-accent2-deep to-accent2-dark' : '', type === 'campaign' ? 'bg-gradient-to-r from-accent1-deep to-accent1-dark' : '', 'pb-24')}
+      className={classNames(type === 'character' ? 'bg-gradient-to-r from-tertiary-dark to-tertiary' : '', type === 'campaign' ? 'bg-gradient-to-r from-accent1-deep to-accent1-dark' : '', 'pb-24')}
     >
       {({ open }) => (
         <>

@@ -20,7 +20,13 @@ const CharacterSheet = () => {
     }
   });
 
-  const charSheet = useRecoilValue(charSheetState);
+  const charSheet = useRecoilValue(getCharSheet);
+
+  const setCharSheet = useSetRecoilState(charSheetState);
+
+  if (charSheet) {
+    setCharSheet(charSheet);
+  }
 
   console.log('Character Sheet:', charSheet);
 

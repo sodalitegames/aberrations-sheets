@@ -5,7 +5,8 @@ import { useRecoilState } from 'recoil';
 import { XIcon } from '@heroicons/react/outline';
 import { LinkIcon, PlusSmIcon, QuestionMarkCircleIcon } from '@heroicons/react/solid';
 
-import { charSheetState } from '../../../recoil/character/character.atoms';
+import { charSheetState } from '../../../../recoil/character/character.atoms';
+import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 const team = [
   {

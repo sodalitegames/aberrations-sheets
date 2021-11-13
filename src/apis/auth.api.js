@@ -11,4 +11,9 @@ const authApi = Axios.create({
   },
 });
 
+export const signUserIn = body => authApi.post(`/auth/login`, body);
+export const signUserUp = body => authApi.post(`/auth/signup`, body);
+
+export const getUser = () => authApi.get(`/users/getMe`);
+
 export default authApi;

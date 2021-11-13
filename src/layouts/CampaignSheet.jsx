@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSetRecoilState, useRecoilValue } from 'recoil';
 
-import { campIdState } from '../recoil/campaign/campaign.atoms';
+import { campIdState, campSheetState } from '../recoil/campaign/campaign.atoms';
 import { getCampSheet } from '../recoil/campaign/campaign.selectors';
 
 import Loading from './components/app/Loading';
@@ -21,6 +21,12 @@ export default function CharacterSheet() {
   });
 
   const campSheet = useRecoilValue(getCampSheet);
+
+  const setCampSheet = useSetRecoilState(campSheetState);
+
+  if (campSheet) {
+    setCampSheet(campSheet);
+  }
 
   console.log('Campaign Sheet:', campSheet);
 

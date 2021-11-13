@@ -1,17 +1,20 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { modalState, slideOverState } from '../../recoil/app/app.atoms';
 import { charSheetState } from '../../recoil/character/character.atoms';
 
+import { getCharactersSpecies } from '../../recoil/resources/resources.selector';
+
 import classNames from '../../utils/classNames';
 import ModalTypes from '../../utils/ModalTypes';
-
-import PanelSection from '../../components/characters/PanelSection';
-import Stats from '../../components/characters/Stats';
-import Button from '../../components/characters/Button';
-import Chip from '../../components/characters/Chip';
-import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 import SlideOverTypes from '../../utils/SlideOverTypes';
+
+import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
+
+import PanelSection from '../../components/shared/PanelSection';
+import Stats from '../../components/characters/Stats';
+import Button from '../../components/shared/Button';
+import Chip from '../../components/shared/Chip';
 
 const equippedWeapons = [
   {
@@ -96,13 +99,10 @@ const equippedUsables = [
 ];
 
 const CharacterGameplayPage = () => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
+  const charSheet = useRecoilValue(charSheetState);
   const setModal = useSetRecoilState(modalState);
   const setSlideOver = useSetRecoilState(slideOverState);
-
-  if (!charSheet) {
-    return <div>Collecting character sheet data...</div>;
-  }
+  const charsSpecies = useRecoilValue(getCharactersSpecies);
 
   return (
     <SheetPageContent title="Gameplay" columns={3}>
@@ -114,11 +114,13 @@ const CharacterGameplayPage = () => {
             <div className="sm:flex sm:space-x-5">
               <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                 <p className="text-xl font-bold text-gray-900 sm:text-2xl">{charSheet.characterName}</p>
-                <p className="text-sm font-medium text-gray-500">Kuma Ability: Once per day, you may reroll the dice after seeing the roll.</p>
+                <p className="text-sm font-medium text-gray-500">
+                  {charsSpecies.name} Ability: {charsSpecies.ability}
+                </p>
               </div>
             </div>
-            <div className="mt-5 flex justify-center sm:mt-0">
-              <Button>Roll Dice</Button>
+            <div className="mt-5 flex flex-shrink-0 justify-center sm:mt-0">
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>Roll Dice</Button>
             </div>
           </div>
         </PanelSection>
@@ -130,8 +132,12 @@ const CharacterGameplayPage = () => {
             stats={[
               { name: 'Fortitude', passive: { name: 'Max Hp', calc: 'Fortitude * 5', value: charSheet.maxHp }, ...charSheet.fortitude },
               { name: 'Agility', passive: { name: 'Dodge Value', calc: 'Agility / 3 (Rd. Down)', value: charSheet.dodgeValue }, ...charSheet.agility },
-              { name: 'Persona', ...charSheet.persona },
-              { name: 'Aptitude', ...charSheet.aptitude },
+              { name: 'Persona', passive: { name: 'Initiative', calc: 'Equal to Persona', value: charSheet.persona.points + charSheet.persona.modifier }, ...charSheet.persona },
+              {
+                name: 'Aptitude',
+                passive: { name: 'Assist', calc: 'Aptitude / 2 (Rd. Down)', value: Math.floor((charSheet.aptitude.points + charSheet.aptitude.modifier) / 2) },
+                ...charSheet.aptitude,
+              },
             ]}
           />
         </PanelSection>
@@ -144,9 +150,6 @@ const CharacterGameplayPage = () => {
                 {equippedWeapons.map(weap => (
                   <li key={weap.handle} className="py-4">
                     <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0">
-                        <img className="h-8 w-8 rounded-full" src="/weapons/sniper.png" alt="temp" />
-                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{weap.name}</p>
                         <p className="text-sm text-gray-500 truncate">{weap.handle}</p>
@@ -155,12 +158,9 @@ const CharacterGameplayPage = () => {
                         </p>
                       </div>
                       <div>
-                        <a
-                          href={weap.href}
-                          className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
-                        >
+                        <Button rounded onClick={() => setModal({ type: ModalTypes.displayWeapon, id: weap._id })}>
                           View
-                        </a>
+                        </Button>
                       </div>
                     </div>
                   </li>
@@ -168,7 +168,7 @@ const CharacterGameplayPage = () => {
               </ul>
 
               <div className="mt-6">
-                <Button>Manage equipped Weapons</Button>
+                <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageEquippedWeapons })}>Manage equipped Weapons</Button>
               </div>
             </div>
           </PanelSection>
@@ -179,16 +179,15 @@ const CharacterGameplayPage = () => {
                 {equippedWearables.map(wear => (
                   <li key={wear.name} className="py-4">
                     <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0">
-                        <img className="h-8 w-8 rounded-full" src="/weapons/bow.png" alt="" />
-                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{wear.name}</p>
                         <p className="text-sm text-gray-500 truncate">{wear.equipped || 'n/a'}</p>
                       </div>
                       {wear.equipped ? (
                         <div>
-                          <Button rounded>View</Button>
+                          <Button rounded onClick={() => setModal({ type: ModalTypes.displayWearable, id: wear._id })}>
+                            View
+                          </Button>
                         </div>
                       ) : null}
                     </div>
@@ -196,7 +195,7 @@ const CharacterGameplayPage = () => {
                 ))}
               </ul>
               <div className="mt-6">
-                <Button>Manage equipped Weapons</Button>
+                <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageEquippedWearables })}>Manage equipped Wearables</Button>
               </div>
             </div>
           </PanelSection>
@@ -210,27 +209,21 @@ const CharacterGameplayPage = () => {
                 {equippedConsumables.map(cons => (
                   <li key={cons.handle} className="py-4">
                     <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0">
-                        <img className="h-8 w-8 rounded-full" src="/weapons/rapier.png" alt="temp" />
-                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{cons.name}</p>
                         <p className="text-sm text-gray-500 truncate">{cons.handle}</p>
                       </div>
                       <div>
-                        <a
-                          href={cons.href}
-                          className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
-                        >
+                        <Button rounded onClick={() => setModal({ type: ModalTypes.displayConsumable, id: cons._id })}>
                           View
-                        </a>
+                        </Button>
                       </div>
                     </div>
                   </li>
                 ))}
               </ul>
               <div className="mt-6">
-                <Button>Manage equipped Consumables</Button>
+                <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageEquippedConsumables })}>Manage equipped Consumables</Button>
               </div>
             </div>
           </PanelSection>
@@ -241,9 +234,6 @@ const CharacterGameplayPage = () => {
                 {equippedUsables.map(usab => (
                   <li key={usab.handle} className="py-4">
                     <div className="flex items-center space-x-4">
-                      <div className="flex-shrink-0">
-                        <img className="h-8 w-8 rounded-full" src="/weapons/bostaff.png" alt="temp" />
-                      </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate">{usab.name}</p>
                         <p className="text-sm text-gray-500 truncate" title="Here are some long words about the rope here written here written here here here.">
@@ -251,19 +241,16 @@ const CharacterGameplayPage = () => {
                         </p>
                       </div>
                       <div>
-                        <a
-                          href={usab.href}
-                          className="inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 text-sm leading-5 font-medium rounded-full text-gray-700 bg-white hover:bg-gray-50"
-                        >
+                        <Button rounded onClick={() => setModal({ type: ModalTypes.displayUsable, id: usab._id })}>
                           View
-                        </a>
+                        </Button>
                       </div>
                     </div>
                   </li>
                 ))}
               </ul>
               <div className="mt-6">
-                <Button>Manage equipped Usables</Button>
+                <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageEquippedUsables })}>Manage equipped Usables</Button>
               </div>
             </div>
           </PanelSection>
@@ -308,7 +295,7 @@ const CharacterGameplayPage = () => {
         <PanelSection>
           <div className="flex justify-between">
             <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
-            <Chip editable color={charSheet.upgradePoints ? 'green' : 'yellow'}>
+            <Chip editable={{ type: ModalTypes.editUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
               {charSheet.upgradePoints} Upgrade Points
             </Chip>
           </div>
@@ -322,7 +309,7 @@ const CharacterGameplayPage = () => {
                     <button
                       type="button"
                       className="inline-flex items-center px-1.5 py-1.5 text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      onClick={() => setModal({ type: ModalTypes.deleteAugmentation })}
+                      onClick={() => setModal({ type: ModalTypes.removeAugmentation })}
                     >
                       Remove
                     </button>
@@ -331,7 +318,7 @@ const CharacterGameplayPage = () => {
               ))}
             </ul>
             <div className="mt-6">
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.augmentationForm })}>Purchase a new Augmentation</Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.purchaseAugmentation })}>Purchase a new Augmentation</Button>
             </div>
           </div>
         </PanelSection>

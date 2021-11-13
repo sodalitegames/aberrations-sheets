@@ -1,8 +1,14 @@
+import { useSetRecoilState } from 'recoil';
+
 import { PencilIcon } from '@heroicons/react/solid';
+
+import { modalState } from '../../recoil/app/app.atoms';
 
 import classNames from '../../utils/classNames';
 
 const Chip = ({ color, children, classes, editable }) => {
+  const setModal = useSetRecoilState(modalState);
+
   return (
     <div
       className={classNames(
@@ -17,7 +23,7 @@ const Chip = ({ color, children, classes, editable }) => {
       {children}
 
       {editable ? (
-        <span title="Edit manually">
+        <span title="Edit manually" onClick={() => setModal(editable)}>
           <PencilIcon
             className={classNames(
               color === 'red' ? 'text-red-800 border-red-800' : '',

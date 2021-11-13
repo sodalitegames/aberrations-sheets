@@ -1,23 +1,19 @@
-import { useRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 
 import { charSheetState } from '../../recoil/character/character.atoms';
 
-import PanelSection from '../../components/characters/PanelSection';
+import PanelSection from '../../components/shared/PanelSection';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
 const CharacterInventoryPage = () => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-
-  if (!charSheet) {
-    return <div>Collecting character sheet data...</div>;
-  }
+  const charSheet = useRecoilValue(charSheetState);
 
   return (
     <SheetPageContent title="Inventory" columns={4}>
-      <PanelSection title="Weapons"></PanelSection>
-      <PanelSection title="Wearables"></PanelSection>
-      <PanelSection title="Consumables"></PanelSection>
-      <PanelSection title="Usables"></PanelSection>
+      <PanelSection title="Weapons">{JSON.stringify(charSheet.weapons)}</PanelSection>
+      <PanelSection title="Wearables">{JSON.stringify(charSheet.wearables)}</PanelSection>
+      <PanelSection title="Consumables">{JSON.stringify(charSheet.consumables)}</PanelSection>
+      <PanelSection title="Usables">{JSON.stringify(charSheet.usables)}</PanelSection>
     </SheetPageContent>
   );
 };

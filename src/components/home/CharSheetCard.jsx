@@ -18,8 +18,6 @@ const stats = [
 export default function CharSheetCard({ charSheet }) {
   const species = useRecoilValue(getSpecies);
 
-  console.log('Species:', species);
-
   const getSpeciesName = speciesId => {
     const currSpecies = species.find(spec => spec.id === speciesId);
     return currSpecies.name;

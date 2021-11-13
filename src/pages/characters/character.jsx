@@ -1,28 +1,36 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { slideOverState, modalState } from '../../recoil/app/app.atoms';
 import { charSheetState } from '../../recoil/character/character.atoms';
 
-import PanelSection from '../../components/characters/PanelSection';
+import { getCharactersSpecies } from '../../recoil/resources/resources.selector';
+
+import PanelSection from '../../components/shared/PanelSection';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import Button from '../../components/characters/Button';
+import Button from '../../components/shared/Button';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
 const CharacterCharacterPage = () => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
+  const charSheet = useRecoilValue(charSheetState);
+
   const setSlideOver = useSetRecoilState(slideOverState);
   const setModal = useSetRecoilState(modalState);
 
-  if (!charSheet) {
-    return <div>Collecting character sheet data...</div>;
-  }
+  const charsSpecies = useRecoilValue(getCharactersSpecies);
 
   return (
     <SheetPageContent title="Character" columns={4}>
       <div className="space-y-4">
-        <PanelSection title="Species Info"></PanelSection>
+        <PanelSection title={`Your Species: ${charsSpecies.name}`}>
+          <div className="flow-root mt-6">
+            <h3 className="text-sm font-semibold text-gray-800">Detail</h3>
+            <p className="mt-1 text-sm text-gray-600">Description here</p>
+            <p className="mt-1 text-sm text-gray-600">{charsSpecies.name}</p>
+          </div>
+        </PanelSection>
+
         <PanelSection title="Character Decsription">
           <div className="flow-root mt-6">
             <p className="mt-1 text-sm text-gray-600">{charSheet.charDescription}</p>
@@ -38,6 +46,7 @@ const CharacterCharacterPage = () => {
           </div>
         </PanelSection>
       </div>
+
       <PanelSection title="Character Background">
         <div className="flow-root mt-6">
           <p className="mt-1 text-sm text-gray-600">{charSheet.charBackground}</p>
@@ -52,6 +61,7 @@ const CharacterCharacterPage = () => {
           </div>
         </div>
       </PanelSection>
+
       <PanelSection title="Character Logs">
         <div className="flow-root mt-2">
           <div className="mb-6">
@@ -83,7 +93,11 @@ const CharacterCharacterPage = () => {
           </ul>
         </div>
       </PanelSection>
-      <PanelSection title="Campaign Details"></PanelSection>
+
+      <PanelSection title="Campaign Details">
+        {JSON.stringify(charSheet.campaign)}
+        {JSON.stringify(charSheet.invites)}
+      </PanelSection>
     </SheetPageContent>
   );
 };

@@ -1,12 +1,12 @@
-import { useRecoilState } from 'recoil';
+//import { useRecoilValue } from 'recoil';
 
 import { AcademicCapIcon, BadgeCheckIcon, CashIcon, ClockIcon, ReceiptRefundIcon, UsersIcon } from '@heroicons/react/outline';
 
-import { charSheetState } from '../../recoil/character/character.atoms';
+//import { charSheetState } from '../../recoil/character/character.atoms';
 
 import classNames from '../../utils/classNames';
 
-import PanelSection from '../../components/characters/PanelSection';
+import PanelSection from '../../components/shared/PanelSection';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
 const actions = [
@@ -49,16 +49,12 @@ const actions = [
 ];
 
 const CharacterResourcesPage = () => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-
-  if (!charSheet) {
-    return <div>Collecting character sheet data...</div>;
-  }
+  //const charSheet = useRecoilValue(charSheetState);
 
   return (
     <SheetPageContent title="Resources" columns={3}>
-      <PanelSection title="Resources" colSpan={2}>
-        <div>
+      <PanelSection colSpan={2}>
+        <div className="rounded-lg bg-gray-200 overflow-hidden shadow divide-y divide-gray-200 sm:divide-y-0 sm:grid sm:grid-cols-2 sm:gap-px -m-6">
           {actions.map((action, actionIdx) => (
             <div
               key={action.name}

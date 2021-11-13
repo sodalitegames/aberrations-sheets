@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { RecoilRoot, atom, selector, useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 
 import { getCurrentUser } from './recoil/user/user.selectors';
+import { currentUserState } from './recoil/user/user.atoms';
 
 import SlideOver from './layouts/components/app/SlideOver';
 import Modal from './layouts/components/app/Modal';
@@ -33,7 +34,7 @@ function Species() {
 }
 
 function App() {
-  const currentUser = useRecoilValue(getCurrentUser);
+  const currentUser = useRecoilValue(currentUserState);
 
   console.log('Current User:', currentUser);
 
