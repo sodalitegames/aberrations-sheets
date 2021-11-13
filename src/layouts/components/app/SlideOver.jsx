@@ -8,6 +8,7 @@ import { slideOverState } from '../../../recoil/app/app.atoms';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
+import PurchaseAugmentation from '../../../components/characters/forms/slide-over/PurchaseAugmentation';
 import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
 import CharacterLog from '../../../components/characters/forms/slide-over/CharacterLog';
@@ -85,11 +86,12 @@ const SlideOver = () => {
               <div className="w-screen max-w-2xl">
                 {/* Forms */}
                 {slideOver && slideOver.type === SlideOverTypes.rollDice ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedWeapons ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedConsumables ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedUsables ? 'Not built yet' : null}
-                {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.weaponForm ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.wearableForm ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.consumableForm ? 'Not built yet' : null}
