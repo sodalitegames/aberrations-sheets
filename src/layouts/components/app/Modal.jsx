@@ -9,29 +9,34 @@ import { modalState } from '../../../recoil/app/app.atoms';
 import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
 
-import TakeDamage from '../../../components/characters/forms/TakeDamage';
-import HealDamage from '../../../components/characters/forms/HealDamage';
+import TakeDamage from '../../../components/characters/forms/modal/TakeDamage';
+import HealDamage from '../../../components/characters/forms/modal/HealDamage';
+import DeleteCharacterLog from '../../../components/characters/forms/modal/DeleteCharacterLog';
+import RecieveMoney from '../../../components/characters/forms/modal/RecieveMoney';
+import PayMoney from '../../../components/characters/forms/modal/PayMoney';
+import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoints';
+import GeneralExhaustion from '../../../components/characters/forms/modal/GeneralExhaustion';
 
 export const ModalForm = ({ type, title, submitText, submitHandler, children }) => {
   const setModal = useSetRecoilState(modalState);
 
   return (
     <form onSubmit={submitHandler}>
-      <div className="">
-        <div className="mt-3 flex justify-start items-center space-x-2">
-          {/* Icon */}
-          {type === 'alert' ? (
-            <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-              <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
-            </div>
-          ) : null}
+      <div className="flex">
+        {/* Icon */}
+        {type === 'alert' ? (
+          <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+            <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
+          </div>
+        ) : null}
+        <div className="mt-2 flex flex-col px-4">
           {/* Title */}
           <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
             {title}
           </Dialog.Title>
+          {/* Form body */}
+          <fieldset className="mb-4">{children}</fieldset>
         </div>
-        {/* Form body */}
-        <fieldset className="mb-4">{children}</fieldset>
       </div>
 
       {/* Action buttons panel */}
@@ -39,7 +44,7 @@ export const ModalForm = ({ type, title, submitText, submitHandler, children }) 
         <button
           type="submit"
           className={classNames(
-            type === alert ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500' : 'bg-dark hover:bg-dark-400 focus:ring-dark-200',
+            type === 'alert' ? 'bg-red-700 hover:bg-red-800 focus:ring-red-500' : 'bg-dark hover:bg-dark-400 focus:ring-dark-200',
             'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm'
           )}
         >
@@ -103,11 +108,11 @@ const Modal = () => {
               {modal.type === ModalTypes.displayUsable ? 'Not built yet' : null}
               {modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
               {modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
-              {modal.type === ModalTypes.recieveMoney ? 'Not built yet' : null}
-              {modal.type === ModalTypes.payMoney ? 'Not built yet' : null}
-              {modal.type === ModalTypes.editUpgradePoints ? 'Not built yet' : null}
+              {modal.type === ModalTypes.recieveMoney ? <RecieveMoney /> : null}
+              {modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
+              {modal.type === ModalTypes.editUpgradePoints ? <UpgradePoints /> : null}
               {modal.type === ModalTypes.removeAugmentation ? 'Not built yet' : null}
-              {modal.type === ModalTypes.editGeneralExhaustion ? 'Not built yet' : null}
+              {modal.type === ModalTypes.editGeneralExhaustion ? <GeneralExhaustion /> : null}
               {modal.type === ModalTypes.editStat ? 'Not built yet' : null}
               {modal.type === ModalTypes.editStatsExperience ? 'Not built yet' : null}
               {modal.type === ModalTypes.editStatsExhaustion ? 'Not built yet' : null}
@@ -115,7 +120,7 @@ const Modal = () => {
               {modal.type === ModalTypes.deleteWearable ? 'Not built yet' : null}
               {modal.type === ModalTypes.deleteConsumable ? 'Not built yet' : null}
               {modal.type === ModalTypes.deleteUsable ? 'Not built yet' : null}
-              {modal.type === ModalTypes.deleteCharacterLog ? 'Not built yet' : null}
+              {modal.type === ModalTypes.deleteCharacterLog ? <DeleteCharacterLog id={modal.id} /> : null}
               {modal.type === ModalTypes.acceptInvite ? 'Not built yet' : null}
               {modal.type === ModalTypes.declineInvite ? 'Not built yet' : null}
               {modal.type === ModalTypes.leaveCampaign ? 'Not built yet' : null}

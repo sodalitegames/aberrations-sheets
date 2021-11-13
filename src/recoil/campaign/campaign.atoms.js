@@ -8,6 +8,6 @@ export const campIdState = atom({
 });
 
 export const campSheetState = atom({
-  key: 'charSheet',
+  key: 'campSheet',
   default: getCampSheet,
 });

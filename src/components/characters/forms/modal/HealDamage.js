@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { modalState } from '../../../recoil/app/app.atoms';
-import { charSheetState } from '../../../recoil/character/character.atoms';
+import { modalState } from '../../../../recoil/app/app.atoms';
+import { charSheetState } from '../../../../recoil/character/character.atoms';
 
-import { updateSheet } from '../../../apis/sheets.api';
+import { updateSheet } from '../../../../apis/sheets.api';
 
-import { ModalForm } from '../../../layouts/components/app/Modal';
+import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../shared/Input';
+import Input from '../../../shared/Input';
 
-const TakeDamage = () => {
+const HealDamage = () => {
   const [damage, setDamage] = useState(0);
 
   const [charSheet, setCharSheet] = useRecoilState(charSheetState);
@@ -19,7 +19,7 @@ const TakeDamage = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    const response = await updateSheet('characters', charSheet._id, { currentHp: charSheet.currentHp - +damage });
+    const response = await updateSheet('characters', charSheet._id, { currentHp: charSheet.currentHp + +damage });
 
     setCharSheet(oldCharSheet => {
       return { ...oldCharSheet, currentHp: response.data.data.sheet.currentHp };
@@ -29,10 +29,10 @@ const TakeDamage = () => {
   };
 
   return (
-    <ModalForm title="Take Damage" submitText={`Take ${damage} Damage`} submitHandler={submitHandler}>
+    <ModalForm title="Heal Damage" submitText={`Heal ${damage} Damage`} submitHandler={submitHandler}>
       <Input label="How much damage?" name="damage" type="number" value={damage} changeHandler={setDamage} />
     </ModalForm>
   );
 };
 
-export default TakeDamage;
+export default HealDamage;

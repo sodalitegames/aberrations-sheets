@@ -132,12 +132,8 @@ const CharacterGameplayPage = () => {
             stats={[
               { name: 'Fortitude', passive: { name: 'Max Hp', calc: 'Fortitude * 5', value: charSheet.maxHp }, ...charSheet.fortitude },
               { name: 'Agility', passive: { name: 'Dodge Value', calc: 'Agility / 3 (Rd. Down)', value: charSheet.dodgeValue }, ...charSheet.agility },
-              { name: 'Persona', passive: { name: 'Initiative', calc: 'Equal to Persona', value: charSheet.persona.points + charSheet.persona.modifier }, ...charSheet.persona },
-              {
-                name: 'Aptitude',
-                passive: { name: 'Assist', calc: 'Aptitude / 2 (Rd. Down)', value: Math.floor((charSheet.aptitude.points + charSheet.aptitude.modifier) / 2) },
-                ...charSheet.aptitude,
-              },
+              { name: 'Persona', passive: { name: 'Initiative', calc: 'Equal to Persona', value: charSheet.initiative }, ...charSheet.persona },
+              { name: 'Aptitude', passive: { name: 'Assist', calc: 'Aptitude / 2 (Rd. Down)', value: charSheet.assist }, ...charSheet.aptitude },
             ]}
           />
         </PanelSection>

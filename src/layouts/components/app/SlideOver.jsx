@@ -8,6 +8,8 @@ import { slideOverState } from '../../../recoil/app/app.atoms';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
+import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
+import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
 import CharacterLog from '../../../components/characters/forms/slide-over/CharacterLog';
 
 export const SlideOverForm = ({ title, description, submitText, submitHandler, children }) => {
@@ -96,8 +98,8 @@ const SlideOver = () => {
                 {slideOver.type === SlideOverTypes.wearableForm ? 'Not built yet' : null}
                 {slideOver.type === SlideOverTypes.consumableForm ? 'Not built yet' : null}
                 {slideOver.type === SlideOverTypes.usableForm ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.charDescriptionForm ? 'Not built yet' : null}
-                {slideOver.type === SlideOverTypes.charBackgroundForm ? 'Not built yet' : null}
+                {slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
+                {slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
                 {slideOver.type === SlideOverTypes.charLogForm ? <CharacterLog id={slideOver.id} /> : null}
               </div>
             </Transition.Child>

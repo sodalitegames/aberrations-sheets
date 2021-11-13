@@ -19,9 +19,8 @@ const Stats = ({ stats, power, generalExhaustion }) => {
         {/* Chips */}
         <div className="space-x-2">
           {generalExhaustion ? (
-            <Chip color="red" editable={{ type: ModalTypes.editGeneralExhaustion }} classes="mt-2">
-              <ArrowSmDownIcon className="-ml-1 mr-0.5 flex-shrink-0 self-center h-5 w-5 text-red-500 invisible" aria-hidden="true" />
-              {generalExhaustion} Exhaustion
+            <Chip color="red" editable={{ type: ModalTypes.editGeneralExhaustion }}>
+              {generalExhaustion} General Exhaustion
             </Chip>
           ) : (
             <Chip color="green" editable={{ type: ModalTypes.editGeneralExhaustion }}>

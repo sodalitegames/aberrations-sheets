@@ -24,7 +24,7 @@ const CharacterCharacterPage = () => {
     <SheetPageContent title="Character" columns={4}>
       <div className="space-y-4">
         <PanelSection title={`Your Species: ${charsSpecies.name}`}>
-          <div className="flow-root mt-6">
+          <div className="flow-root">
             <h3 className="text-sm font-semibold text-gray-800">Detail</h3>
             <p className="mt-1 text-sm text-gray-600">Description here</p>
             <p className="mt-1 text-sm text-gray-600">{charsSpecies.name}</p>
@@ -32,7 +32,7 @@ const CharacterCharacterPage = () => {
         </PanelSection>
 
         <PanelSection title="Character Decsription">
-          <div className="flow-root mt-6">
+          <div className="flow-root">
             <p className="mt-1 text-sm text-gray-600">{charSheet.charDescription}</p>
             <div className="flex justify-end space-x-1 mt-2">
               <button
@@ -48,7 +48,7 @@ const CharacterCharacterPage = () => {
       </div>
 
       <PanelSection title="Character Background">
-        <div className="flow-root mt-6">
+        <div className="flow-root">
           <p className="mt-1 text-sm text-gray-600">{charSheet.charBackground}</p>
           <div className="flex justify-end space-x-1 mt-2">
             <button
@@ -70,7 +70,7 @@ const CharacterCharacterPage = () => {
           <ul className="-my-5 divide-y divide-gray-200">
             {charSheet.characterLogs.map(log => (
               <li key={log._id} className="py-3">
-                <h3 className="text-sm font-semibold text-gray-800">{new Date(log.date).toLocaleDateString()}</h3>
+                <h3 className="text-sm font-semibold text-gray-800">{new Date(log.date).toDateString()}</h3>
                 <p className="mt-1 text-sm text-gray-600">{log.content}</p>
                 <div className="flex justify-end space-x-1 mt-2">
                   <button
