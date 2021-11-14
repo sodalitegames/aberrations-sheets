@@ -19,7 +19,7 @@ const CharacterInventoryPage = () => {
       <PanelSection title="Weapons">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.weaponForm })}>Add a new Weapon</Button>
+            <Button onClick={() => setSlideOver({ type: SlideOverTypes.newWeaponForm })}>Add a new Weapon</Button>
           </div>
           {JSON.stringify(charSheet.weapons)}
         </div>

@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
@@ -6,14 +6,18 @@ import { XIcon } from '@heroicons/react/outline';
 
 import { slideOverState } from '../../../recoil/app/app.atoms';
 
+import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
 import PurchaseAugmentation from '../../../components/characters/forms/slide-over/PurchaseAugmentation';
+import NewWeapon from '../../../components/characters/forms/slide-over/NewWeapon';
+import Consumable from '../../../components/characters/forms/slide-over/Consumable';
 import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
 import CharacterLog from '../../../components/characters/forms/slide-over/CharacterLog';
+import Loading from './Loading';
 
-export const SlideOverForm = ({ title, description, submitText, submitHandler, children }) => {
+export const SlideOverForm = ({ title, description, submitText, submitDisabled, submitHandler, children }) => {
   const setSlideOver = useSetRecoilState(slideOverState);
 
   return (
@@ -38,8 +42,10 @@ export const SlideOverForm = ({ title, description, submitText, submitHandler, c
 
         {/* Divider container */}
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          {/* Form content */}
-          {children}
+          <React.Suspense fallback={<Loading />}>
+            {/* Form content */}
+            {children}
+          </React.Suspense>
         </div>
       </div>
 
@@ -55,7 +61,11 @@ export const SlideOverForm = ({ title, description, submitText, submitHandler, c
           </button>
           <button
             type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-dark hover:bg-dark-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-200"
+            className={classNames(
+              submitDisabled ? 'bg-gray-200 text-gray-400 cursor-default' : 'text-white bg-dark hover:bg-dark-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-200',
+              'inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md'
+            )}
+            disabled={submitDisabled}
           >
             {submitText}
           </button>
@@ -92,9 +102,10 @@ const SlideOver = () => {
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedConsumables ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedUsables ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.weaponForm ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeapon /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.weaponForm ? '<Weapon id={slideOver.id} />' : null}
                 {slideOver && slideOver.type === SlideOverTypes.wearableForm ? 'Not built yet' : null}
-                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <Consumable /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.usableForm ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}

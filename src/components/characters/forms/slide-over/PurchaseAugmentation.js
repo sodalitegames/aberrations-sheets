@@ -6,73 +6,87 @@ import { slideOverState } from '../../../../recoil/app/app.atoms';
 
 import { getAugmentations } from '../../../../recoil/resources/resources.selector';
 
-import { createResource, updateResource } from '../../../../apis/sheets.api';
-
-import { replaceItemById } from '../../../../utils/arrays';
+import { createResource, updateSheet } from '../../../../apis/sheets.api';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
+import Select from '../../../shared/Select';
+import Detail from '../../../shared/Detail';
 
-const PurchaseAugmentation = ({ id }) => {
+const PurchaseAugmentation = () => {
   const [charSheet, setCharSheet] = useRecoilState(charSheetState);
   const setSlideOver = useSetRecoilState(slideOverState);
 
-  const fetchedAugs = useRecoilValue(getAugmentations);
+  const augGroups = useRecoilValue(getAugmentations);
 
   const [augmentation, setAugmentation] = useState(null);
   const [augsList, setAugsList] = useState([]);
 
-  // useEffect(() => {
-  //   if (charSheet && fetchedAugs) {
-  //     const newAugsList = fetchedAugs.map(aug => {
-  //       let purchased = false;
+  useEffect(() => {
+    if (charSheet && augGroups) {
+      const newAugsList = augGroups.map(group => {
+        const children = [group.augmentation1, group.augmentation2, group.augmentation3, group.augmentation4, group.augmentation5].map(aug => {
+          let purchased = false;
 
-  //       charSheet.augmentations.forEach(charsAug => {
-  //         if (charsAug.universalId === aug._id) purchased = true;
-  //       });
+          charSheet.augmentations.forEach(charsAug => {
+            if (charsAug.universalId === aug._id) purchased = true;
+          });
 
-  //       return {
-  //         universalId: aug._id,
-  //         name: aug.name,
-  //         description: aug.description,
-  //         pointCost: aug.pointCost,
-  //         purchased,
-  //       };
-  //     });
+          return {
+            id: aug._id,
+            universalId: aug._id,
+            name: aug.name,
+            displayName: `${aug.name} (${aug.pointCost})`,
+            groupName: group.groupName,
+            description: aug.description,
+            pointCost: aug.pointCost,
+            disabled: purchased,
+          };
+        });
 
-  //     console.log(newAugsList);
+        return {
+          id: group._id,
+          name: group.groupName,
+          children,
+        };
+      });
 
-  //     setAugsList(newAugsList);
-  //   }
-  // }, [charSheet, fetchedAugs]);
+      setAugsList(newAugsList);
+    }
+  }, [charSheet, augGroups]);
+
+  const selectAugmentation = e => {
+    if (!e.target.value) setAugmentation(null);
+
+    let ungrouped = [];
+
+    augsList.forEach(list => {
+      ungrouped = [...ungrouped, ...list.children];
+    });
+
+    const currAug = ungrouped.find(aug => aug.universalId === e.target.value);
+
+    setAugmentation(currAug);
+  };
 
   const submitHandler = async e => {
     e.preventDefault();
 
-    // if (id) {
-    //   const response = await updateResource('characters', charSheet._id, 'logs', id, { date, content });
-    //   console.log(response.data.data);
-    //   setCharSheet(oldCharSheet => {
-    //     console.log(oldCharSheet);
-    //     return { ...oldCharSheet, characterLogs: replaceItemById(oldCharSheet.characterLogs, id, response.data.data.doc) };
-    //   });
+    if (!augmentation) return alert('Must provide augmentation');
 
-    //   setSlideOver(null);
-    //   return;
-    // }
+    if (charSheet.upgradePoints < augmentation.pointCost) return alert('You cannot afford this ability');
 
-    // const response = await createResource('characters', charSheet._id, 'logs', { date, content });
+    const { name, pointCost, description, universalId } = augmentation;
 
-    // console.log(response.data.data);
+    const resourceResponse = await createResource('characters', charSheet._id, 'augmentations', { name, pointCost, description, universalId });
+    const sheetResponse = await updateSheet('characters', charSheet._id, { upgradePoints: charSheet.upgradePoints - pointCost });
 
-    // setCharSheet(oldCharSheet => {
-    //   console.log(oldCharSheet);
-    //   return { ...oldCharSheet, characterLogs: [response.data.data.doc, ...oldCharSheet.characterLogs] };
-    // });
+    setCharSheet(oldCharSheet => {
+      console.log(oldCharSheet);
+      return { ...oldCharSheet, upgradePoints: sheetResponse.data.data.sheet.upgradePoints, augmentations: [resourceResponse.data.data.doc, ...oldCharSheet.augmentations] };
+    });
 
-    // setSlideOver(null);
+    setSlideOver(null);
   };
 
   return (
@@ -80,19 +94,19 @@ const PurchaseAugmentation = ({ id }) => {
       title="Purchase an Augmentation"
       description="Select an augmentation below and purchase it to add it to your character."
       submitText={`Purchase Augmentation`}
+      submitDisabled={!!(!augmentation || (augmentation && charSheet.upgradePoints < augmentation.pointCost))}
       submitHandler={submitHandler}
     >
-      {/* {augsList.length ? (
-        <div>
-          <Input slideOver uneditable label="Name" name="name" value={augsList[0].name} />
-          <Input slideOver uneditable label="Description" name="description" value={augsList[0].description} />
-          <Input slideOver uneditable label="Point Cost" name="pointCost" value={augsList[0].pointCost} />
-        </div>
-      ) : null} */}
+      <Detail slideOver label="Upgrade Points Available" detail={charSheet.upgradePoints} />
+      <Select slideOver label="Choose an Augmentation" name="augmentations" options={augsList} changeHandler={selectAugmentation} />
 
-      {JSON.stringify(fetchedAugs)}
-
-      {/* <TextArea slideOver label="What happened?" name="content" rows={8} value={content} changeHandler={setContent} /> */}
+      {augmentation ? (
+        <>
+          <Detail slideOver label="Name" detail={augmentation.name} />
+          <Detail status={charSheet.upgradePoints < augmentation.pointCost ? 'error' : ''} slideOver label="Point Cost" detail={augmentation.pointCost} />
+          <Detail slideOver label="Description" detail={augmentation.description} />
+        </>
+      ) : null}
     </SlideOverForm>
   );
 };

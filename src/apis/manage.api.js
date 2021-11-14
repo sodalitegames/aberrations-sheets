@@ -12,9 +12,9 @@ const manageApi = Axios.create({
 
 export const fetchSpecies = query => manageApi.get(`/species/${query ? query : ''}`);
 export const fetchAugmentations = () => manageApi.get('/augmentation-groups');
-export const fetchWeapons = () => manageApi.get('/weapons');
+export const fetchWeapons = () => manageApi.get('/weapons?type=Standard');
 
-export const fetchConsumableCategories = () => manageApi.get('/consumable-categories');
+export const fetchConsumableCategories = () => manageApi.get('/consumables-categories');
 export const fetchCreatureTypes = () => manageApi.get('/creature-types');
 
 export default manageApi;

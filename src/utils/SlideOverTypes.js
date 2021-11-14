@@ -9,6 +9,7 @@ const SlideOverTypes = {
   manageEquippedBelongings: 'MANAGE_EQUIPPED_BELONGINGS',
 
   purchaseAugmentation: 'PURCHASE_AUGMENTATION',
+  newWeaponForm: 'NEW_WEAPON_FORM',
   weaponForm: 'WEAPON_FORM',
   wearableForm: 'WEARABLE_FORM',
   consumableForm: 'CONSUMABLE_FORM',

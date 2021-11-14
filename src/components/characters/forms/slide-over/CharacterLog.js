@@ -22,8 +22,10 @@ const CharacterLogForm = ({ id }) => {
 
   useEffect(() => {
     if (id && charSheet) {
-      setDate(new Date(charSheet.characterLogs.find(log => log._id === id).date).toISOString().split('T')[0]);
-      setContent(charSheet.characterLogs.find(log => log._id === id).content);
+      const currentLog = charSheet.characterLogs.find(log => log._id === id);
+
+      setDate(new Date(currentLog.date).toISOString().split('T')[0]);
+      setContent(currentLog.content);
     }
   }, [id, charSheet]);
 

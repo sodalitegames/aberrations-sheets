@@ -306,7 +306,7 @@ const CharacterGameplayPage = () => {
           <div className="flex justify-between">
             <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
             <Chip editable={{ type: ModalTypes.editUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
-              {charSheet.upgradePoints} Upgrade Points
+              {charSheet.upgradePoints} Upgrade {charSheet.upgradePoints === 1 ? 'Point' : 'Points'}
             </Chip>
           </div>
           <div className="flow-root mt-6">
@@ -323,7 +323,12 @@ const CharacterGameplayPage = () => {
                         setModal({
                           type: ModalTypes.confirmDelete,
                           id: aug._id,
-                          data: { type: 'augmentations', title: `Are you sure you want to remove ${aug.name}?`, submitText: `Yes, remove ${aug.name}` },
+                          data: {
+                            type: 'augmentations',
+                            title: `Are you sure you want to remove ${aug.name}?`,
+                            message: 'You will not be able to undo this action, and you will NOT recieve your upgrade points back.',
+                            submitText: `Yes, remove ${aug.name}`,
+                          },
                         })
                       }
                     >
