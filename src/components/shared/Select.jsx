@@ -12,7 +12,13 @@ const Select = ({ label, changeHandler, value, name, options, slideOver, ...othe
           </label>
         </div>
         <div className="sm:col-span-2">
-          <select className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" name={name} onChange={e => changeHandler(e)} {...otherProps}>
+          <select
+            className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+            name={name}
+            value={value}
+            onChange={e => changeHandler(e)}
+            {...otherProps}
+          >
             <option className="text-sm" value="">
               Select One
             </option>
@@ -45,7 +51,13 @@ const Select = ({ label, changeHandler, value, name, options, slideOver, ...othe
         {label}
       </label>
       <div className="mt-2">
-        <select className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md" name={name} onChange={e => changeHandler(e)} {...otherProps}>
+        <select
+          className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+          name={name}
+          value={value}
+          onChange={e => changeHandler(e)}
+          {...otherProps}
+        >
           <option className="text-sm" value="">
             Select One
           </option>

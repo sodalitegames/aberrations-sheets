@@ -9,13 +9,17 @@ import { slideOverState } from '../../../recoil/app/app.atoms';
 import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
+import Loading from './Loading';
+
 import PurchaseAugmentation from '../../../components/characters/forms/slide-over/PurchaseAugmentation';
 import NewWeapon from '../../../components/characters/forms/slide-over/NewWeapon';
+import EditWeapon from '../../../components/characters/forms/slide-over/EditWeapon';
+import Wearable from '../../../components/characters/forms/slide-over/Wearable';
 import Consumable from '../../../components/characters/forms/slide-over/Consumable';
+import Usable from '../../../components/characters/forms/slide-over/Usable';
 import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
 import CharacterLog from '../../../components/characters/forms/slide-over/CharacterLog';
-import Loading from './Loading';
 
 export const SlideOverForm = ({ title, description, submitText, submitDisabled, submitHandler, children }) => {
   const setSlideOver = useSetRecoilState(slideOverState);
@@ -103,10 +107,10 @@ const SlideOver = () => {
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedUsables ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeapon /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.weaponForm ? '<Weapon id={slideOver.id} />' : null}
-                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? 'Not built yet' : null}
-                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <Consumable /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.usableForm ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeapon id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <Wearable id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <Consumable id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <Usable id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charLogForm ? <CharacterLog id={slideOver.id} /> : null}

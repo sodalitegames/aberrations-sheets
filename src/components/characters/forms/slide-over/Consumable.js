@@ -6,24 +6,23 @@ import { slideOverState } from '../../../../recoil/app/app.atoms';
 
 import { getConsumableCategories } from '../../../../recoil/resources/resources.selector';
 
-import { createResource, updateSheet } from '../../../../apis/sheets.api';
+import { createResource, updateResource } from '../../../../apis/sheets.api';
+
+import { replaceItemById } from '../../../../utils/arrays';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import Input from '../../../shared/Input';
 import TextArea from '../../../shared/TextArea';
 import Select from '../../../shared/Select';
-import CheckboxGroup from '../../../shared/CheckboxGroup';
-import RadioGroup from '../../../shared/RadioGroup';
-import Detail from '../../../shared/Detail';
+import CheckboxGroup, { Checkbox } from '../../../shared/CheckboxGroup';
 
 const Consumable = ({ id }) => {
   const [charSheet, setCharSheet] = useRecoilState(charSheetState);
   const setSlideOver = useSetRecoilState(slideOverState);
 
-  const categories = useRecoilValue(getConsumableCategories);
+  const fetchedCategories = useRecoilValue(getConsumableCategories);
 
-  const [category, setCategory] = useState(null);
   const [categoriesList, setCategoriesList] = useState([]);
 
   const [name, setName] = useState('');
@@ -34,10 +33,9 @@ const Consumable = ({ id }) => {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    if (charSheet && categories) {
-      const newCategoriesList = categories.map(categ => {
+    if (charSheet && fetchedCategories) {
+      const newCategoriesList = fetchedCategories.map(categ => {
         return {
-          id: categ._id,
           universalId: categ._id,
           name: categ.name,
           description: categ.description,
@@ -48,15 +46,20 @@ const Consumable = ({ id }) => {
 
       console.log(newCategoriesList);
     }
-  }, [charSheet, categories]);
+  }, [charSheet, fetchedCategories]);
 
-  const selectCategory = e => {
-    if (!e.target.value) setCategory(null);
+  useEffect(() => {
+    if (id && charSheet) {
+      const currentConsumable = charSheet.consumables.find(consumable => consumable._id === id);
 
-    const currCateg = categoriesList.find(cat => cat.universalId === e.target.value);
-
-    setCategory(currCateg);
-  };
+      setName(currentConsumable.name);
+      setLevel(currentConsumable.level);
+      setUses(currentConsumable.uses);
+      setAssociatedStat(currentConsumable.associatedStat);
+      setQuantity(currentConsumable.quantity);
+      setDescription(currentConsumable.description);
+    }
+  }, [id, charSheet]);
 
   const selectStat = e => {
     if (!e.target.value) return setAssociatedStat(null);
@@ -66,17 +69,47 @@ const Consumable = ({ id }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    if (!category) return alert('Must have a category');
+    let categories = [];
 
-    // const { name, pointCost, description, universalId } = augmentation;
+    categoriesList.forEach(categ => {
+      if (e.target[categ.universalId].checked) {
+        categories.push(categ);
+      }
+    });
 
-    // const resourceResponse = await createResource('characters', charSheet._id, 'augmentations', { name, pointCost, description, universalId });
-    // const sheetResponse = await updateSheet('characters', charSheet._id, { upgradePoints: charSheet.upgradePoints - pointCost });
+    console.log(categories);
 
-    // setCharSheet(oldCharSheet => {
-    //   console.log(oldCharSheet);
-    //   return { ...oldCharSheet, upgradePoints: sheetResponse.data.data.sheet.upgradePoints, augmentations: [resourceResponse.data.data.doc, ...oldCharSheet.augmentations] };
-    // });
+    if (!categories.length) return alert('Must select at least one category');
+
+    if (!name) return alert('Must provide a name');
+    if (!level) return alert('Must provide a level');
+    if (!uses) return alert('Must provide a uses');
+    if (!quantity) return alert('Must provide a quantity');
+
+    let body = { name, level, uses, quantity, categories, description };
+
+    if (associatedStat) {
+      body.associatedStat = associatedStat;
+    }
+
+    if (id) {
+      const response = await updateResource('characters', charSheet._id, 'consumables', id, body);
+      console.log(response.data.data);
+      setCharSheet(oldCharSheet => {
+        console.log(oldCharSheet);
+        return { ...oldCharSheet, consumables: replaceItemById(oldCharSheet.consumables, id, response.data.data.doc) };
+      });
+
+      setSlideOver(null);
+      return;
+    }
+
+    const response = await createResource('characters', charSheet._id, 'consumables', body);
+
+    setCharSheet(oldCharSheet => {
+      console.log(oldCharSheet);
+      return { ...oldCharSheet, consumables: [response.data.data.doc, ...oldCharSheet.consumables] };
+    });
 
     setSlideOver(null);
   };
@@ -93,14 +126,17 @@ const Consumable = ({ id }) => {
       <Input slideOver label="Uses" name="uses" type="number" value={uses} changeHandler={setUses} />
       <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} />
 
-      {/* <Select slideOver label="Category" name="category" options={categoriesList} changeHandler={selectCategory} /> */}
-      <CheckboxGroup />
-      <RadioGroup />
+      <CheckboxGroup slideOver label="Categories">
+        {categoriesList.map(categ => (
+          <Checkbox key={categ.universalId} heading={categ.name} description={categ.description} name={categ.universalId} />
+        ))}
+      </CheckboxGroup>
 
       <Select
         slideOver
         label="Associated Stat (Opt.)"
         name="associatedStat"
+        value={associatedStat}
         options={[
           { name: 'Fortitude', id: 'fortitude' },
           { name: 'Agility', id: 'agility' },
@@ -109,7 +145,7 @@ const Consumable = ({ id }) => {
         ]}
         changeHandler={selectStat}
       />
-      <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} />
+      <TextArea slideOver label="Description (Opt.)" name="description" rows={4} value={description} changeHandler={setDescription} />
     </SlideOverForm>
   );
 };

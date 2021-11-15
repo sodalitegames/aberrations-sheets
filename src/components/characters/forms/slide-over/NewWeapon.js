@@ -127,14 +127,14 @@ const NewWeapon = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    if (!weapon) return alert('Must provide weapon');
+    if (!weapon) return alert('Must provide a weapon');
 
     if (!levelDamage) return alert('Must provide levelDamage');
 
     if (weapon === 'Custom' || weapon === 'Improvised') {
-      if (!name) return alert('Must provide name');
-      if (!associatedStat) return alert('Must provide associatedStat');
-      if (!range) return alert('Must provide range');
+      if (!name) return alert('Must provide a name');
+      if (!associatedStat) return alert('Must provide an associatedStat');
+      if (!range) return alert('Must provide a range');
 
       const response = await createResource('characters', charSheet._id, 'weapons', { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, description });
 
@@ -180,6 +180,7 @@ const NewWeapon = () => {
             slideOver
             label="Associated Stat"
             name="associatedStat"
+            value={associatedStat}
             options={[
               { name: 'Fortitude', id: 'fortitude' },
               { name: 'Agility', id: 'agility' },

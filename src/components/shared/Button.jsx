@@ -1,6 +1,17 @@
 import classNames from '../../utils/classNames';
 
-const Button = ({ children, classes, rounded, ...props }) => {
+const Button = ({ children, classes, text, rounded, ...props }) => {
+  if (text) {
+    return (
+      <button
+        className={classNames('w-full flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-600', classes)}
+        {...props}
+      >
+        {children}
+      </button>
+    );
+  }
+
   return (
     <button
       className={classNames(
