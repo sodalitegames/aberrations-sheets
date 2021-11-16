@@ -11,6 +11,8 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 
 import Loading from './Loading';
 
+import EquippedBelongings from '../../../components/characters/forms/slide-over/EquippedBelongings';
+import EquippedWearables from '../../../components/characters/forms/slide-over/EquippedWearables';
 import PurchaseAugmentation from '../../../components/characters/forms/slide-over/PurchaseAugmentation';
 import NewWeapon from '../../../components/characters/forms/slide-over/NewWeapon';
 import EditWeapon from '../../../components/characters/forms/slide-over/EditWeapon';
@@ -100,11 +102,8 @@ const SlideOver = () => {
               <div className="w-screen max-w-2xl">
                 {/* Forms */}
                 {slideOver && slideOver.type === SlideOverTypes.rollDice ? 'Not built yet' : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? 'Not built yet' : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedWeapons ? 'Not built yet' : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? 'Not built yet' : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedConsumables ? 'Not built yet' : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedUsables ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <EquippedBelongings id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? <EquippedWearables /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeapon /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeapon id={slideOver.id} /> : null}

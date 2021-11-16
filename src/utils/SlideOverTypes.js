@@ -1,13 +1,8 @@
 const SlideOverTypes = {
   rollDice: 'ROLL_DICE',
 
-  manageEquippedWeapons: 'MANAGE_EQUIPPED_WEAPONS',
-  manageEquippedWearables: 'MANAGE_EQUIPPED_WEARABLES',
-  manageEquippedConsumables: 'MANAGE_EQUIPPED_CONSUMABLES',
-  manageEquippedUsables: 'MANAGE_EQUIPPED_USABLES',
-
   manageEquippedBelongings: 'MANAGE_EQUIPPED_BELONGINGS',
-
+  manageEquippedWearables: 'MANAGE_EQUIPPED_WEARABLES',
   purchaseAugmentation: 'PURCHASE_AUGMENTATION',
   newWeaponForm: 'NEW_WEAPON_FORM',
   editWeaponForm: 'EDIT_WEAPON_FORM',

@@ -1,41 +1,22 @@
-const TextArea = ({ label, changeHandler, value, name, slideOver, ...otherProps }) => {
-  if (slideOver) {
-    return (
-      <div className="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
-        <div>
-          <label htmlFor={name} className="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
-            {label}
-          </label>
-        </div>
-        <div className="sm:col-span-2">
-          <textarea
-            className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-            name={name}
-            value={value}
-            rows={3}
-            onChange={e => changeHandler(e.target.value)}
-            {...otherProps}
-          />
-        </div>
-      </div>
-    );
-  }
+import Row from './Row';
 
+export const TextAreaInput = ({ name, value, changeHandler, ...otherProps }) => {
   return (
-    <div className="mt-2">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
-        {label}
-      </label>
-      <div className="mt-2">
-        <textarea
-          className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-          name={name}
-          value={value}
-          onChange={e => changeHandler(e.target.value)}
-          {...otherProps}
-        />
-      </div>
-    </div>
+    <textarea
+      className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+      name={name}
+      value={value}
+      onChange={e => changeHandler(e.target.value)}
+      {...otherProps}
+    />
+  );
+};
+
+const TextArea = ({ label, changeHandler, value, name, slideOver, ...otherProps }) => {
+  return (
+    <Row name={name} label={label} slideOver={slideOver}>
+      <TextAreaInput name={name} value={value} changeHandler={changeHandler} {...otherProps} />
+    </Row>
   );
 };
 

@@ -8,11 +8,22 @@ const DescriptionList = ({ list, classes }) => {
           item && (
             <div key={index} className={classNames(item.half ? 'sm:col-span-1' : 'sm:col-span-2')}>
               <dt className="text-xs font-base text-gray-500">{item.name}</dt>
-              {item.values.map((value, index) => (
-                <dd key={index} className="mt-1 text-sm text-gray-900">
-                  {value}
-                </dd>
-              ))}
+              {item.values.map((value, index) => {
+                // check if it has a title
+                if (value.title) {
+                  return (
+                    <dd key={index} title={value.title} className="mt-1 text-sm text-gray-900">
+                      {value.value}
+                    </dd>
+                  );
+                }
+
+                return (
+                  <dd key={index} className="mt-1 text-sm text-gray-900">
+                    {value}
+                  </dd>
+                );
+              })}
             </div>
           )
       )}
