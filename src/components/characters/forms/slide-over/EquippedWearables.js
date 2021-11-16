@@ -293,14 +293,6 @@ const EquippedWearables = () => {
           </ul>
         ) : null}
       </Row>
-
-      <Row slideOver label="All Wearables">
-        <ul className="divide-y divide-gray-200">
-          {charSheet.wearables.map(wearable => {
-            return <Wearable key={wearable._id} wearable={wearable} condensed="view" noButtonPanel />;
-          })}
-        </ul>
-      </Row>
     </SlideOverForm>
   );
 };

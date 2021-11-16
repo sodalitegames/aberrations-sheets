@@ -165,14 +165,6 @@ const EquippedBelongings = ({ id }) => {
               </ul>
             ) : null}
           </Row>
-
-          <Row slideOver label="All Weapons">
-            <ul className="divide-y divide-gray-200">
-              {charSheet.weapons.map(weapon => {
-                return <Weapon key={weapon._id} weapon={weapon} condensed="view" noButtonPanel />;
-              })}
-            </ul>
-          </Row>
         </>
       ) : id === 'consumables' ? (
         <>
@@ -200,14 +192,6 @@ const EquippedBelongings = ({ id }) => {
               </ul>
             ) : null}
           </Row>
-
-          <Row slideOver label="All Consumables">
-            <ul className="divide-y divide-gray-200">
-              {charSheet.consumables.map(consumable => {
-                return <Consumable key={consumable._id} consumable={consumable} condensed="view" noButtonPanel />;
-              })}
-            </ul>
-          </Row>
         </>
       ) : id === 'usables' ? (
         <>
@@ -234,14 +218,6 @@ const EquippedBelongings = ({ id }) => {
                 <Usable usable={equipped3} noButtonPanel />
               </ul>
             ) : null}
-          </Row>
-
-          <Row slideOver label="All Usables">
-            <ul className="divide-y divide-gray-200">
-              {charSheet.usables.map(usable => {
-                return <Usable key={usable._id} usable={usable} condensed="view" noButtonPanel />;
-              })}
-            </ul>
           </Row>
         </>
       ) : null}

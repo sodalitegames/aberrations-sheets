@@ -25,6 +25,10 @@ const ConfirmDelete = ({ id, data }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
+    if (data.equipped) {
+      return alert('You cannot delete this belonging until you unequip it.');
+    }
+
     const response = await deleteResource('characters', charSheet._id, data.type, id);
 
     console.log(response.data);

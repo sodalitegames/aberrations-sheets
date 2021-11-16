@@ -24,52 +24,6 @@ import Consumable from '../../components/characters/display/Consumable';
 import Usable from '../../components/characters/display/Usable';
 import Augmentation from '../../components/characters/display/Augmentation';
 
-const equippedWeapons = [
-  {
-    name: 'Sniper (Aptitude)',
-    handle: 'Level 2 / 2 - 5 Range',
-    ability: `Rafiki's Wrath`,
-    href: '#',
-  },
-  {
-    name: 'Bolas (Fortitude)',
-    handle: 'Level 3 / 1 - 3 Range',
-    ability: `Rafiki's Wrath`,
-    href: '#',
-  },
-];
-
-const equippedWearables = [
-  {
-    name: 'Head',
-    equipped: 'Helmet (+1 FOR)',
-  },
-  {
-    name: 'Face',
-    equipped: false,
-  },
-  {
-    name: 'Torso',
-    equipped: 'Shirt',
-  },
-  {
-    name: 'Arms',
-    equipped: 'Tattoo Sleeves (+1 PER)',
-  },
-  {
-    name: 'Hands',
-    equipped: 'Gloves (+1 APT)',
-  },
-  {
-    name: 'Legs',
-    equipped: 'Greaves (-1 AGL)',
-  },
-  {
-    name: 'Feet',
-    equipped: 'Boots',
-  },
-];
-
 const CharacterGameplayPage = () => {
   const charSheet = useRecoilValue(charSheetState);
   const setModal = useSetRecoilState(modalState);

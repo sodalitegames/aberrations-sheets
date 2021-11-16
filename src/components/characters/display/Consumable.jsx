@@ -8,7 +8,7 @@ import InfoList from '../../shared/InfoList';
 const Consumable = ({ consumable, condensed, noButtonPanel }) => {
   if (condensed === 'view') {
     return (
-      <ListItem heading={`${consumable.name} (Level ${consumable.level})`} view={{ type: ModalTypes.displayBelonging, id: consumable._id, data: { type: 'consumable' } }}>
+      <ListItem heading={`${consumable.name} (Level ${consumable.level})`} view={{ type: ModalTypes.displayBelonging, id: consumable._id, data: { type: 'consumables' } }}>
         <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
         <p className="text-sm text-gray-500 truncate">{consumable.handle}</p>
       </ListItem>
@@ -27,7 +27,7 @@ const Consumable = ({ consumable, condensed, noButtonPanel }) => {
       deletable={{
         type: ModalTypes.confirmDelete,
         id: consumable._id,
-        data: { type: 'consumables', title: `Are you sure you want to delete ${consumable.name}?`, submitText: `Yes, delete ${consumable.name}` },
+        data: { type: 'consumables', title: `Are you sure you want to delete ${consumable.name}?`, submitText: `Yes, delete ${consumable.name}`, equipped: consumable.equipped },
       }}
     >
       <DescriptionList

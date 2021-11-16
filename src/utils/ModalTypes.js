@@ -1,11 +1,5 @@
 const ModalTypes = {
-  displayWeapon: 'DISPLAY_WEAPON',
-  displayWearable: 'DISPLAY_WEARABLE',
-  displayConsumable: 'DISPLAY_CONSUMABLE',
-  displayUsable: 'DISPLAY_USABLE',
-
   displayBelonging: 'DISPLAY_BELONGING',
-
   takeDamage: 'TAKE_DAMAGE',
   healDamage: 'HEAL_DAMAGE',
   recieveMoney: 'RECIEVE_MONEY',

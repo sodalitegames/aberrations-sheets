@@ -17,6 +17,7 @@ import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoi
 import GeneralExhaustion from '../../../components/characters/forms/modal/GeneralExhaustion';
 import EditStat from '../../../components/characters/forms/modal/EditStat';
 import ConfirmDelete from '../../../components/characters/forms/modal/ConfirmDelete';
+import DisplayBelonging from '../../../components/characters/forms/modal/DisplayBelonging';
 
 export const ModalForm = ({ type, title, submitText, submitHandler, children }) => {
   const setModal = useSetRecoilState(modalState);
@@ -63,6 +64,36 @@ export const ModalForm = ({ type, title, submitText, submitHandler, children }) 
   );
 };
 
+export const ModalContainer = ({ title, buttonText, children }) => {
+  const setModal = useSetRecoilState(modalState);
+
+  return (
+    <div>
+      <div className="flex">
+        <div className="mt-2 flex flex-col px-4 mr-6">
+          {/* Title */}
+          <Dialog.Title as="h3" className="text-lg leading-6 font-medium text-gray-900">
+            {title}
+          </Dialog.Title>
+          {/* Modal body */}
+          <div className="mb-4">{children}</div>
+        </div>
+      </div>
+
+      {/* Action buttons panel */}
+      <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+        <button
+          type="button"
+          className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 sm:mt-0 sm:w-auto sm:text-sm"
+          onClick={() => setModal(null)}
+        >
+          {buttonText || 'Done'}
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const Modal = () => {
   const [modal, setModal] = useRecoilState(modalState);
 
@@ -99,11 +130,7 @@ const Modal = () => {
                 </button>
               </div>
               {/* Forms */}
-              {modal && modal.type === ModalTypes.displayBelonging ? 'Not built yet' : null}
-              {modal && modal.type === ModalTypes.displayWeapon ? 'Not built yet' : null}
-              {modal && modal.type === ModalTypes.displayWearable ? 'Not built yet' : null}
-              {modal && modal.type === ModalTypes.displayConsumable ? 'Not built yet' : null}
-              {modal && modal.type === ModalTypes.displayUsable ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.displayBelonging ? <DisplayBelonging id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
               {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
               {modal && modal.type === ModalTypes.recieveMoney ? <RecieveMoney /> : null}

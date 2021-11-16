@@ -8,7 +8,7 @@ import InfoList from '../../shared/InfoList';
 const Usable = ({ usable, condensed, noButtonPanel }) => {
   if (condensed === 'view') {
     return (
-      <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.displayBelonging, id: usable._id, data: { type: 'usable' } }}>
+      <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.displayBelonging, id: usable._id, data: { type: 'usables' } }}>
         <InfoList list={[{ title: usable.description, value: usable.description }]} />
       </ListItem>
     );
@@ -26,7 +26,7 @@ const Usable = ({ usable, condensed, noButtonPanel }) => {
       deletable={{
         type: ModalTypes.confirmDelete,
         id: usable._id,
-        data: { type: 'usables', title: `Are you sure you want to delete ${usable.name}?`, submitText: `Yes, delete ${usable.name}` },
+        data: { type: 'usables', title: `Are you sure you want to delete ${usable.name}?`, submitText: `Yes, delete ${usable.name}`, equipped: usable.equipped },
       }}
     >
       <DescriptionList

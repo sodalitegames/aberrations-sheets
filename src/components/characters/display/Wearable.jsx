@@ -5,11 +5,42 @@ import ListItem from '../../shared/ListItem';
 import DescriptionList from '../../shared/DescriptionList';
 import InfoList from '../../shared/InfoList';
 
+const getWearableMods = (FOR, AGL, PER, APT) => {
+  let stats = [];
+
+  if (FOR) {
+    stats.push(`${FOR > 0 ? '+' : ''}${FOR} FOR`);
+  }
+
+  if (AGL) {
+    stats.push(`${AGL > 0 ? '+' : ''}${AGL} AGL`);
+  }
+
+  if (PER) {
+    stats.push(`${PER > 0 ? '+' : ''}${PER} PER`);
+  }
+
+  if (APT) {
+    stats.push(`${APT > 0 ? '+' : ''}${APT} APT`);
+  }
+
+  console.log(stats);
+
+  if (!stats.length) {
+    return 'No Mods';
+  }
+
+  return stats.join(' / ');
+};
+
 const Wearable = ({ wearable, condensed, noButtonPanel }) => {
   if (condensed === 'view') {
     return (
-      <ListItem heading={wearable.name} view={{ type: ModalTypes.displayBelonging, id: wearable._id, data: { type: 'wearable' } }}>
-        <InfoList list={[wearable.equipped]} />
+      <ListItem
+        heading={`${wearable.name} (${wearable.bodyArea[0].toUpperCase() + wearable.bodyArea.slice(1)})`}
+        view={{ type: ModalTypes.displayBelonging, id: wearable._id, data: { type: 'wearables' } }}
+      >
+        <InfoList list={[getWearableMods(wearable.statMods.fortitude, wearable.statMods.agility, wearable.statMods.persona, wearable.statMods.aptitude)]} />
       </ListItem>
     );
   }
@@ -26,7 +57,7 @@ const Wearable = ({ wearable, condensed, noButtonPanel }) => {
       deletable={{
         type: ModalTypes.confirmDelete,
         id: wearable._id,
-        data: { type: 'wearables', title: `Are you sure you want to delete ${wearable.name}?`, submitText: `Yes, delete ${wearable.name}` },
+        data: { type: 'wearables', title: `Are you sure you want to delete ${wearable.name}?`, submitText: `Yes, delete ${wearable.name}`, equipped: wearable.equipped },
       }}
     >
       <DescriptionList
