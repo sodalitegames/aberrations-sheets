@@ -31,6 +31,14 @@ import CharacterCharacterPage from './pages/characters/character';
 import CharacterNotesPage from './pages/characters/notes';
 import CharacterResourcesPage from './pages/characters/resources';
 
+import CampaignGameplayPage from './pages/campaigns/gameplay';
+import CampaignStatsTrackerPage from './pages/campaigns/stats-tracker';
+import CampaignCampaignPage from './pages/campaigns/campaign';
+import CampaignPlayersPage from './pages/campaigns/players';
+import CampaignNpcsPage from './pages/campaigns/npcs';
+import CampaignBelongingsPage from './pages/campaigns/belongings';
+import CampaignNotesPage from './pages/campaigns/notes';
+
 import './index.css';
 
 ReactDOM.render(
@@ -59,7 +67,15 @@ ReactDOM.render(
                   <Route path="resources" element={<CharacterResourcesPage />} />
                 </Route>
                 <Route path="campaigns/:campId" element={<CampaignSheet />}>
-                  <Route index element={<></>} />
+                  <Route index element={<CampaignGameplayPage />} />
+                  <Route path="stats-tracker" element={<CampaignStatsTrackerPage />} />
+                  <Route path="campaign" element={<CampaignCampaignPage />} />
+                  <Route path="players" element={<CampaignPlayersPage />} />
+                  <Route path="npcs" element={<CampaignNpcsPage />} />
+                  <Route path="creatures" element={<></>} />
+                  <Route path="environments" element={<></>} />
+                  <Route path="belongings" element={<CampaignBelongingsPage />} />
+                  <Route path="notes" element={<CampaignNotesPage />} />
                 </Route>
               </Route>
             </Routes>

@@ -15,9 +15,19 @@ const navigation = {
     { name: 'Inventory', href: 'inventory' },
     { name: 'Character', href: 'character' },
     { name: 'Notes', href: 'notes' },
-    { name: 'Resources', href: 'resources' },
+    //{ name: 'Resources', href: 'resources' },
   ],
-  campaign: [{ name: 'Gameplay', href: '' }],
+  campaign: [
+    { name: 'Gameplay', href: '' },
+    { name: 'Stats Tracker', href: 'stats-tracker' },
+    { name: 'Campaign', href: 'campaign' },
+    { name: 'Players', href: 'players' },
+    { name: 'Npcs', href: 'npcs' },
+    { name: 'Creatures', href: 'creatures' },
+    { name: 'Environments', href: 'environments' },
+    { name: 'Belongings', href: 'belongings' },
+    { name: 'Notes', href: 'notes' },
+  ],
 };
 const secondaryNavigation = [
   { name: 'Home', href: '/' },
@@ -123,7 +133,7 @@ const DesktopNavigation = ({ type }) => {
                 key={item.name}
                 to={item.href}
                 className={({ isActive }) =>
-                  classNames(isActive ? 'text-white bg-opacity-10' : 'text-gray-300', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10 hover:text-white')
+                  classNames(isActive ? 'text-white bg-opacity-10' : 'text-gray-300', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10 hover:text-white min-w-max')
                 }
               >
                 {item.name}
