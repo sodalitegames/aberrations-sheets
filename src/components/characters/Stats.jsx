@@ -1,15 +1,15 @@
-import { useSetRecoilState } from 'recoil';
+import { useDispatch } from 'react-redux';
 
 import { PencilIcon } from '@heroicons/react/solid';
 
-import { modalState } from '../../recoil/app/app.atoms';
+import { setModal } from '../../redux/app/app.actions';
 
 import ModalTypes from '../../utils/ModalTypes';
 
 import Chip from '../shared/Chip';
 
 const Stats = ({ stats, power, generalExhaustion }) => {
-  const setModal = useSetRecoilState(modalState);
+  const dispatch = useDispatch();
 
   return (
     <div>
@@ -36,7 +36,7 @@ const Stats = ({ stats, power, generalExhaustion }) => {
                 <div className="flex flex-col items-center flex-shrink-0 items-start text-5xl font-semibold text-gray-900 relative">
                   <h5 className="font-normal text-xl flex items-center">
                     {stat.name}
-                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editStat, id: stat.name.toLowerCase() })}>
+                    <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editStat, id: stat.name.toLowerCase() }))}>
                       <PencilIcon
                         className="ml-2 mr-2 flex-shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"

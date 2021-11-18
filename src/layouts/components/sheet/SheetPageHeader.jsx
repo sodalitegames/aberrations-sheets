@@ -1,8 +1,8 @@
 import { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useSelector } from 'react-redux';
 
-import { currentUserState } from '../../../recoil/user/user.atoms';
+import { selectCurrentUser } from '../../../redux/user/user.selectors';
 
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
@@ -211,7 +211,7 @@ const Logo = () => {
 };
 
 const SheetPageHeader = ({ type }) => {
-  const currentUser = useRecoilValue(currentUserState);
+  const currentUser = useSelector(selectCurrentUser);
   return (
     <Popover
       as="header"

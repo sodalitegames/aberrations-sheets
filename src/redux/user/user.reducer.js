@@ -1,7 +1,9 @@
+import Cookies from 'js-cookie';
+
 import UserActionTypes from './user.types';
 
 const INITIAL_STATE = {
-  token: localStorage.getItem('token'),
+  token: Cookies.get('token'),
   current: null,
   characters: [],
   campaigns: [],
@@ -31,16 +33,31 @@ const userReducer = (state = INITIAL_STATE, action) => {
         campaigns: [],
         error: null,
       };
-    case UserActionTypes.FETCH_CURRENT_USER_START:
-      return {
-        ...state,
-        token: action.payload.token,
-      };
     case UserActionTypes.FETCH_CURRENT_USER_SUCCESS:
       return {
         ...state,
         current: action.payload,
         error: null,
+      };
+    case UserActionTypes.FETCH_SHEETS_FOR_USER_SUCCESS:
+      return {
+        ...state,
+        [action.payload.sheetType]: action.payload.sheetsList,
+      };
+    case UserActionTypes.CREATE_SHEET_FOR_USER_SUCCESS:
+      return {
+        ...state,
+        [action.payload.sheetType]: [action.payload.newSheet, ...state[action.payload.sheetType]],
+      };
+    case UserActionTypes.FETCH_SHEETS_FOR_USER_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case UserActionTypes.CREATE_SHEET_FOR_USER_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
       };
     case UserActionTypes.SIGN_IN_FAILURE:
     case UserActionTypes.SIGN_UP_FAILURE:

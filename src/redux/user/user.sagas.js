@@ -1,10 +1,36 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
+import Cookies from 'js-cookie';
 
 import UserActionTypes from './user.types';
 
-import { signInSuccess, signInFailure, signUpSuccess, signUpFailure, fetchCurrentUserSuccess, fetchCurrentUserFailure, signOutSuccess } from './user.actions';
+import {
+  signInSuccess,
+  signInFailure,
+  signUpSuccess,
+  signUpFailure,
+  signOutSuccess,
+  fetchCurrentUserSuccess,
+  fetchCurrentUserFailure,
+  fetchSheetsForUserSuccess,
+  fetchSheetsForUserFailure,
+  createSheetForUserSuccess,
+  createSheetForUserFailure,
+} from './user.actions';
 
-import { signUserIn, signUserUp, fetchUser } from '../api/auth.api';
+import authApi, { signUserIn, signUserUp, getUser } from '../../apis/auth.api';
+import sheetsApi, { getSheetsForPlayer, createSheetForPlayer } from '../../apis/sheets.api';
+
+const setCookie = token => {
+  Cookies.set('token', token, { expires: 60 });
+  authApi.defaults.headers.Authorization = `Bearer ${token}`;
+  sheetsApi.defaults.headers.Authorization = `Bearer ${token}`;
+};
+
+const removeCookie = () => {
+  Cookies.remove('token');
+  delete authApi.defaults.headers.Authorization;
+  delete sheetsApi.defaults.headers.Authorization;
+};
 
 // FETCH CURRENT USER
 export function* onFetchCurrentUserStart() {
@@ -13,18 +39,28 @@ export function* onFetchCurrentUserStart() {
 
 export function* fetchCurrentUser({ payload: { token } }) {
   try {
-    const response = yield fetchUser(token);
+    // set api default authorization headers
+    authApi.defaults.headers.Authorization = `Bearer ${token}`;
+    sheetsApi.defaults.headers.Authorization = `Bearer ${token}`;
 
-    // check if response is a failure
-    if (response.data.status === 'fail') {
-      yield put(fetchCurrentUserFailure(response.data));
+    // get the current user
+    const response = yield getUser();
+
+    console.log(response.data);
+
+    const { user } = response.data.data;
+
+    if (!user) {
+      // since there is no user, remove the cookie and api default headers
+      removeCookie();
+      yield put(fetchCurrentUserFailure({ status: 'error', message: 'Something went wrong fetching your data. Please log in again.' }));
       return;
     }
 
-    yield put(fetchCurrentUserSuccess(response.data.data.user));
+    yield put(fetchCurrentUserSuccess(user));
   } catch (err) {
-    // since token is invalid or expired, remove from local storage
-    localStorage.removeItem('token');
+    // since token is invalid or expired, or something else is wrong, remove the cookie and api default headers
+    removeCookie();
     yield put(fetchCurrentUserFailure(err.response.data));
   }
 }
@@ -45,27 +81,23 @@ export function* signIn({ payload: { email, password } }) {
     }
 
     if (response.data.token) {
-      // add token and hasAccount to local storage to persist signins
-      localStorage.setItem('token', response.data.token);
+      // add hasAccount to local storage
       localStorage.setItem('hasAccount', true);
 
-      console.log(response.data.data);
+      // set the cookie and api default headers
+      setCookie(response.data.token);
 
       // dispatch sign in success
       yield put(signInSuccess({ token: response.data.token }));
-
-      // save the current user to state
-      yield put(fetchCurrentUserSuccess(response.data.data.user));
     } else {
       yield put(signInFailure({ status: 'fail', message: 'Something went wrong. Please try again later.', error: response.data }));
     }
   } catch (err) {
-    console.log(err.response);
     yield put(signInFailure({ status: 'fail', message: 'Something went wrong. Please try again later.', error: err.response }));
   }
 }
 
-// SIGN A USER UP
+// SIGN UP A USER
 export function* onSignUpStart() {
   yield takeLatest(UserActionTypes.SIGN_UP_START, signUp);
 }
@@ -81,36 +113,72 @@ export function* signUp({ payload: { name, email, password, passwordConfirm, sub
     }
 
     if (response.data.token) {
-      // add token and hasAccount to local storage to persist signins
-      localStorage.setItem('token', response.data.token);
+      // add hasAccount to local storage
       localStorage.setItem('hasAccount', true);
+
+      // set the cookie and api default headers
+      setCookie(response.data.token);
 
       // dispatch the sign up success
       yield put(signUpSuccess({ token: response.data.token }));
 
       // save the current user to state
-      yield put(fetchCurrentUserSuccess(response.data.data.user));
+      // yield put(fetchCurrentUserSuccess(response.data.data.user));
     } else {
       yield put(signUpFailure({ status: 'fail', message: 'Something went wrong. Please try again later.', error: response.data }));
     }
   } catch (err) {
-    console.log(err.response);
     yield put(signUpFailure({ status: 'fail', message: 'Something went wrong. Please try again later.', error: err.response }));
   }
 }
 
-// SIGN A USER OUT
+// SIGN OUT A USER
 export function* onSignOutStart() {
   yield takeLatest(UserActionTypes.SIGN_OUT_START, signOut);
 }
 
 export function* signOut() {
-  // remove token from local storage
-  localStorage.removeItem('token');
+  // remove the cookie and api default headers
+  removeCookie();
+  // dispatch sign out success
   yield put(signOutSuccess());
+}
+
+// FETCH SHEETS FOR A USER
+export function* onFetchSheetsForUserStart() {
+  yield takeLatest(UserActionTypes.FETCH_SHEETS_FOR_USER_START, fetchSheetsForUser);
+}
+
+export function* fetchSheetsForUser({ payload: { sheetType } }) {
+  try {
+    const response = yield getSheetsForPlayer(sheetType);
+
+    console.log(response.data.data);
+
+    yield put(fetchSheetsForUserSuccess({ sheetType, sheetsList: response.data.data.sheets }));
+  } catch (err) {
+    yield put(fetchSheetsForUserFailure(err.response.data));
+  }
+}
+
+// CREATE A SHEET FOR A USER
+export function* onCreateSheetForUserStart() {
+  yield takeLatest(UserActionTypes.CREATE_SHEET_FOR_USER_START, createSheetForUser);
+}
+
+export function* createSheetForUser({ payload: { sheetType, body } }) {
+  try {
+    const response = yield createSheetForPlayer(sheetType, body);
+
+    console.log(response.data.data);
+
+    yield put(createSheetForUserSuccess({ sheetType, newSheet: response.data.data.sheet }));
+  } catch (err) {
+    yield put(createSheetForUserFailure(err.response.data));
+  }
 }
 
 // EXPORT USER SAGAS
 export function* userSagas() {
-  yield all([call(onFetchCurrentUserStart), call(onSignInStart), call(onSignUpStart), call(onSignOutStart)]);
+  yield all([call(onFetchCurrentUserStart), call(onSignInStart), call(onSignUpStart), call(onSignOutStart), call(onFetchSheetsForUserStart), call(onCreateSheetForUserStart)]);
 }

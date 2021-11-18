@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-const apiUrl = `http://localhost:1337`;
+const apiUrl = process.env.REACT_APP_MANAGE_API;
 
 const manageApi = Axios.create({
   baseURL: apiUrl,

@@ -71,7 +71,7 @@ const Navigation = () => {
       </div>
       <div className="px-4 py-4">
         <button
-          className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-300 hover:text-white hover:border-white"
+          className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-300 hover:bg-primary-fade hover:text-white hover:border-primary"
           onClick={logoutHandler}
         >
           Logout

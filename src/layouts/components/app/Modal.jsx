@@ -1,10 +1,12 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { XIcon, ExclamationIcon } from '@heroicons/react/outline';
 
-import { modalState } from '../../../recoil/app/app.atoms';
+import { selectModal } from '../../../redux/app/app.selectors';
+
+import { setModal } from '../../../redux/app/app.actions';
 
 import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
@@ -20,7 +22,7 @@ import ConfirmDelete from '../../../components/characters/forms/modal/ConfirmDel
 import DisplayBelonging from '../../../components/characters/forms/modal/DisplayBelonging';
 
 export const ModalForm = ({ type, title, submitText, submitHandler, children }) => {
-  const setModal = useSetRecoilState(modalState);
+  const dispatch = useDispatch();
 
   return (
     <form onSubmit={submitHandler}>
@@ -55,7 +57,7 @@ export const ModalForm = ({ type, title, submitText, submitHandler, children }) 
         <button
           type="button"
           className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 sm:mt-0 sm:w-auto sm:text-sm"
-          onClick={() => setModal(null)}
+          onClick={() => dispatch(setModal(null))}
         >
           Cancel
         </button>
@@ -65,7 +67,7 @@ export const ModalForm = ({ type, title, submitText, submitHandler, children }) 
 };
 
 export const ModalContainer = ({ title, buttonText, children }) => {
-  const setModal = useSetRecoilState(modalState);
+  const dispatch = useDispatch();
 
   return (
     <div>
@@ -85,7 +87,7 @@ export const ModalContainer = ({ title, buttonText, children }) => {
         <button
           type="button"
           className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 sm:mt-0 sm:w-auto sm:text-sm"
-          onClick={() => setModal(null)}
+          onClick={() => dispatch(setModal(null))}
         >
           {buttonText || 'Done'}
         </button>
@@ -95,11 +97,12 @@ export const ModalContainer = ({ title, buttonText, children }) => {
 };
 
 const Modal = () => {
-  const [modal, setModal] = useRecoilState(modalState);
+  const dispatch = useDispatch();
+  const modal = useSelector(selectModal);
 
   return (
     <Transition.Root show={!!modal} as={Fragment}>
-      <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={setModal}>
+      <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={() => dispatch(setModal(null))}>
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
             <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
@@ -123,7 +126,7 @@ const Modal = () => {
                 <button
                   type="button"
                   className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
-                  onClick={() => setModal(null)}
+                  onClick={() => dispatch(setModal(null))}
                 >
                   <span className="sr-only">Close</span>
                   <XIcon className="h-6 w-6" aria-hidden="true" />

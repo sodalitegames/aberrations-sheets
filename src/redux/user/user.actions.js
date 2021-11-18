@@ -57,10 +57,34 @@ export const fetchCurrentUserFailure = error => ({
   payload: error,
 });
 
-// CREATE AND DELETE CAMPAIGN SHEETS
-export const createNewCampSheet = data => ({});
-export const deleteCampSheet = () => ({});
+// FETCH SHEETS FOR USER
+export const fetchSheetsForUserStart = sheetType => ({
+  type: UserActionTypes.FETCH_SHEETS_FOR_USER_START,
+  payload: sheetType,
+});
 
-// CREATE AND DELETE CHARACTER SHEETS
-export const createNewCharSheet = data => ({});
-export const deleteCharSheet = () => ({});
+export const fetchSheetsForUserSuccess = sheetsData => ({
+  type: UserActionTypes.FETCH_SHEETS_FOR_USER_SUCCESS,
+  payload: sheetsData,
+});
+
+export const fetchSheetsForUserFailure = error => ({
+  type: UserActionTypes.FETCH_SHEETS_FOR_USER_FAILURE,
+  payload: error,
+});
+
+// CREATE SHEET FOR USER
+export const createSheetForUserStart = sheetData => ({
+  type: UserActionTypes.CREATE_SHEET_FOR_USER_START,
+  payload: sheetData,
+});
+
+export const createSheetForUserSuccess = newSheet => ({
+  type: UserActionTypes.CREATE_SHEET_FOR_USER_SUCCESS,
+  payload: newSheet,
+});
+
+export const createSheetForUserFailure = error => ({
+  type: UserActionTypes.CREATE_SHEET_FOR_USER_FAILURE,
+  payload: error,
+});

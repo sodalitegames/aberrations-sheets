@@ -8,8 +8,6 @@ export const selectCurrentUser = createSelector([selectUser], user => user.curre
 
 export const selectUserError = createSelector([selectUser], user => user.error);
 
-export const selectUserLoading = createSelector([selectUser], user => !!user.current);
+export const selectUsersCharacters = createSelector([selectUser], user => user.characters);
 
-export const selectUsersCharacters = createSelector([selectCurrentUser], current => current.characters);
-
-export const selectUsersCampaigns = createSelector([selectCurrentUser], current => current.campaigns);
+export const selectUsersCampaigns = createSelector([selectUser], user => user.campaigns);

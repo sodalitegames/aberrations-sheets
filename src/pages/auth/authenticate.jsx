@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-import SigninForm from '../../components/auth/auth/SigninForm';
-import SignupForm from '../../components/auth/auth/SignupForm';
+import SigninForm from '../../components/auth/SigninForm';
+import SignupForm from '../../components/auth/SignupForm';
 
 const Authenticate = () => {
   const [hasAccount, setHasAccount] = useState(localStorage.getItem('hasAccount'));

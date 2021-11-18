@@ -1,15 +1,19 @@
 import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { XIcon } from '@heroicons/react/outline';
 
-import { slideOverState } from '../../../recoil/app/app.atoms';
+import { selectSlideOver } from '../../../redux/app/app.selectors';
+
+import { setSlideOver } from '../../../redux/app/app.actions';
 
 import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
 import Loading from './Loading';
+
+import NewCharacter from '../../../components/home/forms/slide-over/NewCharacter';
 
 import EquippedBelongings from '../../../components/characters/forms/slide-over/EquippedBelongings';
 import EquippedWearables from '../../../components/characters/forms/slide-over/EquippedWearables';
@@ -24,7 +28,7 @@ import CharBackground from '../../../components/characters/forms/slide-over/Char
 import CharacterLog from '../../../components/characters/forms/slide-over/CharacterLog';
 
 export const SlideOverForm = ({ title, description, submitText, submitDisabled, submitHandler, children }) => {
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
 
   return (
     <form onSubmit={submitHandler} className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
@@ -38,7 +42,7 @@ export const SlideOverForm = ({ title, description, submitText, submitDisabled, 
             </div>
             {/* Close button */}
             <div className="h-7 flex items-center">
-              <button type="button" className="text-gray-400 hover:text-gray-500" onClick={() => setSlideOver(null)}>
+              <button type="button" className="text-gray-400 hover:text-gray-500" onClick={() => dispatch(setSlideOver(null))}>
                 <span className="sr-only">Close panel</span>
                 <XIcon className="h-6 w-6" aria-hidden="true" />
               </button>
@@ -61,7 +65,7 @@ export const SlideOverForm = ({ title, description, submitText, submitDisabled, 
           <button
             type="button"
             className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
-            onClick={() => setSlideOver(null)}
+            onClick={() => dispatch(setSlideOver(null))}
           >
             Cancel
           </button>
@@ -82,11 +86,13 @@ export const SlideOverForm = ({ title, description, submitText, submitDisabled, 
 };
 
 const SlideOver = () => {
-  const [slideOver, setSlideOver] = useRecoilState(slideOverState);
+  const dispatch = useDispatch();
+
+  const slideOver = useSelector(selectSlideOver);
 
   return (
     <Transition.Root show={!!slideOver} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={setSlideOver}>
+      <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={() => dispatch(setSlideOver(null))}>
         <div className="absolute inset-0 overflow-hidden">
           <Dialog.Overlay className="absolute inset-0" />
           <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex sm:pl-16">
@@ -101,6 +107,8 @@ const SlideOver = () => {
             >
               <div className="w-screen max-w-2xl">
                 {/* Forms */}
+                {slideOver && slideOver.type === SlideOverTypes.newCharacter ? <NewCharacter /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.newCampaign ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.rollDice ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <EquippedBelongings id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? <EquippedWearables /> : null}
