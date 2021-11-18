@@ -1,7 +1,9 @@
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
+import { useDispatch } from 'react-redux';
 
-import { modalState } from '../../../../recoil/app/app.atoms';
 import { charSheetState } from '../../../../recoil/character/character.atoms';
+
+import { setModal } from '../../../../redux/app/app.actions';
 
 import { removeItemById } from '../../../../utils/arrays';
 
@@ -20,7 +22,7 @@ import { ModalForm } from '../../../../layouts/components/app/Modal';
 
 const ConfirmDelete = ({ id, data }) => {
   const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setModal = useSetRecoilState(modalState);
+  const dispatch = useDispatch();
 
   const submitHandler = async e => {
     e.preventDefault();
@@ -37,7 +39,7 @@ const ConfirmDelete = ({ id, data }) => {
       return { ...oldCharSheet, [data.property || data.type]: removeItemById(oldCharSheet[data.property || data.type], id) };
     });
 
-    setModal(null);
+    dispatch(setModal(null));
   };
 
   return (

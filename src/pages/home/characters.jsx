@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { selectUsersCharacters } from '../../redux/user/user.selectors';
+import { selectUsersCharacters, selectUsersCharactersFetched } from '../../redux/user/user.selectors';
 
 import { fetchSheetsForUserStart } from '../../redux/user/user.actions';
 
@@ -13,11 +13,14 @@ import PageContent from '../../layouts/components/home/PageContent';
 import CharSheetCard from '../../components/home/CharSheetCard';
 
 const CharactersPage = () => {
+  const dispatch = useDispatch();
+
   const characters = useSelector(selectUsersCharacters);
+  const fetched = useSelector(selectUsersCharactersFetched);
 
   useEffect(() => {
-    if (!characters.length) {
-      fetchSheetsForUserStart('characters');
+    if (!fetched) {
+      dispatch(fetchSheetsForUserStart('characters'));
     }
   });
 
@@ -25,11 +28,7 @@ const CharactersPage = () => {
 
   return (
     <PageContent heading="My Characters" primary={{ text: 'Create New Character', slideOver: { type: SlideOverTypes.newCharacter } }}>
-      <React.Suspense fallback={<Loading />}>
-        {characters.map(charSheet => (
-          <CharSheetCard key={charSheet._id} charSheet={charSheet} />
-        ))}
-      </React.Suspense>
+      <React.Suspense fallback={<Loading />}>{fetched ? characters.map(charSheet => <CharSheetCard key={charSheet._id} charSheet={charSheet} />) : <Loading />}</React.Suspense>
     </PageContent>
   );
 };

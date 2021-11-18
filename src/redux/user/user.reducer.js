@@ -7,6 +7,14 @@ const INITIAL_STATE = {
   current: null,
   characters: [],
   campaigns: [],
+  fetched: {
+    characters: false,
+    campaigns: false,
+  },
+  errors: {
+    characters: null,
+    campaigns: null,
+  },
   error: null,
 };
 
@@ -43,6 +51,10 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         [action.payload.sheetType]: action.payload.sheetsList,
+        fetched: {
+          ...state.fetched,
+          [action.payload.sheetType]: true,
+        },
       };
     case UserActionTypes.CREATE_SHEET_FOR_USER_SUCCESS:
       return {

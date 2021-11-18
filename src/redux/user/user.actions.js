@@ -44,7 +44,7 @@ export const signOutSuccess = () => ({
 // FETCH CURRENT USER
 export const fetchCurrentUserStart = token => ({
   type: UserActionTypes.FETCH_CURRENT_USER_START,
-  payload: token,
+  payload: { token },
 });
 
 export const fetchCurrentUserSuccess = currentUser => ({
@@ -60,12 +60,12 @@ export const fetchCurrentUserFailure = error => ({
 // FETCH SHEETS FOR USER
 export const fetchSheetsForUserStart = sheetType => ({
   type: UserActionTypes.FETCH_SHEETS_FOR_USER_START,
-  payload: sheetType,
+  payload: { sheetType },
 });
 
-export const fetchSheetsForUserSuccess = sheetsData => ({
+export const fetchSheetsForUserSuccess = (sheetType, sheetsList) => ({
   type: UserActionTypes.FETCH_SHEETS_FOR_USER_SUCCESS,
-  payload: sheetsData,
+  payload: { sheetType, sheetsList },
 });
 
 export const fetchSheetsForUserFailure = error => ({
@@ -74,14 +74,14 @@ export const fetchSheetsForUserFailure = error => ({
 });
 
 // CREATE SHEET FOR USER
-export const createSheetForUserStart = sheetData => ({
+export const createSheetForUserStart = (sheetType, body) => ({
   type: UserActionTypes.CREATE_SHEET_FOR_USER_START,
-  payload: sheetData,
+  payload: { sheetType, body },
 });
 
-export const createSheetForUserSuccess = newSheet => ({
+export const createSheetForUserSuccess = (sheetType, newSheet) => ({
   type: UserActionTypes.CREATE_SHEET_FOR_USER_SUCCESS,
-  payload: newSheet,
+  payload: { sheetType, newSheet },
 });
 
 export const createSheetForUserFailure = error => ({

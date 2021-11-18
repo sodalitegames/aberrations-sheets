@@ -88,7 +88,7 @@ export function* signIn({ payload: { email, password } }) {
       setCookie(response.data.token);
 
       // dispatch sign in success
-      yield put(signInSuccess({ token: response.data.token }));
+      yield put(signInSuccess(response.data.token));
     } else {
       yield put(signInFailure({ status: 'fail', message: 'Something went wrong. Please try again later.', error: response.data }));
     }
@@ -120,7 +120,7 @@ export function* signUp({ payload: { name, email, password, passwordConfirm, sub
       setCookie(response.data.token);
 
       // dispatch the sign up success
-      yield put(signUpSuccess({ token: response.data.token }));
+      yield put(signUpSuccess(response.data.token));
 
       // save the current user to state
       // yield put(fetchCurrentUserSuccess(response.data.data.user));
@@ -155,7 +155,7 @@ export function* fetchSheetsForUser({ payload: { sheetType } }) {
 
     console.log(response.data.data);
 
-    yield put(fetchSheetsForUserSuccess({ sheetType, sheetsList: response.data.data.sheets }));
+    yield put(fetchSheetsForUserSuccess(sheetType, response.data.data.sheets));
   } catch (err) {
     yield put(fetchSheetsForUserFailure(err.response.data));
   }
@@ -172,7 +172,7 @@ export function* createSheetForUser({ payload: { sheetType, body } }) {
 
     console.log(response.data.data);
 
-    yield put(createSheetForUserSuccess({ sheetType, newSheet: response.data.data.sheet }));
+    yield put(createSheetForUserSuccess(sheetType, response.data.data.sheet));
   } catch (err) {
     yield put(createSheetForUserFailure(err.response.data));
   }

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -11,9 +11,8 @@ import { setSlideOver } from '../../../redux/app/app.actions';
 import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
-import Loading from './Loading';
-
 import NewCharacter from '../../../components/home/forms/slide-over/NewCharacter';
+import NewCampaign from '../../../components/home/forms/slide-over/NewCampaign';
 
 import EquippedBelongings from '../../../components/characters/forms/slide-over/EquippedBelongings';
 import EquippedWearables from '../../../components/characters/forms/slide-over/EquippedWearables';
@@ -52,10 +51,8 @@ export const SlideOverForm = ({ title, description, submitText, submitDisabled, 
 
         {/* Divider container */}
         <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
-          <React.Suspense fallback={<Loading />}>
-            {/* Form content */}
-            {children}
-          </React.Suspense>
+          {/* Form content */}
+          {children}
         </div>
       </div>
 
@@ -108,7 +105,7 @@ const SlideOver = () => {
               <div className="w-screen max-w-2xl">
                 {/* Forms */}
                 {slideOver && slideOver.type === SlideOverTypes.newCharacter ? <NewCharacter /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.newCampaign ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.newCampaign ? <NewCampaign /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.rollDice ? 'Not built yet' : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <EquippedBelongings id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? <EquippedWearables /> : null}

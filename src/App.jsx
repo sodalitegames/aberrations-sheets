@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     if (token) {
-      dispatch(fetchCurrentUserStart({ token }));
+      dispatch(fetchCurrentUserStart(token));
     }
   }, [dispatch, token]);
 

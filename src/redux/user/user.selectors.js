@@ -10,4 +10,8 @@ export const selectUserError = createSelector([selectUser], user => user.error);
 
 export const selectUsersCharacters = createSelector([selectUser], user => user.characters);
 
+export const selectUsersCharactersFetched = createSelector([selectUser], user => user.fetched.characters);
+
 export const selectUsersCampaigns = createSelector([selectUser], user => user.campaigns);
+
+export const selectUsersCampaignsFetched = createSelector([selectUser], user => user.fetched.campaigns);
