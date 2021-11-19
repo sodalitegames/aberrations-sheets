@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
-import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { campIdState, campSheetState } from '../recoil/campaign/campaign.atoms';
-import { getCampSheet } from '../recoil/campaign/campaign.selectors';
+import { selectCurrentCampaign } from '../redux/campaign/campaign.selectors';
+
+import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
 import Loading from './components/app/Loading';
 
@@ -12,36 +13,29 @@ import Footer from './components/shared/Footer';
 
 export default function CharacterSheet() {
   let { campId } = useParams();
-  let setcampId = useSetRecoilState(campIdState);
+
+  const dispatch = useDispatch();
+
+  const campSheet = useSelector(selectCurrentCampaign);
 
   useEffect(() => {
-    if (campId) {
-      setcampId(campId);
+    if (campId && !campSheet) {
+      dispatch(fetchCurrentSheetStart('campaigns', campId));
     }
   });
-
-  const campSheet = useRecoilValue(getCampSheet);
-
-  const setCampSheet = useSetRecoilState(campSheetState);
-
-  if (campSheet) {
-    setCampSheet(campSheet);
-  }
-
-  console.log('Campaign Sheet:', campSheet);
-
-  if (!campSheet) {
-    return <div>Collecting campaign sheet data...</div>;
-  }
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
         <SheetPageHeader type="campaign" />
         <main className="-mt-24 pb-8">
-          <React.Suspense fallback={<Loading />}>
-            <Outlet />
-          </React.Suspense>
+          {campSheet ? (
+            <React.Suspense fallback={<Loading />}>
+              <Outlet />
+            </React.Suspense>
+          ) : (
+            <Loading />
+          )}
         </main>
       </div>
       <Footer />

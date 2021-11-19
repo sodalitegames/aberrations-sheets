@@ -1,6 +1,6 @@
-import { useRecoilValue } from 'recoil';
+import { useSelector } from 'react-redux';
 
-import { charSheetState } from '../../recoil/character/character.atoms';
+import { selectCurrentCharacter } from '../../redux/character/character.selectors';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
@@ -8,7 +8,7 @@ import PanelSection from '../../components/shared/PanelSection';
 import Button from '../../components/shared/Button';
 
 const CharacterNotesPage = () => {
-  const charSheet = useRecoilValue(charSheetState);
+  const charSheet = useSelector(selectCurrentCharacter);
 
   return (
     <SheetPageContent title="Notes" columns={3}>

@@ -1,8 +1,4 @@
-//import { useRecoilValue } from 'recoil';
-
 import { AcademicCapIcon, BadgeCheckIcon, CashIcon, ClockIcon, ReceiptRefundIcon, UsersIcon } from '@heroicons/react/outline';
-
-//import { charSheetState } from '../../recoil/character/character.atoms';
 
 import classNames from '../../utils/classNames';
 
@@ -49,8 +45,6 @@ const actions = [
 ];
 
 const CharacterResourcesPage = () => {
-  //const charSheet = useRecoilValue(charSheetState);
-
   return (
     <SheetPageContent title="Resources" columns={3}>
       <PanelSection colSpan={2}>

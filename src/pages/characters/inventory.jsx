@@ -1,7 +1,8 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { slideOverState } from '../../recoil/app/app.atoms';
-import { charSheetState } from '../../recoil/character/character.atoms';
+import { selectCurrentCharacter } from '../../redux/character/character.selectors';
+
+import { setSlideOver } from '../../redux/app/app.actions';
 
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
@@ -16,20 +17,16 @@ import Consumable from '../../components/characters/display/Consumable';
 import Usable from '../../components/characters/display/Usable';
 
 const CharacterInventoryPage = () => {
-  const charSheet = useRecoilValue(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
 
-  console.log(charSheet.weapons);
-  console.log(charSheet.wearables);
-  console.log(charSheet.consumables);
-  console.log(charSheet.usables);
+  const charSheet = useSelector(selectCurrentCharacter);
 
   return (
     <SheetPageContent title="Inventory" columns={4}>
       <PanelSection title="Weapons">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.newWeaponForm })}>Add a new Weapon</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm }))}>Add a new Weapon</Button>
           </div>
 
           <ul className="-my-5 divide-y divide-gray-200">
@@ -42,7 +39,7 @@ const CharacterInventoryPage = () => {
       <PanelSection title="Wearables">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.wearableForm })}>Add a new Wearable</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm }))}>Add a new Wearable</Button>
           </div>
           <ul className="-my-5 divide-y divide-gray-200">
             {charSheet.wearables.map(wearable => (
@@ -54,7 +51,7 @@ const CharacterInventoryPage = () => {
       <PanelSection title="Consumables">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.consumableForm })}>Add a new Consumable</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm }))}>Add a new Consumable</Button>
           </div>
           <ul className="-my-5 divide-y divide-gray-200">
             {charSheet.consumables.map(consumable => (
@@ -66,7 +63,7 @@ const CharacterInventoryPage = () => {
       <PanelSection title="Usables">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.usableForm })}>Add a new Usable</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.usableForm }))}>Add a new Usable</Button>
           </div>
           <ul className="-my-5 divide-y divide-gray-200">
             {charSheet.usables.map(usable => (

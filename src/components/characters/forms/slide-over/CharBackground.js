@@ -27,10 +27,7 @@ const CharBackground = () => {
 
     const response = await updateSheet('characters', charSheet._id, { charBackground });
 
-    console.log(response.data.data);
-
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, charBackground: response.data.data.sheet.charBackground };
     });
 

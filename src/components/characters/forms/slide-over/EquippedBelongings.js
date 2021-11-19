@@ -104,7 +104,6 @@ const EquippedBelongings = ({ id }) => {
     if (body.one !== charSheet.equipped[id].one) {
       const response = await updateResource('characters', charSheet._id, id, body.one || charSheet.equipped[id].one, { equipped: body.one ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, [id]: replaceItemById(oldCharSheet[id], body.one || charSheet.equipped[id].one, response.data.data.doc) };
       });
     }
@@ -113,7 +112,6 @@ const EquippedBelongings = ({ id }) => {
     if (body.two !== charSheet.equipped[id].two) {
       const response = await updateResource('characters', charSheet._id, id, body.two || charSheet.equipped[id].two, { equipped: body.two ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, [id]: replaceItemById(oldCharSheet[id], body.two || charSheet.equipped[id].two, response.data.data.doc) };
       });
     }
@@ -123,7 +121,6 @@ const EquippedBelongings = ({ id }) => {
       if (body.three !== charSheet.equipped[id].three) {
         const response = await updateResource('characters', charSheet._id, id, body.three || charSheet.equipped[id].three, { equipped: body.three ? true : false });
         setCharSheet(oldCharSheet => {
-          console.log(oldCharSheet);
           return { ...oldCharSheet, [id]: replaceItemById(oldCharSheet[id], body.three || charSheet.equipped[id].three, response.data.data.doc) };
         });
       }
@@ -131,9 +128,7 @@ const EquippedBelongings = ({ id }) => {
 
     // Update the character sheet in the database
     const sheetResponse = await updateSheet('characters', charSheet._id, { equipped: { ...charSheet.equipped, [id]: body } });
-    console.log(sheetResponse.data.data);
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, equipped: sheetResponse.data.data.sheet.equipped };
     });
 

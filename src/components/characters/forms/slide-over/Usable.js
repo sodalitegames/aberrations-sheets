@@ -49,9 +49,7 @@ const Usable = ({ id }) => {
 
     if (id) {
       const response = await updateResource('characters', charSheet._id, 'usables', id, { name, type, description, quantity });
-      console.log(response.data.data);
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, usables: replaceItemById(oldCharSheet.usables, id, response.data.data.doc) };
       });
 
@@ -62,7 +60,6 @@ const Usable = ({ id }) => {
     const response = await createResource('characters', charSheet._id, 'usables', { name, type, description, quantity });
 
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, usables: [response.data.data.doc, ...oldCharSheet.usables] };
     });
 

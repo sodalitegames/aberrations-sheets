@@ -24,7 +24,6 @@ export default function SignupForm() {
 
   useEffect(() => {
     if (error) {
-      console.log(error);
       setMessage({ status: 'error', message: error.message });
       setProcessing(false);
     }

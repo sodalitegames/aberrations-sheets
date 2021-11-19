@@ -24,8 +24,6 @@ const getWearableMods = (FOR, AGL, PER, APT) => {
     stats.push(`${APT > 0 ? '+' : ''}${APT} APT`);
   }
 
-  console.log(stats);
-
   if (!stats.length) {
     return 'No Mods';
   }

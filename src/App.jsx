@@ -24,8 +24,6 @@ function App() {
     }
   }, [dispatch, token]);
 
-  console.log(currentUser);
-
   if (!token) {
     return <Authenticate />;
   }

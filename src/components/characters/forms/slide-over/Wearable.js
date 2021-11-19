@@ -54,9 +54,7 @@ const Wearable = ({ id }) => {
 
     if (id) {
       const response = await updateResource('characters', charSheet._id, 'wearables', id, { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } });
-      console.log(response.data.data);
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, id, response.data.data.doc) };
       });
 
@@ -67,7 +65,6 @@ const Wearable = ({ id }) => {
     const response = await createResource('characters', charSheet._id, 'wearables', { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } });
 
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, wearables: [response.data.data.doc, ...oldCharSheet.wearables] };
     });
 

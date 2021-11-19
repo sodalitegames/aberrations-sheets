@@ -1,7 +1,8 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { slideOverState } from '../../recoil/app/app.atoms';
-import { campSheetState } from '../../recoil/campaign/campaign.atoms';
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+
+import { setSlideOver } from '../../redux/app/app.actions';
 
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
@@ -15,9 +16,9 @@ import { ButtonPanel } from '../../components/shared/ListItem';
 import Log from '../../components/characters/display/Log';
 
 const CampaignCampaignPage = () => {
-  const campSheet = useRecoilValue(campSheetState);
+  const dispatch = useDispatch();
 
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   return (
     <SheetPageContent title="Campaign" columns={4}>
@@ -44,7 +45,7 @@ const CampaignCampaignPage = () => {
       <PanelSection title="Captain's Logs">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.charLogForm })}>Add a new Captain's Log</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>Add a new Captain's Log</Button>
           </div>
           <ul className="-my-5 divide-y divide-gray-200">
             {campSheet.captainsLogs.map(log => (

@@ -27,10 +27,7 @@ const CharDescription = () => {
 
     const response = await updateSheet('characters', charSheet._id, { charDescription });
 
-    console.log(response.data.data);
-
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, charDescription: response.data.data.sheet.charDescription };
     });
 

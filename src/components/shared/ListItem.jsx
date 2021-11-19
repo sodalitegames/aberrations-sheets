@@ -1,12 +1,11 @@
-import { useSetRecoilState } from 'recoil';
+import { useDispatch } from 'react-redux';
 
-import { modalState, slideOverState } from '../../recoil/app/app.atoms';
+import { setModal, setSlideOver } from '../../redux/app/app.actions';
 
 import Button from './Button';
 
 export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
-  const setModal = useSetRecoilState(modalState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
 
   return (
     <div className="flex justify-end space-x-1 mt-2">
@@ -14,7 +13,7 @@ export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
         <button
           type="button"
           className="inline-flex items-center px-1.5 py-1.5 text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={() => setSlideOver(editable)}
+          onClick={() => dispatch(setSlideOver(editable))}
         >
           {editText || 'Edit'}
         </button>
@@ -23,7 +22,7 @@ export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
         <button
           type="button"
           className="inline-flex items-center px-1.5 py-1.5 text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={() => setModal(deletable)}
+          onClick={() => dispatch(setModal(deletable))}
         >
           {deleteText || 'Delete'}
         </button>
@@ -33,7 +32,7 @@ export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
 };
 
 const ListItem = ({ heading, editable, deletable, editText, deleteText, view, noButtonPanel, children }) => {
-  const setModal = useSetRecoilState(modalState);
+  const dispatch = useDispatch();
 
   if (view) {
     return (
@@ -45,7 +44,7 @@ const ListItem = ({ heading, editable, deletable, editText, deleteText, view, no
           </div>
           {view === 'hideButton' ? null : (
             <div>
-              <Button rounded onClick={() => setModal(view)}>
+              <Button rounded onClick={() => dispatch(setModal(view))}>
                 View
               </Button>
             </div>

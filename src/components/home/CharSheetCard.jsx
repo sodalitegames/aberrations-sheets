@@ -1,7 +1,12 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { getSpecies } from '../../recoil/resources/resources.selector';
+import { selectSpecies } from '../../redux/resource/resource.selectors';
+
+import { fetchResourceStart } from '../../redux/resource/resource.actions';
+
+import { LoadingSpinner } from '../shared/SubmitButton';
 
 const user = {
   name: 'Rebecca Nicholas',
@@ -16,12 +21,24 @@ const stats = [
 ];
 
 export default function CharSheetCard({ charSheet }) {
-  const species = useRecoilValue(getSpecies);
+  const dispatch = useDispatch();
+
+  const speciesList = useSelector(selectSpecies);
+
+  useEffect(() => {
+    if (!speciesList) {
+      dispatch(fetchResourceStart('species'));
+    }
+  }, [dispatch, speciesList]);
 
   const getSpeciesName = speciesId => {
-    const currSpecies = species.find(spec => spec.id === speciesId);
+    const currSpecies = speciesList.find(spec => spec.id === speciesId);
     return currSpecies.name;
   };
+
+  if (!speciesList) {
+    return <LoadingSpinner dark />;
+  }
 
   return (
     <div className="rounded-lg bg-white overflow-hidden shadow">

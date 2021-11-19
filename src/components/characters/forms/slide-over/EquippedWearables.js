@@ -48,7 +48,6 @@ const EquippedWearables = () => {
       setTorsoList(torsoList);
 
       const armsList = charSheet.wearables.map(bel => (bel.bodyArea === 'arms' ? { name: bel.name, id: bel._id } : null)).filter(bel => bel);
-      console.log('arms list', armsList);
 
       setArmsList(armsList);
 
@@ -165,7 +164,6 @@ const EquippedWearables = () => {
     if (body.head !== charSheet.equipped.wearables.head) {
       const response = await updateResource('characters', charSheet._id, 'wearables', body.head || charSheet.equipped.wearables.head, { equipped: body.head ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.head || charSheet.equipped.wearables.head, response.data.data.doc) };
       });
     }
@@ -174,7 +172,6 @@ const EquippedWearables = () => {
     if (body.face !== charSheet.equipped.wearables.face) {
       const response = await updateResource('characters', charSheet._id, 'wearables', body.face || charSheet.equipped.wearables.face, { equipped: body.face ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.face || charSheet.equipped.wearables.face, response.data.data.doc) };
       });
     }
@@ -183,7 +180,6 @@ const EquippedWearables = () => {
     if (body.torso !== charSheet.equipped.wearables.torso) {
       const response = await updateResource('characters', charSheet._id, 'wearables', body.torso || charSheet.equipped.wearables.torso, { equipped: body.torso ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.torso || charSheet.equipped.wearables.torso, response.data.data.doc) };
       });
     }
@@ -192,7 +188,6 @@ const EquippedWearables = () => {
     if (body.arms !== charSheet.equipped.wearables.arms) {
       const response = await updateResource('characters', charSheet._id, 'wearables', body.arms || charSheet.equipped.wearables.arms, { equipped: body.arms ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.arms || charSheet.equipped.wearables.arms, response.data.data.doc) };
       });
     }
@@ -201,7 +196,6 @@ const EquippedWearables = () => {
     if (body.hands !== charSheet.equipped.wearables.hands) {
       const response = await updateResource('characters', charSheet._id, 'wearables', body.hands || charSheet.equipped.wearables.hands, { equipped: body.hands ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.hands || charSheet.equipped.wearables.hands, response.data.data.doc) };
       });
     }
@@ -210,7 +204,6 @@ const EquippedWearables = () => {
     if (body.legs !== charSheet.equipped.wearables.legs) {
       const response = await updateResource('characters', charSheet._id, 'wearables', body.legs || charSheet.equipped.wearables.legs, { equipped: body.legs ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.legs || charSheet.equipped.wearables.legs, response.data.data.doc) };
       });
     }
@@ -219,16 +212,13 @@ const EquippedWearables = () => {
     if (body.feet !== charSheet.equipped.wearables.feet) {
       const response = await updateResource('characters', charSheet._id, 'wearables', body.feet || charSheet.equipped.wearables.feet, { equipped: body.feet ? true : false });
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.feet || charSheet.equipped.wearables.feet, response.data.data.doc) };
       });
     }
 
     // Update the character sheet in the database
     const sheetResponse = await updateSheet('characters', charSheet._id, { equipped: { ...charSheet.equipped, wearables: body } });
-    console.log(sheetResponse.data.data);
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, equipped: sheetResponse.data.data.sheet.equipped };
     });
 

@@ -21,8 +21,6 @@ const NewWeapon = () => {
 
   const fetchedWeapons = useRecoilValue(getWeapons);
 
-  console.log(fetchedWeapons);
-
   const [weapon, setWeapon] = useState(null);
   const [weaponsList, setWeaponsList] = useState([]);
   const [weaponsSelectList, setWeaponsSelectList] = useState([]);
@@ -38,8 +36,6 @@ const NewWeapon = () => {
 
   useEffect(() => {
     if (charSheet && fetchedWeapons) {
-      console.log(fetchedWeapons);
-
       const mappedWeaponsList = fetchedWeapons.map(weap => {
         return {
           id: weap._id,
@@ -116,7 +112,6 @@ const NewWeapon = () => {
     const currWeapon = weaponsList.find(weapon => weapon.id === e.target.value);
 
     setWeapon(currWeapon);
-    console.log(currWeapon);
   };
 
   const selectStat = e => {
@@ -139,7 +134,6 @@ const NewWeapon = () => {
       const response = await createResource('characters', charSheet._id, 'weapons', { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, description });
 
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, weapons: [response.data.data.doc, ...oldCharSheet.weapons] };
       });
 
@@ -160,7 +154,6 @@ const NewWeapon = () => {
     });
 
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, weapons: [response.data.data.doc, ...oldCharSheet.weapons] };
     });
 

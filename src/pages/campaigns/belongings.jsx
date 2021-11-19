@@ -1,7 +1,8 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { slideOverState } from '../../recoil/app/app.atoms';
-import { campSheetState } from '../../recoil/campaign/campaign.atoms';
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+
+import { setSlideOver } from '../../redux/app/app.actions';
 
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
@@ -16,20 +17,16 @@ import Consumable from '../../components/characters/display/Consumable';
 import Usable from '../../components/characters/display/Usable';
 
 const CampaignBelongingsPage = () => {
-  const campSheet = useRecoilValue(campSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
 
-  console.log(campSheet.weapons);
-  console.log(campSheet.wearables);
-  console.log(campSheet.consumables);
-  console.log(campSheet.usables);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   return (
     <SheetPageContent title="Belongings" columns={4}>
       <PanelSection title="Weapons">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.newWeaponForm })}>Add a new Weapon</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm }))}>Add a new Weapon</Button>
           </div>
 
           <ul className="-my-5 divide-y divide-gray-200">
@@ -42,7 +39,7 @@ const CampaignBelongingsPage = () => {
       <PanelSection title="Wearables">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.wearableForm })}>Add a new Wearable</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm }))}>Add a new Wearable</Button>
           </div>
           <ul className="-my-5 divide-y divide-gray-200">
             {campSheet.wearables.map(wearable => (
@@ -54,7 +51,7 @@ const CampaignBelongingsPage = () => {
       <PanelSection title="Consumables">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.consumableForm })}>Add a new Consumable</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm }))}>Add a new Consumable</Button>
           </div>
           <ul className="-my-5 divide-y divide-gray-200">
             {campSheet.consumables.map(consumable => (
@@ -66,7 +63,7 @@ const CampaignBelongingsPage = () => {
       <PanelSection title="Usables">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.usableForm })}>Add a new Usable</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.usableForm }))}>Add a new Usable</Button>
           </div>
           <ul className="-my-5 divide-y divide-gray-200">
             {campSheet.usables.map(usable => (

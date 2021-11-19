@@ -1,6 +1,6 @@
-import { useSetRecoilState } from 'recoil';
+import { useDispatch } from 'react-redux';
 
-import { slideOverState } from '../../../recoil/app/app.atoms';
+import { setSlideOver } from '../../../redux/app/app.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
@@ -8,7 +8,7 @@ import DescriptionList from '../../shared/DescriptionList';
 import Button from '../../shared/Button';
 
 const Campaign = ({ campaign, condensed }) => {
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
 
   if (condensed === 'view') {
     return 'view';
@@ -22,7 +22,7 @@ const Campaign = ({ campaign, condensed }) => {
     <div>
       <DescriptionList list={[{ name: 'Campaign Name', values: ['Fake Campaign Name'] }]} />
       <div className="mt-6">
-        <Button text onClick={() => setSlideOver({ type: SlideOverTypes.charLogForm })}>
+        <Button text onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>
           Leave Campaign
         </Button>
       </div>

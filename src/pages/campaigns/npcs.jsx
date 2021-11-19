@@ -1,6 +1,6 @@
-import { useRecoilValue } from 'recoil';
+import { useSelector } from 'react-redux';
 
-import { campSheetState } from '../../recoil/campaign/campaign.atoms';
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
@@ -8,7 +8,7 @@ import PanelSection from '../../components/shared/PanelSection';
 import Button from '../../components/shared/Button';
 
 const CampaignNpcsPage = () => {
-  const campSheet = useRecoilValue(campSheetState);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   return (
     <SheetPageContent title="Npcs" columns={4}>

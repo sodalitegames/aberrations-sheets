@@ -43,8 +43,6 @@ const Consumable = ({ id }) => {
       });
 
       setCategoriesList(newCategoriesList);
-
-      console.log(newCategoriesList);
     }
   }, [charSheet, fetchedCategories]);
 
@@ -77,8 +75,6 @@ const Consumable = ({ id }) => {
       }
     });
 
-    console.log(categories);
-
     if (!categories.length) return alert('Must select at least one category');
 
     if (!name) return alert('Must provide a name');
@@ -94,9 +90,7 @@ const Consumable = ({ id }) => {
 
     if (id) {
       const response = await updateResource('characters', charSheet._id, 'consumables', id, body);
-      console.log(response.data.data);
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, consumables: replaceItemById(oldCharSheet.consumables, id, response.data.data.doc) };
       });
 
@@ -107,7 +101,6 @@ const Consumable = ({ id }) => {
     const response = await createResource('characters', charSheet._id, 'consumables', body);
 
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, consumables: [response.data.data.doc, ...oldCharSheet.consumables] };
     });
 

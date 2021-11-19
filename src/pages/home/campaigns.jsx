@@ -23,8 +23,6 @@ const Campaigns = () => {
     }
   });
 
-  console.log('Campaign Sheets:', campaigns);
-
   return (
     <PageContent heading="My Campaigns" primary={{ text: 'Create New Campaign', slideOver: { type: SlideOverTypes.newCampaign } }}>
       <React.Suspense fallback={<Loading />}>{fetched ? campaigns.map(campSheet => <CampSheetCard key={campSheet._id} campSheet={campSheet} />) : <Loading />}</React.Suspense>

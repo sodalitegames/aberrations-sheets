@@ -61,7 +61,6 @@ const EditWeapon = ({ id }) => {
       const response = await updateResource('characters', charSheet._id, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description });
 
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, weapons: replaceItemById(oldCharSheet.weapons, id, response.data.data.doc) };
       });
 
@@ -76,7 +75,6 @@ const EditWeapon = ({ id }) => {
     });
 
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, weapons: replaceItemById(oldCharSheet.weapons, id, response.data.data.doc) };
     });
 

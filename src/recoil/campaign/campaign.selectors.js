@@ -9,7 +9,6 @@ export const getCampSheet = selector({
   get: async ({ get }) => {
     if (get(campIdState)) {
       const response = await getSheet('campaigns', get(campIdState));
-      console.log('Campaign Sheet:', response.data.data.sheet);
       return response.data.data.sheet;
     }
     return null;

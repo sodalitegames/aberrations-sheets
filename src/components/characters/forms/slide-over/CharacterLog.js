@@ -34,9 +34,7 @@ const CharacterLogForm = ({ id }) => {
 
     if (id) {
       const response = await updateResource('characters', charSheet._id, 'logs', id, { date, content });
-      console.log(response.data.data);
       setCharSheet(oldCharSheet => {
-        console.log(oldCharSheet);
         return { ...oldCharSheet, characterLogs: replaceItemById(oldCharSheet.characterLogs, id, response.data.data.doc) };
       });
 
@@ -46,10 +44,7 @@ const CharacterLogForm = ({ id }) => {
 
     const response = await createResource('characters', charSheet._id, 'logs', { date, content });
 
-    console.log(response.data.data);
-
     setCharSheet(oldCharSheet => {
-      console.log(oldCharSheet);
       return { ...oldCharSheet, characterLogs: [response.data.data.doc, ...oldCharSheet.characterLogs] };
     });
 

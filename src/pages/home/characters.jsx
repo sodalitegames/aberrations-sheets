@@ -24,8 +24,6 @@ const CharactersPage = () => {
     }
   });
 
-  console.log('Character Sheets:', characters);
-
   return (
     <PageContent heading="My Characters" primary={{ text: 'Create New Character', slideOver: { type: SlideOverTypes.newCharacter } }}>
       <React.Suspense fallback={<Loading />}>{fetched ? characters.map(charSheet => <CharSheetCard key={charSheet._id} charSheet={charSheet} />) : <Loading />}</React.Suspense>

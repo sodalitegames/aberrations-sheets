@@ -1,10 +1,8 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { modalState, slideOverState } from '../../recoil/app/app.atoms';
-import { charSheetState } from '../../recoil/character/character.atoms';
+import { selectCurrentCharacter, selectEquippedWeapons, selectEquippedWearables, selectEquippedConsumables, selectEquippedUsables } from '../../redux/character/character.selectors';
 
-import { getCharactersSpecies } from '../../recoil/resources/resources.selector';
-import { getEquippedWeapons, getEquippedWearables, getEquippedConsumables, getEquippedUsables } from '../../recoil/character/character.selectors';
+import { setModal, setSlideOver } from '../../redux/app/app.actions';
 
 import classNames from '../../utils/classNames';
 import ModalTypes from '../../utils/ModalTypes';
@@ -25,15 +23,14 @@ import Usable from '../../components/characters/display/Usable';
 import Augmentation from '../../components/characters/display/Augmentation';
 
 const CharacterGameplayPage = () => {
-  const charSheet = useRecoilValue(charSheetState);
-  const setModal = useSetRecoilState(modalState);
-  const setSlideOver = useSetRecoilState(slideOverState);
-  const charsSpecies = useRecoilValue(getCharactersSpecies);
+  const dispatch = useDispatch();
 
-  const equippedWeapons = useRecoilValue(getEquippedWeapons);
-  const equippedWearables = useRecoilValue(getEquippedWearables);
-  const equippedConsumables = useRecoilValue(getEquippedConsumables);
-  const equippedUsables = useRecoilValue(getEquippedUsables);
+  const charSheet = useSelector(selectCurrentCharacter);
+
+  const equippedWeapons = useSelector(selectEquippedWeapons);
+  const equippedWearables = useSelector(selectEquippedWearables);
+  const equippedConsumables = useSelector(selectEquippedConsumables);
+  const equippedUsables = useSelector(selectEquippedUsables);
 
   return (
     <SheetPageContent title="Gameplay" columns={3}>
@@ -45,11 +42,11 @@ const CharacterGameplayPage = () => {
             <div className="sm:flex sm:space-x-5">
               <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                 <p className="text-xl font-bold text-gray-900 sm:text-2xl">{charSheet.characterName}</p>
-                <p className="text-sm font-medium text-gray-500">Ability: {charsSpecies.ability}</p>
+                <p className="text-sm font-medium text-gray-500">Ability: {charSheet.species.ability}</p>
               </div>
             </div>
             <div className="mt-5 flex flex-shrink-0 justify-center sm:mt-0">
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>Roll Dice</Button>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.rollDice }))}>Roll Dice</Button>
             </div>
           </div>
         </PanelSection>
@@ -79,7 +76,7 @@ const CharacterGameplayPage = () => {
               </ul>
 
               <div className="mt-6">
-                <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' })}>Manage equipped Weapons</Button>
+                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' }))}>Manage equipped Weapons</Button>
               </div>
             </div>
           </PanelSection>
@@ -92,7 +89,7 @@ const CharacterGameplayPage = () => {
                 ))}
               </ul>
               <div className="mt-6">
-                <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageEquippedWearables })}>Manage equipped Wearables</Button>
+                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedWearables }))}>Manage equipped Wearables</Button>
               </div>
             </div>
           </PanelSection>
@@ -108,7 +105,7 @@ const CharacterGameplayPage = () => {
                 ))}
               </ul>
               <div className="mt-6">
-                <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' })}>Manage equipped Consumables</Button>
+                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' }))}>Manage equipped Consumables</Button>
               </div>
             </div>
           </PanelSection>
@@ -121,7 +118,7 @@ const CharacterGameplayPage = () => {
                 ))}
               </ul>
               <div className="mt-6">
-                <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' })}>Manage equipped Usables</Button>
+                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' }))}>Manage equipped Usables</Button>
               </div>
             </div>
           </PanelSection>
@@ -140,8 +137,8 @@ const CharacterGameplayPage = () => {
             <span className="text-sm font-medium text-gray-500 uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
           </div>
           <div className="mt-6">
-            <Button onClick={() => setModal({ type: ModalTypes.takeDamage })}>Take Damage</Button>
-            <Button onClick={() => setModal({ type: ModalTypes.healDamage })} classes="mt-2">
+            <Button onClick={() => dispatch(setModal({ type: ModalTypes.takeDamage }))}>Take Damage</Button>
+            <Button onClick={() => dispatch(setModal({ type: ModalTypes.healDamage }))} classes="mt-2">
               Heal Damage
             </Button>
           </div>
@@ -155,8 +152,8 @@ const CharacterGameplayPage = () => {
             <span className="text-sm font-medium text-gray-500 uppercase">{getWalletMessage(charSheet.wallet)}</span>
           </div>
           <div className="mt-6">
-            <Button onClick={() => setModal({ type: ModalTypes.recieveMoney })}>Recieve Money</Button>
-            <Button onClick={() => setModal({ type: ModalTypes.payMoney })} classes="mt-2">
+            <Button onClick={() => dispatch(setModal({ type: ModalTypes.recieveMoney }))}>Recieve Money</Button>
+            <Button onClick={() => dispatch(setModal({ type: ModalTypes.payMoney }))} classes="mt-2">
               Pay Money
             </Button>
           </div>
@@ -177,7 +174,7 @@ const CharacterGameplayPage = () => {
               ))}
             </ul>
             <div className="mt-6">
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.purchaseAugmentation })}>Purchase a new Augmentation</Button>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.purchaseAugmentation }))}>Purchase a new Augmentation</Button>
             </div>
           </div>
         </PanelSection>

@@ -1,9 +1,8 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { slideOverState } from '../../recoil/app/app.atoms';
-import { charSheetState } from '../../recoil/character/character.atoms';
+import { selectCurrentCharacter } from '../../redux/character/character.selectors';
 
-import { getCharactersSpecies } from '../../recoil/resources/resources.selector';
+import { setSlideOver } from '../../redux/app/app.actions';
 
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
@@ -20,18 +19,16 @@ import Invite from '../../components/characters/display/Invite';
 import Campaign from '../../components/characters/display/Campaign';
 
 const CharacterCharacterPage = () => {
-  const charSheet = useRecoilValue(charSheetState);
+  const dispatch = useDispatch();
 
-  const setSlideOver = useSetRecoilState(slideOverState);
-
-  const charsSpecies = useRecoilValue(getCharactersSpecies);
+  const charSheet = useSelector(selectCurrentCharacter);
 
   return (
     <SheetPageContent title="Character" columns={4}>
       <div className="space-y-4">
         <PanelSection title="Character Species">
           <div className="flow-root">
-            <Species species={charsSpecies} />
+            <Species species={charSheet.species} />
           </div>
         </PanelSection>
 
@@ -53,7 +50,7 @@ const CharacterCharacterPage = () => {
       <PanelSection title="Character Logs">
         <div className="flow-root mt-2">
           <div className="mb-6">
-            <Button onClick={() => setSlideOver({ type: SlideOverTypes.charLogForm })}>Add a new Character Log</Button>
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>Add a new Character Log</Button>
           </div>
           <ul className="-my-5 divide-y divide-gray-200">
             {charSheet.characterLogs.map(log => (

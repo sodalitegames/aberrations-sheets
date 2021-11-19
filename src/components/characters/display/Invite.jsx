@@ -1,6 +1,6 @@
-import { useSetRecoilState } from 'recoil';
+import { useDispatch } from 'react-redux';
 
-import { slideOverState } from '../../../recoil/app/app.atoms';
+import { setSlideOver } from '../../../redux/app/app.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
@@ -9,7 +9,7 @@ import DescriptionList from '../../shared/DescriptionList';
 import Button from '../../shared/Button';
 
 const Invite = ({ invite, condensed }) => {
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
 
   if (condensed === 'view') {
     return 'view';
@@ -30,10 +30,10 @@ const Invite = ({ invite, condensed }) => {
         classes="mt-2"
       />
       <div className="mt-4">
-        <Button onClick={() => setSlideOver({ type: SlideOverTypes.charLogForm })}>Accept Invite</Button>
+        <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>Accept Invite</Button>
       </div>
       <div className="mt-2">
-        <Button text onClick={() => setSlideOver({ type: SlideOverTypes.charLogForm })}>
+        <Button text onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>
           Decline Invite
         </Button>
       </div>

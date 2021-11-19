@@ -1,7 +1,4 @@
 import { Link } from 'react-router-dom';
-// import { useRecoilValue } from 'recoil';
-
-// import { getSpecies } from '../../recoil/resources/resources.selector';
 
 const user = {
   name: 'Rebecca Nicholas',
@@ -16,15 +13,6 @@ const stats = [
 ];
 
 export default function CampSheetCard({ campSheet }) {
-  //const species = useRecoilValue(getSpecies);
-
-  // console.log(species);
-
-  // const getSpeciesName = speciesId => {
-  //   const currSpecies = species.find(spec => spec.id === speciesId);
-  //   return currSpecies.name;
-  // };
-
   return (
     <div className="rounded-lg bg-white overflow-hidden shadow">
       <h2 className="sr-only" id="profile-overview-title">

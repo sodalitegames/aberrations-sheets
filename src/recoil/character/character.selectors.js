@@ -9,7 +9,6 @@ export const getCharSheet = selector({
   get: async ({ get }) => {
     if (get(charIdState)) {
       const response = await getSheet('characters', get(charIdState));
-      console.log('Character Sheet:', response.data.data.sheet);
       return response.data.data.sheet;
     }
     return null;
