@@ -46,8 +46,6 @@ export function* fetchCurrentUser({ payload: { token } }) {
     // get the current user
     const response = yield getUser();
 
-    console.log(response.data);
-
     const { user } = response.data.data;
 
     if (!user) {
@@ -153,8 +151,6 @@ export function* fetchSheetsForUser({ payload: { sheetType } }) {
   try {
     const response = yield getSheetsForPlayer(sheetType);
 
-    console.log(response.data.data);
-
     yield put(fetchSheetsForUserSuccess(sheetType, response.data.data.sheets));
   } catch (err) {
     yield put(fetchSheetsForUserFailure(err.response.data));
@@ -169,8 +165,6 @@ export function* onCreateSheetForUserStart() {
 export function* createSheetForUser({ payload: { sheetType, body } }) {
   try {
     const response = yield createSheetForPlayer(sheetType, body);
-
-    console.log(response.data.data);
 
     yield put(createSheetForUserSuccess(sheetType, response.data.data.sheet));
   } catch (err) {

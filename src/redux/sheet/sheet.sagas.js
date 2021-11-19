@@ -20,6 +20,7 @@ import {
 } from './sheet.actions';
 
 import { createResource, deleteSheet as deleteSheetCall, getResources, getSheet, updateResource, updateSheet as updateSheetCall } from '../../apis/sheets.api';
+import { fetchSpecies } from '../../apis/manage.api';
 
 // FETCH CURRENT SHEET
 export function* onFetchCurrentSheetStart() {
@@ -29,9 +30,18 @@ export function* onFetchCurrentSheetStart() {
 export function* fetchCurrentSheet({ payload: { sheetType, sheetId } }) {
   try {
     const response = yield getSheet(sheetType, sheetId);
-    yield put(fetchCurrentSheetSuccess(response.data.data.sheet));
+
+    if (sheetType === 'characters') {
+      // If it is a character sheet, fetch the species data and append it to the sheet data
+      const resourceResponse = yield fetchSpecies(`?_id=${response.data.data.sheet.speciesId}`);
+      const { id, name, ability, appearance, basicInfo, stats } = resourceResponse.data[0];
+      yield put(fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, ability, appearance, basicInfo, stats } }));
+      return;
+    }
+
+    yield put(fetchCurrentSheetSuccess(sheetType, response.data.data.sheet));
   } catch (err) {
-    yield put(fetchCurrentSheetFailure(err.response.data));
+    yield put(fetchCurrentSheetFailure(sheetType, err.response.data));
   }
 }
 
@@ -43,9 +53,9 @@ export function* onUpdateSheetStart() {
 export function* updateSheet({ payload: { sheetType, sheetId, body } }) {
   try {
     const response = yield updateSheetCall(sheetType, sheetId, body);
-    yield put(updateSheetSuccess(response.data.data.sheet));
+    yield put(updateSheetSuccess(sheetType, response.data.data.sheet));
   } catch (err) {
-    yield put(updateSheetFailure(err.response.data));
+    yield put(updateSheetFailure(sheetType, err.response.data));
   }
 }
 
@@ -57,9 +67,9 @@ export function* onDeleteSheetStart() {
 export function* deleteSheet({ payload: { sheetType, sheetId } }) {
   try {
     const response = yield deleteSheetCall(sheetType, sheetId);
-    yield put(deleteSheetSuccess(response.data.data));
+    yield put(deleteSheetSuccess(sheetType, response.data.data));
   } catch (err) {
-    yield put(deleteSheetFailure(err.response.data));
+    yield put(deleteSheetFailure(sheetType, err.response.data));
   }
 }
 
@@ -71,9 +81,9 @@ export function* onFetchSheetResourcesStart() {
 export function* fetchSheetResources({ payload: { sheetType, sheetId, resourceType } }) {
   try {
     const response = yield getResources(sheetType, sheetId, resourceType);
-    yield put(fetchSheetResourcesSuccess(response.data.data.docs));
+    yield put(fetchSheetResourcesSuccess(sheetType, response.data.data.docs));
   } catch (err) {
-    yield put(fetchSheetResourcesFailure(err.response.data));
+    yield put(fetchSheetResourcesFailure(sheetType, err.response.data));
   }
 }
 
@@ -85,9 +95,9 @@ export function* onCreateSheetResourceStart() {
 export function* createSheetResource({ payload: { sheetType, sheetId, resourceType, body } }) {
   try {
     const response = yield createResource(sheetType, sheetId, resourceType, body);
-    yield put(createSheetResourceSuccess(response.data.data.doc));
+    yield put(createSheetResourceSuccess(sheetType, response.data.data.doc));
   } catch (err) {
-    yield put(createSheetResourceFailure(err.response.data));
+    yield put(createSheetResourceFailure(sheetType, err.response.data));
   }
 }
 
@@ -99,9 +109,9 @@ export function* onUpdateSheetResourceStart() {
 export function* updateSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId, body } }) {
   try {
     const response = yield updateResource(sheetType, sheetId, resourceType, resourceId, body);
-    yield put(updateSheetResourceSuccess(response.data.data.doc));
+    yield put(updateSheetResourceSuccess(sheetType, response.data.data.doc));
   } catch (err) {
-    yield put(updateSheetResourceFailure(err.response.data));
+    yield put(updateSheetResourceFailure(sheetType, err.response.data));
   }
 }
 
@@ -113,14 +123,14 @@ export function* onDeleteSheetResourceStart() {
 export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId } }) {
   try {
     const response = yield getSheet(sheetType, sheetId, resourceType, resourceId);
-    yield put(deleteSheetResourceSuccess(response.data.data));
+    yield put(deleteSheetResourceSuccess(sheetType, response.data.data));
   } catch (err) {
-    yield put(deleteSheetResourceFailure(err.response.data));
+    yield put(deleteSheetResourceFailure(sheetType, err.response.data));
   }
 }
 
 // EXPORT SHEET SAGAS
-export function* SheetSagas() {
+export function* sheetSagas() {
   yield all([
     call(onFetchCurrentSheetStart),
     call(onUpdateSheetStart),
