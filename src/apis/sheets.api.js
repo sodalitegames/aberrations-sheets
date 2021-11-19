@@ -17,7 +17,7 @@ export const getSheet = (sheet, sheetId) => sheetsApi.get(`/${sheet}/${sheetId}`
 export const updateSheet = (sheet, sheetId, body) => sheetsApi.patch(`/${sheet}/${sheetId}`, body);
 export const deleteSheet = (sheet, sheetId) => sheetsApi.delete(`/${sheet}/${sheetId}`);
 
-export const getResource = (sheet, sheetId, resource) => sheetsApi.get(`/${sheet}/${sheetId}/${resource}`);
+export const getResources = (sheet, sheetId, resource) => sheetsApi.get(`/${sheet}/${sheetId}/${resource}`);
 export const createResource = (sheet, sheetId, resource, body) => sheetsApi.post(`/${sheet}/${sheetId}/${resource}`, { sheetId: sheetId, ...body });
 export const updateResource = (sheet, sheetId, resource, resourceId, body) => sheetsApi.patch(`/${sheet}/${sheetId}/${resource}/${resourceId}`, body);
 export const deleteResource = (sheet, sheetId, resource, resourceId) => sheetsApi.delete(`/${sheet}/${sheetId}/${resource}/${resourceId}`);

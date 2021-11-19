@@ -76,12 +76,10 @@ const NewCharacter = () => {
         charDescription,
         charBackground,
         speciesId: species.id,
-        stats: {
-          fortitude: { points: species.stats.fortitude },
-          agility: { points: species.stats.agility },
-          persona: { points: species.stats.persona },
-          aptitude: { points: species.stats.aptitude },
-        },
+        fortitude: { points: species.stats.fortitude },
+        agility: { points: species.stats.agility },
+        persona: { points: species.stats.persona },
+        aptitude: { points: species.stats.aptitude },
       })
     );
 
