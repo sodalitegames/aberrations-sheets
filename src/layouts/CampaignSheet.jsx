@@ -19,8 +19,10 @@ export default function CharacterSheet() {
   const campSheet = useSelector(selectCurrentCampaign);
 
   useEffect(() => {
-    if (campId && !campSheet) {
-      dispatch(fetchCurrentSheetStart('campaigns', campId));
+    if (campId) {
+      if (!campSheet || campSheet?._id !== campId) {
+        dispatch(fetchCurrentSheetStart('campaigns', campId));
+      }
     }
   });
 

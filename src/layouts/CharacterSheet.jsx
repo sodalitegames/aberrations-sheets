@@ -19,8 +19,10 @@ const CharacterSheet = () => {
   const charSheet = useSelector(selectCurrentCharacter);
 
   useEffect(() => {
-    if (charId && !charSheet) {
-      dispatch(fetchCurrentSheetStart('characters', charId));
+    if (charId) {
+      if (!charSheet || charSheet?._id !== charId) {
+        dispatch(fetchCurrentSheetStart('characters', charId));
+      }
     }
   });
 
