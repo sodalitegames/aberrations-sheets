@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useSelector } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
 import { ModalContainer } from '../../../../layouts/components/app/Modal';
 
@@ -11,7 +11,7 @@ import Consumable from '../../display/Consumable';
 import Usable from '../../display/Usable';
 
 const DisplayBelonging = ({ id, data }) => {
-  const charSheet = useRecoilValue(charSheetState);
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [belonging, setBelonging] = useState();
 

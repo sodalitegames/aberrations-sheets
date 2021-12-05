@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectConsumableCategories } from '../../../../redux/resource/resource.selectors';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { getConsumableCategories } from '../../../../recoil/resources/resources.selector';
-
-import { createResource, updateResource } from '../../../../apis/sheets.api';
-
-import { replaceItemById } from '../../../../utils/arrays';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
+import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -16,21 +14,31 @@ import Input from '../../../shared/Input';
 import TextArea from '../../../shared/TextArea';
 import Select from '../../../shared/Select';
 import CheckboxGroup, { Checkbox } from '../../../shared/CheckboxGroup';
+import { LoadingSpinner } from '../../../shared/SubmitButton';
+import Row from '../../../shared/Row';
 
 const Consumable = ({ id }) => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
 
-  const fetchedCategories = useRecoilValue(getConsumableCategories);
+  const charSheet = useSelector(selectCurrentCharacter);
+
+  const fetchedCategories = useSelector(selectConsumableCategories);
 
   const [categoriesList, setCategoriesList] = useState([]);
 
   const [name, setName] = useState('');
   const [level, setLevel] = useState(1);
   const [uses, setUses] = useState(1);
+  const [categories, setCategories] = useState([]);
   const [associatedStat, setAssociatedStat] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    if (!fetchedCategories) {
+      dispatch(fetchResourceStart('consumableCategories'));
+    }
+  }, [dispatch, fetchedCategories]);
 
   useEffect(() => {
     if (charSheet && fetchedCategories) {
@@ -53,6 +61,7 @@ const Consumable = ({ id }) => {
       setName(currentConsumable.name);
       setLevel(currentConsumable.level);
       setUses(currentConsumable.uses);
+      setCategories(currentConsumable.categories);
       setAssociatedStat(currentConsumable.associatedStat);
       setQuantity(currentConsumable.quantity);
       setDescription(currentConsumable.description);
@@ -89,22 +98,15 @@ const Consumable = ({ id }) => {
     }
 
     if (id) {
-      const response = await updateResource('characters', charSheet._id, 'consumables', id, body);
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, consumables: replaceItemById(oldCharSheet.consumables, id, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'consumables', id, body));
 
-      setSlideOver(null);
+      dispatch(setSlideOver(null));
       return;
     }
 
-    const response = await createResource('characters', charSheet._id, 'consumables', body);
+    dispatch(createSheetResourceStart('characters', charSheet._id, 'consumables', body));
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, consumables: [response.data.data.doc, ...oldCharSheet.consumables] };
-    });
-
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (
@@ -119,11 +121,23 @@ const Consumable = ({ id }) => {
       <Input slideOver label="Uses" name="uses" type="number" value={uses} changeHandler={setUses} />
       <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} />
 
-      <CheckboxGroup slideOver label="Categories">
-        {categoriesList.map(categ => (
-          <Checkbox key={categ.universalId} heading={categ.name} description={categ.description} name={categ.universalId} />
-        ))}
-      </CheckboxGroup>
+      {fetchedCategories && categoriesList ? (
+        <CheckboxGroup slideOver label="Categories">
+          {categoriesList.map(categ => (
+            <Checkbox
+              key={categ.universalId}
+              heading={categ.name}
+              checked={id ? !!categories.find(cat => cat.universalId === categ.universalId) : false}
+              description={categ.description}
+              name={categ.universalId}
+            />
+          ))}
+        </CheckboxGroup>
+      ) : (
+        <Row slideOver label="Categories">
+          <LoadingSpinner dark />
+        </Row>
+      )}
 
       <Select
         slideOver

@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { updateSheet } from '../../../../apis/sheets.api';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import TextArea from '../../../shared/TextArea';
 
 const CharBackground = () => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
+
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [charBackground, setCharBackground] = useState('');
 
@@ -25,18 +26,16 @@ const CharBackground = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    const response = await updateSheet('characters', charSheet._id, { charBackground });
+    if (!charBackground) return alert('Must provide charBackground');
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, charBackground: response.data.data.sheet.charBackground };
-    });
+    dispatch(updateSheetStart('characters', charSheet._id, { charBackground }));
 
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (
     <SlideOverForm title="Edit Character Background" description="Update the information below to edit your character background." submitText="Save character background" submitHandler={submitHandler}>
-      <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} />
+      <TextArea slideOver label="Character Background" name="charBackground" rows={12} value={charBackground} changeHandler={setCharBackground} />
     </SlideOverForm>
   );
 };

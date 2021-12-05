@@ -18,7 +18,7 @@ const Augmentation = ({ aug, condensed, noButtonPanel }) => {
       noButtonPanel={noButtonPanel}
       deleteText="Remove"
       deletable={{
-        type: ModalTypes.confirmDelete,
+        type: ModalTypes.deleteResource,
         id: aug._id,
         data: {
           type: 'augmentations',

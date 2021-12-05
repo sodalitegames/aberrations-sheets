@@ -1,20 +1,21 @@
 import { useState, useEffect } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { modalState } from '../../../../recoil/app/app.atoms';
-import { charSheetState } from '../../../../recoil/character/character.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { updateSheet } from '../../../../apis/sheets.api';
+import { setModal } from '../../../../redux/app/app.actions';
+import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
 import Input from '../../../shared/Input';
 
 const GeneralExhaustion = () => {
-  const [generalExhaustion, setGeneralExhaustion] = useState(0);
+  const dispatch = useDispatch();
 
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setModal = useSetRecoilState(modalState);
+  const charSheet = useSelector(selectCurrentCharacter);
+
+  const [generalExhaustion, setGeneralExhaustion] = useState(0);
 
   useEffect(() => {
     if (charSheet) {
@@ -25,13 +26,9 @@ const GeneralExhaustion = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    const response = await updateSheet('characters', charSheet._id, { generalExhaustion });
+    dispatch(updateSheetStart('characters', charSheet._id, { generalExhaustion }));
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, generalExhaustion: response.data.data.sheet.generalExhaustion };
-    });
-
-    setModal(null);
+    dispatch(setModal(null));
   };
 
   return (

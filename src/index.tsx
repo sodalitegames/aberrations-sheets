@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
 import { Provider } from 'react-redux';
 
 import { store } from './redux/store';
@@ -47,46 +46,44 @@ import './index.css';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <RecoilRoot>
-        <ErrorBoundary>
-          <React.Suspense fallback={<Loading fullScreen />}>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<App />}>
-                  <Route element={<Page />}>
-                    <Route index element={<HomePage />} />
-                    <Route path="characters" element={<CharactersPage />} />
-                    <Route path="campaigns" element={<CampaignsPage />} />
-                    <Route path="about" element={<AboutPage />} />
-                    <Route path="profile" element={<ProfilePage />} />
-                    <Route path="settings" element={<SettingsPage />} />
-                    <Route path="help" element={<HelpPage />} />
-                    <Route path="privacy" element={<PrivacyPage />} />
-                  </Route>
-                  <Route path="characters/:charId" element={<CharacterSheet />}>
-                    <Route index element={<CharacterGameplayPage />} />
-                    <Route path="inventory" element={<CharacterInventoryPage />} />
-                    <Route path="character" element={<CharacterCharacterPage />} />
-                    <Route path="notes" element={<CharacterNotesPage />} />
-                    <Route path="resources" element={<CharacterResourcesPage />} />
-                  </Route>
-                  <Route path="campaigns/:campId" element={<CampaignSheet />}>
-                    <Route index element={<CampaignGameplayPage />} />
-                    <Route path="stats-tracker" element={<CampaignStatsTrackerPage />} />
-                    <Route path="campaign" element={<CampaignCampaignPage />} />
-                    <Route path="players" element={<CampaignPlayersPage />} />
-                    <Route path="npcs" element={<CampaignNpcsPage />} />
-                    <Route path="creatures" element={<></>} />
-                    <Route path="environments" element={<></>} />
-                    <Route path="belongings" element={<CampaignBelongingsPage />} />
-                    <Route path="notes" element={<CampaignNotesPage />} />
-                  </Route>
+      <ErrorBoundary>
+        <React.Suspense fallback={<Loading fullScreen />}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<App />}>
+                <Route element={<Page />}>
+                  <Route index element={<HomePage />} />
+                  <Route path="characters" element={<CharactersPage />} />
+                  <Route path="campaigns" element={<CampaignsPage />} />
+                  <Route path="about" element={<AboutPage />} />
+                  <Route path="profile" element={<ProfilePage />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                  <Route path="help" element={<HelpPage />} />
+                  <Route path="privacy" element={<PrivacyPage />} />
                 </Route>
-              </Routes>
-            </BrowserRouter>
-          </React.Suspense>
-        </ErrorBoundary>
-      </RecoilRoot>
+                <Route path="characters/:charId" element={<CharacterSheet />}>
+                  <Route index element={<CharacterGameplayPage />} />
+                  <Route path="inventory" element={<CharacterInventoryPage />} />
+                  <Route path="character" element={<CharacterCharacterPage />} />
+                  <Route path="notes" element={<CharacterNotesPage />} />
+                  <Route path="resources" element={<CharacterResourcesPage />} />
+                </Route>
+                <Route path="campaigns/:campId" element={<CampaignSheet />}>
+                  <Route index element={<CampaignGameplayPage />} />
+                  <Route path="stats-tracker" element={<CampaignStatsTrackerPage />} />
+                  <Route path="campaign" element={<CampaignCampaignPage />} />
+                  <Route path="players" element={<CampaignPlayersPage />} />
+                  <Route path="npcs" element={<CampaignNpcsPage />} />
+                  <Route path="creatures" element={<></>} />
+                  <Route path="environments" element={<></>} />
+                  <Route path="belongings" element={<CampaignBelongingsPage />} />
+                  <Route path="notes" element={<CampaignNotesPage />} />
+                </Route>
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </React.Suspense>
+      </ErrorBoundary>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

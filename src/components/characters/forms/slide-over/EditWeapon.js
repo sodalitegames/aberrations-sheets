@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { updateResource } from '../../../../apis/sheets.api';
-
-import { replaceItemById } from '../../../../utils/arrays';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -16,8 +14,9 @@ import Select from '../../../shared/Select';
 import Detail from '../../../shared/Detail';
 
 const EditWeapon = ({ id }) => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
+
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [type, setType] = useState('');
   const [name, setName] = useState('');
@@ -58,27 +57,21 @@ const EditWeapon = ({ id }) => {
       if (!associatedStat) return alert('Must provide an associatedStat');
       if (!range) return alert('Must provide a range');
 
-      const response = await updateResource('characters', charSheet._id, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description }));
 
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, weapons: replaceItemById(oldCharSheet.weapons, id, response.data.data.doc) };
-      });
-
-      setSlideOver(null);
+      dispatch(setSlideOver(null));
       return;
     }
 
-    const response = await updateResource('characters', charSheet._id, 'weapons', id, {
-      nickname,
-      levelDamage,
-      description,
-    });
+    dispatch(
+      updateSheetResourceStart('characters', charSheet._id, 'weapons', id, {
+        nickname,
+        levelDamage,
+        description,
+      })
+    );
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, weapons: replaceItemById(oldCharSheet.weapons, id, response.data.data.doc) };
-    });
-
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (

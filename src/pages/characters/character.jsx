@@ -15,8 +15,8 @@ import { ButtonPanel } from '../../components/shared/ListItem';
 
 import Species from '../../components/characters/display/Species';
 import Log from '../../components/characters/display/Log';
-import Invite from '../../components/characters/display/Invite';
-import Campaign from '../../components/characters/display/Campaign';
+// import Invite from '../../components/characters/display/Invite';
+// import Campaign from '../../components/characters/display/Campaign';
 
 const CharacterCharacterPage = () => {
   const dispatch = useDispatch();
@@ -62,7 +62,7 @@ const CharacterCharacterPage = () => {
 
       <PanelSection title="Campaign Details">
         <div className="flow-root mt-2">
-          {charSheet.campaign ? (
+          {/* {charSheet.campaign ? (
             <Campaign campaign={charSheet.campaign} />
           ) : (
             <ul className="-my-5 divide-y divide-gray-200">
@@ -70,7 +70,8 @@ const CharacterCharacterPage = () => {
                 <Invite key={invite._id} invite={invite} />
               ))}
             </ul>
-          )}
+          )} */}
+          <p className="text-sm italic text-gray-400">Campaign integration is coming soon.</p>
         </div>
       </PanelSection>
     </SheetPageContent>

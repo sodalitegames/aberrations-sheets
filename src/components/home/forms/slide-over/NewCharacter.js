@@ -76,6 +76,7 @@ const NewCharacter = () => {
         charDescription,
         charBackground,
         speciesId: species.id,
+        speciesName: species.name,
         fortitude: { points: species.stats.fortitude },
         agility: { points: species.stats.agility },
         persona: { points: species.stats.persona },
@@ -102,7 +103,9 @@ const NewCharacter = () => {
             ) : null}
           </>
         ) : (
-          <LoadingSpinner dark />
+          <Row slideOver label="Character Species" name="species">
+            <LoadingSpinner dark />
+          </Row>
         )}
       </Row>
       <TextArea slideOver label="Character Description" name="charDescription" rows={4} value={charDescription} changeHandler={setCharDescription} />

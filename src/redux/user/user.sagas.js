@@ -86,7 +86,7 @@ export function* signIn({ payload: { email, password } }) {
       setCookie(response.data.token);
 
       // dispatch sign in success
-      yield put(signInSuccess(response.data.token));
+      yield put(signInSuccess({ token: response.data.token }));
     } else {
       yield put(signInFailure({ status: 'fail', message: 'Something went wrong. Please try again later.', error: response.data }));
     }
@@ -118,7 +118,7 @@ export function* signUp({ payload: { name, email, password, passwordConfirm, sub
       setCookie(response.data.token);
 
       // dispatch the sign up success
-      yield put(signUpSuccess(response.data.token));
+      yield put(signUpSuccess({ token: response.data.token }));
 
       // save the current user to state
       // yield put(fetchCurrentUserSuccess(response.data.data.user));

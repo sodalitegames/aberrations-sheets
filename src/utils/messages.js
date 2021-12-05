@@ -3,7 +3,7 @@ export const getHealthMessage = (current, max) => {
     ? `You're as dead as a doornail`
     : current === 1
     ? `You're as good as dead`
-    : current < max / 4
+    : current < max / 5
     ? `You're in mauled condition`
     : current < max / 2
     ? `You're in bloodied condition`

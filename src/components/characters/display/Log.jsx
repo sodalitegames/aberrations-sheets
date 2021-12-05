@@ -18,9 +18,9 @@ const Log = ({ log, condensed }) => {
       heading={new Date(log.date).toDateString()}
       editable={{ type: SlideOverTypes.charLogForm, id: log._id }}
       deletable={{
-        type: ModalTypes.confirmDelete,
+        type: ModalTypes.deleteResource,
         id: log._id,
-        data: { type: 'logs', property: 'characterLogs', title: 'Are you sure you want to delete this character log?', submitText: 'Yes, delete this character log' },
+        data: { type: 'logs', title: 'Are you sure you want to delete this character log?', submitText: 'Yes, delete this character log' },
       }}
     >
       <InfoList list={[log.content]} />

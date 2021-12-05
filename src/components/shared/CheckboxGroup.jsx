@@ -1,10 +1,12 @@
+import { useState } from 'react';
 import Row from './Row';
 
-export const Checkbox = ({ heading, description, name }) => {
+export const Checkbox = ({ heading, description, name, checked }) => {
+  const [selected, setSelected] = useState(checked);
   return (
     <div className="relative flex items-start">
       <div className="flex items-center h-5">
-        <input className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" type="checkbox" name={name} />
+        <input className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" type="checkbox" name={name} checked={selected} onChange={() => setSelected(!selected)} />
       </div>
       <div className="ml-3 text-sm">
         <label htmlFor={name} className="font-medium text-gray-700">

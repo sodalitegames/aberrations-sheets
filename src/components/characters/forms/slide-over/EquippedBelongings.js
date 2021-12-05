@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { updateSheet, updateResource } from '../../../../apis/sheets.api';
-
-import { replaceItemById } from '../../../../utils/arrays';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { updateSheetStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -18,8 +16,9 @@ import Consumable from '../../display/Consumable';
 import Usable from '../../display/Usable';
 
 const EquippedBelongings = ({ id }) => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
+
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [belongingsList, setBelongingsList] = useState([]);
 
@@ -102,37 +101,25 @@ const EquippedBelongings = ({ id }) => {
 
     // if equipped 1 has changed, update the resource in the database
     if (body.one !== charSheet.equipped[id].one) {
-      const response = await updateResource('characters', charSheet._id, id, body.one || charSheet.equipped[id].one, { equipped: body.one ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, [id]: replaceItemById(oldCharSheet[id], body.one || charSheet.equipped[id].one, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, id, body.one || charSheet.equipped[id].one, { equipped: body.one ? true : false }));
     }
 
     // if equipped 2 has changed, update the resource in the database
     if (body.two !== charSheet.equipped[id].two) {
-      const response = await updateResource('characters', charSheet._id, id, body.two || charSheet.equipped[id].two, { equipped: body.two ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, [id]: replaceItemById(oldCharSheet[id], body.two || charSheet.equipped[id].two, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, id, body.two || charSheet.equipped[id].two, { equipped: body.two ? true : false }));
     }
 
     // if equipped 3 has changed, update the resource in the database
     if (id === 'usables' || id === 'consumables') {
       if (body.three !== charSheet.equipped[id].three) {
-        const response = await updateResource('characters', charSheet._id, id, body.three || charSheet.equipped[id].three, { equipped: body.three ? true : false });
-        setCharSheet(oldCharSheet => {
-          return { ...oldCharSheet, [id]: replaceItemById(oldCharSheet[id], body.three || charSheet.equipped[id].three, response.data.data.doc) };
-        });
+        dispatch(updateSheetResourceStart('characters', charSheet._id, id, body.three || charSheet.equipped[id].three, { equipped: body.three ? true : false }));
       }
     }
 
     // Update the character sheet in the database
-    const sheetResponse = await updateSheet('characters', charSheet._id, { equipped: { ...charSheet.equipped, [id]: body } });
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, equipped: sheetResponse.data.data.sheet.equipped };
-    });
+    dispatch(updateSheetStart('characters', charSheet._id, { equipped: { ...charSheet.equipped, [id]: body } }));
 
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (

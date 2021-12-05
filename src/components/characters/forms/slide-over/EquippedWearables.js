@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { updateSheet, updateResource } from '../../../../apis/sheets.api';
-
-import { replaceItemById } from '../../../../utils/arrays';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { updateSheetStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -15,9 +13,42 @@ import { SelectInput } from '../../../shared/Select';
 
 import Wearable from '../../display/Wearable';
 
+const calculateStatMods = equippedWearables => {
+  let fortitude = 0;
+  let agility = 0;
+  let persona = 0;
+  let aptitude = 0;
+
+  equippedWearables.forEach(wearable => {
+    if (!wearable) return;
+
+    const { fortitude: FOR, agility: AGL, persona: PER, aptitude: APT } = wearable.statMods;
+
+    fortitude = fortitude + FOR;
+    agility = agility + AGL;
+    persona = persona + PER;
+    aptitude = aptitude + APT;
+  });
+
+  // Maximum modifier amount is five
+  if (fortitude > 5) fortitude = 5;
+  if (agility > 5) agility = 5;
+  if (persona > 5) persona = 5;
+  if (aptitude > 5) aptitude = 5;
+
+  // Minimum modifier amount if five
+  if (fortitude < -5) fortitude = -5;
+  if (agility < -5) agility = -5;
+  if (persona < -5) persona = -5;
+  if (aptitude < -5) aptitude = -5;
+
+  return { fortitude, agility, persona, aptitude };
+};
+
 const EquippedWearables = () => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
+
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [headList, setHeadList] = useState([]);
   const [faceList, setFaceList] = useState([]);
@@ -150,6 +181,8 @@ const EquippedWearables = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
+    const statMods = calculateStatMods([head, face, torso, arms, hands, legs, feet]);
+
     let body = {};
 
     body.head = head ? head._id : null;
@@ -162,67 +195,51 @@ const EquippedWearables = () => {
 
     // if head has changed, update the resource in the database
     if (body.head !== charSheet.equipped.wearables.head) {
-      const response = await updateResource('characters', charSheet._id, 'wearables', body.head || charSheet.equipped.wearables.head, { equipped: body.head ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.head || charSheet.equipped.wearables.head, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', body.head || charSheet.equipped.wearables.head, { equipped: body.head ? true : false }));
     }
 
     // if face has changed, update the resource in the database
     if (body.face !== charSheet.equipped.wearables.face) {
-      const response = await updateResource('characters', charSheet._id, 'wearables', body.face || charSheet.equipped.wearables.face, { equipped: body.face ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.face || charSheet.equipped.wearables.face, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', body.face || charSheet.equipped.wearables.face, { equipped: body.face ? true : false }));
     }
 
     // if torso has changed, update the resource in the database
     if (body.torso !== charSheet.equipped.wearables.torso) {
-      const response = await updateResource('characters', charSheet._id, 'wearables', body.torso || charSheet.equipped.wearables.torso, { equipped: body.torso ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.torso || charSheet.equipped.wearables.torso, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', body.torso || charSheet.equipped.wearables.torso, { equipped: body.torso ? true : false }));
     }
 
     // if arms has changed, update the resource in the database
     if (body.arms !== charSheet.equipped.wearables.arms) {
-      const response = await updateResource('characters', charSheet._id, 'wearables', body.arms || charSheet.equipped.wearables.arms, { equipped: body.arms ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.arms || charSheet.equipped.wearables.arms, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', body.arms || charSheet.equipped.wearables.arms, { equipped: body.arms ? true : false }));
     }
 
     // if hands has changed, update the resource in the database
     if (body.hands !== charSheet.equipped.wearables.hands) {
-      const response = await updateResource('characters', charSheet._id, 'wearables', body.hands || charSheet.equipped.wearables.hands, { equipped: body.hands ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.hands || charSheet.equipped.wearables.hands, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', body.hands || charSheet.equipped.wearables.hands, { equipped: body.hands ? true : false }));
     }
 
     // if legs has changed, update the resource in the database
     if (body.legs !== charSheet.equipped.wearables.legs) {
-      const response = await updateResource('characters', charSheet._id, 'wearables', body.legs || charSheet.equipped.wearables.legs, { equipped: body.legs ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.legs || charSheet.equipped.wearables.legs, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', body.legs || charSheet.equipped.wearables.legs, { equipped: body.legs ? true : false }));
     }
 
     // if feet has changed, update the resource in the database
     if (body.feet !== charSheet.equipped.wearables.feet) {
-      const response = await updateResource('characters', charSheet._id, 'wearables', body.feet || charSheet.equipped.wearables.feet, { equipped: body.feet ? true : false });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, wearables: replaceItemById(oldCharSheet.wearables, body.feet || charSheet.equipped.wearables.feet, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', body.feet || charSheet.equipped.wearables.feet, { equipped: body.feet ? true : false }));
     }
 
     // Update the character sheet in the database
-    const sheetResponse = await updateSheet('characters', charSheet._id, { equipped: { ...charSheet.equipped, wearables: body } });
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, equipped: sheetResponse.data.data.sheet.equipped };
-    });
+    dispatch(
+      updateSheetStart('characters', charSheet._id, {
+        fortitude: { ...charSheet.fortitude, modifier: statMods.fortitude },
+        agility: { ...charSheet.agility, modifier: statMods.agility },
+        persona: { ...charSheet.persona, modifier: statMods.persona },
+        aptitude: { ...charSheet.aptitude, modifier: statMods.aptitude },
+        equipped: { ...charSheet.equipped, wearables: body },
+      })
+    );
 
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (

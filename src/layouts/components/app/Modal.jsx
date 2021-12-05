@@ -18,7 +18,7 @@ import PayMoney from '../../../components/characters/forms/modal/PayMoney';
 import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoints';
 import GeneralExhaustion from '../../../components/characters/forms/modal/GeneralExhaustion';
 import EditStat from '../../../components/characters/forms/modal/EditStat';
-import ConfirmDelete from '../../../components/characters/forms/modal/ConfirmDelete';
+import DeleteResource from '../../../components/characters/forms/modal/DeleteResource';
 import DisplayBelonging from '../../../components/characters/forms/modal/DisplayBelonging';
 
 export const ModalForm = ({ type, title, submitText, submitHandler, children }) => {
@@ -141,7 +141,7 @@ const Modal = () => {
               {modal && modal.type === ModalTypes.editUpgradePoints ? <UpgradePoints /> : null}
               {modal && modal.type === ModalTypes.editGeneralExhaustion ? <GeneralExhaustion /> : null}
               {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
-              {modal && modal.type === ModalTypes.confirmDelete ? <ConfirmDelete id={modal.id} data={modal.data} /> : null}
+              {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.acceptInvite ? 'Not built yet' : null}
               {modal && modal.type === ModalTypes.declineInvite ? 'Not built yet' : null}
               {modal && modal.type === ModalTypes.leaveCampaign ? 'Not built yet' : null}

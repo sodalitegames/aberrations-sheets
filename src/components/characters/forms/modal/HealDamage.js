@@ -1,31 +1,28 @@
 import { useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { modalState } from '../../../../recoil/app/app.atoms';
-import { charSheetState } from '../../../../recoil/character/character.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { updateSheet } from '../../../../apis/sheets.api';
+import { setModal } from '../../../../redux/app/app.actions';
+import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
 import Input from '../../../shared/Input';
 
 const HealDamage = () => {
-  const [damage, setDamage] = useState(0);
+  const dispatch = useDispatch();
 
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setModal = useSetRecoilState(modalState);
+  const charSheet = useSelector(selectCurrentCharacter);
+
+  const [damage, setDamage] = useState(0);
 
   const submitHandler = async e => {
     e.preventDefault();
 
-    const response = await updateSheet('characters', charSheet._id, { currentHp: charSheet.currentHp + +damage });
+    dispatch(updateSheetStart('characters', charSheet._id, { currentHp: charSheet.currentHp + +damage }));
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, currentHp: response.data.data.sheet.currentHp };
-    });
-
-    setModal(null);
+    dispatch(setModal(null));
   };
 
   return (

@@ -1,13 +1,9 @@
-import { useRecoilState } from 'recoil';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
 import { setModal } from '../../../../redux/app/app.actions';
-
-import { removeItemById } from '../../../../utils/arrays';
-
-import { deleteResource } from '../../../../apis/sheets.api';
+import { deleteSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
@@ -17,12 +13,13 @@ import { ModalForm } from '../../../../layouts/components/app/Modal';
 //   message?: '',
 //   submitText?: '',
 //   type: '',
-//   property?: '', // if different from type
+//   equipped?: boolean,
 // }
 
-const ConfirmDelete = ({ id, data }) => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
+const DeleteResource = ({ id, data }) => {
   const dispatch = useDispatch();
+
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const submitHandler = async e => {
     e.preventDefault();
@@ -31,13 +28,7 @@ const ConfirmDelete = ({ id, data }) => {
       return alert('You cannot delete this belonging until you unequip it.');
     }
 
-    const response = await deleteResource('characters', charSheet._id, data.type, id);
-
-    console.log(response.data);
-
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, [data.property || data.type]: removeItemById(oldCharSheet[data.property || data.type], id) };
-    });
+    dispatch(deleteSheetResourceStart('characters', charSheet._id, data.type, id));
 
     dispatch(setModal(null));
   };
@@ -51,4 +42,4 @@ const ConfirmDelete = ({ id, data }) => {
   );
 };
 
-export default ConfirmDelete;
+export default DeleteResource;

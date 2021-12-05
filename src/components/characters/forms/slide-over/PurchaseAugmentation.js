@@ -1,26 +1,34 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
+import { selectAugmentations } from '../../../../redux/resource/resource.selectors';
 
-import { getAugmentations } from '../../../../recoil/resources/resources.selector';
-
-import { createResource, updateSheet } from '../../../../apis/sheets.api';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
+import { updateSheetStart, createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import Select from '../../../shared/Select';
 import Detail from '../../../shared/Detail';
+import { LoadingSpinner } from '../../../shared/SubmitButton';
+import Row from '../../../shared/Row';
 
 const PurchaseAugmentation = () => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
 
-  const augGroups = useRecoilValue(getAugmentations);
+  const augGroups = useSelector(selectAugmentations);
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [augmentation, setAugmentation] = useState(null);
   const [augsList, setAugsList] = useState([]);
+
+  useEffect(() => {
+    if (!augGroups) {
+      dispatch(fetchResourceStart('augmentations'));
+    }
+  }, [dispatch, augGroups]);
 
   useEffect(() => {
     if (charSheet && augGroups) {
@@ -78,14 +86,10 @@ const PurchaseAugmentation = () => {
 
     const { name, pointCost, description, universalId } = augmentation;
 
-    const resourceResponse = await createResource('characters', charSheet._id, 'augmentations', { name, pointCost, description, universalId });
-    const sheetResponse = await updateSheet('characters', charSheet._id, { upgradePoints: charSheet.upgradePoints - pointCost });
+    dispatch(createSheetResourceStart('characters', charSheet._id, 'augmentations', { name, pointCost, description, universalId }));
+    dispatch(updateSheetStart('characters', charSheet._id, { upgradePoints: charSheet.upgradePoints - pointCost }));
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, upgradePoints: sheetResponse.data.data.sheet.upgradePoints, augmentations: [resourceResponse.data.data.doc, ...oldCharSheet.augmentations] };
-    });
-
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (
@@ -97,15 +101,23 @@ const PurchaseAugmentation = () => {
       submitHandler={submitHandler}
     >
       <Detail slideOver label="Upgrade Points Available" detail={charSheet.upgradePoints} />
-      <Select slideOver label="Choose an Augmentation" name="augmentations" options={augsList} changeHandler={selectAugmentation} />
-
-      {augmentation ? (
+      {augGroups && augsList ? (
         <>
-          <Detail slideOver label="Name" detail={augmentation.name} />
-          <Detail status={charSheet.upgradePoints < augmentation.pointCost ? 'error' : ''} slideOver label="Point Cost" detail={augmentation.pointCost} />
-          <Detail slideOver label="Description" detail={augmentation.description} />
+          <Select slideOver label="Choose an Augmentation" name="augmentations" options={augsList} changeHandler={selectAugmentation} />
+
+          {augmentation ? (
+            <>
+              <Detail slideOver label="Name" detail={augmentation.name} />
+              <Detail status={charSheet.upgradePoints < augmentation.pointCost ? 'error' : ''} slideOver label="Point Cost" detail={augmentation.pointCost} />
+              <Detail slideOver label="Description" detail={augmentation.description} />
+            </>
+          ) : null}
         </>
-      ) : null}
+      ) : (
+        <Row slideOver label="Choose an Augmentation" name="augmentations">
+          <LoadingSpinner dark />
+        </Row>
+      )}
     </SlideOverForm>
   );
 };

@@ -38,9 +38,9 @@ export const deleteSheetStart = (sheetType, sheetId) => ({
   payload: { sheetType, sheetId },
 });
 
-export const deleteSheetSuccess = (sheetType, message) => ({
+export const deleteSheetSuccess = (sheetType, sheetId, message) => ({
   type: SheetActionTypes.DELETE_SHEET_SUCCESS,
-  payload: { sheetType, message },
+  payload: { sheetType, sheetId, message },
 });
 
 export const deleteSheetFailure = (sheetType, error) => ({
@@ -70,9 +70,9 @@ export const createSheetResourceStart = (sheetType, sheetId, resourceType, body)
   payload: { sheetType, sheetId, resourceType, body },
 });
 
-export const createSheetResourceSuccess = (sheetType, newResource) => ({
+export const createSheetResourceSuccess = (sheetType, resourceType, newResource) => ({
   type: SheetActionTypes.CREATE_SHEET_RESOURCE_SUCCESS,
-  payload: { sheetType, newResource },
+  payload: { sheetType, resourceType, newResource },
 });
 
 export const createSheetResourceFailure = (sheetType, error) => ({
@@ -86,9 +86,9 @@ export const updateSheetResourceStart = (sheetType, sheetId, resourceType, resou
   payload: { sheetType, sheetId, resourceType, resourceId, body },
 });
 
-export const updateSheetResourceSuccess = (sheetType, updatedResource) => ({
+export const updateSheetResourceSuccess = (sheetType, resourceType, updatedResource) => ({
   type: SheetActionTypes.UPDATE_SHEET_RESOURCE_SUCCESS,
-  payload: { sheetType, updatedResource },
+  payload: { sheetType, resourceType, updatedResource },
 });
 
 export const updateSheetResourceFailure = (sheetType, error) => ({
@@ -102,9 +102,9 @@ export const deleteSheetResourceStart = (sheetType, sheetId, resourceType, resou
   payload: { sheetType, sheetId, resourceType, resourceId },
 });
 
-export const deleteSheetResourceSuccess = (sheetType, message) => ({
+export const deleteSheetResourceSuccess = (sheetType, resourceType, resourceId, message) => ({
   type: SheetActionTypes.DELETE_SHEET_RESOURCE_SUCCESS,
-  payload: { sheetType, message },
+  payload: { sheetType, resourceType, resourceId, message },
 });
 
 export const deleteSheetResourceFailure = (sheetType, error) => ({

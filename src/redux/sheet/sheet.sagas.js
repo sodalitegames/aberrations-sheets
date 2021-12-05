@@ -1,4 +1,4 @@
-import { takeLatest, put, all, call } from 'redux-saga/effects';
+import { takeLatest, takeEvery, put, all, call } from 'redux-saga/effects';
 
 import SheetActionTypes from './sheet.types';
 
@@ -19,7 +19,7 @@ import {
   deleteSheetResourceFailure,
 } from './sheet.actions';
 
-import { createResource, deleteSheet as deleteSheetCall, getResources, getSheet, updateResource, updateSheet as updateSheetCall } from '../../apis/sheets.api';
+import { createResource, deleteResource, deleteSheet as deleteSheetCall, getResources, getSheet, updateResource, updateSheet as updateSheetCall } from '../../apis/sheets.api';
 import { fetchSpecies } from '../../apis/manage.api';
 
 // FETCH CURRENT SHEET
@@ -67,7 +67,7 @@ export function* onDeleteSheetStart() {
 export function* deleteSheet({ payload: { sheetType, sheetId } }) {
   try {
     const response = yield deleteSheetCall(sheetType, sheetId);
-    yield put(deleteSheetSuccess(sheetType, response.data.data));
+    yield put(deleteSheetSuccess(sheetType, sheetId, response.data.data));
   } catch (err) {
     yield put(deleteSheetFailure(sheetType, err.response.data));
   }
@@ -95,7 +95,7 @@ export function* onCreateSheetResourceStart() {
 export function* createSheetResource({ payload: { sheetType, sheetId, resourceType, body } }) {
   try {
     const response = yield createResource(sheetType, sheetId, resourceType, body);
-    yield put(createSheetResourceSuccess(sheetType, response.data.data.doc));
+    yield put(createSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
   } catch (err) {
     yield put(createSheetResourceFailure(sheetType, err.response.data));
   }
@@ -103,13 +103,13 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
 
 // UPDATE SHEET RESOURCE
 export function* onUpdateSheetResourceStart() {
-  yield takeLatest(SheetActionTypes.UPDATE_SHEET_RESOURCE_START, updateSheetResource);
+  yield takeEvery(SheetActionTypes.UPDATE_SHEET_RESOURCE_START, updateSheetResource);
 }
 
 export function* updateSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId, body } }) {
   try {
     const response = yield updateResource(sheetType, sheetId, resourceType, resourceId, body);
-    yield put(updateSheetResourceSuccess(sheetType, response.data.data.doc));
+    yield put(updateSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
   } catch (err) {
     yield put(updateSheetResourceFailure(sheetType, err.response.data));
   }
@@ -122,8 +122,8 @@ export function* onDeleteSheetResourceStart() {
 
 export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId } }) {
   try {
-    const response = yield getSheet(sheetType, sheetId, resourceType, resourceId);
-    yield put(deleteSheetResourceSuccess(sheetType, response.data.data));
+    const response = yield deleteResource(sheetType, sheetId, resourceType, resourceId);
+    yield put(deleteSheetResourceSuccess(sheetType, resourceType, resourceId, response.data.data));
   } catch (err) {
     yield put(deleteSheetResourceFailure(sheetType, err.response.data));
   }

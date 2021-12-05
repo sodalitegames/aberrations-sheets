@@ -7,7 +7,7 @@ const ModalTypes = {
   editUpgradePoints: 'EDIT_UPGRADE_POINTS',
   editGeneralExhaustion: 'EDIT_GENERAL_EXHAUSTION',
   editStat: 'EDIT_STAT',
-  confirmDelete: 'CONFIRM_DELETE',
+  deleteResource: 'DELETE_RESOURCE',
 
   acceptInvite: 'ACCEPT_INVITE',
   declineInvite: 'DECLINE_INVITE',

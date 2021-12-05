@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { updateSheet } from '../../../../apis/sheets.api';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import TextArea from '../../../shared/TextArea';
 
 const CharDescription = () => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
+
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [charDescription, setCharDescription] = useState('');
 
@@ -25,13 +26,11 @@ const CharDescription = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    const response = await updateSheet('characters', charSheet._id, { charDescription });
+    if (!charDescription) return alert('Must provide charDescription');
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, charDescription: response.data.data.sheet.charDescription };
-    });
+    dispatch(updateSheetStart('characters', charSheet._id, { charDescription }));
 
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (
@@ -41,7 +40,7 @@ const CharDescription = () => {
       submitText="Save character description"
       submitHandler={submitHandler}
     >
-      <TextArea slideOver label="Character Description" name="charDescription" rows={8} value={charDescription} changeHandler={setCharDescription} />
+      <TextArea slideOver label="Character Description" name="charDescription" rows={12} value={charDescription} changeHandler={setCharDescription} />
     </SlideOverForm>
   );
 };

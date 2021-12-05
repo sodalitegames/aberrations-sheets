@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { createResource, updateResource } from '../../../../apis/sheets.api';
-
-import { replaceItemById } from '../../../../utils/arrays';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import Input from '../../../shared/Input';
 import TextArea from '../../../shared/TextArea';
 
-const CharacterLogForm = ({ id }) => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+const CharacterLog = ({ id }) => {
+  const dispatch = useDispatch();
+
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [date, setDate] = useState('');
   const [content, setContent] = useState('');
@@ -33,22 +32,15 @@ const CharacterLogForm = ({ id }) => {
     e.preventDefault();
 
     if (id) {
-      const response = await updateResource('characters', charSheet._id, 'logs', id, { date, content });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, characterLogs: replaceItemById(oldCharSheet.characterLogs, id, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'logs', id, { date, content }));
 
-      setSlideOver(null);
+      dispatch(setSlideOver(null));
       return;
     }
 
-    const response = await createResource('characters', charSheet._id, 'logs', { date, content });
+    dispatch(createSheetResourceStart('characters', charSheet._id, 'logs', { date, content }));
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, characterLogs: [response.data.data.doc, ...oldCharSheet.characterLogs] };
-    });
-
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (
@@ -64,4 +56,4 @@ const CharacterLogForm = ({ id }) => {
   );
 };
 
-export default CharacterLogForm;
+export default CharacterLog;

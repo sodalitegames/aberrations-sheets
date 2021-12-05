@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSelector, useDispatch } from 'react-redux';
 
-import { charSheetState } from '../../../../recoil/character/character.atoms';
-import { slideOverState } from '../../../../recoil/app/app.atoms';
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { createResource, updateResource } from '../../../../apis/sheets.api';
-
-import { replaceItemById } from '../../../../utils/arrays';
+import { setSlideOver } from '../../../../redux/app/app.actions';
+import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -15,8 +13,9 @@ import TextArea from '../../../shared/TextArea';
 import Select from '../../../shared/Select';
 
 const Usable = ({ id }) => {
-  const [charSheet, setCharSheet] = useRecoilState(charSheetState);
-  const setSlideOver = useSetRecoilState(slideOverState);
+  const dispatch = useDispatch();
+
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const [name, setName] = useState('');
   const [type, setType] = useState('');
@@ -48,22 +47,15 @@ const Usable = ({ id }) => {
     if (!quantity) return alert('Must provide a quantity');
 
     if (id) {
-      const response = await updateResource('characters', charSheet._id, 'usables', id, { name, type, description, quantity });
-      setCharSheet(oldCharSheet => {
-        return { ...oldCharSheet, usables: replaceItemById(oldCharSheet.usables, id, response.data.data.doc) };
-      });
+      dispatch(updateSheetResourceStart('characters', charSheet._id, 'usables', id, { name, type, description, quantity }));
 
-      setSlideOver(null);
+      dispatch(setSlideOver(null));
       return;
     }
 
-    const response = await createResource('characters', charSheet._id, 'usables', { name, type, description, quantity });
+    dispatch(createSheetResourceStart('characters', charSheet._id, 'usables', { name, type, description, quantity }));
 
-    setCharSheet(oldCharSheet => {
-      return { ...oldCharSheet, usables: [response.data.data.doc, ...oldCharSheet.usables] };
-    });
-
-    setSlideOver(null);
+    dispatch(setSlideOver(null));
   };
 
   return (
