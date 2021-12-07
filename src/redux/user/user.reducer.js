@@ -1,7 +1,6 @@
 import Cookies from 'js-cookie';
 
 import UserActionTypes from './user.types';
-import SheetActionTypes from '../sheet/sheet.types';
 
 const INITIAL_STATE = {
   token: Cookies.get('token'),
@@ -72,16 +71,6 @@ const userReducer = (state = INITIAL_STATE, action) => {
       };
     case UserActionTypes.FETCH_SHEETS_FOR_USER_FAILURE:
     case UserActionTypes.CREATE_SHEET_FOR_USER_FAILURE:
-      return {
-        ...state,
-        error: action.payload,
-      };
-    case SheetActionTypes.DELETE_SHEET_SUCCESS:
-      alert('Not set up yet');
-      return {
-        ...state,
-      };
-    case SheetActionTypes.DELETE_SHEET_FAILURE:
       return {
         ...state,
         error: action.payload,

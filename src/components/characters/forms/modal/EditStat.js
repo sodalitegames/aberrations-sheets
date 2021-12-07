@@ -6,6 +6,8 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
+import { capitalize } from '../../../../utils/strings';
+
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
 import Input from '../../../shared/Input';
@@ -39,7 +41,7 @@ const EditStat = ({ id }) => {
   };
 
   return (
-    <ModalForm title={`Edit ${id[0].toUpperCase() + id.slice(1)} Stat`} submitText={`Save changes`} submitHandler={submitHandler}>
+    <ModalForm title={`Edit ${capitalize(id)} Stat`} submitText={`Save changes`} submitHandler={submitHandler}>
       <Input label="Natural" name="points" type="number" value={points} changeHandler={setPoints} />
       <Detail label="Modifier" detail={modifier} />
       <Input label="Experience" name="experience" type="number" value={experience} changeHandler={setExperience} />

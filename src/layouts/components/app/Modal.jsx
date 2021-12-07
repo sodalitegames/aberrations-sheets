@@ -11,17 +11,23 @@ import { setModal } from '../../../redux/app/app.actions';
 import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
 
+import DeleteCharacter from '../../../components/characters/forms/modal/DeleteCharacter';
+import TakeARest from '../../../components/characters/forms/modal/TakeARest';
 import TakeDamage from '../../../components/characters/forms/modal/TakeDamage';
 import HealDamage from '../../../components/characters/forms/modal/HealDamage';
 import RecieveMoney from '../../../components/characters/forms/modal/RecieveMoney';
 import PayMoney from '../../../components/characters/forms/modal/PayMoney';
 import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoints';
-import GeneralExhaustion from '../../../components/characters/forms/modal/GeneralExhaustion';
+import Mortality from '../../../components/characters/forms/modal/Mortality';
 import EditStat from '../../../components/characters/forms/modal/EditStat';
+import EditCondition from '../../../components/characters/forms/modal/EditCondition';
 import DeleteResource from '../../../components/characters/forms/modal/DeleteResource';
 import DisplayBelonging from '../../../components/characters/forms/modal/DisplayBelonging';
+import AcceptInvite from '../../../components/characters/forms/modal/AcceptInvite';
+import DeclineInvite from '../../../components/characters/forms/modal/DeclineInvite';
+import LeaveCampaign from '../../../components/characters/forms/modal/LeaveCampaign';
 
-export const ModalForm = ({ type, title, submitText, submitHandler, children }) => {
+export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, children }) => {
   const dispatch = useDispatch();
 
   return (
@@ -59,7 +65,7 @@ export const ModalForm = ({ type, title, submitText, submitHandler, children }) 
           className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 sm:mt-0 sm:w-auto sm:text-sm"
           onClick={() => dispatch(setModal(null))}
         >
-          Cancel
+          {cancelText || 'Cancel'}
         </button>
       </div>
     </form>
@@ -133,18 +139,21 @@ const Modal = () => {
                 </button>
               </div>
               {/* Forms */}
+              {modal && modal.type === ModalTypes.deleteCharacter ? <DeleteCharacter /> : null}
+              {modal && modal.type === ModalTypes.takeARest ? <TakeARest /> : null}
               {modal && modal.type === ModalTypes.displayBelonging ? <DisplayBelonging id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
               {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
               {modal && modal.type === ModalTypes.recieveMoney ? <RecieveMoney /> : null}
               {modal && modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
               {modal && modal.type === ModalTypes.editUpgradePoints ? <UpgradePoints /> : null}
-              {modal && modal.type === ModalTypes.editGeneralExhaustion ? <GeneralExhaustion /> : null}
+              {modal && modal.type === ModalTypes.editMortality ? <Mortality /> : null}
               {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
+              {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} /> : null}
-              {modal && modal.type === ModalTypes.acceptInvite ? 'Not built yet' : null}
-              {modal && modal.type === ModalTypes.declineInvite ? 'Not built yet' : null}
-              {modal && modal.type === ModalTypes.leaveCampaign ? 'Not built yet' : null}
+              {modal && modal.type === ModalTypes.acceptInvite ? <AcceptInvite /> : null}
+              {modal && modal.type === ModalTypes.declineInvite ? <DeclineInvite /> : null}
+              {modal && modal.type === ModalTypes.leaveCampaign ? <LeaveCampaign /> : null}
             </div>
           </Transition.Child>
         </div>

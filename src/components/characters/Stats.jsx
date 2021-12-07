@@ -8,7 +8,7 @@ import ModalTypes from '../../utils/ModalTypes';
 
 import Chip from '../shared/Chip';
 
-const Stats = ({ stats, power, mortality }) => {
+const Stats = ({ stats, power, mortality, slowed }) => {
   const dispatch = useDispatch();
 
   return (
@@ -69,7 +69,17 @@ const Stats = ({ stats, power, mortality }) => {
               {stat.passive ? (
                 <>
                   <h4 className="text-sm uppercase">{stat.passive.name}</h4>
-                  <p className="font-bold text-lg">{stat.passive.value}</p>
+                  <p className="font-bold text-lg">
+                    {/* Subtract Slowed from total if current passive stat is Dodge Value */}
+                    {stat.passive.name === 'Dodge Value' ? (
+                      <span className="relative">
+                        <span className="absolute -left-4 line-through text-red-900">{stat.passive.value}</span>
+                        {stat.passive.value - slowed}
+                      </span>
+                    ) : (
+                      stat.passive.value
+                    )}
+                  </p>
                   <p className="text-xs font-medium text-gray-500 uppercase">{stat.passive.calc}</p>
                 </>
               ) : (

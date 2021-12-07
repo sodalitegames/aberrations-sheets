@@ -8,6 +8,8 @@ import { setSlideOver } from '../../../../redux/app/app.actions';
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
+import { capitalize } from '../../../../utils/strings';
+
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import Input from '../../../shared/Input';
@@ -197,7 +199,7 @@ const NewWeapon = () => {
               <Detail slideOver label="Type" detail={weapon.type} />
               <Detail slideOver label="Name" detail={weapon.name} />
               <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
-              <Detail slideOver label="Associated Stat" detail={weapon.associatedStat[0].toUpperCase() + weapon.associatedStat.slice(1)} />
+              <Detail slideOver label="Associated Stat" detail={capitalize(weapon.associatedStat)} />
               <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} required />
               <Detail slideOver label="Range" detail={weapon.range} />
               <Detail slideOver label="Ability" detail={weapon.ability} />

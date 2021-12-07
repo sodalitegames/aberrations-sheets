@@ -57,7 +57,7 @@ const MobileNavigation = ({ type, user }) => {
               <div className="pt-3 pb-2">
                 <div className="flex items-center justify-between px-4">
                   <div>
-                    <Link to="/">
+                    <Link to={`/${type}s`}>
                       <h3 className="text-xl font-display uppercase">Aberrations RPG Sheets</h3>
                     </Link>
                   </div>
@@ -199,10 +199,10 @@ const MenuButton = ({ open }) => {
   );
 };
 
-const Logo = () => {
+const Logo = ({ type }) => {
   return (
     <div className="absolute left-0 py-5 flex-shrink-0 lg:static">
-      <Link to="/">
+      <Link to={`/${type}s`}>
         <span className="sr-only">Aberrations RPG Sheets</span>
         <h3 className="text-xl font-display uppercase text-white">Aberrations RPG Sheets</h3>
       </Link>
@@ -222,7 +222,7 @@ const SheetPageHeader = ({ type }) => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="relative flex flex-wrap items-center justify-center lg:justify-between pt-4 pb-8 lg:py-0">
               {/* Logo */}
-              <Logo />
+              <Logo type={type} />
               {/* Right section on desktop */}
               <RightSectionOnDesktop type={type} user={currentUser} />
               {/* Desktop navigation */}

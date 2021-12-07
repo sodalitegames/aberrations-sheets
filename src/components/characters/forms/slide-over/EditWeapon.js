@@ -6,6 +6,8 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
+import { capitalize } from '../../../../utils/strings';
+
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import Input from '../../../shared/Input';
@@ -104,7 +106,7 @@ const EditWeapon = ({ id }) => {
           <Detail slideOver label="Type" detail={type} />
           <Detail slideOver label="Name" detail={name} />
           <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
-          <Detail slideOver label="Associated Stat" detail={associatedStat[0].toUpperCase() + associatedStat.slice(1)} />
+          <Detail slideOver label="Associated Stat" detail={capitalize(associatedStat)} />
           <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} />
           <Detail slideOver label="Range" detail={range} />
           <Detail slideOver label="Ability" detail={ability} />

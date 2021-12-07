@@ -34,7 +34,7 @@ const NoticeText = ({ status, message, link, bold, heading }) => {
   }
 
   return (
-    <p
+    <div
       className={classNames(
         status === 'success' ? 'text-green-700 dark:text-green-400' : '',
         status === 'info' ? 'text-blue-700 dark:text-blue-400' : '',
@@ -44,14 +44,22 @@ const NoticeText = ({ status, message, link, bold, heading }) => {
         'text-sm'
       )}
     >
-      {message}
+      {typeof message !== 'string' ? (
+        <ul className="list-disc pl-5 space-y-1">
+          {message.map((line, index) => (
+            <li key={index}>{line}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>{message}</p>
+      )}
       {link ? (
         <>
           {' '}
           <NoticeLink status={status} link={link} />
         </>
       ) : null}
-    </p>
+    </div>
   );
 };
 
@@ -178,7 +186,7 @@ const NoticeCloseButton = ({ status, setShowNotice }) => {
   );
 };
 
-export default function Notice({ message, status = 'info', link, accent, heading, hideable, noIcon }) {
+export default function Notice({ message, status = 'info', link, accent, heading, hideable, noIcon, classes }) {
   const [showNotice, setShowNotice] = useState(true);
 
   if (!showNotice) {
@@ -197,7 +205,8 @@ export default function Notice({ message, status = 'info', link, accent, heading
         status === 'warn' && accent ? 'border-l-4 border-yellow-400 dark:border-yellow-500' : '',
         (status === 'error' && accent) || (status === 'fail' && accent) ? 'border-l-4 border-red-400 dark:border-red-500' : '',
         !accent ? 'rounded-md' : '',
-        'p-4 my-1'
+        'p-4 my-1',
+        classes
       )}
     >
       <div className="flex">

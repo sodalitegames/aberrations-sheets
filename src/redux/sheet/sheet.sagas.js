@@ -67,6 +67,7 @@ export function* onDeleteSheetStart() {
 export function* deleteSheet({ payload: { sheetType, sheetId } }) {
   try {
     const response = yield deleteSheetCall(sheetType, sheetId);
+    console.log('Deleted Sheet', response.data);
     yield put(deleteSheetSuccess(sheetType, sheetId, response.data.data));
   } catch (err) {
     yield put(deleteSheetFailure(sheetType, err.response.data));

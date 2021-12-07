@@ -6,6 +6,7 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { rollDice } from '../../../../utils/roll';
+import { capitalize } from '../../../../utils/strings';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -41,7 +42,7 @@ const RollDice = () => {
     }
 
     if (stat) {
-      return `Roll for ${statKey[0].toUpperCase() + statKey.slice(1)} (${calcDice()} ${calcDice() === 1 ? 'die' : 'dice'}) with ${calcAdvantage()} Advantage.`;
+      return `Roll for ${capitalize(statKey)} (${calcDice()} ${calcDice() === 1 ? 'die' : 'dice'}) with ${calcAdvantage()} Advantage.`;
     }
 
     return `Roll ${dice} ${dice === 1 ? 'die' : 'dice'} with ${advantage} Advantage.`;

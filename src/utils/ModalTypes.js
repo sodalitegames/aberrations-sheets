@@ -1,4 +1,6 @@
 const ModalTypes = {
+  deleteCharacter: 'DELETE_CHARACTER',
+
   displayBelonging: 'DISPLAY_BELONGING',
   takeDamage: 'TAKE_DAMAGE',
   healDamage: 'HEAL_DAMAGE',

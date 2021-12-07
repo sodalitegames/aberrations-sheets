@@ -11,8 +11,10 @@ import { getHealthMessage, getWalletMessage } from '../../utils/messages';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
 import Stats from '../../components/characters/Stats';
+import Conditions from '../../components/characters/Conditions';
+
+import PanelSection from '../../components/shared/PanelSection';
 import Button from '../../components/shared/Button';
 import Chip from '../../components/shared/Chip';
 
@@ -42,11 +44,13 @@ const CharacterGameplayPage = () => {
             <div className="sm:flex sm:space-x-5">
               <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                 <p className="text-xl font-bold text-gray-900 sm:text-2xl">{charSheet.characterName}</p>
-                <p className="text-sm font-medium text-gray-500">Ability: {charSheet.species.ability}</p>
+                <p className="text-sm font-medium text-gray-500">
+                  {charSheet.species.name} Ability: {charSheet.species.ability}
+                </p>
               </div>
             </div>
-            <div className="mt-5 flex flex-shrink-0 justify-center sm:mt-0">
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.rollDice }))}>Roll Dice</Button>
+            <div className="ml-5 mt-5 flex flex-col flex-shrink-0 justify-center sm:mt-0 space-y-2">
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageCharacter }))}>Manage Character</Button>
             </div>
           </div>
         </PanelSection>
@@ -54,7 +58,8 @@ const CharacterGameplayPage = () => {
         {/* Stats */}
         <PanelSection colSpan={2}>
           <Stats
-            generalExhaustion={charSheet.generalExhaustion}
+            mortality={charSheet.mortality}
+            slowed={charSheet.conditions.slowed}
             power={charSheet.power}
             stats={[
               { name: 'Fortitude', passive: { name: 'Max Hp', calc: 'Fortitude * 5', value: charSheet.maxHp }, ...charSheet.fortitude },
@@ -63,6 +68,7 @@ const CharacterGameplayPage = () => {
               { name: 'Aptitude', passive: { name: 'Assist', calc: 'Aptitude / 2 (Rd. Down)', value: charSheet.assist }, ...charSheet.aptitude },
             ]}
           />
+          <Conditions conditions={charSheet.conditions} />
         </PanelSection>
 
         <div className="space-y-4">
@@ -127,6 +133,14 @@ const CharacterGameplayPage = () => {
 
       {/* Right column */}
       <div className="grid grid-cols-1 gap-4">
+        {/* Actions */}
+        <PanelSection>
+          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.rollDice }))}>Roll Dice</Button>
+          <Button onClick={() => dispatch(setModal({ type: ModalTypes.takeARest }))} classes="mt-2">
+            Take a Rest
+          </Button>
+        </PanelSection>
+
         {/* Health */}
         <PanelSection>
           <div className="flex flex-col items-center justify-between text-5xl font-semibold text-gray-900">

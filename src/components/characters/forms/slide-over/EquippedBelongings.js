@@ -6,6 +6,8 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
+import { capitalize } from '../../../../utils/strings';
+
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import Row from '../../../shared/Row';
@@ -124,8 +126,8 @@ const EquippedBelongings = ({ id }) => {
 
   return (
     <SlideOverForm
-      title={`Manage equipped ${id[0].toUpperCase() + id.slice(1)}`}
-      description={`Update the information below to edit your equipped ${id[0].toUpperCase() + id.slice(1)}.`}
+      title={`Manage equipped ${capitalize(id)}`}
+      description={`Update the information below to edit your equipped ${capitalize(id)}.`}
       submitText="Save edits"
       submitHandler={submitHandler}
     >

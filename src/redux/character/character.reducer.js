@@ -28,6 +28,12 @@ const characterReducer = (state = INITIAL_STATE, action) => {
           ...action.payload.updatedSheet,
         },
       };
+    case SheetActionTypes.DELETE_SHEET_SUCCESS:
+      return {
+        current: null,
+        error: null,
+        permissions: undefined,
+      };
     case SheetActionTypes.CREATE_SHEET_RESOURCE_SUCCESS:
       let { resourceType: createdResourceType, newResource } = action.payload;
       if (createdResourceType === 'logs') createdResourceType = 'characterLogs';
@@ -60,6 +66,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       };
     case SheetActionTypes.FETCH_CURRENT_SHEET_FAILURE:
     case SheetActionTypes.UPDATE_SHEET_FAILURE:
+    case SheetActionTypes.DELETE_SHEET_FAILURE:
     case SheetActionTypes.CREATE_SHEET_RESOURCE_FAILURE:
     case SheetActionTypes.UPDATE_SHEET_RESOURCE_FAILURE:
     case SheetActionTypes.DELETE_SHEET_RESOURCE_FAILURE:

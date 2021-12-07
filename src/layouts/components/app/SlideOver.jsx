@@ -14,6 +14,8 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 import NewCharacter from '../../../components/home/forms/slide-over/NewCharacter';
 import NewCampaign from '../../../components/home/forms/slide-over/NewCampaign';
 
+import ManageCharacter from '../../../components/characters/forms/slide-over/ManageCharacter';
+import RollDice from '../../../components/characters/forms/slide-over/RollDice';
 import EquippedBelongings from '../../../components/characters/forms/slide-over/EquippedBelongings';
 import EquippedWearables from '../../../components/characters/forms/slide-over/EquippedWearables';
 import PurchaseAugmentation from '../../../components/characters/forms/slide-over/PurchaseAugmentation';
@@ -26,7 +28,7 @@ import CharDescription from '../../../components/characters/forms/slide-over/Cha
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
 import CharacterLog from '../../../components/characters/forms/slide-over/CharacterLog';
 
-export const SlideOverForm = ({ title, description, submitText, submitDisabled, submitHandler, children }) => {
+export const SlideOverForm = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
   const dispatch = useDispatch();
 
   return (
@@ -64,7 +66,7 @@ export const SlideOverForm = ({ title, description, submitText, submitDisabled, 
             className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
             onClick={() => dispatch(setSlideOver(null))}
           >
-            Cancel
+            {cancelText || 'Cancel'}
           </button>
           <button
             type="submit"
@@ -106,7 +108,8 @@ const SlideOver = () => {
                 {/* Forms */}
                 {slideOver && slideOver.type === SlideOverTypes.newCharacter ? <NewCharacter /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newCampaign ? <NewCampaign /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.rollDice ? 'Not built yet' : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <EquippedBelongings id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? <EquippedWearables /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}

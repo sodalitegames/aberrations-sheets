@@ -1,5 +1,6 @@
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
+import { capitalize } from '../../../utils/strings';
 
 import ListItem from '../../shared/ListItem';
 import DescriptionList from '../../shared/DescriptionList';
@@ -34,10 +35,7 @@ const getWearableMods = (FOR, AGL, PER, APT) => {
 const Wearable = ({ wearable, condensed, noButtonPanel }) => {
   if (condensed === 'view') {
     return (
-      <ListItem
-        heading={`${wearable.name} (${wearable.bodyArea[0].toUpperCase() + wearable.bodyArea.slice(1)})`}
-        view={{ type: ModalTypes.displayBelonging, id: wearable._id, data: { type: 'wearables' } }}
-      >
+      <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} view={{ type: ModalTypes.displayBelonging, id: wearable._id, data: { type: 'wearables' } }}>
         <InfoList list={[getWearableMods(wearable.statMods.fortitude, wearable.statMods.agility, wearable.statMods.persona, wearable.statMods.aptitude)]} />
       </ListItem>
     );
@@ -60,7 +58,7 @@ const Wearable = ({ wearable, condensed, noButtonPanel }) => {
     >
       <DescriptionList
         list={[
-          { name: 'Body Area', values: [wearable.bodyArea[0].toUpperCase() + wearable.bodyArea.slice(1)] },
+          { name: 'Body Area', values: [capitalize(wearable.bodyArea)] },
           { name: 'Description', values: [wearable.description] },
           { name: 'Fortitude Mod', values: [wearable.statMods.fortitude], half: true },
           { name: 'Agility Mod', values: [wearable.statMods.agility], half: true },

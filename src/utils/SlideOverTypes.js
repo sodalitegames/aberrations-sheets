@@ -2,8 +2,8 @@ const SlideOverTypes = {
   newCharacter: 'NEW_CHARACTER',
   newCampaign: 'NEW_CAMPAIGN',
 
+  manageCharacter: 'MANAGE_CHARACTER',
   rollDice: 'ROLL_DICE',
-
   manageEquippedBelongings: 'MANAGE_EQUIPPED_BELONGINGS',
   manageEquippedWearables: 'MANAGE_EQUIPPED_WEARABLES',
   purchaseAugmentation: 'PURCHASE_AUGMENTATION',

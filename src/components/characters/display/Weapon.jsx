@@ -1,12 +1,13 @@
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
+import { capitalize } from '../../../utils/strings';
 
 import ListItem from '../../shared/ListItem';
 import DescriptionList from '../../shared/DescriptionList';
 import InfoList from '../../shared/InfoList';
 
 const createWeaponList = (stat, range, ability) => {
-  const weapon = [`${stat[0].toUpperCase() + stat.slice(1)} | Range: ${range}`];
+  const weapon = [`${capitalize(stat)} | Range: ${range}`];
   if (ability) weapon.push({ title: ability, value: ability.replace('"', '') });
   return weapon;
 };
@@ -38,7 +39,7 @@ const Weapon = ({ weapon, condensed, noButtonPanel }) => {
       <DescriptionList
         list={[
           { name: 'Type', values: [weapon.type], half: true },
-          { name: 'Associated Stat', values: [weapon.associatedStat[0].toUpperCase() + weapon.associatedStat.slice(1)], half: true },
+          { name: 'Associated Stat', values: [capitalize(weapon.associatedStat)], half: true },
           { name: 'Level & Damage', values: [weapon.levelDamage], half: true },
           { name: 'Range', values: [weapon.range], half: true },
           weapon.ability ? { name: 'Ability', values: [weapon.ability] } : null,
