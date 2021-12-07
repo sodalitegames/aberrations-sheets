@@ -19,21 +19,21 @@ const EditStat = ({ id }) => {
   const [points, setPoints] = useState(0);
   const [modifier, setModifier] = useState(0);
   const [experience, setExperience] = useState(0);
-  const [exhaustion, setExhaustion] = useState(0);
+  const [advantage, setAdvantage] = useState(0);
 
   useEffect(() => {
     if (charSheet) {
       setPoints(charSheet[id].points);
       setModifier(charSheet[id].modifier);
       setExperience(charSheet[id].experience);
-      setExhaustion(charSheet[id].exhaustion);
+      setAdvantage(charSheet[id].advantage);
     }
   }, [charSheet, id]);
 
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { [id]: { points, modifier, experience, exhaustion } }));
+    dispatch(updateSheetStart('characters', charSheet._id, { [id]: { points, modifier, experience, advantage } }));
 
     dispatch(setModal(null));
   };
@@ -43,7 +43,7 @@ const EditStat = ({ id }) => {
       <Input label="Natural" name="points" type="number" value={points} changeHandler={setPoints} />
       <Detail label="Modifier" detail={modifier} />
       <Input label="Experience" name="experience" type="number" value={experience} changeHandler={setExperience} />
-      <Input label="Exhaustion" name="exhaustion" type="number" value={exhaustion} changeHandler={setExhaustion} />
+      <Input label="Advantage" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
     </ModalForm>
   );
 };

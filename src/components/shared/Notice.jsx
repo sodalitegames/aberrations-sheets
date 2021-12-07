@@ -178,7 +178,7 @@ const NoticeCloseButton = ({ status, setShowNotice }) => {
   );
 };
 
-export default function Notice({ message, status = 'info', link, accent, heading, hideable }) {
+export default function Notice({ message, status = 'info', link, accent, heading, hideable, noIcon }) {
   const [showNotice, setShowNotice] = useState(true);
 
   if (!showNotice) {
@@ -202,9 +202,11 @@ export default function Notice({ message, status = 'info', link, accent, heading
     >
       <div className="flex">
         {/* Icon */}
-        <div className="flex-shrink-0">
-          <NoticeIcon status={status} />
-        </div>
+        {!noIcon ? (
+          <div className="flex-shrink-0">
+            <NoticeIcon status={status} />
+          </div>
+        ) : null}
 
         {/* If heading was provided */}
         {heading ? (

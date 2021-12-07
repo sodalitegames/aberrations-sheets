@@ -10,32 +10,32 @@ import { ModalForm } from '../../../../layouts/components/app/Modal';
 
 import Input from '../../../shared/Input';
 
-const GeneralExhaustion = () => {
+const EditCondition = ({ id }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
 
-  const [generalExhaustion, setGeneralExhaustion] = useState(0);
+  const [points, setPoints] = useState(0);
 
   useEffect(() => {
     if (charSheet) {
-      setGeneralExhaustion(charSheet.generalExhaustion);
+      setPoints(charSheet.conditions[id]);
     }
-  }, [charSheet]);
+  }, [charSheet, id]);
 
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { generalExhaustion }));
+    dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, [id]: points } }));
 
     dispatch(setModal(null));
   };
 
   return (
-    <ModalForm title="Edit General Exhaustion" submitText={`Save changes`} submitHandler={submitHandler}>
-      <Input label="General Exhaustion" name="generalExhaustion" type="number" value={generalExhaustion} changeHandler={setGeneralExhaustion} />
+    <ModalForm title={`Edit ${id[0].toUpperCase() + id.slice(1)} Condition`} submitText={`Save changes`} submitHandler={submitHandler}>
+      <Input label={`${id[0].toUpperCase() + id.slice(1)} Points`} name={id} type="number" value={points} changeHandler={setPoints} />
     </ModalForm>
   );
 };
 
-export default GeneralExhaustion;
+export default EditCondition;

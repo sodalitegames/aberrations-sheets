@@ -8,7 +8,7 @@ import ModalTypes from '../../utils/ModalTypes';
 
 import Chip from '../shared/Chip';
 
-const Stats = ({ stats, power, generalExhaustion }) => {
+const Stats = ({ stats, power, mortality }) => {
   const dispatch = useDispatch();
 
   return (
@@ -17,9 +17,9 @@ const Stats = ({ stats, power, generalExhaustion }) => {
         <h3 className="text-lg font-medium text-gray-900">Stats</h3>
         {/* Chips */}
         <div className="space-x-2">
-          {/* General exhaustion */}
-          <Chip color={generalExhaustion ? 'red' : 'green'} editable={{ type: ModalTypes.editGeneralExhaustion }}>
-            {generalExhaustion} General Exhaustion
+          {/* Mortality */}
+          <Chip color={mortality >= stats[0].points ? 'red' : mortality >= stats[0].points / 2 ? 'yellow' : 'green'} editable={{ type: ModalTypes.editMortality }}>
+            {mortality} Mortality
           </Chip>
           {/* Power */}
           <Chip color="green">{power} Power</Chip>
@@ -33,7 +33,7 @@ const Stats = ({ stats, power, generalExhaustion }) => {
             {/* Active Stat */}
             <div className="py-4">
               <dd className="mt-1 flex flex-col justify-between items-top md:block lg:flex">
-                <div className="flex flex-col items-center flex-shrink-0 items-start text-5xl font-semibold text-gray-900 relative">
+                <div className="flex flex-col items-center flex-shrink-0 items-start text-5xl font-semibold text-gray-900">
                   <h5 className="font-normal text-xl flex items-center">
                     {stat.name}
                     <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editStat, id: stat.name.toLowerCase() }))}>
@@ -43,14 +43,7 @@ const Stats = ({ stats, power, generalExhaustion }) => {
                       />
                     </span>
                   </h5>
-                  {stat.exhaustion || generalExhaustion ? (
-                    <span>
-                      <span className="text-red-800 line-through text-3xl absolute top-9 left-12">{stat.points + stat.modifier}</span>{' '}
-                      {stat.points + stat.modifier - stat.exhaustion - generalExhaustion}
-                    </span>
-                  ) : (
-                    stat.points + stat.modifier
-                  )}
+                  {stat.points + stat.modifier}
                   <span className="text-sm font-medium text-gray-500">
                     {stat.points} NAT &amp; {stat.modifier} MOD
                   </span>
@@ -58,11 +51,15 @@ const Stats = ({ stats, power, generalExhaustion }) => {
 
                 <div className="flex flex-col mt-4 space-y-2">
                   {/* Experience */}
-                  <Chip color={stat.experience >= stat.points ? 'green' : 'yellow'}>
-                    {stat.experience} / {stat.points} Experience
-                  </Chip>
-                  {/* Exhaustion */}
-                  <Chip color={stat.exhaustion ? 'red' : 'green'}>{stat.exhaustion} Exhaustion</Chip>
+                  {stat.experience ? (
+                    <Chip color={stat.experience >= stat.points ? 'green' : 'yellow'}>
+                      {stat.experience} / {stat.points} Experience
+                    </Chip>
+                  ) : (
+                    <Chip color="gray">No Experience</Chip>
+                  )}
+                  {/* Temporary Advantage */}
+                  {stat.advantage ? <Chip color={stat.advantage < 0 ? 'red' : 'green'}>{stat.advantage} Advantage</Chip> : <Chip color="gray">No Advantage</Chip>}
                 </div>
               </dd>
             </div>
