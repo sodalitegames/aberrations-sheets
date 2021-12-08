@@ -77,6 +77,7 @@ const NewCharacter = () => {
         charBackground,
         speciesId: species.id,
         speciesName: species.name,
+        currentHp: species.stats.fortitude * 5,
         fortitude: { points: species.stats.fortitude },
         agility: { points: species.stats.agility },
         persona: { points: species.stats.persona },

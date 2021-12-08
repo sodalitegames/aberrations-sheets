@@ -1,8 +1,10 @@
 import { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
+
+import { signOutStart } from '../../../redux/user/user.actions';
 
 import { Menu, Popover, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
@@ -31,7 +33,7 @@ const navigation = {
 };
 const secondaryNavigation = [
   { name: 'Home', href: '/' },
-  { name: 'Your Profile', href: '/profile' },
+  { name: 'Profile', href: '/profile' },
   { name: 'Settings', href: '/settings' },
 ];
 
@@ -146,7 +148,9 @@ const DesktopNavigation = ({ type }) => {
   );
 };
 
-const RightSectionOnDesktop = ({ type, user }) => {
+const RightSectionOnDesktop = () => {
+  const dispatch = useDispatch();
+
   return (
     <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
       {/* <button
@@ -166,7 +170,11 @@ const RightSectionOnDesktop = ({ type, user }) => {
         <div>
           <Menu.Button className="bg-white rounded-full flex text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100">
             <span className="sr-only">Open overflow menu</span>
-            <img className="h-8 w-8 rounded-full" src="/weapons/sniper.png" alt="temp" />
+            <span className="inline-block h-8 w-8 rounded-full overflow-hidden bg-gray-100">
+              <svg className="h-full w-full text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </span>
           </Menu.Button>
         </div>
         <Transition as={Fragment} leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
@@ -180,6 +188,11 @@ const RightSectionOnDesktop = ({ type, user }) => {
                 )}
               </Menu.Item>
             ))}
+            <Menu.Item>
+              <button className="block px-4 py-2 text-sm text-gray-700" onClick={() => dispatch(signOutStart)}>
+                Log out
+              </button>
+            </Menu.Item>
           </Menu.Items>
         </Transition>
       </Menu>
@@ -224,7 +237,7 @@ const SheetPageHeader = ({ type }) => {
               {/* Logo */}
               <Logo type={type} />
               {/* Right section on desktop */}
-              <RightSectionOnDesktop type={type} user={currentUser} />
+              <RightSectionOnDesktop />
               {/* Desktop navigation */}
               <DesktopNavigation type={type} />
               {/* Menu button */}

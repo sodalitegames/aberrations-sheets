@@ -25,7 +25,7 @@ const Campaigns = () => {
 
   return (
     <PageContent heading="My Campaigns" primary={{ text: 'Create New Campaign', slideOver: { type: SlideOverTypes.newCampaign } }}>
-      <React.Suspense fallback={<Loading />}>{fetched ? campaigns.map(campSheet => <CampSheetCard key={campSheet._id} campSheet={campSheet} />) : <Loading />}</React.Suspense>
+      <div className="grid grid-cols-2 gap-8">{fetched ? campaigns.map(campSheet => <CampSheetCard key={campSheet._id} campSheet={campSheet} />) : <Loading />}</div>
     </PageContent>
   );
 };

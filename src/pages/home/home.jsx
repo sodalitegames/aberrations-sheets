@@ -3,17 +3,18 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../redux/user/user.selectors';
 
 import PageContent from '../../layouts/components/home/PageContent';
-import PageSection from '../../layouts/components/home/PageSection';
-
 import PagePanel from '../../layouts/components/home/PagePanel';
+
+import Notice from '../../components/shared/Notice';
 
 const HomePage = () => {
   const currentUser = useSelector(selectCurrentUser);
   return (
     <PageContent heading={`Welcome back, ${currentUser.name}`}>
-      <PageSection heading="Overview">
-        <PagePanel>{/* Panel content goes here... */}</PagePanel>
-      </PageSection>
+      <Notice status="warn" heading="Under Construction" message="This page is currently under construction." />
+      <PagePanel heading="Home Page" subheading="Home page under construction...">
+        {/* Panel content goes here... */}
+      </PagePanel>
     </PageContent>
   );
 };

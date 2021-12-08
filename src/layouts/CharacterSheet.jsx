@@ -40,7 +40,7 @@ const CharacterSheet = () => {
           )}
         </main>
       </div>
-      <Footer />
+      <Footer classes="max-w-3xl lg:max-w-7xl" />
     </div>
   );
 };

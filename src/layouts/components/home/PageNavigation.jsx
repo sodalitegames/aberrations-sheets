@@ -3,7 +3,9 @@ import { Link, NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Dialog, Transition } from '@headlessui/react';
 
-import { CogIcon, HomeIcon, QuestionMarkCircleIcon, UserCircleIcon, ShieldCheckIcon, UserGroupIcon, UserIcon, SupportIcon, XIcon } from '@heroicons/react/outline';
+import { HomeIcon, UserIcon, UserGroupIcon, UserCircleIcon, CogIcon, XIcon } from '@heroicons/react/outline';
+
+// import { HomeIcon, UserIcon, UserGroupIcon, QuestionMarkCircleIcon, UserCircleIcon, CogIcon, SupportIcon, ShieldCheckIcon, XIcon } from '@heroicons/react/outline';
 
 import { signOutStart } from '../../../redux/user/user.actions';
 
@@ -13,21 +15,17 @@ const navigation = [
   { name: 'Home', href: '', icon: HomeIcon },
   { name: 'Characters', href: 'characters', icon: UserIcon },
   { name: 'Campaigns', href: 'campaigns', icon: UserGroupIcon },
-  { name: 'About', href: 'about', icon: QuestionMarkCircleIcon },
+  // { name: 'About', href: 'about', icon: QuestionMarkCircleIcon },
 ];
 const secondaryNavigation = [
   { name: 'Profile', href: 'profile', icon: UserCircleIcon },
   { name: 'Settings', href: 'settings', icon: CogIcon },
-  { name: 'Help', href: 'help', icon: SupportIcon },
-  { name: 'Privacy', href: 'privacy', icon: ShieldCheckIcon },
+  // { name: 'Help', href: 'help', icon: SupportIcon },
+  // { name: 'Privacy', href: 'privacy', icon: ShieldCheckIcon },
 ];
 
 const Navigation = () => {
   const dispatch = useDispatch();
-
-  const logoutHandler = () => {
-    dispatch(signOutStart());
-  };
 
   return (
     <nav className="mt-5 flex-1 flex flex-col justify-between overflow-y-auto" aria-label="Sidebar">
@@ -72,7 +70,7 @@ const Navigation = () => {
       <div className="px-4 py-4">
         <button
           className="w-full flex justify-center items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-300 hover:bg-primary-fade hover:text-white hover:border-primary"
-          onClick={logoutHandler}
+          onClick={() => dispatch(signOutStart())}
         >
           Logout
         </button>
