@@ -23,6 +23,7 @@ import Wearable from '../../components/characters/display/Wearable';
 import Consumable from '../../components/characters/display/Consumable';
 import Usable from '../../components/characters/display/Usable';
 import Augmentation from '../../components/characters/display/Augmentation';
+import EmptyState from '../../components/shared/EmptyState';
 
 const CharacterGameplayPage = () => {
   const dispatch = useDispatch();
@@ -75,28 +76,48 @@ const CharacterGameplayPage = () => {
           {/* Equipped Weapons */}
           <PanelSection title="Equipped Weapons">
             <div className="flow-root mt-6">
-              <ul className="-my-5 divide-y divide-gray-200">
-                {equippedWeapons.map(weapon => (
-                  <Weapon key={weapon._id} weapon={weapon} condensed="view" />
-                ))}
-              </ul>
+              {equippedWeapons.length ? (
+                <>
+                  <ul className="-my-5 divide-y divide-gray-200">
+                    {equippedWeapons.map(weapon => (
+                      <Weapon key={weapon._id} weapon={weapon} condensed="view" />
+                    ))}
+                  </ul>
 
-              <div className="mt-6">
-                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' }))}>Manage equipped Weapons</Button>
-              </div>
+                  <div className="mt-6">
+                    <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' }))}>Manage equipped Weapons</Button>
+                  </div>
+                </>
+              ) : (
+                <EmptyState
+                  heading="No Equipped Weapons"
+                  message="Get started by equipping your first one now"
+                  button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' })), text: 'Equip Weapon' }}
+                />
+              )}
             </div>
           </PanelSection>
           {/* Equipped Wearables */}
           <PanelSection title="Equipped Wearables">
             <div className="flow-root mt-6">
-              <ul className="-my-5 divide-y divide-gray-200">
-                {equippedWearables.map(wearable => (
-                  <Wearable key={wearable._id} wearable={wearable} condensed="view" />
-                ))}
-              </ul>
-              <div className="mt-6">
-                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedWearables }))}>Manage equipped Wearables</Button>
-              </div>
+              {equippedWearables.length ? (
+                <>
+                  <ul className="-my-5 divide-y divide-gray-200">
+                    {equippedWearables.map(wearable => (
+                      <Wearable key={wearable._id} wearable={wearable} condensed="view" />
+                    ))}
+                  </ul>
+                  <div className="mt-6">
+                    <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedWearables }))}>Manage equipped Wearables</Button>
+                  </div>
+                </>
+              ) : (
+                <EmptyState
+                  heading="No Equipped Wearables"
+                  message="Get started by equipping your first one now"
+                  button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'wearables' })), text: 'Equip Wearable' }}
+                />
+              )}
             </div>
           </PanelSection>
         </div>
@@ -105,27 +126,47 @@ const CharacterGameplayPage = () => {
           {/* Equipped Consumables */}
           <PanelSection title="Equipped Consumables">
             <div className="flow-root mt-6">
-              <ul className="-my-5 divide-y divide-gray-200">
-                {equippedConsumables.map(consumable => (
-                  <Consumable key={consumable._id} consumable={consumable} condensed="view" />
-                ))}
-              </ul>
-              <div className="mt-6">
-                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' }))}>Manage equipped Consumables</Button>
-              </div>
+              {equippedConsumables.length ? (
+                <>
+                  <ul className="-my-5 divide-y divide-gray-200">
+                    {equippedConsumables.map(consumable => (
+                      <Consumable key={consumable._id} consumable={consumable} condensed="view" />
+                    ))}
+                  </ul>
+                  <div className="mt-6">
+                    <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' }))}>Manage equipped Consumables</Button>
+                  </div>
+                </>
+              ) : (
+                <EmptyState
+                  heading="No Equipped Consumables"
+                  message="Get started by equipping your first one now"
+                  button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' })), text: 'Equip Consumable' }}
+                />
+              )}
             </div>
           </PanelSection>
           {/* Equipped Usables */}
           <PanelSection title="Equipped Usables">
             <div className="flow-root mt-6">
-              <ul className="-my-5 divide-y divide-gray-200">
-                {equippedUsables.map(usable => (
-                  <Usable key={usable._id} usable={usable} condensed="view" />
-                ))}
-              </ul>
-              <div className="mt-6">
-                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' }))}>Manage equipped Usables</Button>
-              </div>
+              {equippedUsables.length ? (
+                <>
+                  <ul className="-my-5 divide-y divide-gray-200">
+                    {equippedUsables.map(usable => (
+                      <Usable key={usable._id} usable={usable} condensed="view" />
+                    ))}
+                  </ul>
+                  <div className="mt-6">
+                    <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' }))}>Manage equipped Usables</Button>
+                  </div>
+                </>
+              ) : (
+                <EmptyState
+                  heading="No Equipped Usables"
+                  message="Get started by equipping your first one now"
+                  button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' })), text: 'Equip Usable' }}
+                />
+              )}
             </div>
           </PanelSection>
         </div>
@@ -182,14 +223,24 @@ const CharacterGameplayPage = () => {
             </Chip>
           </div>
           <div className="flow-root mt-6">
-            <ul className="-my-5 divide-y divide-gray-200">
-              {charSheet.augmentations.map(aug => (
-                <Augmentation key={aug._id} aug={aug} />
-              ))}
-            </ul>
-            <div className="mt-6">
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.purchaseAugmentation }))}>Purchase a new Augmentation</Button>
-            </div>
+            {charSheet.augmentations.length ? (
+              <>
+                <div className="mt-6">
+                  <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.purchaseAugmentation }))}>Purchase a new Augmentation</Button>
+                </div>
+                <ul className="-my-5 divide-y divide-gray-200">
+                  {charSheet.augmentations.map(aug => (
+                    <Augmentation key={aug._id} aug={aug} />
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <EmptyState
+                heading="No Augmentations"
+                message="Get started by purchasing your first one now"
+                button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.purchaseAugmentation })), text: 'Purchase Augmentation' }}
+              />
+            )}
           </div>
         </PanelSection>
       </div>
