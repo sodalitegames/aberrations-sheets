@@ -11,6 +11,7 @@ import { setModal } from '../../../redux/app/app.actions';
 import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
 
+// Character Sheet
 import DeleteCharacter from '../../../components/characters/forms/modal/DeleteCharacter';
 import TakeARest from '../../../components/characters/forms/modal/TakeARest';
 import TakeDamage from '../../../components/characters/forms/modal/TakeDamage';
@@ -26,6 +27,9 @@ import DisplayBelonging from '../../../components/characters/forms/modal/Display
 import AcceptInvite from '../../../components/characters/forms/modal/AcceptInvite';
 import DeclineInvite from '../../../components/characters/forms/modal/DeclineInvite';
 import LeaveCampaign from '../../../components/characters/forms/modal/LeaveCampaign';
+
+// Campaign Sheet
+import SendInvite from '../../../components/campaigns/forms/modal/SendInvite';
 
 export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, children }) => {
   const dispatch = useDispatch();
@@ -139,6 +143,7 @@ const Modal = () => {
                 </button>
               </div>
               {/* Forms */}
+              {/* Character Sheet */}
               {modal && modal.type === ModalTypes.deleteCharacter ? <DeleteCharacter /> : null}
               {modal && modal.type === ModalTypes.takeARest ? <TakeARest /> : null}
               {modal && modal.type === ModalTypes.displayBelonging ? <DisplayBelonging id={modal.id} data={modal.data} /> : null}
@@ -151,9 +156,11 @@ const Modal = () => {
               {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} /> : null}
-              {modal && modal.type === ModalTypes.acceptInvite ? <AcceptInvite /> : null}
-              {modal && modal.type === ModalTypes.declineInvite ? <DeclineInvite /> : null}
+              {modal && modal.type === ModalTypes.acceptInvite ? <AcceptInvite id={modal.id} /> : null}
+              {modal && modal.type === ModalTypes.declineInvite ? <DeclineInvite id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.leaveCampaign ? <LeaveCampaign /> : null}
+              {/* Campaign Sheet */}
+              {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
             </div>
           </Transition.Child>
         </div>

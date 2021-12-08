@@ -7,6 +7,7 @@ import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
+import Invite from '../../display/Invite';
 
 const AcceptInvite = ({ id }) => {
   const dispatch = useDispatch();
@@ -14,8 +15,6 @@ const AcceptInvite = ({ id }) => {
   const charSheet = useSelector(selectCurrentCharacter);
 
   const [invite, setInvite] = useState(null);
-
-  console.log(invite);
 
   useEffect(() => {
     if (charSheet) {
@@ -26,16 +25,18 @@ const AcceptInvite = ({ id }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetResourceStart('characters', charSheet._id, 'invites', id, { status: 'Declined' }));
+    dispatch(updateSheetResourceStart('characters', charSheet._id, 'invites', id, { status: 'Accepted' }));
 
     dispatch(setModal(null));
   };
 
   return (
-    <ModalForm title="Accept Campaign Invitation" submitText={`Join ${'Campaign Name'}`} submitHandler={submitHandler}>
-      <div className="mt-2">
-        <p className="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">display invite here</p>
-      </div>
+    <ModalForm title="Accept Campaign Invitation" submitText={`Join ${invite?.campaignName}`} submitHandler={submitHandler}>
+      {invite ? (
+        <ul className="-my-5 divide-y divide-gray-200 mt-2">
+          <Invite invite={invite} noActions />
+        </ul>
+      ) : null}
     </ModalForm>
   );
 };

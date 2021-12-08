@@ -17,6 +17,8 @@ const ModalTypes = {
   acceptInvite: 'ACCEPT_INVITE',
   declineInvite: 'DECLINE_INVITE',
   leaveCampaign: 'LEAVE_CAMPAIGN',
+
+  sendInvite: 'SEND_INVITE',
 };
 
 export default ModalTypes;

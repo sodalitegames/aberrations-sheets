@@ -1,14 +1,14 @@
 import { useDispatch } from 'react-redux';
 
-import { setSlideOver } from '../../../redux/app/app.actions';
+import { setModal } from '../../../redux/app/app.actions';
 
-import SlideOverTypes from '../../../utils/SlideOverTypes';
+import ModalTypes from '../../../utils/ModalTypes';
 
 import ListItem from '../../shared/ListItem';
 import DescriptionList from '../../shared/DescriptionList';
 import Button from '../../shared/Button';
 
-const Invite = ({ invite, condensed }) => {
+const Invite = ({ invite, noActions, condensed }) => {
   const dispatch = useDispatch();
 
   if (condensed === 'view') {
@@ -25,18 +25,23 @@ const Invite = ({ invite, condensed }) => {
         list={[
           // { name: 'Campaign Captain', values: [invite.ccName] },
           { name: 'Invite Sent', values: [new Date(invite.createdAt).toDateString()] },
+          { name: 'Status', values: [invite.status] },
           { name: 'Message', values: [invite.message] },
         ]}
         classes="mt-2"
       />
-      <div className="mt-4">
-        <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>Accept Invite</Button>
-      </div>
-      <div className="mt-2">
-        <Button text onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>
-          Decline Invite
-        </Button>
-      </div>
+      {!noActions ? (
+        <>
+          <div className="mt-4">
+            <Button onClick={() => dispatch(setModal({ type: ModalTypes.acceptInvite, id: invite._id }))}>Accept Invite</Button>
+          </div>
+          <div className="mt-2">
+            <Button text onClick={() => dispatch(setModal({ type: ModalTypes.declineInvite, id: invite._id }))}>
+              Decline Invite
+            </Button>
+          </div>
+        </>
+      ) : null}
     </ListItem>
   );
 };
