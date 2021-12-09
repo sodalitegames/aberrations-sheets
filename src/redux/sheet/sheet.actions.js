@@ -111,3 +111,19 @@ export const deleteSheetResourceFailure = (sheetType, error) => ({
   type: SheetActionTypes.DELETE_SHEET_RESOURCE_FAILURE,
   payload: { sheetType, error },
 });
+
+// Remove Character from Campaign
+export const removeCharacterFromCampaignStart = (sheetType, sheetId, body) => ({
+  type: SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_START,
+  payload: { sheetType, sheetId, body },
+});
+
+export const removeCharacterFromCampaignSuccess = (sheetType, message) => ({
+  type: SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS,
+  payload: { sheetType, message },
+});
+
+export const removeCharacterFromCampaignFailure = (sheetType, error) => ({
+  type: SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_FAILURE,
+  payload: { sheetType, error },
+});

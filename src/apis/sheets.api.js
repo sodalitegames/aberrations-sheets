@@ -22,4 +22,7 @@ export const createResource = (sheet, sheetId, resource, body) => sheetsApi.post
 export const updateResource = (sheet, sheetId, resource, resourceId, body) => sheetsApi.patch(`/${sheet}/${sheetId}/${resource}/${resourceId}`, body);
 export const deleteResource = (sheet, sheetId, resource, resourceId) => sheetsApi.delete(`/${sheet}/${sheetId}/${resource}/${resourceId}`);
 
+export const leaveCampaign = (sheet, sheetId) => sheetsApi.post(`/${sheet}/${sheetId}/leave-campaign`);
+export const removePlayer = (sheet, sheetId, body) => sheetsApi.post(`/${sheet}/${sheetId}/remove-player`, body);
+
 export default sheetsApi;

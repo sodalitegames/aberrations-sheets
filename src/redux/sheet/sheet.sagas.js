@@ -17,9 +17,21 @@ import {
   updateSheetResourceFailure,
   deleteSheetResourceSuccess,
   deleteSheetResourceFailure,
+  removeCharacterFromCampaignSuccess,
+  removeCharacterFromCampaignFailure,
 } from './sheet.actions';
 
-import { createResource, deleteResource, deleteSheet as deleteSheetCall, getResources, getSheet, updateResource, updateSheet as updateSheetCall } from '../../apis/sheets.api';
+import {
+  createResource,
+  deleteResource,
+  deleteSheet as deleteSheetCall,
+  getResources,
+  getSheet,
+  leaveCampaign,
+  removePlayer,
+  updateResource,
+  updateSheet as updateSheetCall,
+} from '../../apis/sheets.api';
 import { fetchSpecies } from '../../apis/manage.api';
 
 // FETCH CURRENT SHEET
@@ -130,6 +142,33 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
   }
 }
 
+// REMOVE CHARACTER FROM CAMPAIGN
+export function* onRemoveCharacterFromCampaignStart() {
+  yield takeLatest(SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_START, removeCharacterFromCampaign);
+}
+
+export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, body } }) {
+  if (sheetType === 'characters') {
+    try {
+      const response = yield leaveCampaign(sheetType, sheetId);
+      console.log('Left Campaign', response.data);
+      yield put(removeCharacterFromCampaignSuccess(sheetType, response.data.message));
+    } catch (err) {
+      yield put(removeCharacterFromCampaignFailure(sheetType, err.response.data));
+    }
+  }
+
+  if (sheetType === 'campaigns') {
+    try {
+      const response = yield removePlayer(sheetType, sheetId, body);
+      console.log('Removed Player', response.data);
+      yield put(removeCharacterFromCampaignSuccess(sheetType, response.data.message));
+    } catch (err) {
+      yield put(removeCharacterFromCampaignFailure(sheetType, err.response.data));
+    }
+  }
+}
+
 // EXPORT SHEET SAGAS
 export function* sheetSagas() {
   yield all([
@@ -140,5 +179,6 @@ export function* sheetSagas() {
     call(onCreateSheetResourceStart),
     call(onUpdateSheetResourceStart),
     call(onDeleteSheetResourceStart),
+    call(onRemoveCharacterFromCampaignStart),
   ]);
 }

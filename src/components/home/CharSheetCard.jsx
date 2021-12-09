@@ -6,7 +6,7 @@ export default function CharSheetCard({ charSheet }) {
   return (
     <PagePanel
       heading={charSheet.characterName}
-      subheading={charSheet.campaign ? `${charSheet.campaign.name} by ${charSheet.campaign.ccName}` : 'No campaign assigned'}
+      subheading={charSheet.campaign ? `Campaign - ${charSheet.campaign.name} by ${charSheet.campaign.ccName}` : 'No campaign assigned'}
       link={{ text: 'Go to Character', to: charSheet._id }}
     >
       <DescriptionList

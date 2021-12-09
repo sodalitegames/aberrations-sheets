@@ -30,7 +30,7 @@ const Invite = ({ invite, noActions, condensed }) => {
         ]}
         classes="mt-2"
       />
-      {!noActions ? (
+      {!noActions && invite.status === 'Pending' ? (
         <>
           <div className="mt-4">
             <Button onClick={() => dispatch(setModal({ type: ModalTypes.acceptInvite, id: invite._id }))}>Accept Invite</Button>

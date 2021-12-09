@@ -21,6 +21,7 @@ import Log from '../../components/characters/display/Log';
 import EmptyState from '../../components/shared/EmptyState';
 import Invite from '../../components/characters/display/Invite';
 import Campaign from '../../components/characters/display/Campaign';
+import ListContainer from '../../components/shared/ListContainer';
 
 const CharacterCharacterPage = () => {
   const dispatch = useDispatch();
@@ -55,39 +56,53 @@ const CharacterCharacterPage = () => {
 
       <PanelSection title="Character Logs">
         <div className="flow-root mt-2">
-          {charSheet.characterLogs.length ? (
-            <>
-              <div className="mb-6">
-                <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>Add a new Character Log</Button>
-              </div>
-              <ul className="-my-5 divide-y divide-gray-200">
-                {charSheet.characterLogs.map(log => (
-                  <Log key={log._id} log={log} />
-                ))}
-              </ul>
-            </>
-          ) : (
-            <EmptyState
-              heading="No Character Logs"
-              message="Get started by creating your first one now"
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm })), text: 'New Character Log' }}
-            />
-          )}
+          <div className="mb-6">
+            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>Add a new Character Log</Button>
+          </div>
+          <ListContainer
+            list={charSheet.characterLogs}
+            empty={{
+              heading: 'No Character Logs',
+              message: 'Get started by creating your first one now',
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm })), text: 'New Character Log' },
+            }}
+          >
+            {charSheet.characterLogs.map(log => (
+              <Log key={log._id} log={log} />
+            ))}
+          </ListContainer>
         </div>
       </PanelSection>
 
-      <PanelSection title="Campaign Details">
+      <PanelSection title={charSheet.campaign ? 'Campaign Details' : 'Campaign Invitations'}>
         <div className="flow-root mt-2">
           {charSheet.campaign ? (
             <Campaign campaign={charSheet.campaign} />
-          ) : charSheet.invites.length ? (
-            <ul className="-my-5 divide-y divide-gray-200">
-              {charSheet.invites.map(invite => (
-                <Invite key={invite._id} invite={invite} />
-              ))}
-            </ul>
+          ) : charSheet.invites.filter(invite => invite.status === 'Pending').length ? (
+            <>
+              <ListContainer>
+                {charSheet.invites
+                  .filter(invite => invite.status === 'Pending')
+                  .map(invite => (
+                    <Invite key={invite._id} invite={invite} />
+                  ))}
+              </ListContainer>
+
+              <p className="border-t border-gray-100 text-sm italic text-gray-600 mt-4 pt-4 mb-2 text-center">Need a new invite? Copy your Character Id below.</p>
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(charSheet._id);
+                  setCopied(true);
+                }}
+                small
+                classes="mt-4"
+              >
+                {charSheet._id} <DocumentDuplicateIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+              </Button>
+              {copied ? <p className="text-sm italic text-gray-400 mt-1 text-center">Copied to clipboard</p> : null}
+            </>
           ) : (
-            <EmptyState heading="No Campaign Invites" message="Copy your Character Id below and send it to your future Campaign Captain">
+            <EmptyState heading="No Pending Invites" message="Copy your Character Id below and send it to your future Campaign Captain">
               <Button
                 onClick={() => {
                   navigator.clipboard.writeText(charSheet._id);
