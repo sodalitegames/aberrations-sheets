@@ -31,7 +31,7 @@ const Weapon = ({ weapon, condensed, noButtonPanel }) => {
       noButtonPanel={noButtonPanel}
       editable={{ type: SlideOverTypes.editWeaponForm, id: weapon._id }}
       deletable={{
-        type: ModalTypes.deleteResource,
+        type: ModalTypes.deleteCharResource,
         id: weapon._id,
         data: { type: 'weapons', title: `Are you sure you want to delete ${weapon.nickname || weapon.name}?`, submitText: `Yes, delete ${weapon.nickname || weapon.name}`, equipped: weapon.equipped },
       }}

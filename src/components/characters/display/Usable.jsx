@@ -24,7 +24,7 @@ const Usable = ({ usable, condensed, noButtonPanel }) => {
       noButtonPanel={noButtonPanel}
       editable={{ type: SlideOverTypes.usableForm, id: usable._id }}
       deletable={{
-        type: ModalTypes.deleteResource,
+        type: ModalTypes.deleteCharResource,
         id: usable._id,
         data: { type: 'usables', title: `Are you sure you want to delete ${usable.name}?`, submitText: `Yes, delete ${usable.name}`, equipped: usable.equipped },
       }}

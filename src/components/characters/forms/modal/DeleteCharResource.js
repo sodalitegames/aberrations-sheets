@@ -16,7 +16,7 @@ import { ModalForm } from '../../../../layouts/components/app/Modal';
 //   equipped?: boolean,
 // }
 
-const DeleteResource = ({ id, data }) => {
+const DeleteCharResource = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -42,4 +42,4 @@ const DeleteResource = ({ id, data }) => {
   );
 };
 
-export default DeleteResource;
+export default DeleteCharResource;
