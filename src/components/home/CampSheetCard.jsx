@@ -11,7 +11,7 @@ const CampSheetCard = ({ campSheet }) => {
     >
       <DescriptionList
         list={[
-          { name: 'Player Characters', values: campSheet.players.map(player => player.characterName) },
+          { name: 'Player Characters', values: [`${campSheet.players.length ? campSheet.players.map(player => player.characterName).join(', ') : 'No characters assigned'}`] },
           { name: 'Overview', values: [campSheet.overview] },
         ]}
       />

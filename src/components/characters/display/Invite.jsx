@@ -26,7 +26,7 @@ const Invite = ({ invite, noActions, condensed }) => {
           // { name: 'Campaign Captain', values: [invite.ccName] },
           { name: 'Invite Sent', values: [new Date(invite.createdAt).toDateString()] },
           { name: 'Status', values: [invite.status] },
-          { name: 'Message', values: [invite.message] },
+          invite.message ? { name: 'Message', values: [invite.message] } : null,
         ]}
         classes="mt-2"
       />
