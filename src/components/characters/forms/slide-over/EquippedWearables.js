@@ -243,7 +243,7 @@ const EquippedWearables = () => {
   };
 
   return (
-    <SlideOverForm title="Manage equipped Wearables" description="Update the information below to edit your equipped wearables" submitText="Save edits" submitHandler={submitHandler}>
+    <SlideOverForm title="Manage equipped Wearables" description="Update the information below to edit your equipped wearables" submitText="Save changes" submitHandler={submitHandler}>
       <Row slideOver name="head" label="Head">
         <SelectInput name="head" value={head ? head._id : ''} options={headList} changeHandler={selectHead} />
         {head ? (

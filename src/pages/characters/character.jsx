@@ -15,13 +15,13 @@ import PanelSection from '../../components/shared/PanelSection';
 import Button from '../../components/shared/Button';
 import InfoList from '../../components/shared/InfoList';
 import { ButtonPanel } from '../../components/shared/ListItem';
+import ListContainer from '../../components/shared/ListContainer';
 
 import Species from '../../components/characters/display/Species';
-import Log from '../../components/characters/display/Log';
+import CharacterLog from '../../components/characters/display/CharacterLog';
 import EmptyState from '../../components/shared/EmptyState';
 import Invite from '../../components/characters/display/Invite';
 import Campaign from '../../components/characters/display/Campaign';
-import ListContainer from '../../components/shared/ListContainer';
 
 const CharacterCharacterPage = () => {
   const dispatch = useDispatch();
@@ -56,11 +56,9 @@ const CharacterCharacterPage = () => {
 
       <PanelSection title="Character Logs">
         <div className="flow-root mt-2">
-          <div className="mb-6">
-            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>Add a new Character Log</Button>
-          </div>
           <ListContainer
             list={charSheet.characterLogs}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm })), text: 'Add a new Character Log' }}
             empty={{
               heading: 'No Character Logs',
               message: 'Get started by creating your first one now',
@@ -68,7 +66,7 @@ const CharacterCharacterPage = () => {
             }}
           >
             {charSheet.characterLogs.map(log => (
-              <Log key={log._id} log={log} />
+              <CharacterLog key={log._id} log={log} />
             ))}
           </ListContainer>
         </div>

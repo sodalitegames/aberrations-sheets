@@ -4,7 +4,7 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ListItem from '../../shared/ListItem';
 import InfoList from '../../shared/InfoList';
 
-const Log = ({ log, condensed }) => {
+const CaptainsLog = ({ log, condensed }) => {
   if (condensed === 'view') {
     return 'view';
   }
@@ -16,11 +16,11 @@ const Log = ({ log, condensed }) => {
   return (
     <ListItem
       heading={new Date(log.date).toDateString()}
-      editable={{ type: SlideOverTypes.charLogForm, id: log._id }}
+      editable={{ type: SlideOverTypes.captainsLogForm, id: log._id }}
       deletable={{
-        type: ModalTypes.deleteResource,
+        type: ModalTypes.deleteCampResource,
         id: log._id,
-        data: { type: 'logs', title: 'Are you sure you want to delete this character log?', submitText: 'Yes, delete this character log' },
+        data: { type: 'logs', title: `Are you sure you want to delete this captain's log?`, submitText: `Yes, delete this captain's log` },
       }}
     >
       <InfoList list={[log.content]} />
@@ -28,4 +28,4 @@ const Log = ({ log, condensed }) => {
   );
 };
 
-export default Log;
+export default CaptainsLog;

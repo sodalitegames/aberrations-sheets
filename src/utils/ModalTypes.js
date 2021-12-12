@@ -10,7 +10,7 @@ const ModalTypes = {
   editMortality: 'EDIT_MORTALITY',
   editStat: 'EDIT_STAT',
   editCondition: 'EDIT_CONDITION',
-  deleteResource: 'DELETE_RESOURCE',
+  deleteCharResource: 'DELETE_CHARACTER_RESOURCE',
 
   takeARest: 'TAKE_A_REST',
 
@@ -19,6 +19,7 @@ const ModalTypes = {
   leaveCampaign: 'LEAVE_CAMPAIGN',
 
   sendInvite: 'SEND_INVITE',
+  deleteCampResource: 'DELETE_CAMPAIGN_RESOURCE',
 };
 
 export default ModalTypes;

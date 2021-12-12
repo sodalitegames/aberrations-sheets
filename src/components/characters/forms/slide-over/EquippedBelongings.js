@@ -128,7 +128,7 @@ const EquippedBelongings = ({ id }) => {
     <SlideOverForm
       title={`Manage equipped ${capitalize(id)}`}
       description={`Update the information below to edit your equipped ${capitalize(id)}.`}
-      submitText="Save edits"
+      submitText="Save changes"
       submitHandler={submitHandler}
     >
       {id === 'weapons' ? (

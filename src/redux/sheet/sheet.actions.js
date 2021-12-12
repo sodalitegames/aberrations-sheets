@@ -112,6 +112,12 @@ export const deleteSheetResourceFailure = (sheetType, error) => ({
   payload: { sheetType, error },
 });
 
+// Add Campaign to Character
+export const addCampaignToCharacterSuccess = (sheetType, campaign) => ({
+  type: SheetActionTypes.ADD_CAMPAIGN_TO_CHARACTER_SUCCESS,
+  payload: { sheetType, campaign },
+});
+
 // Remove Character from Campaign
 export const removeCharacterFromCampaignStart = (sheetType, sheetId, body) => ({
   type: SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_START,

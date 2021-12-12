@@ -23,8 +23,8 @@ const Campaign = ({ campaign, condensed }) => {
         list={[
           { name: 'Campaign Name', values: [campaign.name] },
           { name: 'CC Name', values: [campaign.ccNickname || campaign.ccName] },
-          { name: 'Players', values: campaign.players.map(player => player.playerName) },
-          { name: 'Characters', values: campaign.players.map(player => player.characterName) },
+          { name: 'Players', values: [`${campaign.players.map(player => player.playerName).join(', ')}`] },
+          { name: 'Characters', values: [`${campaign.players.map(player => player.characterName).join(', ')}`] },
         ]}
       />
       <div className="mt-6">

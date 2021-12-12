@@ -22,7 +22,7 @@ import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoi
 import Mortality from '../../../components/characters/forms/modal/Mortality';
 import EditStat from '../../../components/characters/forms/modal/EditStat';
 import EditCondition from '../../../components/characters/forms/modal/EditCondition';
-import DeleteResource from '../../../components/characters/forms/modal/DeleteResource';
+import DeleteCharResource from '../../../components/characters/forms/modal/DeleteCharResource';
 import DisplayBelonging from '../../../components/characters/forms/modal/DisplayBelonging';
 import AcceptInvite from '../../../components/characters/forms/modal/AcceptInvite';
 import DeclineInvite from '../../../components/characters/forms/modal/DeclineInvite';
@@ -30,6 +30,7 @@ import LeaveCampaign from '../../../components/characters/forms/modal/LeaveCampa
 
 // Campaign Sheet
 import SendInvite from '../../../components/campaigns/forms/modal/SendInvite';
+import DeleteCampResource from '../../../components/campaigns/forms/modal/DeleteCampResource';
 
 export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, children }) => {
   const dispatch = useDispatch();
@@ -155,12 +156,13 @@ const Modal = () => {
               {modal && modal.type === ModalTypes.editMortality ? <Mortality /> : null}
               {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} /> : null}
-              {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} /> : null}
+              {modal && modal.type === ModalTypes.deleteCharResource ? <DeleteCharResource id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.acceptInvite ? <AcceptInvite id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.declineInvite ? <DeclineInvite id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.leaveCampaign ? <LeaveCampaign /> : null}
               {/* Campaign Sheet */}
               {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
+              {modal && modal.type === ModalTypes.deleteCampResource ? <DeleteCampResource id={modal.id} data={modal.data} /> : null}
             </div>
           </Transition.Child>
         </div>

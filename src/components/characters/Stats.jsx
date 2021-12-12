@@ -71,7 +71,7 @@ const Stats = ({ stats, power, mortality, slowed }) => {
                   <h4 className="text-sm uppercase">{stat.passive.name}</h4>
                   <p className="font-bold text-lg">
                     {/* Subtract Slowed from total if current passive stat is Dodge Value */}
-                    {stat.passive.name === 'Dodge Value' ? (
+                    {stat.passive.name === 'Dodge Value' && slowed ? (
                       <span className="relative">
                         <span className="absolute -left-4 line-through text-red-900">{stat.passive.value}</span>
                         {stat.passive.value - slowed}

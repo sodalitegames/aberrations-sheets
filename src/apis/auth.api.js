@@ -10,8 +10,8 @@ const authApi = Axios.create({
   },
 });
 
-export const signUserIn = body => authApi.post(`/auth/login`, body);
-export const signUserUp = body => authApi.post(`/auth/signup`, body);
+export const signUserIn = body => authApi.post(`/auth/login?app=sheets`, body);
+export const signUserUp = body => authApi.post(`/auth/signup?app=sheets`, body);
 
 export const getUser = () => authApi.get(`/users/getMe`);
 

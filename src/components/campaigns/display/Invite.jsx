@@ -26,18 +26,18 @@ const Invite = ({ invite, noActions, condensed }) => {
           // { name: 'Campaign Captain', values: [invite.ccName] },
           { name: 'Invite Sent', values: [new Date(invite.createdAt).toDateString()] },
           { name: 'Status', values: [invite.status] },
-          invite.message ? { name: 'Message', values: [invite.message] } : null,
+          { name: 'Message', values: [invite.message] },
         ]}
         classes="mt-2"
       />
       {!noActions && invite.status === 'Pending' ? (
         <>
           <div className="mt-4">
-            <Button onClick={() => dispatch(setModal({ type: ModalTypes.acceptInvite, id: invite._id }))}>Accept Invite</Button>
+            <Button onClick={() => dispatch(setModal({ type: ModalTypes.revokeInvite, id: invite._id }))}>Revoke Invite</Button>
           </div>
           <div className="mt-2">
-            <Button text onClick={() => dispatch(setModal({ type: ModalTypes.declineInvite, id: invite._id }))}>
-              Decline Invite
+            <Button text onClick={() => dispatch(setModal({ type: ModalTypes.deleteInvite, id: invite._id }))}>
+              Delete Invite
             </Button>
           </div>
         </>

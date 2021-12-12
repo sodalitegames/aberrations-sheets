@@ -19,6 +19,7 @@ import {
   deleteSheetResourceFailure,
   removeCharacterFromCampaignSuccess,
   removeCharacterFromCampaignFailure,
+  addCampaignToCharacterSuccess,
 } from './sheet.actions';
 
 import {
@@ -122,6 +123,12 @@ export function* onUpdateSheetResourceStart() {
 export function* updateSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId, body } }) {
   try {
     const response = yield updateResource(sheetType, sheetId, resourceType, resourceId, body);
+
+    // If resource is invite and the invitation was just accepted, add the campaign sheet to the redux state
+    if (resourceType === 'invites' && response.data.data.doc.status === 'Accepted') {
+      yield put(addCampaignToCharacterSuccess(sheetType, response.data.data.campaign));
+    }
+
     yield put(updateSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
   } catch (err) {
     yield put(updateSheetResourceFailure(sheetType, err.response.data));

@@ -6,6 +6,7 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 import { deleteSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
+import { setModal } from '../../../../redux/app/app.actions';
 
 const DeleteCharacter = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,8 @@ const DeleteCharacter = () => {
     }
 
     dispatch(deleteSheetStart('characters', charSheet._id));
+
+    dispatch(setModal(null));
 
     navigate('/characters');
   };

@@ -7,6 +7,9 @@ import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
+
+import ListContainer from '../../../shared/ListContainer';
+
 import Invite from '../../display/Invite';
 
 const AcceptInvite = ({ id }) => {
@@ -33,9 +36,9 @@ const AcceptInvite = ({ id }) => {
   return (
     <ModalForm title="Accept Campaign Invitation" submitText={`Join ${invite?.campaignName}`} submitHandler={submitHandler}>
       {invite ? (
-        <ul className="-my-5 divide-y divide-gray-200 mt-2">
+        <ListContainer classes="mt-4">
           <Invite invite={invite} noActions />
-        </ul>
+        </ListContainer>
       ) : null}
     </ModalForm>
   );
