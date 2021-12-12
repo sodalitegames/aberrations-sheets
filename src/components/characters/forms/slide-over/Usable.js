@@ -73,9 +73,10 @@ const Usable = ({ id }) => {
         value={type}
         options={[
           { name: 'Common', id: 'Common' },
-          { name: 'Unique', id: 'Unique' },
+          { name: 'Semi-Common', id: 'Semi-Common' },
           { name: 'Rare', id: 'Rare' },
-          { name: 'Coveted', id: 'Coveted' },
+          { name: 'Collectible', id: 'Collectible' },
+          { name: 'One of A Kind', id: 'One of A Kind' },
         ]}
         changeHandler={selectType}
       />
