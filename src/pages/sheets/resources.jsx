@@ -44,7 +44,7 @@ const actions = [
   },
 ];
 
-const CharacterResourcesPage = () => {
+const SheetResourcesPage = ({ sheetType }) => {
   return (
     <SheetPageContent title="Resources" columns={3}>
       <PanelSection colSpan={2}>
@@ -89,4 +89,4 @@ const CharacterResourcesPage = () => {
   );
 };
 
-export default CharacterResourcesPage;
+export default SheetResourcesPage;

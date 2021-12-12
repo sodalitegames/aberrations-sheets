@@ -21,7 +21,6 @@ import HomePage from './pages/home/home';
 import CharactersPage from './pages/home/characters';
 import CampaignsPage from './pages/home/campaigns';
 import AboutPage from './pages/home/about';
-
 import ProfilePage from './pages/home/profile';
 import SettingsPage from './pages/home/settings';
 import HelpPage from './pages/home/help';
@@ -30,8 +29,6 @@ import PrivacyPage from './pages/home/privacy';
 import CharacterGameplayPage from './pages/characters/gameplay';
 import CharacterInventoryPage from './pages/characters/inventory';
 import CharacterCharacterPage from './pages/characters/character';
-import CharacterNotesPage from './pages/characters/notes';
-import CharacterResourcesPage from './pages/characters/resources';
 
 import CampaignGameplayPage from './pages/campaigns/gameplay';
 import CampaignStatsTrackerPage from './pages/campaigns/stats-tracker';
@@ -39,7 +36,9 @@ import CampaignCampaignPage from './pages/campaigns/campaign';
 import CampaignPlayersPage from './pages/campaigns/players';
 import CampaignNpcsPage from './pages/campaigns/npcs';
 import CampaignBelongingsPage from './pages/campaigns/belongings';
-import CampaignNotesPage from './pages/campaigns/notes';
+
+import SheetNotesPage from './pages/sheets/notes';
+import SheetResourcesPage from './pages/sheets/resources';
 
 import './index.css';
 
@@ -63,10 +62,10 @@ ReactDOM.render(
                 </Route>
                 <Route path="characters/:charId" element={<CharacterSheet />}>
                   <Route index element={<CharacterGameplayPage />} />
-                  <Route path="inventory" element={<CharacterInventoryPage />} />
                   <Route path="character" element={<CharacterCharacterPage />} />
-                  <Route path="notes" element={<CharacterNotesPage />} />
-                  <Route path="resources" element={<CharacterResourcesPage />} />
+                  <Route path="inventory" element={<CharacterInventoryPage />} />
+                  <Route path="notes" element={<SheetNotesPage sheetType="characters" />} />
+                  <Route path="resources" element={<SheetResourcesPage sheetType="characters" />} />
                 </Route>
                 <Route path="campaigns/:campId" element={<CampaignSheet />}>
                   <Route index element={<CampaignGameplayPage />} />
@@ -77,7 +76,8 @@ ReactDOM.render(
                   <Route path="creatures" element={<></>} />
                   <Route path="environments" element={<></>} />
                   <Route path="belongings" element={<CampaignBelongingsPage />} />
-                  <Route path="notes" element={<CampaignNotesPage />} />
+                  <Route path="notes" element={<SheetNotesPage sheetType="campaigns" />} />
+                  <Route path="resources" element={<SheetResourcesPage sheetType="campaigns" />} />
                 </Route>
               </Route>
             </Routes>
