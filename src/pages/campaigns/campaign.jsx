@@ -9,11 +9,11 @@ import SlideOverTypes from '../../utils/SlideOverTypes';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
 import PanelSection from '../../components/shared/PanelSection';
-import Button from '../../components/shared/Button';
 import InfoList from '../../components/shared/InfoList';
 import { ButtonPanel } from '../../components/shared/ListItem';
+import ListContainer from '../../components/shared/ListContainer';
 
-import Log from '../../components/characters/display/Log';
+import CaptainsLog from '../../components/campaigns/display/CaptainsLog';
 
 const CampaignCampaignPage = () => {
   const dispatch = useDispatch();
@@ -26,14 +26,14 @@ const CampaignCampaignPage = () => {
         <PanelSection title="Campaign Overview">
           <div className="flow-root">
             <InfoList list={[campSheet.overview]} />
-            <ButtonPanel editable={{ type: SlideOverTypes.charDescriptionForm }} />
+            <ButtonPanel editable={{ type: SlideOverTypes.campOverviewForm }} />
           </div>
         </PanelSection>
 
         <PanelSection title="Campaign Details">
           <div className="flow-root">
             <InfoList list={[campSheet.details]} />
-            <ButtonPanel editable={{ type: SlideOverTypes.charBackgroundForm }} />
+            <ButtonPanel editable={{ type: SlideOverTypes.campDetailsForm }} />
           </div>
         </PanelSection>
       </div>
@@ -44,14 +44,19 @@ const CampaignCampaignPage = () => {
 
       <PanelSection title="Captain's Logs">
         <div className="flow-root mt-2">
-          <div className="mb-6">
-            <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm }))}>Add a new Captain's Log</Button>
-          </div>
-          <ul className="-my-5 divide-y divide-gray-200">
+          <ListContainer
+            list={campSheet.captainsLogs}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.captainsLogForm })), text: `Add a new Captain's Log` }}
+            empty={{
+              heading: `No Captain's Logs`,
+              message: 'Get started by creating your first one now',
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.captainsLogForm })), text: `New Captain's Log` },
+            }}
+          >
             {campSheet.captainsLogs.map(log => (
-              <Log key={log._id} log={log} />
+              <CaptainsLog key={log._id} log={log} />
             ))}
-          </ul>
+          </ListContainer>
         </div>
       </PanelSection>
     </SheetPageContent>

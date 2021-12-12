@@ -14,6 +14,7 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 import NewCharacter from '../../../components/home/forms/slide-over/NewCharacter';
 import NewCampaign from '../../../components/home/forms/slide-over/NewCampaign';
 
+// Character Sheet
 import ManageCharacter from '../../../components/characters/forms/slide-over/ManageCharacter';
 import RollDice from '../../../components/characters/forms/slide-over/RollDice';
 import EquippedBelongings from '../../../components/characters/forms/slide-over/EquippedBelongings';
@@ -27,6 +28,11 @@ import Usable from '../../../components/characters/forms/slide-over/Usable';
 import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
 import CharacterLog from '../../../components/characters/forms/slide-over/CharacterLog';
+
+// Campaign Sheet
+import CampOverview from '../../../components/campaigns/forms/slide-over/CampOverview';
+import CampDetails from '../../../components/campaigns/forms/slide-over/CampDetails';
+import CaptainsLog from '../../../components/campaigns/forms/slide-over/CaptainsLog';
 
 export const SlideOverForm = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
   const dispatch = useDispatch();
@@ -106,6 +112,7 @@ const SlideOver = () => {
             >
               <div className="w-screen max-w-2xl">
                 {/* Forms */}
+                {/* Character Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.newCharacter ? <NewCharacter /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newCampaign ? <NewCampaign /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
@@ -121,6 +128,10 @@ const SlideOver = () => {
                 {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charLogForm ? <CharacterLog id={slideOver.id} /> : null}
+                {/* Campaign Sheet */}
+                {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.captainsLogForm ? <CaptainsLog id={slideOver.id} /> : null}
               </div>
             </Transition.Child>
           </div>
