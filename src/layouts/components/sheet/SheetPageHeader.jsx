@@ -14,21 +14,22 @@ import classNames from '../../../utils/classNames';
 const navigation = {
   character: [
     { name: 'Gameplay', href: '' },
-    { name: 'Inventory', href: 'inventory' },
     { name: 'Character', href: 'character' },
+    { name: 'Inventory', href: 'inventory' },
     { name: 'Notes', href: 'notes' },
     //{ name: 'Resources', href: 'resources' },
   ],
   campaign: [
     { name: 'Gameplay', href: '' },
-    { name: 'Stats Tracker', href: 'stats-tracker' },
     { name: 'Campaign', href: 'campaign' },
+    { name: 'Stats Tracker', href: 'stats-tracker' },
     { name: 'Players', href: 'players' },
     { name: 'Npcs', href: 'npcs' },
     { name: 'Creatures', href: 'creatures' },
     { name: 'Environments', href: 'environments' },
     { name: 'Belongings', href: 'belongings' },
     { name: 'Notes', href: 'notes' },
+    //{ name: 'Resources', href: 'resources' },
   ],
 };
 const secondaryNavigation = [
@@ -228,7 +229,7 @@ const SheetPageHeader = ({ type }) => {
   return (
     <Popover
       as="header"
-      className={classNames(type === 'character' ? 'bg-gradient-to-r from-tertiary-dark to-tertiary' : '', type === 'campaign' ? 'bg-gradient-to-r from-accent1-deep to-accent1-dark' : '', 'pb-24')}
+      className={classNames(type === 'character' ? 'bg-gradient-to-r from-accent2-deep to-accent2-dark' : '', type === 'campaign' ? 'bg-gradient-to-r from-accent1-deep to-accent1-dark' : '', 'pb-24')}
     >
       {({ open }) => (
         <>
