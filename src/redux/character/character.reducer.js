@@ -64,6 +64,14 @@ const characterReducer = (state = INITIAL_STATE, action) => {
           [deletedResourceType]: removeItemById(state.current[deletedResourceType], resourceId),
         },
       };
+    case SheetActionTypes.ADD_CAMPAIGN_TO_CHARACTER_SUCCESS:
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          campaign: action.payload.campaign,
+        },
+      };
     case SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS:
       return {
         ...state,
