@@ -117,7 +117,7 @@ const TakeARest = () => {
           conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
           fortitude: { ...fortitude, advantage: 0 },
           agility: { ...agility, advantage: 0 },
-          persona: { ...agility, advantage: 0 },
+          persona: { ...persona, advantage: 0 },
           aptitude: { ...aptitude, advantage: 0 },
           upgradePoints: charSheet.upgradePoints + upgradePoints,
         })

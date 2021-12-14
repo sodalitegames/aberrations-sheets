@@ -7,7 +7,7 @@ import DescriptionList from '../../shared/DescriptionList';
 import InfoList from '../../shared/InfoList';
 
 const createWeaponList = (stat, range, ability) => {
-  const weapon = [`${capitalize(stat)} | Range: ${range}`];
+  const weapon = [`${capitalize(stat)} | ${range} Range`];
   if (ability) weapon.push({ title: ability, value: ability.replace('"', '') });
   return weapon;
 };
