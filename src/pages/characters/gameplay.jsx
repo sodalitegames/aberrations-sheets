@@ -50,7 +50,7 @@ const CharacterGameplayPage = () => {
                 </p>
               </div>
             </div>
-            <div className="ml-5 mt-5 flex flex-col flex-shrink-0 justify-center sm:mt-0 space-y-2">
+            <div className="ml-5 mt-5 flex flex-col shrink-0 justify-center sm:mt-0 space-y-2">
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageCharacter }))}>Manage Character</Button>
             </div>
           </div>

@@ -12,7 +12,16 @@ export const LoadingSpinner = ({ dark }) => {
 const SubmitButton = ({ type, text, loadingText, loading, classes, notFull }) => {
   if (loading) {
     return (
-      <button type="button" className={classNames(`btn-${type}`, notFull ? 'py-2 px-4' : 'w-full', classes)}>
+      <button
+        type="button"
+        className={classNames(
+          type === 'primary' ? 'btn-primary' : '',
+          type === 'secondary' ? 'btn-secondary' : '',
+          type === 'tertiary' ? 'btn-tertiary' : '',
+          notFull ? 'py-2 px-4' : 'w-full',
+          classes
+        )}
+      >
         <LoadingSpinner />
         {loadingText || 'Processing'}
       </button>
@@ -20,7 +29,10 @@ const SubmitButton = ({ type, text, loadingText, loading, classes, notFull }) =>
   }
 
   return (
-    <button type="submit" className={classNames(`btn-${type}`, notFull ? 'py-2 px-4' : 'w-full', classes)}>
+    <button
+      type="submit"
+      className={classNames(type === 'primary' ? 'btn-primary' : '', type === 'secondary' ? 'btn-secondary' : '', type === 'tertiary' ? 'btn-tertiary' : '', notFull ? 'py-2 px-4' : 'w-full', classes)}
+    >
       {text}
     </button>
   );

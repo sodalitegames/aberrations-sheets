@@ -40,7 +40,7 @@ export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, 
       <div>
         {/* Icon */}
         {type === 'alert' ? (
-          <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+          <div className="mx-auto shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
             <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
           </div>
         ) : null}
@@ -116,7 +116,7 @@ const Modal = () => {
       <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={() => dispatch(setModal(null))}>
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
-            <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <Dialog.Overlay className="fixed inset-0 bg-gray-500/75 transition-opacity" />
           </Transition.Child>
           {/* This element is to trick the browser into centering the modal contents. */}
           <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">

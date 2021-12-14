@@ -42,7 +42,7 @@ const Navigation = () => {
                 )
               }
             >
-              <item.icon className="mr-4 flex-shrink-0 h-6 w-6 text-gray-100 group-hover:text-white" aria-hidden="true" />
+              <item.icon className="mr-4 shrink-0 h-6 w-6 text-gray-100 group-hover:text-white" aria-hidden="true" />
               {item.name}
             </NavLink>
           ))}
@@ -93,7 +93,7 @@ const PageNavigation = ({ sidebarOpen, setSidebarOpen }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-gray-700 bg-opacity-75" />
+            <Dialog.Overlay className="fixed inset-0 bg-gray-700/75" />
           </Transition.Child>
           <Transition.Child
             as={Fragment}
@@ -117,7 +117,7 @@ const PageNavigation = ({ sidebarOpen, setSidebarOpen }) => {
                   </button>
                 </div>
               </Transition.Child>
-              <div className="flex-shrink-0 flex items-center px-4">
+              <div className="shrink-0 flex items-center px-4">
                 <Link to="/">
                   <h3 className="text-lg font-display uppercase text-white">Aberrations RPG</h3>
                 </Link>
@@ -125,7 +125,7 @@ const PageNavigation = ({ sidebarOpen, setSidebarOpen }) => {
               <Navigation />
             </div>
           </Transition.Child>
-          <div className="flex-shrink-0 w-14" aria-hidden="true">
+          <div className="shrink-0 w-14" aria-hidden="true">
             {/* Dummy element to force sidebar to shrink to fit close icon */}
           </div>
         </Dialog>
@@ -135,7 +135,7 @@ const PageNavigation = ({ sidebarOpen, setSidebarOpen }) => {
       <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0">
         {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className="flex flex-col flex-grow bg-primary pt-5 pb-4 overflow-y-auto">
-          <div className="flex items-center flex-shrink-0 px-4">
+          <div className="flex items-center shrink-0 px-4">
             <Link to="/">
               <h3 className="text-lg font-display uppercase text-white">Aberrations RPG</h3>
             </Link>

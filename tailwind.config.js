@@ -2,14 +2,14 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('tailwindcss/colors');
 
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  content: ['./src/**/*.{js,jsx,ts,tsx}'],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
       colors: {
         white: '#FFFFFF',
         black: '#020605',
-        light: colors.trueGray,
+        light: colors.neutral,
         dark: {
           DEFAULT: '#000000',
           50: '#0A0A0A',
@@ -31,11 +31,10 @@ module.exports = {
         accent2: { DEFAULT: '#BEA0CF', dark: '#8F5CAD', deep: '#4E305F' },
         accent3: { DEFAULT: '#E9DC86', dark: '#D9C330', deep: '#796C16' },
         util: { red: '#C44939', green: '#4FB286' },
-        gray: colors.gray,
+        green: colors.emerald,
+        yellow: colors.amber,
+        gray: colors.zinc,
         teal: colors.teal,
-        rose: colors.rose,
-        sky: colors.sky,
-        cyan: colors.cyan,
       },
       fontFamily: {
         sans: ['Kanit', ...defaultTheme.fontFamily.sans],
@@ -43,9 +42,6 @@ module.exports = {
         display: ['Audiowide', 'Kanit', ...defaultTheme.fontFamily.sans],
       },
     },
-  },
-  variants: {
-    extend: {},
   },
   plugins: [require('@tailwindcss/forms'), require('@tailwindcss/line-clamp')],
 };

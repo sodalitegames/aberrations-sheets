@@ -61,14 +61,16 @@ ReactDOM.render(
                   <Route path="privacy" element={<PrivacyPage />} />
                 </Route>
                 <Route path="characters/:charId" element={<CharacterSheet />}>
-                  <Route index element={<CharacterGameplayPage />} />
+                  {/* <Route index element={<CharacterGameplayPage />} /> */}
+                  <Route path="gameplay" element={<CharacterGameplayPage />} />
                   <Route path="character" element={<CharacterCharacterPage />} />
                   <Route path="inventory" element={<CharacterInventoryPage />} />
                   <Route path="notes" element={<SheetNotesPage sheetType="characters" />} />
                   <Route path="resources" element={<SheetResourcesPage sheetType="characters" />} />
                 </Route>
                 <Route path="campaigns/:campId" element={<CampaignSheet />}>
-                  <Route index element={<CampaignGameplayPage />} />
+                  {/* <Route index element={<CampaignGameplayPage />} /> */}
+                  <Route path="gameplay" element={<CampaignGameplayPage />} />
                   <Route path="stats-tracker" element={<CampaignStatsTrackerPage />} />
                   <Route path="campaign" element={<CampaignCampaignPage />} />
                   <Route path="players" element={<CampaignPlayersPage />} />

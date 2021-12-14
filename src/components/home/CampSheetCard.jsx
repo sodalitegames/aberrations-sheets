@@ -7,7 +7,7 @@ const CampSheetCard = ({ campSheet }) => {
     <PagePanel
       heading={campSheet.name}
       subheading={campSheet.players.length ? `Players - ${campSheet.players.map(player => player.playerName).join(', ')}` : 'No players assigned'}
-      link={{ text: 'Go to Campaign', to: campSheet._id }}
+      link={{ text: 'Go to Campaign', to: `${campSheet._id}/gameplay` }}
     >
       <DescriptionList
         list={[

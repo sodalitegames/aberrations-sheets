@@ -22,10 +22,7 @@ const Conditions = ({ conditions }) => {
             <h4 className="text-md uppercase flex items-center" title="Reduce your movement speed and dodge value by this amount">
               Slowed
               <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editCondition, id: 'slowed' }))}>
-                <PencilIcon
-                  className="ml-2 mr-2 flex-shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
-                  aria-hidden="true"
-                />
+                <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
               </span>
             </h4>
             <p className="font-bold text-lg">{conditions.slowed}</p>
@@ -38,10 +35,7 @@ const Conditions = ({ conditions }) => {
             <h4 className="text-md uppercase flex items-center" title="Take this much damage at the start of each of your turns">
               Agony
               <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editCondition, id: 'agony' }))}>
-                <PencilIcon
-                  className="ml-2 mr-2 flex-shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
-                  aria-hidden="true"
-                />
+                <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
               </span>
             </h4>
             <p className="font-bold text-lg">{conditions.agony}</p>
@@ -54,10 +48,7 @@ const Conditions = ({ conditions }) => {
             <h4 className="text-md uppercase flex items-center" title="Take this much disadvantage on all Fortitude and Agility tests">
               Injured
               <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editCondition, id: 'injured' }))}>
-                <PencilIcon
-                  className="ml-2 mr-2 flex-shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
-                  aria-hidden="true"
-                />
+                <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
               </span>
             </h4>
             <p className="font-bold text-lg">{conditions.injured}</p>
@@ -70,10 +61,7 @@ const Conditions = ({ conditions }) => {
             <h4 className="text-md uppercase flex items-center" title="Take this much disadvantage on all Persona and Aptitude tests">
               Disturbed
               <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editCondition, id: 'disturbed' }))}>
-                <PencilIcon
-                  className="ml-2 mr-2 flex-shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
-                  aria-hidden="true"
-                />
+                <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
               </span>
             </h4>
             <p className="font-bold text-lg">{conditions.disturbed}</p>
