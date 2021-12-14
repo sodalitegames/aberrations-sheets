@@ -23,6 +23,7 @@ const CharacterInventoryPage = () => {
 
   return (
     <SheetPageContent title="Inventory" columns={4}>
+      {/* Weapons */}
       <PanelSection title="Weapons">
         <div className="flow-root mt-2">
           <ListContainer
@@ -41,6 +42,7 @@ const CharacterInventoryPage = () => {
         </div>
       </PanelSection>
 
+      {/* Wearables */}
       <PanelSection title="Wearables">
         <div className="flow-root mt-2">
           <ListContainer
@@ -59,6 +61,7 @@ const CharacterInventoryPage = () => {
         </div>
       </PanelSection>
 
+      {/* Consumables */}
       <PanelSection title="Consumables">
         <div className="flow-root mt-2">
           <ListContainer
@@ -77,6 +80,7 @@ const CharacterInventoryPage = () => {
         </div>
       </PanelSection>
 
+      {/* Usables */}
       <PanelSection title="Usables">
         <div className="flow-root mt-2">
           <ListContainer

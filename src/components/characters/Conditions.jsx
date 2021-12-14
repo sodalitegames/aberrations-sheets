@@ -12,12 +12,12 @@ const Conditions = ({ conditions }) => {
   return (
     <div className="mt-8">
       <div className="mx-2">
-        <h3 className="text-lg font-medium text-gray-900">Conditions</h3>
+        <h3 className="text-lg text-center md:text-left font-medium text-gray-900">Conditions</h3>
       </div>
 
-      <dl className="mt-4 grid grid-cols-1 md:grid-cols-4">
+      <dl className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-y-4">
         {/* Slowed */}
-        <div className="flex flex-col justify-between px-2">
+        <div className="flex flex-col justify-between mx-2 rounded-md border border-gray-100 md:border-0">
           <div className="bg-gray-50 flex flex-col items-center rounded-md py-3">
             <h4 className="text-md uppercase flex items-center" title="Reduce your movement speed and dodge value by this amount">
               Slowed
@@ -30,7 +30,7 @@ const Conditions = ({ conditions }) => {
         </div>
 
         {/* Agony */}
-        <div className="flex flex-col justify-between px-2">
+        <div className="flex flex-col justify-between mx-2 rounded-md border border-gray-100 md:border-0">
           <div className="bg-gray-50 flex flex-col items-center rounded-md py-3">
             <h4 className="text-md uppercase flex items-center" title="Take this much damage at the start of each of your turns">
               Agony
@@ -43,7 +43,7 @@ const Conditions = ({ conditions }) => {
         </div>
 
         {/* Injured */}
-        <div className="flex flex-col justify-between px-2">
+        <div className="flex flex-col justify-between mx-2 rounded-md border border-gray-100 md:border-0">
           <div className="bg-gray-50 flex flex-col items-center rounded-md py-3">
             <h4 className="text-md uppercase flex items-center" title="Take this much disadvantage on all Fortitude and Agility tests">
               Injured
@@ -56,7 +56,7 @@ const Conditions = ({ conditions }) => {
         </div>
 
         {/* Disturbed */}
-        <div className="flex flex-col justify-between px-2">
+        <div className="flex flex-col justify-between mx-2 rounded-md border border-gray-100 md:border-0">
           <div className="bg-gray-50 flex flex-col items-center rounded-md py-3">
             <h4 className="text-md uppercase flex items-center" title="Take this much disadvantage on all Persona and Aptitude tests">
               Disturbed

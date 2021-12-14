@@ -1,6 +1,6 @@
 const NewlineText = ({ text }) => {
   return (
-    <span className="space-y-4">
+    <span className="space-y-1">
       {text.split('\n').map((string, index) => (
         <p key={index}>{string}</p>
       ))}

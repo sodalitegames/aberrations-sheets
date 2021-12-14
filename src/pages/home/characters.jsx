@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectUsersCharacters, selectUsersCharactersFetched } from '../../redux/user/user.selectors';
@@ -26,7 +26,7 @@ const CharactersPage = () => {
 
   return (
     <PageContent heading="My Characters" primary={{ text: 'Create New Character', slideOver: { type: SlideOverTypes.newCharacter } }}>
-      <div className="grid grid-cols-2 gap-8">{fetched ? characters.map(charSheet => <CharSheetCard key={charSheet._id} charSheet={charSheet} />) : <Loading />}</div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">{fetched ? characters.map(charSheet => <CharSheetCard key={charSheet._id} charSheet={charSheet} />) : <Loading />}</div>
     </PageContent>
   );
 };

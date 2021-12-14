@@ -1,6 +1,6 @@
 import classNames from '../../utils/classNames';
 
-const PanelSection = ({ title, colSpan, rowSpan, children }) => {
+const PanelSection = ({ title, colSpan, rowSpan, classes, children }) => {
   return (
     <section
       className={classNames(
@@ -13,10 +13,11 @@ const PanelSection = ({ title, colSpan, rowSpan, children }) => {
         rowSpan === 2 ? 'row-span-2' : '',
         rowSpan === 3 ? 'row-span-3' : '',
         rowSpan === 4 ? 'row-span-4' : '',
-        !rowSpan ? 'row-span-1' : ''
+        !rowSpan ? 'row-span-1' : '',
+        classes
       )}
     >
-      <div className="rounded-lg bg-white overflow-hidden shadow">
+      <div className="rounded-lg bg-white shadow">
         <div className="p-6">
           {title ? <h2 className="text-base font-medium text-gray-900 mb-2">{title}</h2> : null}
           <div className="flow-root">{children}</div>

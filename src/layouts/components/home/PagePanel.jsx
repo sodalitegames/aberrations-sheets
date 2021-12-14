@@ -4,7 +4,7 @@ import Button from '../../../components/shared/Button';
 
 const PagePanel = ({ heading, subheading, children, link, footer }) => {
   return (
-    <div className="bg-white shadow overflow-hidden sm:rounded-lg">
+    <div className="bg-white shadow rounded-lg">
       {/* Panel header */}
       <div className="px-4 py-5 sm:px-6 flex justify-between items-center">
         <div>

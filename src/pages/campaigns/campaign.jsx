@@ -23,6 +23,7 @@ const CampaignCampaignPage = () => {
   return (
     <SheetPageContent title="Campaign" columns={4}>
       <div className="space-y-4">
+        {/* Campaign Overview */}
         <PanelSection title="Campaign Overview">
           <div className="flow-root">
             <InfoList list={[campSheet.overview]} />
@@ -30,6 +31,7 @@ const CampaignCampaignPage = () => {
           </div>
         </PanelSection>
 
+        {/* Campaign Details */}
         <PanelSection title="Campaign Details">
           <div className="flow-root">
             <InfoList list={[campSheet.details]} />
@@ -38,10 +40,12 @@ const CampaignCampaignPage = () => {
         </PanelSection>
       </div>
 
+      {/* Past and Future Sessions */}
       <PanelSection colSpan={2} title="Past and Future Sessions">
         <div className="flow-root">{JSON.stringify(campSheet.sessions)}</div>
       </PanelSection>
 
+      {/* Captain's Logs */}
       <PanelSection title="Captain's Logs">
         <div className="flow-root mt-2">
           <ListContainer

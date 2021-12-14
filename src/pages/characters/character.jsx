@@ -32,28 +32,32 @@ const CharacterCharacterPage = () => {
 
   return (
     <SheetPageContent title="Character" columns={4}>
-      <div className="space-y-4">
-        <PanelSection title="Character Species">
-          <div className="flow-root">
-            <Species species={charSheet.species} />
-          </div>
-        </PanelSection>
+      {/* Character Species */}
+      <PanelSection title="Character Species">
+        <div className="flow-root">
+          <Species species={charSheet.species} />
+        </div>
+      </PanelSection>
 
+      <div className="space-y-4">
+        {/* Character Description */}
         <PanelSection title="Character Description">
           <div className="flow-root">
             <InfoList list={[charSheet.charDescription]} />
             <ButtonPanel editable={{ type: SlideOverTypes.charDescriptionForm }} />
           </div>
         </PanelSection>
+
+        {/* Character Background */}
+        <PanelSection title="Character Background">
+          <div className="flow-root">
+            <InfoList list={[charSheet.charBackground]} />
+            <ButtonPanel editable={{ type: SlideOverTypes.charBackgroundForm }} />
+          </div>
+        </PanelSection>
       </div>
 
-      <PanelSection title="Character Background">
-        <div className="flow-root">
-          <InfoList list={[charSheet.charBackground]} />
-          <ButtonPanel editable={{ type: SlideOverTypes.charBackgroundForm }} />
-        </div>
-      </PanelSection>
-
+      {/* Character Logs */}
       <PanelSection title="Character Logs">
         <div className="flow-root mt-2">
           <ListContainer
@@ -72,6 +76,7 @@ const CharacterCharacterPage = () => {
         </div>
       </PanelSection>
 
+      {/* Campaign Invites and Campaign Details */}
       <PanelSection title={charSheet.campaign ? 'Campaign Details' : 'Campaign Invitations'}>
         <div className="flow-root mt-2">
           {charSheet.campaign ? (

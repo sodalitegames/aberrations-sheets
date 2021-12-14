@@ -12,6 +12,7 @@ const CampaignNpcsPage = () => {
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
+      {/* All Npcs */}
       <PanelSection title="Manage Npcs">
         <div className="flow-root mt-2">
           <div className="mb-6">
@@ -19,6 +20,8 @@ const CampaignNpcsPage = () => {
           </div>
         </div>
       </PanelSection>
+
+      {/* Selected Npc */}
       <PanelSection title="Selected Npc" colSpan={3}>
         {JSON.stringify(campSheet.npcs)}
       </PanelSection>

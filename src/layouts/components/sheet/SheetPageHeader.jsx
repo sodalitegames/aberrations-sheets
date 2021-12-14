@@ -39,6 +39,8 @@ const secondaryNavigation = [
 ];
 
 const MobileNavigation = ({ type, user }) => {
+  const dispatch = useDispatch();
+
   return (
     <Transition.Root as={Fragment}>
       <div className="lg:hidden">
@@ -94,7 +96,11 @@ const MobileNavigation = ({ type, user }) => {
               <div className="pt-4 pb-2">
                 <div className="flex items-center px-5">
                   <div className="shrink-0">
-                    <img className="h-10 w-10 rounded-full" src="/weapons/sniper.png" alt="temp" />
+                    <span className="inline-block h-8 w-8 rounded-full overflow-hidden bg-gray-100">
+                      <svg className="h-full w-full text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    </span>
                   </div>
                   <div className="ml-3 min-w-0 flex-1">
                     <div className="text-base font-medium text-gray-800 truncate">{user.name}</div>
@@ -114,6 +120,9 @@ const MobileNavigation = ({ type, user }) => {
                       {item.name}
                     </Link>
                   ))}
+                  <button className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800" onClick={() => dispatch(signOutStart())}>
+                    Log out
+                  </button>
                 </div>
               </div>
             </div>
@@ -188,7 +197,7 @@ const RightSectionOnDesktop = () => {
               </Menu.Item>
             ))}
             <Menu.Item>
-              <button className="block px-4 py-2 text-sm text-gray-700" onClick={() => dispatch(signOutStart)}>
+              <button className="block px-4 py-2 text-sm text-gray-700" onClick={() => dispatch(signOutStart())}>
                 Log out
               </button>
             </Menu.Item>
