@@ -25,7 +25,8 @@ const CampaignPlayersPage = () => {
 
   return (
     <SheetPageContent title="Players" columns={4}>
-      <PanelSection title="Manage Players">
+      {/* All Players */}
+      <PanelSection title="Manage Players" classes="col-span-2 lg:col-span-1">
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.players}
@@ -42,11 +43,13 @@ const CampaignPlayersPage = () => {
           </ListContainer>
 
           <p className="border-t border-gray-100 text-sm italic text-gray-600 mt-6 pt-4 mb-2 text-center">Want to manage invites you have already sent?</p>
-          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageSentInvites }))} small classes="mt-4">
+          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageSentInvites }))} small classes="mt-4" disabled>
             Manage Sent Invites
           </Button>
         </div>
       </PanelSection>
+
+      {/* Selected Player */}
       <PanelSection title="Selected Player" colSpan={3}>
         {!player ? <p className="text-sm italic text-gray-400">Once a you have selected a player, you will be able to see their information right here.</p> : JSON.stringify(player)}
       </PanelSection>

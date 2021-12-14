@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { setModal } from '../../../redux/app/app.actions';
 
 import ModalTypes from '../../../utils/ModalTypes';
+import { formatDate } from '../../../utils/formatDate';
 
 import ListItem from '../../shared/ListItem';
 import DescriptionList from '../../shared/DescriptionList';
@@ -24,7 +25,7 @@ const Invite = ({ invite, noActions, condensed }) => {
       <DescriptionList
         list={[
           // { name: 'Campaign Captain', values: [invite.ccName] },
-          { name: 'Invite Sent', values: [new Date(invite.createdAt).toDateString()] },
+          { name: 'Invite Sent', values: [formatDate(invite.createdAt)] },
           { name: 'Status', values: [invite.status] },
           { name: 'Message', values: [invite.message] },
         ]}

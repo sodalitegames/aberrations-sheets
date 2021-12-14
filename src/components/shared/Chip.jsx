@@ -30,7 +30,7 @@ const Chip = ({ color, children, classes, editable }) => {
               color === 'red' ? 'text-red-800 border-red-800' : '',
               color === 'yellow' ? 'text-yellow-800 border-yellow-800' : '',
               color === 'green' ? 'text-green-800 border-green-800' : '',
-              '-mr-1 ml-2 flex-shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer border p-0.5 rounded-full'
+              '-mr-1 ml-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer border p-0.5 rounded-full'
             )}
             aria-hidden="true"
           />

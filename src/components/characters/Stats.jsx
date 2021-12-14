@@ -13,7 +13,7 @@ const Stats = ({ stats, power, mortality, slowed }) => {
 
   return (
     <div>
-      <div className="flex justify-between mx-2">
+      <div className="flex justify-between mx-2 flex-wrap space-y-2">
         <h3 className="text-lg font-medium text-gray-900">Stats</h3>
         {/* Chips */}
         <div className="space-x-2">
@@ -27,18 +27,18 @@ const Stats = ({ stats, power, mortality, slowed }) => {
         {/* End Chips */}
       </div>
 
-      <dl className="mt-4 grid grid-cols-1 md:grid-cols-4">
+      <dl className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map(stat => (
-          <div key={stat.name} className="flex flex-col justify-between px-2">
+          <div key={stat.name} className="flex flex-col justify-between px-2 border border-gray-200 md:border-gray-50 lg:border-0 rounded-md shadow-sm md:shadow-none pb-2">
             {/* Active Stat */}
             <div className="py-4">
               <dd className="mt-1 flex flex-col justify-between items-top md:block lg:flex">
-                <div className="flex flex-col items-center flex-shrink-0 items-start text-5xl font-semibold text-gray-900">
+                <div className="flex flex-col items-center shrink-0 text-5xl font-semibold text-gray-900">
                   <h5 className="font-normal text-xl flex items-center">
                     {stat.name}
                     <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editStat, id: stat.name.toLowerCase() }))}>
                       <PencilIcon
-                        className="ml-2 mr-2 flex-shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
+                        className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"
                       />
                     </span>
@@ -65,7 +65,7 @@ const Stats = ({ stats, power, mortality, slowed }) => {
             </div>
 
             {/* Passive Stat */}
-            <div className="bg-gray-50 flex flex-col items-center rounded-md py-3">
+            <div className="bg-gray-50 flex flex-col items-center rounded-md py-3 border border-gray-100 md:border-0">
               {stat.passive ? (
                 <>
                   <h4 className="text-sm uppercase">{stat.passive.name}</h4>

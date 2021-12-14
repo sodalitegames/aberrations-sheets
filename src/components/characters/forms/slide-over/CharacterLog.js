@@ -8,6 +8,8 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../../
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
+import { isoStringDate } from '../../../../utils/formatDate';
+
 import Input from '../../../shared/Input';
 import TextArea from '../../../shared/TextArea';
 
@@ -23,7 +25,7 @@ const CharacterLog = ({ id }) => {
     if (id && charSheet) {
       const currentLog = charSheet.characterLogs.find(log => log._id === id);
 
-      setDate(new Date(currentLog.date).toISOString().split('T')[0]);
+      setDate(isoStringDate(currentLog.date));
       setContent(currentLog.content);
     }
   }, [id, charSheet]);

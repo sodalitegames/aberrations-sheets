@@ -23,6 +23,7 @@ const CampaignBelongingsPage = () => {
 
   return (
     <SheetPageContent title="Belongings" columns={4}>
+      {/* Weapons */}
       <PanelSection title="Weapons">
         <div className="flow-root mt-2">
           <ListContainer
@@ -30,8 +31,8 @@ const CampaignBelongingsPage = () => {
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'Add a new Weapon' }}
             empty={{
               heading: 'No Weapons',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'New Weapon' },
+              message: 'This feature is coming soon...',
+              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'New Weapon' },
             }}
           >
             {campSheet.weapons.map(weapon => (
@@ -40,6 +41,8 @@ const CampaignBelongingsPage = () => {
           </ListContainer>
         </div>
       </PanelSection>
+
+      {/* Wearables */}
       <PanelSection title="Wearables">
         <div className="flow-root mt-2">
           <ListContainer
@@ -47,8 +50,8 @@ const CampaignBelongingsPage = () => {
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm })), text: 'Add a new Wearable' }}
             empty={{
               heading: 'No Wearables',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm })), text: 'New Wearable' },
+              message: 'This feature is coming soon...',
+              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm })), text: 'New Wearable' },
             }}
           >
             {campSheet.wearables.map(wearable => (
@@ -57,6 +60,8 @@ const CampaignBelongingsPage = () => {
           </ListContainer>
         </div>
       </PanelSection>
+
+      {/* Consumables */}
       <PanelSection title="Consumables">
         <div className="flow-root mt-2">
           <ListContainer
@@ -64,8 +69,8 @@ const CampaignBelongingsPage = () => {
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm })), text: 'Add a new Consumable' }}
             empty={{
               heading: 'No Consumables',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm })), text: 'New Consumable' },
+              message: 'This feature is coming soon...',
+              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm })), text: 'New Consumable' },
             }}
           >
             {campSheet.consumables.map(consumable => (
@@ -74,6 +79,8 @@ const CampaignBelongingsPage = () => {
           </ListContainer>
         </div>
       </PanelSection>
+
+      {/* Usables */}
       <PanelSection title="Usables">
         <div className="flow-root mt-2">
           <ListContainer
@@ -81,8 +88,8 @@ const CampaignBelongingsPage = () => {
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'Add a new Usable' }}
             empty={{
               heading: 'No Usables',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'New Usable' },
+              message: 'This feature is coming soon...',
+              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'New Usable' },
             }}
           >
             {campSheet.usables.map(usable => (

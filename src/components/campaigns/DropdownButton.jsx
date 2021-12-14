@@ -14,7 +14,7 @@ const DropdownButton = ({ actions }) => {
         type="button"
         className="relative inline-flex items-center px-4 py-2 rounded-l-md border border-gray-300 bg-red-200 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 z-10"
       >
-        Save changes
+        Actions
       </button>
       <Menu as="span" className="-ml-px relative block">
         <Menu.Button className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-red-200 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 z-10">

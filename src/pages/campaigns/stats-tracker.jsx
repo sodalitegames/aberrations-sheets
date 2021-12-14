@@ -13,10 +13,9 @@ const CampaignStatsTrackerPage = () => {
 
   return (
     <SheetPageContent title="Stats Tracker" columns={1}>
-      <PanelSection title="Stats Tracker">
-        <div className="flow-root mt-2">
-          <StatsTracker list={[...campSheet.players, ...campSheet.npcs]} />
-        </div>
+      {/* Stats Tracker */}
+      <PanelSection>
+        <StatsTracker list={[...campSheet.players, ...campSheet.npcs]} />
       </PanelSection>
     </SheetPageContent>
   );

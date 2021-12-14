@@ -13,14 +13,14 @@ import classNames from '../../../utils/classNames';
 
 const navigation = {
   character: [
-    { name: 'Gameplay', href: '' },
+    { name: 'Gameplay', href: 'gameplay' },
     { name: 'Character', href: 'character' },
     { name: 'Inventory', href: 'inventory' },
     { name: 'Notes', href: 'notes' },
     //{ name: 'Resources', href: 'resources' },
   ],
   campaign: [
-    { name: 'Gameplay', href: '' },
+    { name: 'Gameplay', href: 'gameplay' },
     { name: 'Campaign', href: 'campaign' },
     { name: 'Stats Tracker', href: 'stats-tracker' },
     { name: 'Players', href: 'players' },
@@ -39,11 +39,13 @@ const secondaryNavigation = [
 ];
 
 const MobileNavigation = ({ type, user }) => {
+  const dispatch = useDispatch();
+
   return (
     <Transition.Root as={Fragment}>
       <div className="lg:hidden">
         <Transition.Child as={Fragment} enter="duration-150 ease-out" enterFrom="opacity-0" enterTo="opacity-100" leave="duration-150 ease-in" leaveFrom="opacity-100" leaveTo="opacity-0">
-          <Popover.Overlay className="z-20 fixed inset-0 bg-black bg-opacity-25" />
+          <Popover.Overlay className="z-20 fixed inset-0 bg-black/25" />
         </Transition.Child>
 
         <Transition.Child
@@ -93,8 +95,12 @@ const MobileNavigation = ({ type, user }) => {
               </div>
               <div className="pt-4 pb-2">
                 <div className="flex items-center px-5">
-                  <div className="flex-shrink-0">
-                    <img className="h-10 w-10 rounded-full" src="/weapons/sniper.png" alt="temp" />
+                  <div className="shrink-0">
+                    <span className="inline-block h-8 w-8 rounded-full overflow-hidden bg-gray-100">
+                      <svg className="h-full w-full text-gray-800" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    </span>
                   </div>
                   <div className="ml-3 min-w-0 flex-1">
                     <div className="text-base font-medium text-gray-800 truncate">{user.name}</div>
@@ -102,7 +108,7 @@ const MobileNavigation = ({ type, user }) => {
                   </div>
                   {/* <button
                     type="button"
-                    className="ml-auto flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                    className="ml-auto shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
                   >
                     <span className="sr-only">View notifications</span>
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
@@ -114,6 +120,9 @@ const MobileNavigation = ({ type, user }) => {
                       {item.name}
                     </Link>
                   ))}
+                  <button className="block rounded-md px-3 py-2 text-base text-gray-900 font-medium hover:bg-gray-100 hover:text-gray-800" onClick={() => dispatch(signOutStart())}>
+                    Log out
+                  </button>
                 </div>
               </div>
             </div>
@@ -135,9 +144,7 @@ const DesktopNavigation = ({ type }) => {
               <NavLink
                 key={item.name}
                 to={item.href}
-                className={({ isActive }) =>
-                  classNames(isActive ? 'text-white bg-opacity-10' : 'text-gray-300', 'text-sm font-medium rounded-md bg-white bg-opacity-0 px-3 py-2 hover:bg-opacity-10 hover:text-white min-w-max')
-                }
+                className={({ isActive }) => classNames(isActive ? 'text-white bg-white/10' : 'text-gray-300', 'text-sm font-medium rounded-md px-3 py-2 hover:bg-white/10 hover:text-white min-w-max')}
               >
                 {item.name}
               </NavLink>
@@ -159,7 +166,7 @@ const RightSectionOnDesktop = () => {
         className={classNames(
           type === 'character' ? 'text-gray-200' : '',
           type === 'campaign' ? 'text-gray-200' : '',
-          'flex-shrink-0 p-1 rounded-full hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white'
+          'shrink-0 p-1 rounded-full hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white'
         )}
       >
         <span className="sr-only">View notifications</span>
@@ -167,7 +174,7 @@ const RightSectionOnDesktop = () => {
       </button> */}
 
       {/* Secondary navigation dropdown */}
-      <Menu as="div" className="ml-4 relative flex-shrink-0">
+      <Menu as="div" className="ml-4 relative shrink-0">
         <div>
           <Menu.Button className="bg-white rounded-full flex text-sm ring-2 ring-white ring-opacity-20 focus:outline-none focus:ring-opacity-100">
             <span className="sr-only">Open overflow menu</span>
@@ -190,7 +197,7 @@ const RightSectionOnDesktop = () => {
               </Menu.Item>
             ))}
             <Menu.Item>
-              <button className="block px-4 py-2 text-sm text-gray-700" onClick={() => dispatch(signOutStart)}>
+              <button className="block px-4 py-2 text-sm text-gray-700" onClick={() => dispatch(signOutStart())}>
                 Log out
               </button>
             </Menu.Item>
@@ -203,9 +210,9 @@ const RightSectionOnDesktop = () => {
 
 const MenuButton = ({ open }) => {
   return (
-    <div className="absolute right-0 flex-shrink-0 lg:hidden">
+    <div className="absolute right-0 shrink-0 lg:hidden">
       {/* Mobile menu button */}
-      <Popover.Button className="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-gray-200 hover:text-white hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-white">
+      <Popover.Button className="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-gray-200 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white">
         <span className="sr-only">Open main menu</span>
         {open ? <XIcon className="block h-6 w-6" aria-hidden="true" /> : <MenuIcon className="block h-6 w-6" aria-hidden="true" />}
       </Popover.Button>
@@ -215,7 +222,7 @@ const MenuButton = ({ open }) => {
 
 const Logo = ({ type }) => {
   return (
-    <div className="absolute left-0 py-5 flex-shrink-0 lg:static">
+    <div className="absolute left-0 py-5 shrink-0 lg:static">
       <Link to={`/${type}s`}>
         <span className="sr-only">Aberrations RPG Sheets</span>
         <h3 className="text-xl font-display uppercase text-white">Aberrations RPG Sheets</h3>

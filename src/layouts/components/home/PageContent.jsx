@@ -45,7 +45,7 @@ const PageContent = ({ heading, primary, secondary, children }) => {
   return (
     <>
       <ContentHeader heading={heading} primary={primary} secondary={secondary} />
-      <div className="py-4 sm:p-6 lg:p-8 space-y-8">{children}</div>
+      <div className="p-6 space-y-8">{children}</div>
     </>
   );
 };

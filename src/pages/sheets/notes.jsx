@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import ReactQuill from 'react-quill';
 
 // ReactQuill theme stylesheets
-import 'react-quill/dist/quill.snow.css';
-// import 'react-quill/dist/quill.bubble.css';
+// import 'react-quill/dist/quill.snow.css';
+import 'react-quill/dist/quill.bubble.css';
 
 import { selectCurrentCharacter } from '../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
@@ -84,6 +84,7 @@ const SheetNotesPage = ({ sheetType }) => {
 
   return (
     <SheetPageContent title="Notes" columns={3}>
+      {/* All Notes */}
       <PanelSection>
         <div className="flow-root mt-2">
           <ListContainer
@@ -108,6 +109,8 @@ const SheetNotesPage = ({ sheetType }) => {
           </ListContainer>
         </div>
       </PanelSection>
+
+      {/* Selected Note */}
       <PanelSection colSpan={2}>
         <div className="flow-root">
           {!openNote ? (
@@ -127,9 +130,9 @@ const SheetNotesPage = ({ sheetType }) => {
                 <Notice status="success" message="Your note is saved and up to date." classes="mb-4" />
               )}
               <ReactQuill
-                theme="snow"
-                placeholder="Write something epic..."
-                // className="rounded-lg border border-gray-200"
+                theme="bubble"
+                placeholder="You can select any text that you have typed to bring up formatting options."
+                className="rounded-lg border border-gray-200"
                 value={content}
                 onChange={editorChange}
               />

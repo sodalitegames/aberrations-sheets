@@ -1,5 +1,6 @@
 import ModalTypes from '../../../utils/ModalTypes';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
+import { formatDate } from '../../../utils/formatDate';
 
 import ListItem from '../../shared/ListItem';
 import InfoList from '../../shared/InfoList';
@@ -15,7 +16,7 @@ const CharacterLog = ({ log, condensed }) => {
 
   return (
     <ListItem
-      heading={new Date(log.date).toDateString()}
+      heading={formatDate(log.date)}
       editable={{ type: SlideOverTypes.charLogForm, id: log._id }}
       deletable={{
         type: ModalTypes.deleteCharResource,

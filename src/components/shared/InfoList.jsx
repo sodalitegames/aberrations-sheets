@@ -1,4 +1,5 @@
 import React from 'react';
+import NewlineText from '../utility/NewlineText';
 
 const InfoList = ({ list }) => {
   return (
@@ -7,16 +8,16 @@ const InfoList = ({ list }) => {
         // check if it has a title
         if (item.title) {
           return (
-            <p key={index} title={item.title} className="mt-1 text-sm text-gray-600 truncate">
-              {item.value}
-            </p>
+            <span key={index} title={item.title} className="mt-1 text-sm text-gray-600 truncate">
+              <NewlineText text={String(item.value)} />
+            </span>
           );
         }
 
         return (
-          <p key={index} className="mt-1 text-sm text-gray-600">
-            {item}
-          </p>
+          <span key={index} className="mt-1 text-sm text-gray-600">
+            <NewlineText text={String(item)} />
+          </span>
         );
       })}
     </React.Fragment>
