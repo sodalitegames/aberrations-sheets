@@ -45,8 +45,13 @@ const EditWeapon = ({ id }) => {
   }, [id, charSheet]);
 
   const selectStat = e => {
-    if (!e.target.value) return setAssociatedStat(null);
+    if (!e.target.value) return setAssociatedStat('');
     setAssociatedStat(e.target.value);
+  };
+
+  const selectRange = e => {
+    if (!e.target.value) return setRange('');
+    setRange(e.target.value);
   };
 
   const submitHandler = async e => {
@@ -97,7 +102,20 @@ const EditWeapon = ({ id }) => {
             changeHandler={selectStat}
           />
           <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} />
-          <Input slideOver label="Range" name="range" type="text" value={range} changeHandler={setRange} />
+          <Select
+            slideOver
+            label="Range"
+            name="range"
+            value={range}
+            options={[
+              { name: 'Close (0 - 1)', id: 'Close' },
+              { name: 'Short (2 - 4)', id: 'Short' },
+              { name: 'Long (4 - 6)', id: 'Long' },
+              { name: 'Far (6 - 10)', id: 'Far' },
+            ]}
+            changeHandler={selectRange}
+            required
+          />
           <TextArea slideOver label="Ability" name="ability" rows={4} value={ability} changeHandler={setAbility} />
           <TextArea slideOver label="Description (Opt.)" name="description" rows={4} value={description} changeHandler={setDescription} />
         </>
