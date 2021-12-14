@@ -1,4 +1,5 @@
 import classNames from '../../utils/classNames';
+import NewlineText from '../utility/NewlineText';
 
 const DescriptionList = ({ list, classes }) => {
   return (
@@ -13,14 +14,14 @@ const DescriptionList = ({ list, classes }) => {
                 if (value.title) {
                   return (
                     <dd key={index} title={value.title} className="mt-1 text-sm text-gray-900">
-                      {value.value}
+                      <NewlineText text={String(value.value)} />
                     </dd>
                   );
                 }
 
                 return (
                   <dd key={index} className="mt-1 text-sm text-gray-900">
-                    {value}
+                    <NewlineText text={String(value)} />
                   </dd>
                 );
               })}
