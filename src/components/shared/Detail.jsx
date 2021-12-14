@@ -10,7 +10,7 @@ const Detail = ({ label, detail, status, slideOver }) => {
         </div>
         <div className="sm:col-span-2">
           <span className={classNames(status === 'error' ? 'text-red-700' : 'text-gray-900', 'sm:text-sm')}>
-            <NewlineText text={detail} />
+            <NewlineText text={String(detail)} />
           </span>
         </div>
       </div>
@@ -22,7 +22,7 @@ const Detail = ({ label, detail, status, slideOver }) => {
       <h4 className={classNames(status === 'error' ? 'text-red-700' : 'text-gray-900', 'block text-sm font-medium sm:mt-px sm:pt-2')}>{label}</h4>
       <div className="mt-2">
         <span className={classNames(status === 'error' ? 'text-red-700' : 'text-gray-900', 'sm:text-sm')}>
-          <NewlineText text={detail} />
+          <NewlineText text={String(detail)} />
         </span>
       </div>
     </div>

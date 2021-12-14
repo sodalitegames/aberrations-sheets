@@ -8,7 +8,7 @@ const InfoList = ({ list }) => {
         // check if it has a title
         if (item.title) {
           return (
-            <span key={index} title={item.title} className="mt-1 text-sm text-gray-600 truncate">
+            <span key={index} title={item.title} className="mt-1 text-sm text-gray-600 line-clamp-2">
               <NewlineText text={String(item.value)} />
             </span>
           );
