@@ -1,4 +1,6 @@
-import { takeLatest, takeEvery, put, all, call } from 'redux-saga/effects';
+import { takeLatest, takeEvery, put, all, call, fork } from 'redux-saga/effects';
+import { eventChannel } from 'redux-saga';
+import io from 'socket.io-client'
 
 import SheetActionTypes from './sheet.types';
 
@@ -34,6 +36,24 @@ import {
   updateSheet as updateSheetCall,
 } from '../../apis/sheets.api';
 import { fetchSpecies } from '../../apis/manage.api';
+
+// Socket.io Connection
+function connect() {
+  const socket = io('http://localhost:2341');
+
+  return new Promise(resolve => {
+    socket.on('connect', () => {
+      resolve(socket);
+      console.log('Socket connected')
+    })
+  })
+}
+
+export function* subscribe(socket) {
+  return new eventChannel(emit => {
+    const update = 
+  })
+}
 
 // FETCH CURRENT SHEET
 export function* onFetchCurrentSheetStart() {

@@ -6,6 +6,8 @@ import { selectCurrentCharacter } from '../redux/character/character.selectors';
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
+import socket from '../utils/socket';
+
 import Loading from './components/app/Loading';
 
 import SheetPageHeader from './components/sheet/SheetPageHeader';
@@ -17,6 +19,14 @@ const CharacterSheet = () => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
+
+  // useEffect(() => {
+  //   const connection = new SocketConnection('/');
+
+  //   if (charId) {
+  //     connection.joinRoom(charId);
+  //   }
+  // });
 
   useEffect(() => {
     if (charId) {
