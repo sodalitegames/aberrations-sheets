@@ -10,7 +10,7 @@ import { ModalForm } from '../../../../layouts/components/app/Modal';
 
 import Input from '../../../shared/Input';
 
-const RecieveMoney = () => {
+const ReceiveMoney = () => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -26,10 +26,10 @@ const RecieveMoney = () => {
   };
 
   return (
-    <ModalForm title="Recieve Money" submitText={`Recieve ${amount} monies`} submitHandler={submitHandler}>
+    <ModalForm title="Receive Money" submitText={`Receive ${amount} monies`} submitHandler={submitHandler}>
       <Input label="How much money?" name="amount" type="number" value={amount} changeHandler={setAmount} />
     </ModalForm>
   );
 };
 
-export default RecieveMoney;
+export default ReceiveMoney;
