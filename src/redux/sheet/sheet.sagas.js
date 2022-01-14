@@ -33,7 +33,7 @@ import {
   updateResource,
   updateSheet as updateSheetCall,
 } from '../../apis/sheets.api';
-import { fetchSpecies } from '../../apis/manage.api';
+import { fetchSpecies } from '../../apis/aberrations.api';
 
 // FETCH CURRENT SHEET
 export function* onFetchCurrentSheetStart() {
