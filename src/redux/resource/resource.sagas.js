@@ -4,7 +4,7 @@ import ResourceActionTypes from './resource.types';
 
 import { fetchResourceSuccess, fetchResourceFailure } from './resource.actions';
 
-import { fetchSpecies, fetchWeapons, fetchAugmentations, fetchConsumableCategories, fetchCreatureTypes } from '../../apis/manage.api';
+import { fetchSpecies, fetchWeapons, fetchAugmentations, fetchConsumableCategories, fetchCreatureTypes } from '../../apis/aberrations.api';
 
 export function* onFetchResourceStart() {
   yield takeLatest(ResourceActionTypes.FETCH_RESOURCE_START, fetchResource);

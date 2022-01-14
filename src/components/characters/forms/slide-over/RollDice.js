@@ -62,7 +62,7 @@ const RollDice = () => {
     e.preventDefault();
 
     if (!stat) {
-      const data = rollDice(dice, advantage);
+      const data = rollDice(parseInt(dice), parseInt(advantage));
       setRollData(data);
       return;
     }

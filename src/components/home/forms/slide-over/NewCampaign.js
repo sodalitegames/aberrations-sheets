@@ -40,7 +40,7 @@ const NewCampaign = () => {
       <Input slideOver label="CC Nickname (Opt.)" type="text" name="ccNickname" value={ccNickname} changeHandler={setCcNickname} />
       <Input slideOver label="Campaign Name" type="text" name="name" value={name} changeHandler={setName} />
       <TextArea slideOver label="Campaign Overview" name="overview" rows={4} value={overview} changeHandler={setOverview} />
-      <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={details} changeHandler={setDetails} />
+      <TextArea slideOver label="Campaign Details" name="details" rows={8} value={details} changeHandler={setDetails} />
     </SlideOverForm>
   );
 };

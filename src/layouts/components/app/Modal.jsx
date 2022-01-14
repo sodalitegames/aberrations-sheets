@@ -16,7 +16,7 @@ import DeleteCharacter from '../../../components/characters/forms/modal/DeleteCh
 import TakeARest from '../../../components/characters/forms/modal/TakeARest';
 import TakeDamage from '../../../components/characters/forms/modal/TakeDamage';
 import HealDamage from '../../../components/characters/forms/modal/HealDamage';
-import RecieveMoney from '../../../components/characters/forms/modal/RecieveMoney';
+import ReceiveMoney from '../../../components/characters/forms/modal/ReceiveMoney';
 import PayMoney from '../../../components/characters/forms/modal/PayMoney';
 import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoints';
 import Mortality from '../../../components/characters/forms/modal/Mortality';
@@ -150,7 +150,7 @@ const Modal = () => {
               {modal && modal.type === ModalTypes.displayBelonging ? <DisplayBelonging id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
               {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
-              {modal && modal.type === ModalTypes.recieveMoney ? <RecieveMoney /> : null}
+              {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney /> : null}
               {modal && modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
               {modal && modal.type === ModalTypes.editUpgradePoints ? <UpgradePoints /> : null}
               {modal && modal.type === ModalTypes.editMortality ? <Mortality /> : null}
