@@ -8,7 +8,7 @@ import PanelSection from '../../components/shared/PanelSection';
 
 import StatsTracker from '../../components/campaigns/StatsTracker';
 
-const CampaignStatsTrackerPage = () => {
+const CampaignCombatPage = () => {
   const campSheet = useSelector(selectCurrentCampaign);
 
   return (
@@ -21,4 +21,4 @@ const CampaignStatsTrackerPage = () => {
   );
 };
 
-export default CampaignStatsTrackerPage;
+export default CampaignCombatPage;

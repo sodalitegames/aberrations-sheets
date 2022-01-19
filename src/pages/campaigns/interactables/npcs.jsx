@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 
-import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
-import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
+import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
-import Button from '../../components/shared/Button';
+import PanelSection from '../../../components/shared/PanelSection';
+import Button from '../../../components/shared/Button';
 
 const CampaignNpcsPage = () => {
   const campSheet = useSelector(selectCurrentCampaign);

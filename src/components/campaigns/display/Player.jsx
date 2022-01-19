@@ -16,7 +16,7 @@ const Player = ({ player, condensed, noButtonPanel }) => {
 
   return (
     <ListItem
-      heading={player.playerName}
+      heading={player.playerNickname ? `${player.playerNickname} (${player.playerName})` : player.playerName}
       noButtonPanel={noButtonPanel}
       // editable={{ type: SlideOverTypes.wearableForm, id: wearable._id }}
       // deletable={{
@@ -25,7 +25,13 @@ const Player = ({ player, condensed, noButtonPanel }) => {
       //   data: { type: 'wearables', title: `Are you sure you want to delete ${wearable.name}?`, submitText: `Yes, delete ${wearable.name}`, equipped: wearable.equipped },
       // }}
     >
-      <DescriptionList list={[{ name: 'Character Name', values: [player.characterName] }]} classes="mt-2" />
+      <DescriptionList
+        list={[
+          { name: 'Character Name', values: [player.characterName] },
+          { name: 'Character Power', values: [player.power] },
+        ]}
+        classes="mt-2"
+      />
     </ListItem>
   );
 };

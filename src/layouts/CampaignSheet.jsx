@@ -24,12 +24,16 @@ export default function CharacterSheet() {
         dispatch(fetchCurrentSheetStart('campaigns', campId));
       }
     }
+
+    if (campSheet) {
+      document.title = `${campSheet.name} | Aberrations RPG Sheets`;
+    }
   });
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
-        <SheetPageHeader type="campaign" />
+        <SheetPageHeader title={campSheet ? `Aberrations RPG Sheets -  ${campSheet.name}` : 'Aberrations RPG Sheets'} type="campaign" />
         <main className="-mt-24 pb-8">
           {campSheet ? (
             <React.Suspense fallback={<Loading />}>

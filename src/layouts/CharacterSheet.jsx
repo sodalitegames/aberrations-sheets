@@ -24,12 +24,16 @@ const CharacterSheet = () => {
         dispatch(fetchCurrentSheetStart('characters', charId));
       }
     }
+
+    if (charSheet) {
+      document.title = `${charSheet.characterName} | Aberrations RPG Sheets`;
+    }
   });
 
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
-        <SheetPageHeader type="character" />
+        <SheetPageHeader title={charSheet ? `Aberrations RPG Sheets - ${charSheet.characterName}` : 'Aberrations RPG Sheets'} type="character" />
         <main className="-mt-24 pb-8">
           {charSheet ? (
             <React.Suspense fallback={<Loading />}>

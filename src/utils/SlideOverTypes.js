@@ -19,6 +19,7 @@ const SlideOverTypes = {
   campOverviewForm: 'CAMPAIGN_OVERVIEW_FORM',
   campDetailsForm: 'CAMPAIGN_DETAILS_FORM',
   captainsLogForm: 'CAPTAINS_LOG_FORM',
+  manageSentInvites: 'MANAGE_SENT_INVITES',
 };
 
 export default SlideOverTypes;

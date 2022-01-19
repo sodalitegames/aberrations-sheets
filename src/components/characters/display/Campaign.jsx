@@ -17,13 +17,15 @@ const Campaign = ({ campaign, condensed }) => {
     return 'expandable';
   }
 
+  console.log(campaign);
+
   return (
     <div>
       <DescriptionList
         list={[
           { name: 'Campaign Name', values: [campaign.name] },
           { name: 'CC Name', values: [campaign.ccNickname || campaign.ccName] },
-          { name: 'Players', values: [`${campaign.players.map(player => player.playerName).join(', ')}`] },
+          { name: 'Players', values: [`${campaign.players.map(player => player.playerNickname || player.playerName).join(', ')}`] },
           { name: 'Characters', values: [`${campaign.players.map(player => player.characterName).join(', ')}`] },
         ]}
       />

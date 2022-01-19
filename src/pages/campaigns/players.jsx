@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
@@ -14,14 +15,15 @@ import Button from '../../components/shared/Button';
 import ListContainer from '../../components/shared/ListContainer';
 
 import Player from '../../components/campaigns/display/Player';
-import { useState } from 'react';
 
 const CampaignPlayersPage = () => {
   const dispatch = useDispatch();
 
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [player] = useState(null);
+  const [player, setPlayer] = useState(null);
+
+  console.log(player);
 
   return (
     <SheetPageContent title="Players" columns={4}>
@@ -38,12 +40,14 @@ const CampaignPlayersPage = () => {
             }}
           >
             {campSheet.players.map(player => (
-              <Player key={player._id} player={player} />
+              <div key={player._id} className="hover:bg-gray-50 px-2 cursor-pointer" onClick={() => setPlayer(player)}>
+                <Player player={player} />
+              </div>
             ))}
           </ListContainer>
 
           <p className="border-t border-gray-100 text-sm italic text-gray-600 mt-6 pt-4 mb-2 text-center">Want to manage invites you have already sent?</p>
-          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageSentInvites }))} small classes="mt-4" disabled>
+          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageSentInvites }))} small classes="mt-4">
             Manage Sent Invites
           </Button>
         </div>
