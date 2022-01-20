@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectActiveSession } from '../../redux/campaign/campaign.selectors';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
@@ -8,6 +8,7 @@ import PanelSection from '../../components/shared/PanelSection';
 
 const CampaignGameplayPage = () => {
   const campSheet = useSelector(selectCurrentCampaign);
+  const activeSession = useSelector(selectActiveSession);
 
   return (
     <SheetPageContent title="Gameplay" columns={4}>
@@ -25,7 +26,7 @@ const CampaignGameplayPage = () => {
 
       {/* Active Session */}
       <PanelSection colSpan={2} title="Active Session">
-        <div className="flow-root">{JSON.stringify(campSheet.sessions[0])}</div>
+        <div className="flow-root">{JSON.stringify(activeSession)}</div>
       </PanelSection>
 
       {/* Active Interactables */}

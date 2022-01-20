@@ -38,7 +38,7 @@ const CampaignUsablesPage = () => {
         </div>
       </PanelSection>
 
-      {/* Selected Npc */}
+      {/* Selected Usable */}
       <PanelSection title="Selected Usable" colSpan={3}>
         {JSON.stringify(campSheet.usables)}
       </PanelSection>

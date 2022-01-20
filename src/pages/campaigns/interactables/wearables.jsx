@@ -38,7 +38,7 @@ const CampaignWearablesPage = () => {
         </div>
       </PanelSection>
 
-      {/* Selected Npc */}
+      {/* Selected Wearable */}
       <PanelSection title="Selected Wearable" colSpan={3}>
         {JSON.stringify(campSheet.wearables)}
       </PanelSection>

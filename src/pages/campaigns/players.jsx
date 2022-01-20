@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { ExternalLinkIcon } from '@heroicons/react/outline';
+
 import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../redux/app/app.actions';
@@ -55,7 +57,16 @@ const CampaignPlayersPage = () => {
 
       {/* Selected Player */}
       <PanelSection title="Selected Player" colSpan={3}>
-        {!player ? <p className="text-sm italic text-gray-400">Once a you have selected a player, you will be able to see their information right here.</p> : JSON.stringify(player)}
+        {!player ? (
+          <p className="text-sm italic text-gray-400">Once a you have selected a player, you will be able to see their information right here.</p>
+        ) : (
+          <div>
+            <a className="btn-tertiary" href={`https://sheets.aberrations-rpg.com/characters/${player._id}/gameplay`} target="_blank" rel="noreferrer">
+              View {player.characterName} <ExternalLinkIcon className="ml-4 h-6 w-6 text-white" aria-hidden="true" />
+            </a>
+            {JSON.stringify(player)}
+          </div>
+        )}
       </PanelSection>
     </SheetPageContent>
   );

@@ -1,11 +1,11 @@
 import { Fragment, useState } from 'react';
-// import { useSelector } from 'react-redux';
-import { NavLink, Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { NavLink, useNavigate, Outlet } from 'react-router-dom';
 
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
 
-// import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 
 import classNames from '../../utils/classNames';
 
@@ -14,27 +14,28 @@ import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 import PanelSection from '../../components/shared/PanelSection';
 
 const tabs = [
-  { name: 'Npcs', href: 'npcs', count: '1' },
-  { name: 'Creatures', href: 'creatures', count: '2' },
-  { name: 'Environments', href: 'environments', count: '12' },
-  { name: 'Weapons', href: 'weapons', count: '52' },
-  { name: 'Wearables', href: 'wearables', count: '6' },
-  { name: 'Consumables', href: 'consumables', count: '4' },
-  { name: 'Usables', href: 'usables', count: '0' },
+  { name: 'Npcs', href: 'npcs' },
+  { name: 'Creatures', href: 'creatures' },
+  { name: 'Environments', href: 'environments' },
+  { name: 'Weapons', href: 'weapons' },
+  { name: 'Wearables', href: 'wearables' },
+  { name: 'Consumables', href: 'consumables' },
+  { name: 'Usables', href: 'usables' },
 ];
 
-const fakeSessions = [
-  { title: 'Current', description: 'This job posting can be viewed by anyone who has the link.', current: true },
-  { title: '10/12/22', description: 'This job posting will no longer be publicly accessible.', current: false },
-  { title: '10/12/22', description: 'This job posting will no longer be publicly accessible.', current: false },
+const interactableStates = [
+  { title: 'Active', description: 'Active Interactables show up on the gameplay tab, and if an Npc or Creature, the combat table. ', current: true },
+  { title: 'Inactive', description: 'Inactive Interactables are hidden elsewhere, but can be viewed and edited here.', current: false },
+  { title: 'All', description: 'View and edit both active and inactive Interactables.', current: false },
 ];
 
 const CampaignInteractablesPage = () => {
+  let navigate = useNavigate();
   // const dispatch = useDispatch();
 
-  // const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign);
 
-  const [selected, setSelected] = useState(fakeSessions[0]);
+  const [selected, setSelected] = useState(interactableStates[0]);
 
   return (
     <div className="space-y-6">
@@ -52,9 +53,12 @@ const CampaignInteractablesPage = () => {
                 name="tabs"
                 className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
                 defaultValue={tabs[0].name}
+                onChange={e => navigate(`${e.target.value}`)}
               >
                 {tabs.map(tab => (
-                  <option key={tab.name}>{tab.name}</option>
+                  <option key={tab.name} value={tab.href}>
+                    {tab.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -73,16 +77,14 @@ const CampaignInteractablesPage = () => {
                       }
                     >
                       {tab.name}
-                      {tab.count ? (
-                        <span
-                          className={classNames(
-                            tab.current ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-900',
-                            'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block'
-                          )}
-                        >
-                          {tab.count}
-                        </span>
-                      ) : null}
+                      <span
+                        className={classNames(
+                          tab.current ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-900',
+                          'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block'
+                        )}
+                      >
+                        {campSheet[tab.href].length}
+                      </span>
                     </NavLink>
                   ))}
                 </nav>
@@ -109,9 +111,9 @@ const CampaignInteractablesPage = () => {
 
                     <Transition show={open} as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
                       <Listbox.Options className="origin-top-right absolute z-10 right-0 mt-2 w-72 rounded-md shadow-lg overflow-hidden bg-white divide-y divide-gray-200 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        {fakeSessions.map(option => (
+                        {interactableStates.map((option, index) => (
                           <Listbox.Option
-                            key={option.title}
+                            key={index}
                             className={({ active }) => classNames(active ? 'text-white bg-indigo-500' : 'text-gray-900', 'cursor-default select-none relative p-4 text-sm')}
                             value={option}
                           >

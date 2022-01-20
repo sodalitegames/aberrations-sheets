@@ -39,7 +39,7 @@ const CampaignConsumablesPage = () => {
       </PanelSection>
 
       {/* Selected Consumable */}
-      <PanelSection title="Selected Npc" colSpan={3}>
+      <PanelSection title="Selected Consumable" colSpan={3}>
         {JSON.stringify(campSheet.consumables)}
       </PanelSection>
     </SheetPageContent>
