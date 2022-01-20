@@ -21,13 +21,10 @@ const navigation = {
   ],
   campaign: [
     { name: 'Gameplay', href: 'gameplay' },
+    { name: 'Combat', href: 'combat' },
     { name: 'Campaign', href: 'campaign' },
-    { name: 'Stats Tracker', href: 'stats-tracker' },
     { name: 'Players', href: 'players' },
-    { name: 'Npcs', href: 'npcs' },
-    { name: 'Creatures', href: 'creatures' },
-    { name: 'Environments', href: 'environments' },
-    { name: 'Belongings', href: 'belongings' },
+    { name: 'Interactables', href: 'interactables' },
     { name: 'Notes', href: 'notes' },
     //{ name: 'Resources', href: 'resources' },
   ],
@@ -38,7 +35,7 @@ const secondaryNavigation = [
   { name: 'Settings', href: '/settings' },
 ];
 
-const MobileNavigation = ({ type, user }) => {
+const MobileNavigation = ({ title, type, user }) => {
   const dispatch = useDispatch();
 
   return (
@@ -63,7 +60,7 @@ const MobileNavigation = ({ type, user }) => {
                 <div className="flex items-center justify-between px-4">
                   <div>
                     <Link to={`/${type}s`}>
-                      <h3 className="text-xl font-display uppercase">Aberrations RPG Sheets</h3>
+                      <h3 className="text-xl font-display uppercase">{title}</h3>
                     </Link>
                   </div>
                   <div className="-mr-2">
@@ -220,18 +217,18 @@ const MenuButton = ({ open }) => {
   );
 };
 
-const Logo = ({ type }) => {
+const Logo = ({ title, type }) => {
   return (
     <div className="absolute left-0 py-5 shrink-0 lg:static">
       <Link to={`/${type}s`}>
-        <span className="sr-only">Aberrations RPG Sheets</span>
-        <h3 className="text-xl font-display uppercase text-white">Aberrations RPG Sheets</h3>
+        <span className="sr-only">{title}</span>
+        <h3 className="text-xl font-display uppercase text-white">{title}</h3>
       </Link>
     </div>
   );
 };
 
-const SheetPageHeader = ({ type }) => {
+const SheetPageHeader = ({ title, type }) => {
   const currentUser = useSelector(selectCurrentUser);
   return (
     <Popover
@@ -243,7 +240,7 @@ const SheetPageHeader = ({ type }) => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="relative flex flex-wrap items-center justify-center lg:justify-between pt-4 pb-8 lg:py-0">
               {/* Logo */}
-              <Logo type={type} />
+              <Logo title={title} type={type} />
               {/* Right section on desktop */}
               <RightSectionOnDesktop />
               {/* Desktop navigation */}
@@ -253,7 +250,7 @@ const SheetPageHeader = ({ type }) => {
             </div>
           </div>
           {/* Mobile navigation */}
-          <MobileNavigation type={type} user={currentUser} />
+          <MobileNavigation title={title} type={type} user={currentUser} />
         </>
       )}
     </Popover>

@@ -5,6 +5,7 @@ const actions = [
   { name: 'Take Damage', href: '#' },
   { name: 'Heal Damage', href: '#' },
   { name: 'Edit Stats', href: '#' },
+  { name: 'Edit Conditions', href: '#' },
 ];
 
 const StatsTracker = ({ list }) => {

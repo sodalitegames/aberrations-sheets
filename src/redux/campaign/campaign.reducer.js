@@ -4,6 +4,7 @@ import { replaceItemById, removeItemById } from '../../utils/arrays';
 
 const INITIAL_STATE = {
   current: null,
+  loading: false,
   error: null,
   permissions: undefined,
 };
@@ -15,10 +16,19 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
   }
 
   switch (action.type) {
+    case SheetActionTypes.FETCH_CURRENT_SHEET_START:
+      return {
+        ...state,
+        current: null,
+        loading: true,
+        error: null,
+      };
     case SheetActionTypes.FETCH_CURRENT_SHEET_SUCCESS:
       return {
         ...state,
         current: action.payload.currentSheet,
+        loading: false,
+        error: null,
       };
     case SheetActionTypes.UPDATE_SHEET_SUCCESS:
       return {
@@ -65,6 +75,12 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
         },
       };
     case SheetActionTypes.FETCH_CURRENT_SHEET_FAILURE:
+      return {
+        ...state,
+        current: null,
+        loading: false,
+        error: action.payload.error,
+      };
     case SheetActionTypes.UPDATE_SHEET_FAILURE:
     case SheetActionTypes.DELETE_SHEET_FAILURE:
     case SheetActionTypes.CREATE_SHEET_RESOURCE_FAILURE:

@@ -33,6 +33,7 @@ import CharacterLog from '../../../components/characters/forms/slide-over/Charac
 import CampOverview from '../../../components/campaigns/forms/slide-over/CampOverview';
 import CampDetails from '../../../components/campaigns/forms/slide-over/CampDetails';
 import CaptainsLog from '../../../components/campaigns/forms/slide-over/CaptainsLog';
+import ManageInvites from '../../../components/campaigns/forms/slide-over/ManageInvites';
 
 export const SlideOverForm = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
   const dispatch = useDispatch();
@@ -132,6 +133,7 @@ const SlideOver = () => {
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.captainsLogForm ? <CaptainsLog id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}
               </div>
             </Transition.Child>
           </div>

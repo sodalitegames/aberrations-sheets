@@ -17,6 +17,7 @@ import CampaignSheet from './layouts/CampaignSheet';
 
 import Loading from './layouts/components/app/Loading';
 
+// Home Pages
 import HomePage from './pages/home/home';
 import CharactersPage from './pages/home/characters';
 import CampaignsPage from './pages/home/campaigns';
@@ -26,17 +27,28 @@ import SettingsPage from './pages/home/settings';
 import HelpPage from './pages/home/help';
 import PrivacyPage from './pages/home/privacy';
 
+// Character Pages
 import CharacterGameplayPage from './pages/characters/gameplay';
 import CharacterInventoryPage from './pages/characters/inventory';
 import CharacterCharacterPage from './pages/characters/character';
 
+// Campaign Pages
 import CampaignGameplayPage from './pages/campaigns/gameplay';
-import CampaignStatsTrackerPage from './pages/campaigns/stats-tracker';
+import CampaignCombatPage from './pages/campaigns/combat';
 import CampaignCampaignPage from './pages/campaigns/campaign';
 import CampaignPlayersPage from './pages/campaigns/players';
-import CampaignNpcsPage from './pages/campaigns/npcs';
-import CampaignBelongingsPage from './pages/campaigns/belongings';
+import CampaignInteractablesPage from './pages/campaigns/interactables';
 
+// Nested Campaign Interactables Pages
+import CampaignNpcsPage from './pages/campaigns/interactables/npcs';
+import CampaignWeaponsPage from './pages/campaigns/interactables/weapons';
+import CampaignWearablesPage from './pages/campaigns/interactables/wearables';
+import CampaignConsumablesPage from './pages/campaigns/interactables/consumables';
+import CampaignUsablesPage from './pages/campaigns/interactables/usables';
+import CampaignEnvironmentsPage from './pages/campaigns/interactables/environments';
+import CampaignCreaturesPage from './pages/campaigns/interactables/creatures';
+
+// Shared Sheet Pages
 import SheetNotesPage from './pages/sheets/notes';
 import SheetResourcesPage from './pages/sheets/resources';
 
@@ -71,13 +83,18 @@ ReactDOM.render(
                 <Route path="campaigns/:campId" element={<CampaignSheet />}>
                   {/* <Route index element={<CampaignGameplayPage />} /> */}
                   <Route path="gameplay" element={<CampaignGameplayPage />} />
-                  <Route path="stats-tracker" element={<CampaignStatsTrackerPage />} />
+                  <Route path="combat" element={<CampaignCombatPage />} />
                   <Route path="campaign" element={<CampaignCampaignPage />} />
                   <Route path="players" element={<CampaignPlayersPage />} />
-                  <Route path="npcs" element={<CampaignNpcsPage />} />
-                  <Route path="creatures" element={<></>} />
-                  <Route path="environments" element={<></>} />
-                  <Route path="belongings" element={<CampaignBelongingsPage />} />
+                  <Route path="interactables" element={<CampaignInteractablesPage />}>
+                    <Route path="npcs" element={<CampaignNpcsPage />} />
+                    <Route path="creatures" element={<CampaignCreaturesPage />} />
+                    <Route path="environments" element={<CampaignEnvironmentsPage />} />
+                    <Route path="weapons" element={<CampaignWeaponsPage />} />
+                    <Route path="wearables" element={<CampaignWearablesPage />} />
+                    <Route path="consumables" element={<CampaignConsumablesPage />} />
+                    <Route path="usables" element={<CampaignUsablesPage />} />
+                  </Route>
                   <Route path="notes" element={<SheetNotesPage sheetType="campaigns" />} />
                   <Route path="resources" element={<SheetResourcesPage sheetType="campaigns" />} />
                 </Route>

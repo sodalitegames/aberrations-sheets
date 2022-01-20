@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { ExternalLinkIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 
@@ -14,14 +17,15 @@ import Button from '../../components/shared/Button';
 import ListContainer from '../../components/shared/ListContainer';
 
 import Player from '../../components/campaigns/display/Player';
-import { useState } from 'react';
 
 const CampaignPlayersPage = () => {
   const dispatch = useDispatch();
 
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [player] = useState(null);
+  const [player, setPlayer] = useState(null);
+
+  console.log(player);
 
   return (
     <SheetPageContent title="Players" columns={4}>
@@ -38,12 +42,14 @@ const CampaignPlayersPage = () => {
             }}
           >
             {campSheet.players.map(player => (
-              <Player key={player._id} player={player} />
+              <div key={player._id} className="hover:bg-gray-50 px-2 cursor-pointer" onClick={() => setPlayer(player)}>
+                <Player player={player} />
+              </div>
             ))}
           </ListContainer>
 
           <p className="border-t border-gray-100 text-sm italic text-gray-600 mt-6 pt-4 mb-2 text-center">Want to manage invites you have already sent?</p>
-          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageSentInvites }))} small classes="mt-4" disabled>
+          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageSentInvites }))} small classes="mt-4">
             Manage Sent Invites
           </Button>
         </div>
@@ -51,7 +57,16 @@ const CampaignPlayersPage = () => {
 
       {/* Selected Player */}
       <PanelSection title="Selected Player" colSpan={3}>
-        {!player ? <p className="text-sm italic text-gray-400">Once a you have selected a player, you will be able to see their information right here.</p> : JSON.stringify(player)}
+        {!player ? (
+          <p className="text-sm italic text-gray-400">Once a you have selected a player, you will be able to see their information right here.</p>
+        ) : (
+          <div>
+            <a className="btn-tertiary" href={`https://sheets.aberrations-rpg.com/characters/${player._id}/gameplay`} target="_blank" rel="noreferrer">
+              View {player.characterName} <ExternalLinkIcon className="ml-4 h-6 w-6 text-white" aria-hidden="true" />
+            </a>
+            {JSON.stringify(player)}
+          </div>
+        )}
       </PanelSection>
     </SheetPageContent>
   );
