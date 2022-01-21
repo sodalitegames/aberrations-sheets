@@ -6,9 +6,9 @@ export const fetchCurrentSheetStart = (sheetType, sheetId) => ({
   payload: { sheetType, sheetId },
 });
 
-export const fetchCurrentSheetSuccess = (sheetType, currentSheet) => ({
+export const fetchCurrentSheetSuccess = (sheetType, currentSheet, permissions) => ({
   type: SheetActionTypes.FETCH_CURRENT_SHEET_SUCCESS,
-  payload: { sheetType, currentSheet },
+  payload: { sheetType, currentSheet, permissions },
 });
 
 export const fetchCurrentSheetFailure = (sheetType, error) => ({

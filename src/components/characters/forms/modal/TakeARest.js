@@ -50,7 +50,7 @@ const TakeARest = () => {
         actionsArr.push(`Aptitude stat leveled up (and experience will be reset)`);
       }
 
-      if (upgradePoints) actionsArr.push(`You'll Recieve ${upgradePoints} Upgrade Points`);
+      if (upgradePoints) actionsArr.push(`You'll Receive ${upgradePoints} Upgrade Points`);
 
       setActions(actionsArr);
     }
@@ -74,8 +74,10 @@ const TakeARest = () => {
 
     if (rest === 'slumber') {
       let upgradePoints = 0;
+      let upgradedFortitude = false;
 
       if (fortitude.experience >= fortitude.points) {
+        upgradedFortitude = true;
         upgradePoints++;
         fortitude = {
           ...fortitude,
@@ -113,7 +115,7 @@ const TakeARest = () => {
 
       dispatch(
         updateSheetStart('characters', charSheet._id, {
-          currentHp: charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier),
+          currentHp: charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 5 : 0),
           conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
           fortitude: { ...fortitude, advantage: 0 },
           agility: { ...agility, advantage: 0 },

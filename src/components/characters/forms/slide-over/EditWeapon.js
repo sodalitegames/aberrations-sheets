@@ -116,7 +116,7 @@ const EditWeapon = ({ id }) => {
             changeHandler={selectRange}
             required
           />
-          <TextArea slideOver label="Ability" name="ability" rows={4} value={ability} changeHandler={setAbility} />
+          <TextArea slideOver label="Ability (Opt.)" name="ability" rows={4} value={ability} changeHandler={setAbility} />
           <TextArea slideOver label="Description (Opt.)" name="description" rows={4} value={description} changeHandler={setDescription} />
         </>
       ) : type === 'Standard' ? (

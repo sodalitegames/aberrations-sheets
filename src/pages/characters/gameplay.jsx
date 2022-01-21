@@ -108,7 +108,7 @@ const CharacterGameplayPage = () => {
             <span className="text-sm font-medium text-gray-500 uppercase">{getWalletMessage(charSheet.wallet)}</span>
           </div>
           <div className="mt-6">
-            <Button onClick={() => dispatch(setModal({ type: ModalTypes.recieveMoney }))}>Recieve Money</Button>
+            <Button onClick={() => dispatch(setModal({ type: ModalTypes.receiveMoney }))}>Receive Money</Button>
             <Button onClick={() => dispatch(setModal({ type: ModalTypes.payMoney }))} classes="mt-2">
               Pay Money
             </Button>

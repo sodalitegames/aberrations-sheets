@@ -35,7 +35,7 @@ import {
   updateResource,
   updateSheet as updateSheetCall,
 } from '../../apis/sheets.api';
-import { fetchSpecies } from '../../apis/manage.api';
+import { fetchSpecies } from '../../apis/aberrations.api';
 
 // Socket.io Connection
 function connect() {
@@ -64,17 +64,19 @@ export function* fetchCurrentSheet({ payload: { sheetType, sheetId } }) {
   try {
     const response = yield getSheet(sheetType, sheetId);
 
+    console.log(response.data);
+
     if (sheetType === 'characters') {
       // If it is a character sheet, fetch the species data and append it to the sheet data
       const resourceResponse = yield fetchSpecies(`?_id=${response.data.data.sheet.speciesId}`);
       const { id, name, ability, appearance, basicInfo, stats } = resourceResponse.data[0];
-      yield put(fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, ability, appearance, basicInfo, stats } }));
+      yield put(fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, ability, appearance, basicInfo, stats } }, response.data.data.permissions));
       return;
     }
 
     yield put(fetchCurrentSheetSuccess(sheetType, response.data.data.sheet));
   } catch (err) {
-    yield put(fetchCurrentSheetFailure(sheetType, err.response.data));
+    yield put(fetchCurrentSheetFailure(sheetType, err.response));
   }
 }
 
