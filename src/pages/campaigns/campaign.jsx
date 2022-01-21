@@ -69,25 +69,27 @@ const CampaignCampaignPage = () => {
         {/* Active Session */}
         <PanelSection title="Active Session">
           <div className="flow-root">
-            <dl className="space-y-6 divide-y divide-gray-200">
-              <Disclosure as="div" key={activeSession.name} className="pt-6">
-                {({ open }) => (
-                  <>
-                    <dt className="text-lg">
-                      <Disclosure.Button className="text-left w-full flex justify-between items-start text-gray-400">
-                        <span className="font-medium text-gray-900">{activeSession.name}</span>
-                        <span className="ml-6 h-7 flex items-center">
-                          <ChevronDownIcon className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform')} aria-hidden="true" />
-                        </span>
-                      </Disclosure.Button>
-                    </dt>
-                    <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                      <SessionDetails session={activeSession} />
-                    </Disclosure.Panel>
-                  </>
-                )}
-              </Disclosure>
-            </dl>
+            {activeSession ? (
+              <dl className="space-y-6 divide-y divide-gray-200">
+                <Disclosure as="div" key={activeSession.name} className="pt-6">
+                  {({ open }) => (
+                    <>
+                      <dt className="text-lg">
+                        <Disclosure.Button className="text-left w-full flex justify-between items-start text-gray-400">
+                          <span className="font-medium text-gray-900">{activeSession.name}</span>
+                          <span className="ml-6 h-7 flex items-center">
+                            <ChevronDownIcon className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform')} aria-hidden="true" />
+                          </span>
+                        </Disclosure.Button>
+                      </dt>
+                      <Disclosure.Panel as="dd" className="mt-2 pr-12">
+                        <SessionDetails session={activeSession} />
+                      </Disclosure.Panel>
+                    </>
+                  )}
+                </Disclosure>
+              </dl>
+            ) : null}
           </div>
         </PanelSection>
 
