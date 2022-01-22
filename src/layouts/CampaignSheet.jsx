@@ -6,6 +6,9 @@ import { selectCurrentCampaign, selectError, selectLoading } from '../redux/camp
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
+import charSocket from '../sockets/character';
+import campSocket from '../sockets/campaign';
+
 import Loading from './components/app/Loading';
 
 import SheetPageHeader from './components/sheet/SheetPageHeader';
@@ -22,10 +25,25 @@ export default function CharacterSheet() {
   const loading = useSelector(selectLoading);
 
   useEffect(() => {
+    if (campId) {
+      // Join room for campaign sheet
+      campSocket.emit('joinRoom', campId);
+    }
+
+    if (campSheet) {
+      // Join room for each player's character sheet
+      campSheet.players.forEach(character => {
+        charSocket.emit('joinRoom', character._id);
+      });
+    }
+  });
+
+  useEffect(() => {
     if (loading) return;
     if (error) return;
 
     if (campId) {
+      // Fetch current campaign sheet if not already or data is stale
       if (!campSheet || campSheet?._id !== campId) {
         dispatch(fetchCurrentSheetStart('campaigns', campId));
       }

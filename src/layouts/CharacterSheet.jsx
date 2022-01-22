@@ -6,7 +6,7 @@ import { selectCurrentCharacter, selectError, selectLoading, selectPermissions }
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
-import socket from '../utils/socket';
+import charSocket from '../sockets/character';
 
 import Loading from './components/app/Loading';
 
@@ -26,19 +26,19 @@ const CharacterSheet = () => {
   const loading = useSelector(selectLoading);
   const permissions = useSelector(selectPermissions);
 
-  // useEffect(() => {
-  //   const connection = new SocketConnection('/');
-
-  //   if (charId) {
-  //     connection.joinRoom(charId);
-  //   }
-  // });
+  useEffect(() => {
+    if (charId) {
+      // Join room for character sheet
+      charSocket.emit('joinRoom', charId);
+    }
+  });
 
   useEffect(() => {
     if (loading) return;
     if (error) return;
 
     if (charId) {
+      // Fetch current character sheet if not already or data is stale
       if (!charSheet || charSheet?._id !== charId) {
         dispatch(fetchCurrentSheetStart('characters', charId));
       }

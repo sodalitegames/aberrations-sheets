@@ -1,8 +1,8 @@
-import { takeLatest, takeEvery, put, all, call, fork } from 'redux-saga/effects';
-import { eventChannel } from 'redux-saga';
-import io from 'socket.io-client'
+import { takeLatest, takeEvery, put, all, call } from 'redux-saga/effects';
 
 import SheetActionTypes from './sheet.types';
+
+import ChangesTypes from '../../utils/ChangesTypes';
 
 import {
   fetchCurrentSheetSuccess,
@@ -37,23 +37,13 @@ import {
 } from '../../apis/sheets.api';
 import { fetchSpecies } from '../../apis/aberrations.api';
 
-// Socket.io Connection
-function connect() {
-  const socket = io('http://localhost:2341');
+import charSocket from '../../sockets/character';
+import campSocket from '../../sockets/campaign';
 
-  return new Promise(resolve => {
-    socket.on('connect', () => {
-      resolve(socket);
-      console.log('Socket connected')
-    })
-  })
-}
-
-export function* subscribe(socket) {
-  return new eventChannel(emit => {
-    const update = 
-  })
-}
+const socket = {
+  characters: charSocket,
+  campaigns: campSocket,
+};
 
 // FETCH CURRENT SHEET
 export function* onFetchCurrentSheetStart() {
@@ -88,6 +78,10 @@ export function* onUpdateSheetStart() {
 export function* updateSheet({ payload: { sheetType, sheetId, body } }) {
   try {
     const response = yield updateSheetCall(sheetType, sheetId, body);
+
+    // Emit changes to connected clients
+    socket[sheetType].emit('changes', { type: ChangesTypes.updateSheet, room: sheetId, args: [sheetType, response.data.data.sheet] });
+
     yield put(updateSheetSuccess(sheetType, response.data.data.sheet));
   } catch (err) {
     yield put(updateSheetFailure(sheetType, err.response.data));
@@ -102,7 +96,13 @@ export function* onDeleteSheetStart() {
 export function* deleteSheet({ payload: { sheetType, sheetId } }) {
   try {
     const response = yield deleteSheetCall(sheetType, sheetId);
+
+    // Console log data
     console.log('Deleted Sheet', response.data);
+
+    // Emit changes to connected clients
+    socket[sheetType].emit('changes', { type: ChangesTypes.deleteSheet, room: sheetId, args: [sheetType, sheetId, response.data.data] });
+
     yield put(deleteSheetSuccess(sheetType, sheetId, response.data.data));
   } catch (err) {
     yield put(deleteSheetFailure(sheetType, err.response.data));
@@ -131,6 +131,16 @@ export function* onCreateSheetResourceStart() {
 export function* createSheetResource({ payload: { sheetType, sheetId, resourceType, body } }) {
   try {
     const response = yield createResource(sheetType, sheetId, resourceType, body);
+
+    // If resource is invite, then update the character sheets it is being sent to as well
+    if (resourceType === 'invites') {
+      // Emit changes to character sheets
+      socket['characters'].emit('changes', { type: ChangesTypes.createSheetResource, room: response.data.data.doc.charSheetId, args: ['characters', resourceType, response.data.data.doc] });
+    }
+
+    // Emit changes to connected clients
+    socket[sheetType].emit('changes', { type: ChangesTypes.createSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
+
     yield put(createSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
   } catch (err) {
     yield put(createSheetResourceFailure(sheetType, err.response.data));
@@ -148,7 +158,21 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
 
     // If resource is invite and the invitation was just accepted, add the campaign sheet to the redux state
     if (resourceType === 'invites' && response.data.data.doc.status === 'Accepted') {
+      // Emit changes to connected clients, both character and campaign sheets
+      socket['characters'].emit('changes', { type: ChangesTypes.addCampaignToCharacter, room: response.data.data.doc.charSheetId, args: ['characters', response.data.data.campaign] });
+      socket['campaigns'].emit('changes', { type: ChangesTypes.addCampaignToCharacter, room: response.data.data.doc.sheetId, args: ['campaigns', response.data.data.campaign] });
+
       yield put(addCampaignToCharacterSuccess(sheetType, response.data.data.campaign));
+    }
+
+    // Send to both characters and campaigns if the resource is an invite
+    if (resourceType === 'invites') {
+      // Emit changes to connected clients, both character and campaign sheets
+      socket['characters'].emit('changes', { type: ChangesTypes.updateSheetResource, room: response.data.data.doc.charSheetId, args: ['characters', resourceType, response.data.data.doc] });
+      socket['campaigns'].emit('changes', { type: ChangesTypes.updateSheetResource, room: response.data.data.doc.sheetId, args: ['campaigns', resourceType, response.data.data.doc] });
+    } else {
+      // Emit changes to connected clients
+      socket[sheetType].emit('changes', { type: ChangesTypes.updateSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
     }
 
     yield put(updateSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
@@ -165,6 +189,17 @@ export function* onDeleteSheetResourceStart() {
 export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId } }) {
   try {
     const response = yield deleteResource(sheetType, sheetId, resourceType, resourceId);
+
+    // Update the character sheet as well if resource is an invite
+    // Note: Character sheets cannot delete invites
+    if (resourceType === 'invites') {
+      // Emit changes to character sheet
+      socket['characters'].emit('changes', { type: ChangesTypes.deleteSheetResource, room: response.data.metadata.charId, args: ['characters', resourceType, resourceId, response.data.data] });
+    }
+
+    // Emit changes to connected clients
+    socket[sheetType].emit('changes', { type: ChangesTypes.deleteSheetResource, room: sheetId, args: [sheetType, resourceType, resourceId, response.data.data] });
+
     yield put(deleteSheetResourceSuccess(sheetType, resourceType, resourceId, response.data.data));
   } catch (err) {
     yield put(deleteSheetResourceFailure(sheetType, err.response.data));
@@ -180,7 +215,14 @@ export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, bo
   if (sheetType === 'characters') {
     try {
       const response = yield leaveCampaign(sheetType, sheetId);
+
+      // Console log data
       console.log('Left Campaign', response.data);
+
+      // Emit changes to connected clients
+      socket['characters'].emit('changes', { type: ChangesTypes.removeCharacterFromCampaign, room: sheetId, args: ['characters', response.data.message] });
+      socket['campaigns'].emit('changes', { type: ChangesTypes.removeCharacterFromCampaign, room: response.metadata.campId, args: ['campaigns', response.data.message] });
+
       yield put(removeCharacterFromCampaignSuccess(sheetType, response.data.message));
     } catch (err) {
       yield put(removeCharacterFromCampaignFailure(sheetType, err.response.data));
@@ -190,7 +232,14 @@ export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, bo
   if (sheetType === 'campaigns') {
     try {
       const response = yield removePlayer(sheetType, sheetId, body);
+
+      // Console log data
       console.log('Removed Player', response.data);
+
+      // Emit changes to connected clients
+      socket['characters'].emit('changes', { type: ChangesTypes.removeCharacterFromCampaign, room: response.metadata.charId, args: ['characters', response.data.message] });
+      socket['campaigns'].emit('changes', { type: ChangesTypes.removeCharacterFromCampaign, room: sheetId, args: ['campaigns', response.data.message] });
+
       yield put(removeCharacterFromCampaignSuccess(sheetType, response.data.message));
     } catch (err) {
       yield put(removeCharacterFromCampaignFailure(sheetType, err.response.data));
