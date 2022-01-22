@@ -61,7 +61,7 @@ const CampaignPlayersPage = () => {
           <p className="text-sm italic text-gray-400">Once a you have selected a player, you will be able to see their information right here.</p>
         ) : (
           <div>
-            <a className="btn-tertiary" href={`https://sheets.aberrations-rpg.com/characters/${player._id}/gameplay`} target="_blank" rel="noreferrer">
+            <a className="btn-tertiary" href={`${process.env.REACT_APP_SELF}/characters/${player._id}/gameplay`} target="_blank" rel="noreferrer">
               View {player.characterName} <ExternalLinkIcon className="ml-4 h-6 w-6 text-white" aria-hidden="true" />
             </a>
             {JSON.stringify(player)}

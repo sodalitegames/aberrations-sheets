@@ -124,9 +124,9 @@ export const removeCharacterFromCampaignStart = (sheetType, sheetId, body) => ({
   payload: { sheetType, sheetId, body },
 });
 
-export const removeCharacterFromCampaignSuccess = (sheetType, message) => ({
+export const removeCharacterFromCampaignSuccess = (sheetType, data) => ({
   type: SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS,
-  payload: { sheetType, message },
+  payload: { sheetType, data },
 });
 
 export const removeCharacterFromCampaignFailure = (sheetType, error) => ({

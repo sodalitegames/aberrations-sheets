@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   loading: false,
   error: null,
   permissions: undefined,
+  reload: undefined,
 };
 
 const characterReducer = (state = INITIAL_STATE, action) => {
@@ -31,6 +32,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: null,
         permissions: action.payload.permissions,
+        reload: undefined,
       };
     case SheetActionTypes.UPDATE_SHEET_SUCCESS:
       return {
