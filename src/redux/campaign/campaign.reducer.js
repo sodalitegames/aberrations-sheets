@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   loading: false,
   error: null,
   permissions: undefined,
+  reload: undefined,
 };
 
 const campaignReducer = (state = INITIAL_STATE, action) => {
@@ -29,6 +30,7 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
         current: action.payload.currentSheet,
         loading: false,
         error: null,
+        reload: undefined,
       };
     case SheetActionTypes.UPDATE_SHEET_SUCCESS:
       return {
@@ -72,6 +74,20 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
         current: {
           ...state.current,
           [deletedResourceType]: removeItemById(state.current[deletedResourceType], resourceId),
+        },
+      };
+    case SheetActionTypes.ADD_CAMPAIGN_TO_CHARACTER_SUCCESS:
+      return {
+        ...state,
+        reload: 'A new player has joined your campaign. Please refresh to get the latest data.',
+      };
+    case SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS:
+      console.log(action.payload);
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: removeItemById(state.current.players, action.payload.data.metadata.charId),
         },
       };
     case SheetActionTypes.FETCH_CURRENT_SHEET_FAILURE:

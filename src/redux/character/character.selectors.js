@@ -10,6 +10,8 @@ export const selectLoading = createSelector([selectCharacter], character => char
 
 export const selectPermissions = createSelector([selectCharacter], character => character.permissions);
 
+export const selectReload = createSelector([selectCharacter], character => character.reload);
+
 export const selectEquippedWeapons = createSelector([selectCurrentCharacter], current => current.weapons.filter(weapon => weapon.equipped));
 
 export const selectEquippedWearables = createSelector([selectCurrentCharacter], current => current.wearables.filter(wearable => wearable.equipped));

@@ -25,8 +25,8 @@ campSocket.on('message', message => {
   console.log('socket:message:', message);
 });
 
-campSocket.on('updates', ({ type, args }) => {
-  console.log('socket:updates:', args);
+campSocket.on('updates', ({ sheet, room, type, args }) => {
+  console.log('socket:updates:', sheet, room, type, args);
 
   switch (type) {
     case ChangesTypes.updateSheet:

@@ -2,18 +2,20 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCampaign, selectError, selectLoading } from '../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectError, selectLoading, selectReload } from '../redux/campaign/campaign.selectors';
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
-import charSocket from '../sockets/character';
+// import charSocket from '../sockets/character';
 import campSocket from '../sockets/campaign';
 
 import Loading from './components/app/Loading';
 
 import SheetPageHeader from './components/sheet/SheetPageHeader';
-import Footer from './components/shared/Footer';
 import SheetPageError from './components/sheet/SheetPageError';
+
+import Footer from './components/shared/Footer';
+import Banner from './components/shared/Banner';
 
 export default function CharacterSheet() {
   let { campId } = useParams();
@@ -23,6 +25,7 @@ export default function CharacterSheet() {
   const campSheet = useSelector(selectCurrentCampaign);
   const error = useSelector(selectError);
   const loading = useSelector(selectLoading);
+  const reload = useSelector(selectReload);
 
   useEffect(() => {
     if (campId) {
@@ -30,12 +33,12 @@ export default function CharacterSheet() {
       campSocket.emit('joinRoom', campId);
     }
 
-    if (campSheet) {
-      // Join room for each player's character sheet
-      campSheet.players.forEach(character => {
-        charSocket.emit('joinRoom', character._id);
-      });
-    }
+    // if (campSheet) {
+    //   // Join room for each player's character sheet
+    //   campSheet.players.forEach(character => {
+    //     charSocket.emit('joinRoom', character._id);
+    //   });
+    // }
   });
 
   useEffect(() => {
@@ -57,18 +60,21 @@ export default function CharacterSheet() {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
-        <SheetPageHeader title={campSheet ? `Aberrations RPG Sheets -  ${campSheet.name}` : 'Aberrations RPG Sheets'} type="campaign" />
-        <main className="-mt-24 pb-8">
-          {!loading && campSheet ? (
-            <React.Suspense fallback={<Loading />}>
-              <Outlet />
-            </React.Suspense>
-          ) : !loading && error ? (
-            <SheetPageError type="campaigns" error={error} />
-          ) : (
-            <Loading />
-          )}
-        </main>
+        {reload ? <Banner icon="info" theme="secondary" message={reload} button={{ text: 'Reload', custom: () => dispatch(fetchCurrentSheetStart('campaigns', campId)) }} /> : null}
+        <div>
+          <SheetPageHeader title={campSheet ? `Aberrations RPG Sheets -  ${campSheet.name}` : 'Aberrations RPG Sheets'} type="campaign" />
+          <main className="-mt-24 pb-8">
+            {!loading && campSheet ? (
+              <React.Suspense fallback={<Loading />}>
+                <Outlet />
+              </React.Suspense>
+            ) : !loading && error ? (
+              <SheetPageError type="campaigns" error={error} />
+            ) : (
+              <Loading />
+            )}
+          </main>
+        </div>
       </div>
       <Footer />
     </div>

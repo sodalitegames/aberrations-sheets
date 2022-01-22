@@ -25,8 +25,8 @@ charSocket.on('message', message => {
   console.log('socket:message:', message);
 });
 
-charSocket.on('updates', ({ type, args }) => {
-  console.log('socket:updates:', type, args);
+charSocket.on('updates', ({ sheet, room, type, args }) => {
+  console.log('socket:updates:', sheet, room, type, args);
 
   switch (type) {
     case ChangesTypes.updateSheet:
