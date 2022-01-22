@@ -1,9 +1,30 @@
 import AppActionTypes from './app.types';
 
+import { replaceItemById } from '../../utils/arrays';
+
 const INITIAL_STATE = {
   modal: null,
   slideOver: null,
-  flashMessages: [],
+  notifications: [
+    {
+      _id: '1',
+      heading: 'Successfully saved! 1',
+      message: 'Anyone with a link can now view this file.',
+      dismissed: false,
+    },
+    {
+      _id: '2',
+      heading: 'Successfully saved! 2',
+      message: 'Anyone with a link can now view this file.',
+      dismissed: false,
+    },
+    {
+      _id: '3',
+      heading: 'Successfully saved! 3',
+      message: 'Anyone with a link can now view this file.',
+      dismissed: false,
+    },
+  ],
 };
 
 const appReducer = (state = INITIAL_STATE, action) => {
@@ -18,10 +39,15 @@ const appReducer = (state = INITIAL_STATE, action) => {
         ...state,
         slideOver: action.payload,
       };
-    case AppActionTypes.ADD_FLASH_MESSAGE:
+    case AppActionTypes.ADD_NOTIFICATION:
       return {
         ...state,
-        flashMessages: [...state.flashMessages, action.payload],
+        notifications: [...state.notifications, action.payload],
+      };
+    case AppActionTypes.DISMISS_NOTIFICATION:
+      return {
+        ...state,
+        notifications: replaceItemById(state.notifications, action.payload._id, { ...action.payload, dismissed: true }),
       };
     default:
       return state;

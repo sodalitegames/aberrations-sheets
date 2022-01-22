@@ -4,6 +4,7 @@ import SheetActionTypes from './sheet.types';
 
 import ChangesTypes from '../../utils/ChangesTypes';
 
+import { addNotification } from '../app/app.actions';
 import {
   fetchCurrentSheetSuccess,
   fetchCurrentSheetFailure,
@@ -83,6 +84,9 @@ export function* updateSheet({ payload: { sheetType, sheetId, body } }) {
     socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.updateSheet, room: sheetId, args: [sheetType, response.data.data.sheet] });
 
     yield put(updateSheetSuccess(sheetType, response.data.data.sheet));
+
+    // Add a notification
+    yield put(addNotification({ _id: '4', heading: 'Updated', message: 'You updated your sheet' }));
   } catch (err) {
     yield put(updateSheetFailure(sheetType, err.response.data));
   }
@@ -147,6 +151,9 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
     socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.createSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
 
     yield put(createSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
+
+    // Add a notification
+    yield put(addNotification({ _id: '4', heading: `${resourceType} created`, message: `${response.data.data.doc.name || resourceType} has been created` }));
   } catch (err) {
     yield put(createSheetResourceFailure(sheetType, err.response.data));
   }

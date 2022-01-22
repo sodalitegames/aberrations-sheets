@@ -10,7 +10,12 @@ export const setSlideOver = slideOver => ({
   payload: slideOver,
 });
 
-export const addFlashMessage = flashMessage => ({
-  type: AppActionTypes.ADD_FLASH_MESSAGE,
-  payload: flashMessage,
+export const addNotification = notification => ({
+  type: AppActionTypes.ADD_NOTIFICATION,
+  payload: notification,
+});
+
+export const dismissNotification = notification => ({
+  type: AppActionTypes.DISMISS_NOTIFICATION,
+  payload: notification,
 });
