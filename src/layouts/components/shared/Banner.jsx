@@ -27,21 +27,39 @@ const Banner = ({ icon, theme, message, button, closable }) => {
           </div>
           {button ? (
             <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
-              <Link
-                to={button.href}
-                className={classNames(
-                  'flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white',
-                  theme === 'primary'
-                    ? 'bg-primary-light hover:bg-primary-fade'
-                    : theme === 'secondary'
-                    ? 'bg-secondary-light hover:bg-secondary-fade'
-                    : theme === 'tertiary'
-                    ? 'bg-tertiary-light hover:bg-tertiary-fade'
-                    : 'bg-gray-700 hover:bg-gray-600'
-                )}
-              >
-                {button.text}
-              </Link>
+              {button.custom ? (
+                <button
+                  onClick={button.custom}
+                  className={classNames(
+                    'flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white',
+                    theme === 'primary'
+                      ? 'bg-primary-light hover:bg-primary-fade'
+                      : theme === 'secondary'
+                      ? 'bg-secondary-light hover:bg-secondary-fade'
+                      : theme === 'tertiary'
+                      ? 'bg-tertiary-light hover:bg-tertiary-fade'
+                      : 'bg-gray-700 hover:bg-gray-600'
+                  )}
+                >
+                  {button.text}
+                </button>
+              ) : (
+                <Link
+                  to={button.href}
+                  className={classNames(
+                    'flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white',
+                    theme === 'primary'
+                      ? 'bg-primary-light hover:bg-primary-fade'
+                      : theme === 'secondary'
+                      ? 'bg-secondary-light hover:bg-secondary-fade'
+                      : theme === 'tertiary'
+                      ? 'bg-tertiary-light hover:bg-tertiary-fade'
+                      : 'bg-gray-700 hover:bg-gray-600'
+                  )}
+                >
+                  {button.text}
+                </Link>
+              )}
             </div>
           ) : null}
           {closable ? (
