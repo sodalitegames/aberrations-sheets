@@ -10,10 +10,10 @@ import { capitalize } from '../../../../utils/strings';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
-import Select from '../../../shared/Select';
-import Detail from '../../../shared/Detail';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
+import Select from '../../../shared/form/Select';
+import Detail from '../../../shared/form/Detail';
 
 const EditWeapon = ({ id, data }) => {
   const dispatch = useDispatch();

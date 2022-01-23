@@ -7,8 +7,8 @@ import { updateSheetStart, updateSheetResourceStart } from '../../../../redux/sh
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Row from '../../../shared/Row';
-import { SelectInput } from '../../../shared/Select';
+import Row from '../../../shared/form/Row';
+import { SelectInput } from '../../../shared/form/Select';
 
 import DisplayWearable from '../../../sheets/display/DisplayWearable';
 

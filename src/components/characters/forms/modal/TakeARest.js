@@ -9,7 +9,7 @@ import { capitalize } from '../../../../utils/strings';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Select from '../../../shared/Select';
+import Select from '../../../shared/form/Select';
 import Notice from '../../../shared/Notice';
 
 const TakeARest = () => {

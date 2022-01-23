@@ -9,7 +9,7 @@ import { capitalize } from '../../../../utils/strings';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
+import Input from '../../../shared/form/Input';
 
 const EditCondition = ({ id }) => {
   const dispatch = useDispatch();

@@ -10,12 +10,12 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../../
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
-import Select from '../../../shared/Select';
-import CheckboxGroup, { Checkbox } from '../../../shared/CheckboxGroup';
-import { LoadingSpinner } from '../../../shared/SubmitButton';
-import Row from '../../../shared/Row';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
+import Select from '../../../shared/form/Select';
+import CheckboxGroup, { Checkbox } from '../../../shared/form/CheckboxGroup';
+import { LoadingSpinner } from '../../../shared/form/SubmitButton';
+import Row from '../../../shared/form/Row';
 
 const Consumable = ({ id, data }) => {
   const dispatch = useDispatch();

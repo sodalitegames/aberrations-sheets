@@ -8,9 +8,9 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../../
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
-import Select from '../../../shared/Select';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
+import Select from '../../../shared/form/Select';
 
 const Usable = ({ id, data }) => {
   const dispatch = useDispatch();

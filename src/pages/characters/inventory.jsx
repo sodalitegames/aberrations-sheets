@@ -11,7 +11,7 @@ import classNames from '../../utils/classNames';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 import { Link } from 'react-router-dom';
 
 const tabs = [

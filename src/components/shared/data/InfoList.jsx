@@ -1,5 +1,5 @@
 import React from 'react';
-import NewlineText from '../utility/NewlineText';
+import NewlineText from '../../utility/NewlineText';
 
 const InfoList = ({ list }) => {
   return (

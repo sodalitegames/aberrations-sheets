@@ -2,8 +2,8 @@ import ModalTypes from '../../../utils/ModalTypes';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import { formatDate } from '../../../utils/formatDate';
 
-import ListItem from '../../shared/ListItem';
-import InfoList from '../../shared/InfoList';
+import ListItem from '../../shared/data/ListItem';
+import InfoList from '../../shared/data/InfoList';
 
 const DisplayLog = ({ sheetType, log }) => {
   return (

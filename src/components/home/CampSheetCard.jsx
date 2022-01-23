@@ -1,6 +1,6 @@
 import PagePanel from '../../layouts/components/home/PagePanel';
 
-import DescriptionList from '../shared/DescriptionList';
+import DescriptionList from '../shared/data/DescriptionList';
 
 const CampSheetCard = ({ campSheet }) => {
   return (

@@ -9,10 +9,10 @@ import { updateSheetStart, createSheetResourceStart } from '../../../../redux/sh
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Select from '../../../shared/Select';
-import Detail from '../../../shared/Detail';
-import { LoadingSpinner } from '../../../shared/SubmitButton';
-import Row from '../../../shared/Row';
+import Select from '../../../shared/form/Select';
+import Detail from '../../../shared/form/Detail';
+import { LoadingSpinner } from '../../../shared/form/SubmitButton';
+import Row from '../../../shared/form/Row';
 
 const PurchaseAugmentation = () => {
   const dispatch = useDispatch();

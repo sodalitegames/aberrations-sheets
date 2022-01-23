@@ -1,17 +1,9 @@
 import ModalTypes from '../../../utils/ModalTypes';
-import InfoList from '../../shared/InfoList';
+import InfoList from '../../shared/data/InfoList';
 
-import ListItem from '../../shared/ListItem';
+import ListItem from '../../shared/data/ListItem';
 
-const Augmentation = ({ aug, condensed, noButtonPanel }) => {
-  if (condensed === 'view') {
-    return 'view';
-  }
-
-  if (condensed === 'expandable') {
-    return 'expandable';
-  }
-
+const DisplayAugmentation = ({ aug, noButtonPanel }) => {
   return (
     <ListItem
       heading={aug.name}
@@ -34,4 +26,4 @@ const Augmentation = ({ aug, condensed, noButtonPanel }) => {
   );
 };
 
-export default Augmentation;
+export default DisplayAugmentation;

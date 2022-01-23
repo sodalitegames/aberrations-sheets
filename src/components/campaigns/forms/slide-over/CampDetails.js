@@ -7,7 +7,7 @@ import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import TextArea from '../../../shared/TextArea';
+import TextArea from '../../../shared/form/TextArea';
 
 const CampDetails = () => {
   const dispatch = useDispatch();

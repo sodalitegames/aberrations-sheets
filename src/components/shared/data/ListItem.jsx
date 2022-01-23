@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux';
 
-import { setModal, setSlideOver } from '../../redux/app/app.actions';
+import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 
-import Button from './Button';
+import Button from '../Button';
 
 export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
   const dispatch = useDispatch();

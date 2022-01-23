@@ -5,8 +5,8 @@ import { setModal } from '../../../redux/app/app.actions';
 import ModalTypes from '../../../utils/ModalTypes';
 import { formatDate } from '../../../utils/formatDate';
 
-import ListItem from '../../shared/ListItem';
-import DescriptionList from '../../shared/DescriptionList';
+import ListItem from '../../shared/data/ListItem';
+import DescriptionList from '../../shared/data/DescriptionList';
 import Button from '../../shared/Button';
 
 const DisplayInvite = ({ invite, noActions, sheetType }) => {

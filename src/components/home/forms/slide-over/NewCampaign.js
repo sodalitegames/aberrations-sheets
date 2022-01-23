@@ -7,9 +7,9 @@ import { createSheetForUserStart } from '../../../../redux/user/user.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Detail from '../../../shared/Detail';
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
+import Detail from '../../../shared/form/Detail';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
 
 const NewCampaign = () => {
   const dispatch = useDispatch();

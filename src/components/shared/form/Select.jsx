@@ -1,6 +1,6 @@
 import React from 'react';
 
-import classNames from '../../utils/classNames';
+import classNames from '../../../utils/classNames';
 
 import Row from './Row';
 

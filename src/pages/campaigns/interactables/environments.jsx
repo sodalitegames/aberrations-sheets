@@ -8,8 +8,8 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../../components/shared/PanelSection';
-import ListContainer from '../../../components/shared/ListContainer';
+import PanelSection from '../../../components/sheets/PanelSection';
+import ListContainer from '../../../components/shared/data/ListContainer';
 
 const CampaignEnvironmentsPage = () => {
   const dispatch = useDispatch();

@@ -14,8 +14,8 @@ import classNames from '../../../utils/classNames';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../../components/shared/PanelSection';
-import ListContainer from '../../../components/shared/ListContainer';
+import PanelSection from '../../../components/sheets/PanelSection';
+import ListContainer from '../../../components/shared/data/ListContainer';
 
 import Button from '../../../components/shared/Button';
 

@@ -1,4 +1,4 @@
-import Notice from './Notice';
+import Notice from '../shared/Notice';
 
 const Die = ({ roll }) => {
   return (

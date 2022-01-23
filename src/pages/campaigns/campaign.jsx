@@ -12,10 +12,10 @@ import classNames from '../../utils/classNames';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
-import InfoList from '../../components/shared/InfoList';
-import { ButtonPanel } from '../../components/shared/ListItem';
-import ListContainer from '../../components/shared/ListContainer';
+import PanelSection from '../../components/sheets/PanelSection';
+import InfoList from '../../components/shared/data/InfoList';
+import { ButtonPanel } from '../../components/shared/data/ListItem';
+import ListContainer from '../../components/shared/data/ListContainer';
 import Button from '../../components/shared/Button';
 
 import DisplayLog from '../../components/sheets/display/DisplayLog';

@@ -8,8 +8,8 @@ import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions'
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import ListContainer from '../../../shared/ListContainer';
-import Select from '../../../shared/Select';
+import ListContainer from '../../../shared/data/ListContainer';
+import Select from '../../../shared/form/Select';
 import Notice from '../../../shared/Notice';
 
 import DisplayInvite from '../../display/DisplayInvite';

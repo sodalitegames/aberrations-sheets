@@ -9,13 +9,13 @@ import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Input from '../../../shared/Input';
+import Input from '../../../shared/form/Input';
 // import TextArea from '../../../shared/TextArea';
-import Row from '../../../shared/Row';
-import Detail from '../../../shared/Detail';
+import Row from '../../../shared/form/Row';
+import Detail from '../../../shared/form/Detail';
 import Button from '../../../shared/Button';
 
-import Species from '../../../characters/display/Species';
+import DisplaySpecies from '../../../sheets/display/DisplaySpecies';
 import ModalTypes from '../../../../utils/ModalTypes';
 
 const ManageCharacter = () => {
@@ -62,7 +62,7 @@ const ManageCharacter = () => {
       <Input slideOver label="Character Name" type="text" name="characterName" value={characterName} changeHandler={setCharacterName} />
       <Row slideOver name="species" label="Character Species">
         <ul className="mt-3 divide-y divide-gray-200">
-          <Species species={charSheet.species} />
+          <DisplaySpecies species={charSheet.species} />
         </ul>
       </Row>
       {/* <TextArea slideOver label="Character Description" name="charDescription" rows={6} value={charDescription} changeHandler={setCharDescription} />

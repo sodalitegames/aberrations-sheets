@@ -1,7 +1,7 @@
-import EmptyState from './EmptyState';
+import EmptyState from '../EmptyState';
 
-import Button from './Button';
-import classNames from '../../utils/classNames';
+import Button from '../Button';
+import classNames from '../../../utils/classNames';
 
 const ListContainer = ({ list, button, empty, classes, children }) => {
   if (empty && !list.length) {

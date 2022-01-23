@@ -7,7 +7,7 @@ import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
+import Input from '../../../shared/form/Input';
 
 const TakeDamage = () => {
   const dispatch = useDispatch();

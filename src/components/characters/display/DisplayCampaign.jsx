@@ -2,11 +2,11 @@ import { useDispatch } from 'react-redux';
 
 import { setModal } from '../../../redux/app/app.actions';
 
-import DescriptionList from '../../shared/DescriptionList';
+import DescriptionList from '../../shared/data/DescriptionList';
 import Button from '../../shared/Button';
 import ModalTypes from '../../../utils/ModalTypes';
 
-const Campaign = ({ campaign, condensed }) => {
+const DisplayCampaign = ({ campaign, condensed }) => {
   const dispatch = useDispatch();
 
   if (condensed === 'view') {
@@ -36,4 +36,4 @@ const Campaign = ({ campaign, condensed }) => {
   );
 };
 
-export default Campaign;
+export default DisplayCampaign;

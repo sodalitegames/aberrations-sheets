@@ -1,5 +1,5 @@
-import classNames from '../../utils/classNames';
-import NewlineText from '../utility/NewlineText';
+import classNames from '../../../utils/classNames';
+import NewlineText from '../../utility/NewlineText';
 
 const DescriptionList = ({ list, classes }) => {
   return (

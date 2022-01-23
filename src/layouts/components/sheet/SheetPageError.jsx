@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import SheetPageContent from './SheetPageContent';
 
-import PanelSection from '../../../components/shared/PanelSection';
+import PanelSection from '../../../components/sheets/PanelSection';
 import classNames from '../../../utils/classNames';
 
 const SheetPageError = ({ type, error }) => {

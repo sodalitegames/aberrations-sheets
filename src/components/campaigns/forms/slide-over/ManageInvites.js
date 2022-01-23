@@ -4,7 +4,7 @@ import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selec
 
 import { SlideOverContainer } from '../../../../layouts/components/app/SlideOver';
 
-import ListContainer from '../../../shared/ListContainer';
+import ListContainer from '../../../shared/data/ListContainer';
 
 import DisplayInvite from '../../../sheets/display/DisplayInvite';
 

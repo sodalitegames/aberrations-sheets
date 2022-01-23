@@ -14,12 +14,12 @@ import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 import Stats from '../../components/characters/Stats';
 import Conditions from '../../components/characters/Conditions';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 import Button from '../../components/shared/Button';
 import Chip from '../../components/shared/Chip';
-import ListContainer from '../../components/shared/ListContainer';
+import ListContainer from '../../components/shared/data/ListContainer';
 
-import Augmentation from '../../components/characters/display/Augmentation';
+import DisplayAugmentation from '../../components/characters/display/DisplayAugmentation';
 
 import DisplayWeapon from '../../components/sheets/display/DisplayWeapon';
 import DisplayWearable from '../../components/sheets/display/DisplayWearable';
@@ -216,7 +216,7 @@ const CharacterGameplayPage = () => {
             }}
           >
             {charSheet.augmentations.map(aug => (
-              <Augmentation key={aug._id} aug={aug} />
+              <DisplayAugmentation key={aug._id} aug={aug} />
             ))}
           </ListContainer>
         </div>

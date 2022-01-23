@@ -6,7 +6,7 @@ import { signUpStart } from '../../redux/user/user.actions';
 import { selectUserError } from '../../redux/user/user.selectors';
 
 import Notice from '../shared/Notice';
-import SubmitButton from '../shared/SubmitButton';
+import SubmitButton from '../shared/form/SubmitButton';
 
 export default function SignupForm() {
   const dispatch = useDispatch();

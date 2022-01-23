@@ -9,8 +9,8 @@ import { capitalize } from '../../../../utils/strings';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Row from '../../../shared/Row';
-import { SelectInput } from '../../../shared/Select';
+import Row from '../../../shared/form/Row';
+import { SelectInput } from '../../../shared/form/Select';
 
 import DisplayWeapon from '../../../sheets/display/DisplayWeapon';
 import DisplayConsumable from '../../../sheets/display/DisplayConsumable';

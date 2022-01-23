@@ -12,11 +12,11 @@ import SlideOverTypes from '../../utils/SlideOverTypes';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 import Button from '../../components/shared/Button';
-import ListContainer from '../../components/shared/ListContainer';
+import ListContainer from '../../components/shared/data/ListContainer';
 
-import Player from '../../components/campaigns/display/Player';
+import DisplayPlayer from '../../components/campaigns/display/DisplayPlayer';
 
 const CampaignPlayersPage = () => {
   const dispatch = useDispatch();
@@ -41,7 +41,7 @@ const CampaignPlayersPage = () => {
           >
             {campSheet.players.map(player => (
               <div key={player._id} className="hover:bg-gray-50 px-2 cursor-pointer" onClick={() => setPlayer(player)}>
-                <Player player={player} />
+                <DisplayPlayer player={player} />
               </div>
             ))}
           </ListContainer>

@@ -2,10 +2,10 @@
 // import ModalTypes from '../../../utils/ModalTypes';
 // import { capitalize } from '../../../utils/strings';
 
-import ListItem from '../../shared/ListItem';
-import DescriptionList from '../../shared/DescriptionList';
+import ListItem from '../../shared/data/ListItem';
+import DescriptionList from '../../shared/data/DescriptionList';
 
-const Player = ({ player, condensed, noButtonPanel }) => {
+const DisplayPlayer = ({ player, condensed, noButtonPanel }) => {
   if (condensed === 'view') {
     return 'view';
   }
@@ -36,4 +36,4 @@ const Player = ({ player, condensed, noButtonPanel }) => {
   );
 };
 
-export default Player;
+export default DisplayPlayer;

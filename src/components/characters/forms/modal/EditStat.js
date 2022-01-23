@@ -9,8 +9,8 @@ import { capitalize } from '../../../../utils/strings';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
-import Detail from '../../../shared/Detail';
+import Input from '../../../shared/form/Input';
+import Detail from '../../../shared/form/Detail';
 
 const EditStat = ({ id }) => {
   const dispatch = useDispatch();

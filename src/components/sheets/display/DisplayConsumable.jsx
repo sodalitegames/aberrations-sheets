@@ -1,9 +1,9 @@
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 
-import ListItem from '../../shared/ListItem';
-import DescriptionList from '../../shared/DescriptionList';
-import InfoList from '../../shared/InfoList';
+import ListItem from '../../shared/data/ListItem';
+import DescriptionList from '../../shared/data/DescriptionList';
+import InfoList from '../../shared/data/InfoList';
 
 const DisplayConsumable = ({ consumable, condensed, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {

@@ -10,8 +10,8 @@ import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import { isoStringDate } from '../../../../utils/formatDate';
 
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
 
 const LogForm = ({ id, data }) => {
   const dispatch = useDispatch();

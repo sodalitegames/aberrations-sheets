@@ -2,9 +2,9 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 import { capitalize } from '../../../utils/strings';
 
-import ListItem from '../../shared/ListItem';
-import DescriptionList from '../../shared/DescriptionList';
-import InfoList from '../../shared/InfoList';
+import ListItem from '../../shared/data/ListItem';
+import DescriptionList from '../../shared/data/DescriptionList';
+import InfoList from '../../shared/data/InfoList';
 
 const createWeaponList = (stat, range, ability) => {
   const weapon = [`${capitalize(stat)} | ${range} Range`];

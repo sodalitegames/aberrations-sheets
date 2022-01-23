@@ -1,14 +1,6 @@
-import DescriptionList from '../../shared/DescriptionList';
+import DescriptionList from '../../shared/data/DescriptionList';
 
-const Species = ({ species, condensed }) => {
-  if (condensed === 'view') {
-    return 'view';
-  }
-
-  if (condensed === 'expandable') {
-    return 'expandable';
-  }
-
+const DisplaySpecies = ({ species }) => {
   return (
     <DescriptionList
       list={[
@@ -25,4 +17,4 @@ const Species = ({ species, condensed }) => {
   );
 };
 
-export default Species;
+export default DisplaySpecies;

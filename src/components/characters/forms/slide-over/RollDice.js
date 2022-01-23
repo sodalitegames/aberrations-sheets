@@ -10,11 +10,11 @@ import { capitalize } from '../../../../utils/strings';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Input from '../../../shared/Input';
-import Select from '../../../shared/Select';
-import Detail from '../../../shared/Detail';
+import Input from '../../../shared/form/Input';
+import Select from '../../../shared/form/Select';
+import Detail from '../../../shared/form/Detail';
 import Notice from '../../../shared/Notice';
-import RollResults, { ResultsMessages } from '../../../shared/RollResults';
+import RollResults, { ResultsMessages } from '../../RollResults';
 
 const RollDice = () => {
   const dispatch = useDispatch();

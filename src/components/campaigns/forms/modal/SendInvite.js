@@ -7,8 +7,8 @@ import { createSheetResourceStart } from '../../../../redux/sheet/sheet.actions'
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
 
 const SendInvite = () => {
   const dispatch = useDispatch();
