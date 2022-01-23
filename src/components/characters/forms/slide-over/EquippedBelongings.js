@@ -13,8 +13,8 @@ import Row from '../../../shared/Row';
 import { SelectInput } from '../../../shared/Select';
 
 import DisplayWeapon from '../../../sheets/display/DisplayWeapon';
-import Consumable from '../../display/Consumable';
-import Usable from '../../display/Usable';
+import DisplayConsumable from '../../../sheets/display/DisplayConsumable';
+import DisplayUsable from '../../../sheets/display/DisplayUsable';
 
 const EquippedBelongings = ({ id }) => {
   const dispatch = useDispatch();
@@ -153,7 +153,7 @@ const EquippedBelongings = ({ id }) => {
             <SelectInput name="consumable1" value={equipped1 ? equipped1._id : ''} options={belongingsList} changeHandler={selectEquipped1} />
             {equipped1 ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Consumable consumable={equipped1} noButtonPanel />
+                <DisplayConsumable consumable={equipped1} noButtonPanel />
               </ul>
             ) : null}
           </Row>
@@ -161,7 +161,7 @@ const EquippedBelongings = ({ id }) => {
             <SelectInput name="consumable2" value={equipped2 ? equipped2._id : ''} options={belongingsList} changeHandler={selectEquipped2} />
             {equipped2 ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Consumable consumable={equipped2} noButtonPanel />
+                <DisplayConsumable consumable={equipped2} noButtonPanel />
               </ul>
             ) : null}
           </Row>
@@ -169,7 +169,7 @@ const EquippedBelongings = ({ id }) => {
             <SelectInput name="consumable3" value={equipped3 ? equipped3._id : ''} options={belongingsList} changeHandler={selectEquipped3} />
             {equipped3 ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Consumable consumable={equipped3} noButtonPanel />
+                <DisplayConsumable consumable={equipped3} noButtonPanel />
               </ul>
             ) : null}
           </Row>
@@ -180,7 +180,7 @@ const EquippedBelongings = ({ id }) => {
             <SelectInput name="usable1" value={equipped1 ? equipped1._id : ''} options={belongingsList} changeHandler={selectEquipped1} />
             {equipped1 ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Usable usable={equipped1} noButtonPanel />
+                <DisplayUsable usable={equipped1} noButtonPanel />
               </ul>
             ) : null}
           </Row>
@@ -188,7 +188,7 @@ const EquippedBelongings = ({ id }) => {
             <SelectInput name="usable2" value={equipped2 ? equipped2._id : ''} options={belongingsList} changeHandler={selectEquipped2} />
             {equipped2 ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Usable usable={equipped2} noButtonPanel />
+                <DisplayUsable usable={equipped2} noButtonPanel />
               </ul>
             ) : null}
           </Row>
@@ -196,7 +196,7 @@ const EquippedBelongings = ({ id }) => {
             <SelectInput name="usable3" value={equipped3 ? equipped3._id : ''} options={belongingsList} changeHandler={selectEquipped3} />
             {equipped3 ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Usable usable={equipped3} noButtonPanel />
+                <DisplayUsable usable={equipped3} noButtonPanel />
               </ul>
             ) : null}
           </Row>

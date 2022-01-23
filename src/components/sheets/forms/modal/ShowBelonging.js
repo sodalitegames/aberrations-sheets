@@ -7,9 +7,9 @@ import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selec
 import { ModalContainer } from '../../../../layouts/components/app/Modal';
 
 import DisplayWeapon from '../../display/DisplayWeapon';
-import Wearable from '../../../characters/display/Wearable';
-import Consumable from '../../../characters/display/Consumable';
-import Usable from '../../../characters/display/Usable';
+import DisplayWearable from '../../display/DisplayWearable';
+import DisplayConsumable from '../../display/DisplayConsumable';
+import DisplayUsable from '../../display/DisplayUsable';
 
 const ShowBelonging = ({ id, data }) => {
   const charSheet = useSelector(selectCurrentCharacter);
@@ -38,17 +38,17 @@ const ShowBelonging = ({ id, data }) => {
   return (
     <ModalContainer>
       {belonging ? (
-        <ul className="-my-5 mt-2 divide-y divide-gray-200">
+        <>
           {data.resourceType === 'weapons' ? (
-            <DisplayWeapon weapon={belonging} noButtonPanel />
+            <DisplayWeapon weapon={belonging} />
           ) : data.resourceType === 'wearables' ? (
-            <Wearable wearable={belonging} noButtonPanel />
+            <DisplayWearable wearable={belonging} />
           ) : data.resourceType === 'consumables' ? (
-            <Consumable consumable={belonging} noButtonPanel />
+            <DisplayConsumable consumable={belonging} />
           ) : data.resourceType === 'usables' ? (
-            <Usable usable={belonging} noButtonPanel />
+            <DisplayUsable usable={belonging} />
           ) : null}
-        </ul>
+        </>
       ) : (
         'Loading belonging...'
       )}

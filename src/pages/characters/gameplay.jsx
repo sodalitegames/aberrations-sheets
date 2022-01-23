@@ -19,11 +19,12 @@ import Button from '../../components/shared/Button';
 import Chip from '../../components/shared/Chip';
 import ListContainer from '../../components/shared/ListContainer';
 
-import DisplayWeapon from '../../components/sheets/display/DisplayWeapon';
-import Wearable from '../../components/characters/display/Wearable';
-import Consumable from '../../components/characters/display/Consumable';
-import Usable from '../../components/characters/display/Usable';
 import Augmentation from '../../components/characters/display/Augmentation';
+
+import DisplayWeapon from '../../components/sheets/display/DisplayWeapon';
+import DisplayWearable from '../../components/sheets/display/DisplayWearable';
+import DisplayConsumable from '../../components/sheets/display/DisplayConsumable';
+import DisplayUsable from '../../components/sheets/display/DisplayUsable';
 
 const CharacterGameplayPage = () => {
   const dispatch = useDispatch();
@@ -130,7 +131,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedWeapons.map(weapon => (
-                <DisplayWeapon key={weapon._id} weapon={weapon} condensed="view" listItem />
+                <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="characters" condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -149,7 +150,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedWearables.map(wearable => (
-                <Wearable key={wearable._id} wearable={wearable} condensed="view" />
+                <DisplayWearable key={wearable._id} wearable={wearable} sheetType="characters" condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -170,7 +171,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedConsumables.map(consumable => (
-                <Consumable key={consumable._id} consumable={consumable} condensed="view" />
+                <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="characters" condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -189,7 +190,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedUsables.map(usable => (
-                <Usable key={usable._id} usable={usable} condensed="view" />
+                <DisplayUsable key={usable._id} usable={usable} sheetType="characters" condensed="view" listItem />
               ))}
             </ListContainer>
           </div>

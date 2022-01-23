@@ -5,15 +5,7 @@ import { formatDate } from '../../../utils/formatDate';
 import ListItem from '../../shared/ListItem';
 import InfoList from '../../shared/InfoList';
 
-const DisplayLog = ({ sheetType, log, condensed }) => {
-  if (condensed === 'view') {
-    return 'view';
-  }
-
-  if (condensed === 'expandable') {
-    return 'expandable';
-  }
-
+const DisplayLog = ({ sheetType, log }) => {
   return (
     <ListItem
       heading={formatDate(log.date)}
