@@ -101,7 +101,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       <InfoList list={[player.charDescription]} />
 
       <h3 className="text-lg border-b border-gray-200 mt-8 mb-4 font-semibold text-gray-800">Character Background</h3>
-      <InfoList list={[player.charDescription]} />
+      <InfoList list={[player.charBackground]} />
 
       <h3 className="text-lg border-b border-gray-200 mt-8 mb-4 font-semibold text-gray-800">Augmentations</h3>
       <ul className="grid">
