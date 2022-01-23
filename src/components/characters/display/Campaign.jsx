@@ -17,8 +17,6 @@ const Campaign = ({ campaign, condensed }) => {
     return 'expandable';
   }
 
-  console.log(campaign);
-
   return (
     <div>
       <DescriptionList

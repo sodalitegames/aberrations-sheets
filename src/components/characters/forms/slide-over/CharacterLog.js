@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
@@ -35,14 +34,10 @@ const CharacterLog = ({ id }) => {
 
     if (id) {
       dispatch(updateSheetResourceStart('characters', charSheet._id, 'logs', id, { date, content }));
-
-      dispatch(setSlideOver(null));
       return;
     }
 
     dispatch(createSheetResourceStart('characters', charSheet._id, 'logs', { date, content }));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

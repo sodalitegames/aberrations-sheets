@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCharacter, selectError, selectLoading, selectPermissions } from '../redux/character/character.selectors';
+import { selectCurrentCharacter, selectCharacterError, selectLoading, selectPermissions } from '../redux/character/character.selectors';
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
@@ -22,9 +22,10 @@ const CharacterSheet = () => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
-  const error = useSelector(selectError);
+  const error = useSelector(selectCharacterError);
   const loading = useSelector(selectLoading);
   const permissions = useSelector(selectPermissions);
+  // const transactions = useSelector(selectTransactions);
 
   useEffect(() => {
     if (charId) {
@@ -63,7 +64,11 @@ const CharacterSheet = () => {
         ) : null}
 
         <div>
-          <SheetPageHeader title={charSheet ? `Aberrations RPG Sheets - ${charSheet.characterName}` : 'Aberrations RPG Sheets'} type="character" />
+          <SheetPageHeader
+            title={charSheet ? `Aberrations RPG Sheets - ${charSheet.characterName}` : 'Aberrations RPG Sheets'}
+            transactions={charSheet ? charSheet.transactions : null}
+            type="character"
+          />
           <main className="-mt-24 pb-8">
             {!loading && charSheet ? (
               <React.Suspense fallback={<Loading />}>

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
@@ -57,14 +56,10 @@ const Wearable = ({ id }) => {
 
     if (id) {
       dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', id, { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }));
-
-      dispatch(setSlideOver(null));
       return;
     }
 
     dispatch(createSheetResourceStart('characters', charSheet._id, 'wearables', { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

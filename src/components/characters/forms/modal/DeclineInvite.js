@@ -2,7 +2,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
@@ -16,8 +15,6 @@ const DeclineInvite = ({ id }) => {
     e.preventDefault();
 
     dispatch(updateSheetResourceStart('characters', charSheet._id, 'invites', id, { status: 'Declined' }));
-
-    dispatch(setModal(null));
   };
 
   return (

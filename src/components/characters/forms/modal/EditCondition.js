@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
@@ -29,8 +28,6 @@ const EditCondition = ({ id }) => {
     e.preventDefault();
 
     dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, [id]: points } }));
-
-    dispatch(setModal(null));
   };
 
   return (

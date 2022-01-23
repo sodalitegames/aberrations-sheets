@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectConsumableCategories } from '../../../../redux/resource/resource.selectors';
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
@@ -99,14 +98,10 @@ const Consumable = ({ id }) => {
 
     if (id) {
       dispatch(updateSheetResourceStart('characters', charSheet._id, 'consumables', id, body));
-
-      dispatch(setSlideOver(null));
       return;
     }
 
     dispatch(createSheetResourceStart('characters', charSheet._id, 'consumables', body));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

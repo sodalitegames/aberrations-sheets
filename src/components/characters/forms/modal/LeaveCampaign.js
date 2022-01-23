@@ -2,7 +2,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { removeCharacterFromCampaignStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
@@ -16,8 +15,6 @@ const LeaveCampaign = () => {
     e.preventDefault();
 
     dispatch(removeCharacterFromCampaignStart('characters', charSheet._id));
-
-    dispatch(setModal(null));
   };
 
   return (

@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 import { selectWeapons } from '../../../../redux/resource/resource.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
@@ -147,8 +146,6 @@ const NewWeapon = () => {
       if (!range) return alert('Must provide a range');
 
       dispatch(createSheetResourceStart('characters', charSheet._id, 'weapons', { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, description }));
-
-      dispatch(setSlideOver(null));
       return;
     }
 
@@ -165,8 +162,6 @@ const NewWeapon = () => {
         universalId: weapon.universalId,
       })
     );
-
-    dispatch(setSlideOver(null));
   };
 
   return (

@@ -9,3 +9,5 @@ export const selectSlideOver = createSelector([selectApp], app => app.slideOver)
 export const selectAllNotifications = createSelector([selectApp], app => app.notifications);
 
 export const selectNotifications = createSelector([selectApp], app => app.notifications.filter(not => !not.dismissed));
+
+export const selectAlert = createSelector([selectApp], app => app.alert);

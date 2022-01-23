@@ -5,11 +5,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { XIcon } from '@heroicons/react/outline';
 
 import { selectSlideOver } from '../../../redux/app/app.selectors';
+import { selectResourceError } from '../../../redux/resource/resource.selectors';
+import { selectCharacterError } from '../../../redux/character/character.selectors';
+import { selectCampaignError } from '../../../redux/campaign/campaign.selectors';
 
 import { setSlideOver } from '../../../redux/app/app.actions';
 
 import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
+import { formatValidationErrors } from '../../../utils/validationErrors';
+
+import Notice from '../../../components/shared/Notice';
 
 import NewCharacter from '../../../components/home/forms/slide-over/NewCharacter';
 import NewCampaign from '../../../components/home/forms/slide-over/NewCampaign';
@@ -38,6 +44,10 @@ import ManageInvites from '../../../components/campaigns/forms/slide-over/Manage
 export const SlideOverForm = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
   const dispatch = useDispatch();
 
+  const characterError = useSelector(selectCharacterError);
+  const campaignError = useSelector(selectCampaignError);
+  const resourceError = useSelector(selectResourceError);
+
   return (
     <form onSubmit={submitHandler} className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
       <div className="flex-1">
@@ -64,6 +74,10 @@ export const SlideOverForm = ({ title, description, submitText, cancelText, subm
           {children}
         </div>
       </div>
+
+      {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+      {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+      {resourceError ? <Notice status="error" heading={resourceError.statusText} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
       {/* Action buttons */}
       <div className="shrink-0 px-4 border-t border-gray-200 py-5 sm:px-6">

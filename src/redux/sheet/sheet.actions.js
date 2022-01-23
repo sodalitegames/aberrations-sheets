@@ -17,9 +17,9 @@ export const fetchCurrentSheetFailure = (sheetType, error) => ({
 });
 
 // Update Sheet
-export const updateSheetStart = (sheetType, sheetId, body) => ({
+export const updateSheetStart = (sheetType, sheetId, body, config) => ({
   type: SheetActionTypes.UPDATE_SHEET_START,
-  payload: { sheetType, sheetId, body },
+  payload: { sheetType, sheetId, body, config },
 });
 
 export const updateSheetSuccess = (sheetType, updatedSheet) => ({
@@ -33,9 +33,9 @@ export const updateSheetFailure = (sheetType, error) => ({
 });
 
 // Delete Sheet
-export const deleteSheetStart = (sheetType, sheetId) => ({
+export const deleteSheetStart = (sheetType, sheetId, config) => ({
   type: SheetActionTypes.DELETE_SHEET_START,
-  payload: { sheetType, sheetId },
+  payload: { sheetType, sheetId, config },
 });
 
 export const deleteSheetSuccess = (sheetType, sheetId, message) => ({
@@ -65,9 +65,9 @@ export const fetchSheetResourcesFailure = (sheetType, error) => ({
 });
 
 // Create Sheet Resource
-export const createSheetResourceStart = (sheetType, sheetId, resourceType, body) => ({
+export const createSheetResourceStart = (sheetType, sheetId, resourceType, body, config) => ({
   type: SheetActionTypes.CREATE_SHEET_RESOURCE_START,
-  payload: { sheetType, sheetId, resourceType, body },
+  payload: { sheetType, sheetId, resourceType, body, config },
 });
 
 export const createSheetResourceSuccess = (sheetType, resourceType, newResource) => ({
@@ -81,9 +81,9 @@ export const createSheetResourceFailure = (sheetType, error) => ({
 });
 
 // Update Sheet Resource
-export const updateSheetResourceStart = (sheetType, sheetId, resourceType, resourceId, body) => ({
+export const updateSheetResourceStart = (sheetType, sheetId, resourceType, resourceId, body, config) => ({
   type: SheetActionTypes.UPDATE_SHEET_RESOURCE_START,
-  payload: { sheetType, sheetId, resourceType, resourceId, body },
+  payload: { sheetType, sheetId, resourceType, resourceId, body, config },
 });
 
 export const updateSheetResourceSuccess = (sheetType, resourceType, updatedResource) => ({
@@ -97,9 +97,9 @@ export const updateSheetResourceFailure = (sheetType, error) => ({
 });
 
 // Delete Sheet Resource
-export const deleteSheetResourceStart = (sheetType, sheetId, resourceType, resourceId) => ({
+export const deleteSheetResourceStart = (sheetType, sheetId, resourceType, resourceId, config) => ({
   type: SheetActionTypes.DELETE_SHEET_RESOURCE_START,
-  payload: { sheetType, sheetId, resourceType, resourceId },
+  payload: { sheetType, sheetId, resourceType, resourceId, config },
 });
 
 export const deleteSheetResourceSuccess = (sheetType, resourceType, resourceId, message) => ({
@@ -119,9 +119,9 @@ export const addCampaignToCharacterSuccess = (sheetType, campaign) => ({
 });
 
 // Remove Character from Campaign
-export const removeCharacterFromCampaignStart = (sheetType, sheetId, body) => ({
+export const removeCharacterFromCampaignStart = (sheetType, sheetId, body, config) => ({
   type: SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_START,
-  payload: { sheetType, sheetId, body },
+  payload: { sheetType, sheetId, body, config },
 });
 
 export const removeCharacterFromCampaignSuccess = (sheetType, data) => ({

@@ -1,4 +1,5 @@
 import SheetActionTypes from '../sheet/sheet.types';
+import AppActionTypes from '../app/app.types';
 
 import { replaceItemById, removeItemById } from '../../utils/arrays';
 
@@ -35,6 +36,7 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.UPDATE_SHEET_SUCCESS:
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           ...action.payload.updatedSheet,
@@ -51,6 +53,7 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
       if (createdResourceType === 'logs') createdResourceType = 'captainsLogs';
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           [createdResourceType]: [newResource, ...state.current[createdResourceType]],
@@ -61,6 +64,7 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
       if (updatedResourceType === 'logs') updatedResourceType = 'captainsLogs';
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           [updatedResourceType]: replaceItemById(state.current[updatedResourceType], updatedResource._id, updatedResource),
@@ -71,6 +75,7 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
       if (deletedResourceType === 'logs') deletedResourceType = 'captainsLogs';
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           [deletedResourceType]: removeItemById(state.current[deletedResourceType], resourceId),
@@ -82,9 +87,9 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
         reload: 'A new player has joined your campaign. Please refresh to get the latest data.',
       };
     case SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           players: removeItemById(state.current.players, action.payload.data.metadata.charId),
@@ -106,6 +111,12 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: action.payload.error,
+      };
+    case AppActionTypes.SET_SLIDE_OVER:
+    case AppActionTypes.SET_MODAL:
+      return {
+        ...state,
+        error: null,
       };
     default:
       return state;

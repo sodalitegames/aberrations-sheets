@@ -4,7 +4,7 @@ import SheetActionTypes from './sheet.types';
 
 import ChangesTypes from '../../utils/ChangesTypes';
 
-import { addNotification } from '../app/app.actions';
+import { addNotification, setSlideOver, setModal } from '../app/app.actions';
 import {
   fetchCurrentSheetSuccess,
   fetchCurrentSheetFailure,
@@ -55,8 +55,6 @@ export function* fetchCurrentSheet({ payload: { sheetType, sheetId } }) {
   try {
     const response = yield getSheet(sheetType, sheetId);
 
-    console.log(response.data);
-
     if (sheetType === 'characters') {
       // If it is a character sheet, fetch the species data and append it to the sheet data
       const resourceResponse = yield fetchSpecies(`?_id=${response.data.data.sheet.speciesId}`);
@@ -67,7 +65,7 @@ export function* fetchCurrentSheet({ payload: { sheetType, sheetId } }) {
 
     yield put(fetchCurrentSheetSuccess(sheetType, response.data.data.sheet));
   } catch (err) {
-    yield put(fetchCurrentSheetFailure(sheetType, err.response));
+    yield put(fetchCurrentSheetFailure(sheetType, err.response || err));
   }
 }
 
@@ -76,7 +74,7 @@ export function* onUpdateSheetStart() {
   yield takeLatest(SheetActionTypes.UPDATE_SHEET_START, updateSheet);
 }
 
-export function* updateSheet({ payload: { sheetType, sheetId, body } }) {
+export function* updateSheet({ payload: { sheetType, sheetId, body, config } }) {
   try {
     const response = yield updateSheetCall(sheetType, sheetId, body);
 
@@ -86,7 +84,13 @@ export function* updateSheet({ payload: { sheetType, sheetId, body } }) {
     yield put(updateSheetSuccess(sheetType, response.data.data.sheet));
 
     // Add a notification
-    yield put(addNotification({ _id: '4', heading: 'Updated', message: 'You updated your sheet' }));
+    yield put(addNotification({ heading: 'Updated', message: 'Your sheet has been updated' }));
+
+    if (!config?.keepOpen) {
+      // Close out the modal or slideover if it is open
+      yield put(setSlideOver(null));
+      yield put(setModal(null));
+    }
   } catch (err) {
     yield put(updateSheetFailure(sheetType, err.response.data));
   }
@@ -97,7 +101,7 @@ export function* onDeleteSheetStart() {
   yield takeLatest(SheetActionTypes.DELETE_SHEET_START, deleteSheet);
 }
 
-export function* deleteSheet({ payload: { sheetType, sheetId } }) {
+export function* deleteSheet({ payload: { sheetType, sheetId, config } }) {
   try {
     const response = yield deleteSheetCall(sheetType, sheetId);
 
@@ -108,6 +112,15 @@ export function* deleteSheet({ payload: { sheetType, sheetId } }) {
     socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.deleteSheet, room: sheetId, args: [sheetType, sheetId, response.data.data] });
 
     yield put(deleteSheetSuccess(sheetType, sheetId, response.data.data));
+
+    // Add a notification
+    yield put(addNotification({ heading: 'Deleted', message: 'Your sheet has been deleted' }));
+
+    if (!config?.keepOpen) {
+      // Close out the modal or slideover if it is open
+      yield put(setSlideOver(null));
+      yield put(setModal(null));
+    }
   } catch (err) {
     yield put(deleteSheetFailure(sheetType, err.response.data));
   }
@@ -132,7 +145,7 @@ export function* onCreateSheetResourceStart() {
   yield takeLatest(SheetActionTypes.CREATE_SHEET_RESOURCE_START, createSheetResource);
 }
 
-export function* createSheetResource({ payload: { sheetType, sheetId, resourceType, body } }) {
+export function* createSheetResource({ payload: { sheetType, sheetId, resourceType, body, config } }) {
   try {
     const response = yield createResource(sheetType, sheetId, resourceType, body);
 
@@ -153,8 +166,15 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
     yield put(createSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
 
     // Add a notification
-    yield put(addNotification({ _id: '4', heading: `${resourceType} created`, message: `${response.data.data.doc.name || resourceType} has been created` }));
+    yield put(addNotification({ heading: `${resourceType} created`, message: `${response.data.data.doc.name || resourceType} has been created` }));
+
+    if (!config?.keepOpen) {
+      // Close out the modal or slideover if it is open
+      yield put(setSlideOver(null));
+      yield put(setModal(null));
+    }
   } catch (err) {
+    console.log(err);
     yield put(createSheetResourceFailure(sheetType, err.response.data));
   }
 }
@@ -164,7 +184,7 @@ export function* onUpdateSheetResourceStart() {
   yield takeEvery(SheetActionTypes.UPDATE_SHEET_RESOURCE_START, updateSheetResource);
 }
 
-export function* updateSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId, body } }) {
+export function* updateSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId, body, config } }) {
   try {
     const response = yield updateResource(sheetType, sheetId, resourceType, resourceId, body);
 
@@ -180,6 +200,9 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
       socket['campaigns'].emit('changes', { sheet: 'campaigns', type: ChangesTypes.addCampaignToCharacter, room: response.data.data.doc.sheetId, args: ['campaigns', response.data.data.campaign] });
 
       yield put(addCampaignToCharacterSuccess(sheetType, response.data.data.campaign));
+
+      // Add a notification
+      yield put(addNotification({ heading: 'Joined Campaign', message: `You have joined ${response.data.data.campaign.name}` }));
     }
 
     // Send to both characters and campaigns if the resource is an invite
@@ -203,6 +226,15 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
     }
 
     yield put(updateSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
+
+    // Add a notification
+    yield put(addNotification({ heading: `${resourceType} updated`, message: `${response.data.data.doc.name || resourceType} has been updated` }));
+
+    if (!config?.keepOpen) {
+      // Close out the modal or slideover if it is open
+      yield put(setSlideOver(null));
+      yield put(setModal(null));
+    }
   } catch (err) {
     yield put(updateSheetResourceFailure(sheetType, err.response.data));
   }
@@ -213,7 +245,7 @@ export function* onDeleteSheetResourceStart() {
   yield takeLatest(SheetActionTypes.DELETE_SHEET_RESOURCE_START, deleteSheetResource);
 }
 
-export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId } }) {
+export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceType, resourceId, config } }) {
   try {
     const response = yield deleteResource(sheetType, sheetId, resourceType, resourceId);
 
@@ -233,6 +265,15 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
     socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.deleteSheetResource, room: sheetId, args: [sheetType, resourceType, resourceId, response.data.data] });
 
     yield put(deleteSheetResourceSuccess(sheetType, resourceType, resourceId, response.data.data));
+
+    // Add a notification
+    yield put(addNotification({ heading: `${resourceType} deleted`, message: `${response.data.data.doc.name || resourceType} has been deleted` }));
+
+    if (!config?.keepOpen) {
+      // Close out the modal or slideover if it is open
+      yield put(setSlideOver(null));
+      yield put(setModal(null));
+    }
   } catch (err) {
     yield put(deleteSheetResourceFailure(sheetType, err.response.data));
   }
@@ -243,7 +284,7 @@ export function* onRemoveCharacterFromCampaignStart() {
   yield takeLatest(SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_START, removeCharacterFromCampaign);
 }
 
-export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, body } }) {
+export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, body, config } }) {
   if (sheetType === 'characters') {
     try {
       const response = yield leaveCampaign(sheetType, sheetId);
@@ -256,6 +297,15 @@ export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, bo
       socket['campaigns'].emit('changes', { sheet: 'campaigns', type: ChangesTypes.removeCharacterFromCampaign, room: response.data.metadata.campId, args: ['campaigns', response.data] });
 
       yield put(removeCharacterFromCampaignSuccess(sheetType, response.data));
+
+      // Add a notification
+      yield put(addNotification({ heading: `Left Campaign`, message: `You have left Campaign #${response.data.metadata.campId}` }));
+
+      if (!config?.keepOpen) {
+        // Close out the modal or slideover if it is open
+        yield put(setSlideOver(null));
+        yield put(setModal(null));
+      }
     } catch (err) {
       yield put(removeCharacterFromCampaignFailure(sheetType, err.response.data));
     }
@@ -273,6 +323,15 @@ export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, bo
       socket['campaigns'].emit('changes', { sheet: 'campaigns', type: ChangesTypes.removeCharacterFromCampaign, room: sheetId, args: ['campaigns', response.data] });
 
       yield put(removeCharacterFromCampaignSuccess(sheetType, response.data));
+
+      // Add a notification
+      yield put(addNotification({ heading: `Player Removed`, message: `Character #${response.data.metadata.charId} has been removed from your campaign` }));
+
+      if (!config?.keepOpen) {
+        // Close out the modal or slideover if it is open
+        yield put(setSlideOver(null));
+        yield put(setModal(null));
+      }
     } catch (err) {
       yield put(removeCharacterFromCampaignFailure(sheetType, err.response.data));
     }

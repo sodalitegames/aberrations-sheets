@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
@@ -21,8 +20,6 @@ const ReceiveMoney = () => {
     e.preventDefault();
 
     dispatch(updateSheetStart('characters', charSheet._id, { wallet: charSheet.wallet + +amount }));
-
-    dispatch(setModal(null));
   };
 
   return (

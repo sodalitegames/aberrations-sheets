@@ -25,8 +25,6 @@ const CampaignPlayersPage = () => {
 
   const [player, setPlayer] = useState(null);
 
-  console.log(player);
-
   return (
     <SheetPageContent title="Players" columns={4}>
       {/* All Players */}

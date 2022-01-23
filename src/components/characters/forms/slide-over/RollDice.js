@@ -72,13 +72,13 @@ const RollDice = () => {
 
     // If any injured, disturbed, or experience was gained, save that to the database
     if (data.injured) {
-      dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured + data.injured } }));
+      dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured + data.injured } }, { keepOpen: true }));
     }
     if (data.disturbed) {
-      dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, disturbed: charSheet.conditions.disturbed + data.disturbed } }));
+      dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, disturbed: charSheet.conditions.disturbed + data.disturbed } }, { keepOpen: true }));
     }
     if (data.experience) {
-      dispatch(updateSheetStart('characters', charSheet._id, { [data.stat]: { ...charSheet[data.stat], experience: charSheet[data.stat].experience + data.experience } }));
+      dispatch(updateSheetStart('characters', charSheet._id, { [data.stat]: { ...charSheet[data.stat], experience: charSheet[data.stat].experience + data.experience } }, { keepOpen: true }));
     }
   };
 

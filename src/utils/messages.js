@@ -17,3 +17,27 @@ export const getHealthMessage = (current, max) => {
 export const getWalletMessage = wallet => {
   return 'Cash on your person';
 };
+
+export const getTransactionHeading = ({ senderName, recipientName, sellPrice, documentType, document }, sent) => {
+  if (sent) {
+    if (documentType === 'wallet') {
+      return `You offered to pay ${recipientName} ${document.wallet} monies`;
+    }
+
+    if (sellPrice) {
+      return `You asked ${recipientName} to buy your ${document.name} for ${sellPrice} monies`;
+    }
+
+    return `You offered your ${document.name} to ${recipientName}`;
+  }
+
+  if (documentType === 'wallet') {
+    return `${senderName} wants to pay you ${document.wallet} monies`;
+  }
+
+  if (sellPrice) {
+    return `${senderName} wants to sell you their ${document.name} for ${sellPrice} monies`;
+  }
+
+  return `${senderName} wants to give you their ${document.name}`;
+};

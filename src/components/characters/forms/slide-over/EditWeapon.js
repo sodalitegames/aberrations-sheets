@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
@@ -65,8 +64,6 @@ const EditWeapon = ({ id }) => {
       if (!range) return alert('Must provide a range');
 
       dispatch(updateSheetResourceStart('characters', charSheet._id, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description }));
-
-      dispatch(setSlideOver(null));
       return;
     }
 
@@ -77,8 +74,6 @@ const EditWeapon = ({ id }) => {
         description,
       })
     );
-
-    dispatch(setSlideOver(null));
   };
 
   return (

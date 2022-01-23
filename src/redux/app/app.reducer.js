@@ -6,25 +6,14 @@ const INITIAL_STATE = {
   modal: null,
   slideOver: null,
   notifications: [
-    {
-      _id: '1',
-      heading: 'Successfully saved! 1',
-      message: 'Anyone with a link can now view this file.',
-      dismissed: false,
-    },
-    {
-      _id: '2',
-      heading: 'Successfully saved! 2',
-      message: 'Anyone with a link can now view this file.',
-      dismissed: false,
-    },
-    {
-      _id: '3',
-      heading: 'Successfully saved! 3',
-      message: 'Anyone with a link can now view this file.',
-      dismissed: false,
-    },
+    // {
+    //   _id: '1',
+    //   heading: 'Successfully saved!',
+    //   message: 'Anyone with a link can now view this file.',
+    //   dismissed: false,
+    // }
   ],
+  alert: null,
 };
 
 const appReducer = (state = INITIAL_STATE, action) => {
@@ -42,12 +31,22 @@ const appReducer = (state = INITIAL_STATE, action) => {
     case AppActionTypes.ADD_NOTIFICATION:
       return {
         ...state,
-        notifications: [...state.notifications, action.payload],
+        notifications: [...state.notifications, { ...action.payload, _id: state.notifications.length + 1, dismissed: false }],
       };
     case AppActionTypes.DISMISS_NOTIFICATION:
       return {
         ...state,
         notifications: replaceItemById(state.notifications, action.payload._id, { ...action.payload, dismissed: true }),
+      };
+    case AppActionTypes.SET_ALERT:
+      return {
+        ...state,
+        alert: action.payload,
+      };
+    case AppActionTypes.DISMISS_ALERT:
+      return {
+        ...state,
+        alert: null,
       };
     default:
       return state;

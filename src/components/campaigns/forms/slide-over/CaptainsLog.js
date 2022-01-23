@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
@@ -35,14 +34,10 @@ const CaptainsLog = ({ id }) => {
 
     if (id) {
       dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'logs', id, { date, content }));
-
-      dispatch(setSlideOver(null));
       return;
     }
 
     dispatch(createSheetResourceStart('campaigns', campSheet._id, 'logs', { date, content }));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

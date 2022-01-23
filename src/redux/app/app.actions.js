@@ -19,3 +19,12 @@ export const dismissNotification = notification => ({
   type: AppActionTypes.DISMISS_NOTIFICATION,
   payload: notification,
 });
+
+export const setAlert = alert => ({
+  type: AppActionTypes.SET_ALERT,
+  payload: alert,
+});
+
+export const dismissAlert = () => ({
+  type: AppActionTypes.DISMISS_ALERT,
+});

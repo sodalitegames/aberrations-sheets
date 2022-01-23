@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
@@ -29,8 +28,6 @@ const CampDetails = () => {
     if (!details) return alert('Must provide details');
 
     dispatch(updateSheetStart('campaigns', campSheet._id, { details }));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCampaign, selectError, selectLoading, selectReload } from '../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectCampaignError, selectLoading, selectReload } from '../redux/campaign/campaign.selectors';
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
@@ -23,7 +23,7 @@ export default function CharacterSheet() {
   const dispatch = useDispatch();
 
   const campSheet = useSelector(selectCurrentCampaign);
-  const error = useSelector(selectError);
+  const error = useSelector(selectCampaignError);
   const loading = useSelector(selectLoading);
   const reload = useSelector(selectReload);
 
@@ -62,7 +62,7 @@ export default function CharacterSheet() {
       <div>
         {reload ? <Banner icon="info" theme="secondary" message={reload} button={{ text: 'Reload', custom: () => dispatch(fetchCurrentSheetStart('campaigns', campId)) }} /> : null}
         <div>
-          <SheetPageHeader title={campSheet ? `Aberrations RPG Sheets -  ${campSheet.name}` : 'Aberrations RPG Sheets'} type="campaign" />
+          <SheetPageHeader title={campSheet ? `Aberrations RPG Sheets -  ${campSheet.name}` : 'Aberrations RPG Sheets'} transactions={campSheet ? campSheet.transactions : null} type="campaign" />
           <main className="-mt-24 pb-8">
             {!loading && campSheet ? (
               <React.Suspense fallback={<Loading />}>

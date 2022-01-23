@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
@@ -238,8 +237,6 @@ const EquippedWearables = () => {
         equipped: { ...charSheet.equipped, wearables: body },
       })
     );
-
-    dispatch(setSlideOver(null));
   };
 
   return (

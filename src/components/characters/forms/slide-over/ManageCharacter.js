@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../../../../redux/user/user.selectors';
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver, setModal } from '../../../../redux/app/app.actions';
+import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
@@ -53,8 +53,6 @@ const ManageCharacter = () => {
         charBackground,
       })
     );
-
-    dispatch(setSlideOver(null));
   };
 
   return (

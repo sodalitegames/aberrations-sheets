@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
@@ -36,8 +35,6 @@ const EditStat = ({ id }) => {
     e.preventDefault();
 
     dispatch(updateSheetStart('characters', charSheet._id, { [id]: { points, modifier, experience, advantage } }));
-
-    dispatch(setModal(null));
   };
 
   return (

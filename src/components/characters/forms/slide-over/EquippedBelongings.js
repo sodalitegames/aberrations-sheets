@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
@@ -120,8 +119,6 @@ const EquippedBelongings = ({ id }) => {
 
     // Update the character sheet in the database
     dispatch(updateSheetStart('characters', charSheet._id, { equipped: { ...charSheet.equipped, [id]: body } }));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

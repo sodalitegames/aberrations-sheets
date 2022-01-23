@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 import { selectAugmentations } from '../../../../redux/resource/resource.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { updateSheetStart, createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
@@ -88,8 +87,6 @@ const PurchaseAugmentation = () => {
 
     dispatch(createSheetResourceStart('characters', charSheet._id, 'augmentations', { name, pointCost, description, universalId }));
     dispatch(updateSheetStart('characters', charSheet._id, { upgradePoints: charSheet.upgradePoints - pointCost }));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

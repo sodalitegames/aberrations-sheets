@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../../../../redux/user/user.selectors';
 import { selectSpecies } from '../../../../redux/resource/resource.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { createSheetForUserStart } from '../../../../redux/user/user.actions';
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 
@@ -84,8 +83,6 @@ const NewCharacter = () => {
         aptitude: { points: species.stats.aptitude },
       })
     );
-
-    dispatch(setSlideOver(null));
   };
 
   return (

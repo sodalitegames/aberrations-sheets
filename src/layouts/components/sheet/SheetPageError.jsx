@@ -13,12 +13,12 @@ const SheetPageError = ({ type, error }) => {
         <div className="sm:flex p-16 justify-between items-center">
           <div className="sm:flex items-center sm:ml-6">
             <p className={classNames('text-4xl font-extrabold sm:text-5xl', type === 'characters' ? 'text-accent2-deep' : type === 'campaigns' ? 'text-accent1-deep' : 'text-gray-900')}>
-              {error.status}
+              {error.status || 500}
             </p>
 
             <div className="sm:border-l sm:border-gray-200 sm:ml-6 sm:pl-6">
-              <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">{error.statusText}</h1>
-              <p className="mt-1 text-base text-gray-500">{error.data.message}</p>
+              <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">{error.statusText || error.message || 'Something went wrong'}</h1>
+              <p className="mt-1 text-base text-gray-500">{error.data?.message || 'Please wait a few minutes and try again later'}</p>
             </div>
           </div>
           <div className="space-x-3 sm:pl-6">

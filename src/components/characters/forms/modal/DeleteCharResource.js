@@ -2,7 +2,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { deleteSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
@@ -29,8 +28,6 @@ const DeleteCharResource = ({ id, data }) => {
     }
 
     dispatch(deleteSheetResourceStart('characters', charSheet._id, data.type, id));
-
-    dispatch(setModal(null));
   };
 
   return (

@@ -2,7 +2,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { deleteSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
@@ -29,8 +28,6 @@ const DeleteCampResource = ({ id, data }) => {
     }
 
     dispatch(deleteSheetResourceStart('campaigns', campSheet._id, data.type, id));
-
-    dispatch(setModal(null));
   };
 
   return (

@@ -5,11 +5,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { XIcon, ExclamationIcon } from '@heroicons/react/outline';
 
 import { selectModal } from '../../../redux/app/app.selectors';
+import { selectResourceError } from '../../../redux/resource/resource.selectors';
+import { selectCharacterError } from '../../../redux/character/character.selectors';
+import { selectCampaignError } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal } from '../../../redux/app/app.actions';
 
 import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
+import { formatValidationErrors } from '../../../utils/validationErrors';
+
+import Notice from '../../../components/shared/Notice';
 
 // Character Sheet
 import DeleteCharacter from '../../../components/characters/forms/modal/DeleteCharacter';
@@ -35,6 +41,10 @@ import DeleteCampResource from '../../../components/campaigns/forms/modal/Delete
 export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, children }) => {
   const dispatch = useDispatch();
 
+  const characterError = useSelector(selectCharacterError);
+  const campaignError = useSelector(selectCampaignError);
+  const resourceError = useSelector(selectResourceError);
+
   return (
     <form onSubmit={submitHandler}>
       <div>
@@ -53,6 +63,10 @@ export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, 
           <fieldset className="mb-4">{children}</fieldset>
         </div>
       </div>
+
+      {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+      {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+      {resourceError ? <Notice status="error" heading={resourceError.statusText} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
       {/* Action buttons panel */}
       <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
