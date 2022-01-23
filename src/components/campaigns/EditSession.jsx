@@ -26,7 +26,7 @@ const dueDates = [
   // More items...
 ];
 
-const SessionDetails = ({ session }) => {
+const EditSession = ({ session }) => {
   const [assigned, setAssigned] = useState(assignees[0]);
   const [labelled, setLabelled] = useState(labels[0]);
   const [dated, setDated] = useState(dueDates[0]);
@@ -186,4 +186,4 @@ const SessionDetails = ({ session }) => {
   );
 };
 
-export default SessionDetails;
+export default EditSession;

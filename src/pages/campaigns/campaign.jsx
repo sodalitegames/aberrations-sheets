@@ -19,7 +19,7 @@ import ListContainer from '../../components/shared/data/ListContainer';
 import Button from '../../components/shared/Button';
 
 import DisplayLog from '../../components/sheets/display/DisplayLog';
-import SessionDetails from '../../components/campaigns/SessionDetails';
+import EditSession from '../../components/campaigns/EditSession';
 
 const CampaignCampaignPage = () => {
   const dispatch = useDispatch();
@@ -83,7 +83,7 @@ const CampaignCampaignPage = () => {
                         </Disclosure.Button>
                       </dt>
                       <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                        <SessionDetails session={activeSession} />
+                        <EditSession session={activeSession} />
                       </Disclosure.Panel>
                     </>
                   )}
@@ -110,7 +110,7 @@ const CampaignCampaignPage = () => {
                         </Disclosure.Button>
                       </dt>
                       <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                        <SessionDetails session={session} />
+                        <EditSession session={session} />
                       </Disclosure.Panel>
                     </>
                   )}
@@ -137,7 +137,7 @@ const CampaignCampaignPage = () => {
                         </Disclosure.Button>
                       </dt>
                       <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                        <SessionDetails session={session} />
+                        <EditSession session={session} />
                       </Disclosure.Panel>
                     </>
                   )}

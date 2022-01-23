@@ -1,19 +1,32 @@
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { CheckCircleIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
-import { setSlideOver } from '../../../redux/app/app.actions';
+import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
+import ModalTypes from '../../../utils/ModalTypes';
+import classNames from '../../../utils/classNames';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
 import PanelSection from '../../../components/sheets/PanelSection';
 import ListContainer from '../../../components/shared/data/ListContainer';
 
+import Button from '../../../components/shared/Button';
+
+// import DisplayEnvironment from '../../../components/campaigns/display/DisplayEnvironment';
+
 const CampaignEnvironmentsPage = () => {
   const dispatch = useDispatch();
   const campSheet = useSelector(selectCurrentCampaign);
+
+  const [environment, setEnvironment] = useState(campSheet.environments[0]);
+
+  console.log(environment);
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
@@ -30,7 +43,18 @@ const CampaignEnvironmentsPage = () => {
             }}
           >
             {campSheet.environments.map(environment => (
-              <div>{environment._id}</div>
+              <div
+                key={environment._id}
+                className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer', environment.equipped ? '' : '')}
+                onClick={() => setEnvironment(environment)}
+              >
+                {/* <DisplayEnvironment key={environment._id} environment={environment} condensed listItem /> */}
+                {environment.equipped ? (
+                  <div className="shrink-0 ml-2" title="Equipped">
+                    <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                  </div>
+                ) : null}
+              </div>
             ))}
           </ListContainer>
         </div>
@@ -38,7 +62,38 @@ const CampaignEnvironmentsPage = () => {
 
       {/* Selected Environment */}
       <PanelSection title="Selected Environment" colSpan={3}>
-        {JSON.stringify(campSheet.environments)}
+        {environment ? (
+          <div className="grid gap-8 grid-cols-3 divide-x divide-gray-200">
+            <div className="col-span-2">{/* <DisplayEnvironment environment={environment} sheetType={sheetType} /> */}</div>
+
+            <div className="col-span-1 space-y-4 pl-8">
+              <Button>{environment.active ? 'Deactivate' : 'Activate'}</Button>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.environmentForm, id: environment._id }))}>Edit</Button>
+              <Button
+                alert
+                onClick={() =>
+                  dispatch(
+                    setModal({
+                      type: ModalTypes.deleteResource,
+                      id: environment._id,
+                      data: {
+                        sheetType: 'campaigns',
+                        resourceType: 'environments',
+                        title: `Are you sure you want to delete ${environment.name}?`,
+                        submitText: `Yes, delete ${environment.name}`,
+                        equipped: environment.equipped,
+                      },
+                    })
+                  )
+                }
+              >
+                Delete
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm italic text-gray-400">Please create or select an environment to get started.</p>
+        )}
       </PanelSection>
     </SheetPageContent>
   );

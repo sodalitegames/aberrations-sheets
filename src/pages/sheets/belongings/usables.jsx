@@ -46,10 +46,19 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.usables : campSheet.usables).map(usable => (
-              <div key={usable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer', usable.equipped ? '' : '')} onClick={() => setUsable(usable)}>
+              <div key={usable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setUsable(usable)}>
                 <DisplayUsable key={usable._id} usable={usable} sheetType={sheetType} condensed listItem />
-                {usable.equipped ? (
+
+                {/* Display if it's a character sheet usable is equipped */}
+                {sheetType === 'characters' && usable.equipped ? (
                   <div className="shrink-0 ml-2" title="Equipped">
+                    <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                  </div>
+                ) : null}
+
+                {/* Display if it's a campaign sheet and usable is active */}
+                {sheetType === 'campaigns' && usable.active ? (
+                  <div className="shrink-0 ml-2" title="Active">
                     <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
                   </div>
                 ) : null}
@@ -68,9 +77,10 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button>{usable.equipped ? 'Unequip' : 'Equip'}</Button>
-              <Button>Give</Button>
-              <Button>Sell</Button>
+              {sheetType === 'characters' ? <Button>{usable.equipped ? 'Unequip' : 'Equip'}</Button> : null}
+              {sheetType === 'campaigns' ? <Button>{usable.npcId ? 'Unassign' : 'Assign'}</Button> : null}
+              {sheetType === 'campaigns' ? <Button>{usable.active ? 'Deactivate' : 'Activate'}</Button> : null}
+              <Button>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, id: usable._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert

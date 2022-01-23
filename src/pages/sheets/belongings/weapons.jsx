@@ -46,10 +46,19 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.weapons : campSheet.weapons).map(weapon => (
-              <div key={weapon._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer', weapon.equipped ? '' : '')} onClick={() => setWeapon(weapon)}>
+              <div key={weapon._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setWeapon(weapon)}>
                 <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={sheetType} condensed listItem />
-                {weapon.equipped ? (
+
+                {/* Display if it's a character sheet weapon is equipped */}
+                {sheetType === 'characters' && weapon.equipped ? (
                   <div className="shrink-0 ml-2" title="Equipped">
+                    <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                  </div>
+                ) : null}
+
+                {/* Display if it's a campaign sheet and weapon is active */}
+                {sheetType === 'campaigns' && weapon.active ? (
+                  <div className="shrink-0 ml-2" title="Active">
                     <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
                   </div>
                 ) : null}
@@ -68,9 +77,10 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button>{weapon.equipped ? 'Unequip' : 'Equip'}</Button>
-              <Button>Give</Button>
-              <Button>Sell</Button>
+              {sheetType === 'characters' ? <Button>{weapon.equipped ? 'Unequip' : 'Equip'}</Button> : null}
+              {sheetType === 'campaigns' ? <Button>{weapon.npcId ? 'Unassign' : 'Assign'}</Button> : null}
+              {sheetType === 'campaigns' ? <Button>{weapon.active ? 'Deactivate' : 'Activate'}</Button> : null}
+              <Button>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.editWeaponForm, id: weapon._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert

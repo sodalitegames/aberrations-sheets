@@ -46,14 +46,19 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.wearables : campSheet.wearables).map(wearable => (
-              <div
-                key={wearable._id}
-                className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer', wearable.equipped ? '' : '')}
-                onClick={() => setWearable(wearable)}
-              >
+              <div key={wearable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setWearable(wearable)}>
                 <DisplayWearable key={wearable._id} wearable={wearable} sheetType={sheetType} condensed listItem />
-                {wearable.equipped ? (
+
+                {/* Display if it's a character sheet wearable is equipped */}
+                {sheetType === 'characters' && wearable.equipped ? (
                   <div className="shrink-0 ml-2" title="Equipped">
+                    <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                  </div>
+                ) : null}
+
+                {/* Display if it's a campaign sheet and wearable is active */}
+                {sheetType === 'campaigns' && wearable.active ? (
+                  <div className="shrink-0 ml-2" title="Active">
                     <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
                   </div>
                 ) : null}
@@ -72,9 +77,10 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button>{wearable.equipped ? 'Unequip' : 'Equip'}</Button>
-              <Button>Give</Button>
-              <Button>Sell</Button>
+              {sheetType === 'characters' ? <Button>{wearable.equipped ? 'Unequip' : 'Equip'}</Button> : null}
+              {sheetType === 'campaigns' ? <Button>{wearable.npcId ? 'Unassign' : 'Assign'}</Button> : null}
+              {sheetType === 'campaigns' ? <Button>{wearable.active ? 'Deactivate' : 'Activate'}</Button> : null}
+              <Button>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, id: wearable._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert
