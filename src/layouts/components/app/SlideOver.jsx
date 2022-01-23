@@ -33,13 +33,14 @@ import Consumable from '../../../components/characters/forms/slide-over/Consumab
 import Usable from '../../../components/characters/forms/slide-over/Usable';
 import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
-import CharacterLog from '../../../components/characters/forms/slide-over/CharacterLog';
 
 // Campaign Sheet
 import CampOverview from '../../../components/campaigns/forms/slide-over/CampOverview';
 import CampDetails from '../../../components/campaigns/forms/slide-over/CampDetails';
-import CaptainsLog from '../../../components/campaigns/forms/slide-over/CaptainsLog';
 import ManageInvites from '../../../components/campaigns/forms/slide-over/ManageInvites';
+
+// Shared
+import LogForm from '../../../components/sheets/forms/slide-over/LogForm';
 
 export const SlideOverForm = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
   const dispatch = useDispatch();
@@ -188,12 +189,12 @@ const SlideOver = () => {
                 {slideOver && slideOver.type === SlideOverTypes.usableForm ? <Usable id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.charLogForm ? <CharacterLog id={slideOver.id} /> : null}
                 {/* Campaign Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.captainsLogForm ? <CaptainsLog id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}
+                {/* Shared */}
+                {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm id={slideOver.id} data={slideOver.data} /> : null}
               </div>
             </Transition.Child>
           </div>

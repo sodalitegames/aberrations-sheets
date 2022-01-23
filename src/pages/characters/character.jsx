@@ -62,15 +62,15 @@ const CharacterCharacterPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={charSheet.characterLogs}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm })), text: 'Add a new Character Log' }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'Add a new Character Log' }}
             empty={{
               heading: 'No Character Logs',
               message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm })), text: 'New Character Log' },
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'New Character Log' },
             }}
           >
             {charSheet.characterLogs.map(log => (
-              <DisplayLog key={log._id} log={log} sheet="characters" />
+              <DisplayLog key={log._id} log={log} sheetType="characters" />
             ))}
           </ListContainer>
         </div>

@@ -14,12 +14,12 @@ const SlideOverTypes = {
   usableForm: 'USABLE_FORM',
   charDescriptionForm: 'CHARACTER_DESCRIPTION_FORM',
   charBackgroundForm: 'CHARACTER_BACKGROUND_FORM',
-  charLogForm: 'CHARACTER_LOG_FORM',
 
   campOverviewForm: 'CAMPAIGN_OVERVIEW_FORM',
   campDetailsForm: 'CAMPAIGN_DETAILS_FORM',
-  captainsLogForm: 'CAPTAINS_LOG_FORM',
   manageSentInvites: 'MANAGE_SENT_INVITES',
+
+  logForm: 'LOG_FORM',
 };
 
 export default SlideOverTypes;

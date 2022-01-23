@@ -153,15 +153,15 @@ const CampaignCampaignPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.captainsLogs}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.captainsLogForm })), text: `Add a new Captain's Log` }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } })), text: `Add a new Captain's Log` }}
             empty={{
               heading: `No Captain's Logs`,
               message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.captainsLogForm })), text: `New Captain's Log` },
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } })), text: `New Captain's Log` },
             }}
           >
             {campSheet.captainsLogs.map(log => (
-              <DisplayLog key={log._id} log={log} sheet="campaigns" />
+              <DisplayLog key={log._id} log={log} sheetType="campaigns" />
             ))}
           </ListContainer>
         </div>
