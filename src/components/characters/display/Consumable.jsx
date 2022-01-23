@@ -25,9 +25,15 @@ const Consumable = ({ consumable, condensed, noButtonPanel }) => {
       noButtonPanel={noButtonPanel}
       editable={{ type: SlideOverTypes.consumableForm, id: consumable._id }}
       deletable={{
-        type: ModalTypes.deleteCharResource,
+        type: ModalTypes.deleteResource,
         id: consumable._id,
-        data: { type: 'consumables', title: `Are you sure you want to delete ${consumable.name}?`, submitText: `Yes, delete ${consumable.name}`, equipped: consumable.equipped },
+        data: {
+          sheetType: 'characters',
+          resourceType: 'consumables',
+          title: `Are you sure you want to delete ${consumable.name}?`,
+          submitText: `Yes, delete ${consumable.name}`,
+          equipped: consumable.equipped,
+        },
       }}
     >
       <DescriptionList

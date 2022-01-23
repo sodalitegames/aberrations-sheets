@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
 import { deleteSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
@@ -15,9 +16,10 @@ import { ModalForm } from '../../../../layouts/components/app/Modal';
 //   equipped?: boolean,
 // }
 
-const DeleteCampResource = ({ id, data }) => {
+const DeleteResource = ({ id, data }) => {
   const dispatch = useDispatch();
 
+  const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
   const submitHandler = async e => {
@@ -27,7 +29,13 @@ const DeleteCampResource = ({ id, data }) => {
       return alert('You cannot delete this belonging until you unequip it.');
     }
 
-    dispatch(deleteSheetResourceStart('campaigns', campSheet._id, data.type, id));
+    if (data.sheetType === 'characters') {
+      dispatch(deleteSheetResourceStart('characters', charSheet._id, data.resourceType, id));
+    }
+
+    if (data.sheetType === 'campaigns') {
+      dispatch(deleteSheetResourceStart('campaigns', campSheet._id, data.resourceType, id));
+    }
   };
 
   return (
@@ -39,4 +47,4 @@ const DeleteCampResource = ({ id, data }) => {
   );
 };
 
-export default DeleteCampResource;
+export default DeleteResource;

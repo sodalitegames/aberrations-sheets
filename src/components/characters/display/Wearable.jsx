@@ -51,9 +51,15 @@ const Wearable = ({ wearable, condensed, noButtonPanel }) => {
       noButtonPanel={noButtonPanel}
       editable={{ type: SlideOverTypes.wearableForm, id: wearable._id }}
       deletable={{
-        type: ModalTypes.deleteCharResource,
+        type: ModalTypes.deleteResource,
         id: wearable._id,
-        data: { type: 'wearables', title: `Are you sure you want to delete ${wearable.name}?`, submitText: `Yes, delete ${wearable.name}`, equipped: wearable.equipped },
+        data: {
+          sheetType: 'characters',
+          resourceType: 'wearables',
+          title: `Are you sure you want to delete ${wearable.name}?`,
+          submitText: `Yes, delete ${wearable.name}`,
+          equipped: wearable.equipped,
+        },
       }}
     >
       <DescriptionList

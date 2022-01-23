@@ -18,7 +18,7 @@ import { ButtonPanel } from '../../components/shared/ListItem';
 import ListContainer from '../../components/shared/ListContainer';
 
 import Species from '../../components/characters/display/Species';
-import CharacterLog from '../../components/characters/display/CharacterLog';
+import DisplayLog from '../../components/sheets/display/DisplayLog';
 import EmptyState from '../../components/shared/EmptyState';
 import Invite from '../../components/characters/display/Invite';
 import Campaign from '../../components/characters/display/Campaign';
@@ -70,7 +70,7 @@ const CharacterCharacterPage = () => {
             }}
           >
             {charSheet.characterLogs.map(log => (
-              <CharacterLog key={log._id} log={log} />
+              <DisplayLog key={log._id} log={log} sheet="characters" />
             ))}
           </ListContainer>
         </div>

@@ -18,7 +18,7 @@ import { ButtonPanel } from '../../components/shared/ListItem';
 import ListContainer from '../../components/shared/ListContainer';
 import Button from '../../components/shared/Button';
 
-import CaptainsLog from '../../components/campaigns/display/CaptainsLog';
+import DisplayLog from '../../components/sheets/display/DisplayLog';
 import SessionDetails from '../../components/campaigns/SessionDetails';
 
 const CampaignCampaignPage = () => {
@@ -161,7 +161,7 @@ const CampaignCampaignPage = () => {
             }}
           >
             {campSheet.captainsLogs.map(log => (
-              <CaptainsLog key={log._id} log={log} />
+              <DisplayLog key={log._id} log={log} sheet="campaigns" />
             ))}
           </ListContainer>
         </div>

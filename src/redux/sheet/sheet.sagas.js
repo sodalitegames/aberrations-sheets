@@ -267,7 +267,7 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
     yield put(deleteSheetResourceSuccess(sheetType, resourceType, resourceId, response.data.data));
 
     // Add a notification
-    yield put(addNotification({ heading: `${resourceType} deleted`, message: `${response.data.data.doc.name || resourceType} has been deleted` }));
+    yield put(addNotification({ heading: `${resourceType} deleted`, message: `${resourceType} has been deleted` }));
 
     if (!config?.keepOpen) {
       // Close out the modal or slideover if it is open

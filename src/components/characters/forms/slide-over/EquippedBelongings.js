@@ -12,7 +12,7 @@ import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 import Row from '../../../shared/Row';
 import { SelectInput } from '../../../shared/Select';
 
-import Weapon from '../../display/Weapon';
+import DisplayWeapon from '../../../sheets/display/DisplayWeapon';
 import Consumable from '../../display/Consumable';
 import Usable from '../../display/Usable';
 
@@ -134,7 +134,7 @@ const EquippedBelongings = ({ id }) => {
             <SelectInput name="weapon1" value={equipped1 ? equipped1._id : ''} options={belongingsList} changeHandler={selectEquipped1} />
             {equipped1 ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Weapon weapon={equipped1} noButtonPanel />
+                <DisplayWeapon weapon={equipped1} noButtonPanel />
               </ul>
             ) : null}
           </Row>
@@ -142,7 +142,7 @@ const EquippedBelongings = ({ id }) => {
             <SelectInput name="weapon2" value={equipped2 ? equipped2._id : ''} options={belongingsList} changeHandler={selectEquipped2} />
             {equipped2 ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Weapon weapon={equipped2} noButtonPanel />
+                <DisplayWeapon weapon={equipped2} noButtonPanel />
               </ul>
             ) : null}
           </Row>

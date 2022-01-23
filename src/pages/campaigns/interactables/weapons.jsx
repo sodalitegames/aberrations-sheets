@@ -11,7 +11,7 @@ import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent
 import PanelSection from '../../../components/shared/PanelSection';
 import ListContainer from '../../../components/shared/ListContainer';
 
-import Weapon from '../../../components/characters/display/Weapon';
+import DisplayWeapon from '../../../components/sheets/display/DisplayWeapon';
 
 const CampaignWeaponsPage = () => {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const CampaignWeaponsPage = () => {
             }}
           >
             {campSheet.weapons.map(weapon => (
-              <Weapon key={weapon._id} weapon={weapon} />
+              <DisplayWeapon key={weapon._id} weapon={weapon} />
             ))}
           </ListContainer>
         </div>
