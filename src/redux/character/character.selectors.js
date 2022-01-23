@@ -4,7 +4,7 @@ const selectCharacter = state => state.character;
 
 export const selectCurrentCharacter = createSelector([selectCharacter], character => character.current);
 
-export const selectError = createSelector([selectCharacter], character => character.error);
+export const selectCharacterError = createSelector([selectCharacter], character => character.error);
 
 export const selectLoading = createSelector([selectCharacter], character => character.loading);
 

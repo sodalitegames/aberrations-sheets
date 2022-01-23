@@ -3,14 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Select from '../../../shared/Select';
+import Select from '../../../shared/form/Select';
 import Notice from '../../../shared/Notice';
 
 const TakeARest = () => {
@@ -125,8 +124,6 @@ const TakeARest = () => {
         })
       );
 
-      dispatch(setModal(null));
-
       return;
     }
 
@@ -141,8 +138,6 @@ const TakeARest = () => {
           aptitude: { ...charSheet.aptitude, advantage: 0 },
         })
       );
-
-      dispatch(setModal(null));
 
       return;
     }

@@ -1,7 +1,7 @@
-const NewlineText = ({ text }) => {
+const NewlineText = ({ text, children }) => {
   return (
     <span className="space-y-1">
-      {text.split('\n').map((string, index) => (
+      {(text || children).split('\n').map((string, index) => (
         <p key={index}>{string}</p>
       ))}
     </span>

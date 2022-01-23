@@ -4,7 +4,7 @@ const selectCampaign = state => state.campaign;
 
 export const selectCurrentCampaign = createSelector([selectCampaign], campaign => campaign.current);
 
-export const selectError = createSelector([selectCampaign], campaign => campaign.error);
+export const selectCampaignError = createSelector([selectCampaign], campaign => campaign.error);
 
 export const selectLoading = createSelector([selectCampaign], campaign => campaign.loading);
 

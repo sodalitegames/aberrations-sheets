@@ -39,7 +39,7 @@ export function* fetchResource({ payload: { resourceType } }) {
         break;
     }
   } catch (error) {
-    yield put(fetchResourceFailure(resourceType, error.response.data));
+    yield put(fetchResourceFailure(resourceType, error.response));
   }
 }
 

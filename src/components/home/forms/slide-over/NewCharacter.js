@@ -4,20 +4,19 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../../../../redux/user/user.selectors';
 import { selectSpecies } from '../../../../redux/resource/resource.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { createSheetForUserStart } from '../../../../redux/user/user.actions';
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
-import Row from '../../../shared/Row';
-import { SelectInput } from '../../../shared/Select';
-import { LoadingSpinner } from '../../../shared/SubmitButton';
-import Detail from '../../../shared/Detail';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
+import Row from '../../../shared/form/Row';
+import { SelectInput } from '../../../shared/form/Select';
+import { LoadingSpinner } from '../../../shared/form/SubmitButton';
+import Detail from '../../../shared/form/Detail';
 
-import Species from '../../../characters/display/Species';
+import DisplaySpecies from '../../../sheets/display/DisplaySpecies';
 
 const NewCharacter = () => {
   const dispatch = useDispatch();
@@ -84,8 +83,6 @@ const NewCharacter = () => {
         aptitude: { points: species.stats.aptitude },
       })
     );
-
-    dispatch(setSlideOver(null));
   };
 
   return (
@@ -99,7 +96,7 @@ const NewCharacter = () => {
             <SelectInput name="species" value={species ? species.id : ''} options={newSpeciesList} changeHandler={selectCurrentSpecies} />
             {species ? (
               <ul className="mt-3 divide-y divide-gray-200">
-                <Species species={species} />
+                <DisplaySpecies species={species} />
               </ul>
             ) : null}
           </>

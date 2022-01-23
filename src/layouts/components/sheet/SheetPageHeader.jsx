@@ -2,14 +2,17 @@ import { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { selectAllNotifications } from '../../../redux/app/app.selectors';
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
 
+import { dismissNotification } from '../../../redux/app/app.actions';
 import { signOutStart } from '../../../redux/user/user.actions';
 
-import { Menu, Popover, Transition } from '@headlessui/react';
-import { MenuIcon, XIcon } from '@heroicons/react/outline';
+import { Menu, Popover, Transition, Tab } from '@headlessui/react';
+import { MenuIcon, BellIcon, ChatAltIcon, XIcon, CheckCircleIcon } from '@heroicons/react/outline';
 
 import classNames from '../../../utils/classNames';
+import { getTransactionHeading } from '../../../utils/messages';
 
 const navigation = {
   character: [
@@ -130,45 +133,180 @@ const MobileNavigation = ({ title, type, user }) => {
   );
 };
 
-const DesktopNavigation = ({ type }) => {
+const Transaction = ({ transaction, sent }) => {
   return (
-    <div className="w-full py-5 mb-8 lg:border-t lg:border-white lg:border-opacity-20">
-      <div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-center">
-        {/* Primary navigation */}
-        <div className="hidden lg:block lg:col-span-2">
-          <nav className="flex space-x-4">
-            {navigation[type].map(item => (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                className={({ isActive }) => classNames(isActive ? 'text-white bg-white/10' : 'text-gray-300', 'text-sm font-medium rounded-md px-3 py-2 hover:bg-white/10 hover:text-white min-w-max')}
-              >
-                {item.name}
-              </NavLink>
-            ))}
-          </nav>
+    <div className="w-full bg-white rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+      <div className="p-4">
+        <div className="flex items-start">
+          <div>
+            <p className="text-sm font-medium text-gray-900">{getTransactionHeading(transaction, sent)}</p>
+            {transaction.message ? <p className="mt-1 text-sm text-gray-500">{transaction.message}</p> : null}
+            {sent ? (
+              <div className="mt-3 flex space-x-7">
+                <button type="button" className="bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                  Revoke
+                </button>
+                <button type="button" className="bg-white rounded-md text-sm font-medium text-red-600 hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                  Delete
+                </button>
+              </div>
+            ) : (
+              <div className="mt-3 flex space-x-7">
+                <button type="button" className="bg-white rounded-md text-sm font-medium text-green-600 hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                  Accept
+                </button>
+                <button type="button" className="bg-white rounded-md text-sm font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                  Decline
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-const RightSectionOnDesktop = () => {
+const RightSectionOnDesktop = ({ transactions, type }) => {
   const dispatch = useDispatch();
+
+  const notifications = useSelector(selectAllNotifications);
 
   return (
     <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
-      {/* <button
-        type="button"
-        className={classNames(
-          type === 'character' ? 'text-gray-200' : '',
-          type === 'campaign' ? 'text-gray-200' : '',
-          'shrink-0 p-1 rounded-full hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white'
-        )}
-      >
-        <span className="sr-only">View notifications</span>
-        <BellIcon className="h-6 w-6" aria-hidden="true" />
-      </button> */}
+      {/* Transactions dropdown */}
+      <Popover className="relative mr-1">
+        <Popover.Button
+          className={classNames(
+            type === 'character' ? 'text-gray-200' : '',
+            type === 'campaign' ? 'text-gray-200' : '',
+            'relative shrink-0 p-3 rounded-full hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white'
+          )}
+        >
+          <span className="sr-only">View transactions</span>
+          <ChatAltIcon className="h-6 w-6" aria-hidden="true" />
+          {/* <span className="absolute top-1 right-1 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span> */}
+        </Popover.Button>
+
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-200"
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <Popover.Panel className="absolute z-10 w-72 px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
+            <div className="overflow-y-scroll hide-scrollbar max-h-screen rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+              <div className="relative flex flex-col bg-white">
+                <div className="w-full max-w-md px-2 sm:px-0">
+                  <Tab.Group>
+                    <Tab.List className="flex p-1 space-x-1 bg-gray-50">
+                      {['Sent', 'Received'].map((tab, index) => (
+                        <Tab
+                          key={index}
+                          className={({ selected }) =>
+                            classNames(
+                              'w-full py-2.5 text-sm leading-5 font-medium rounded-lg',
+                              'focus:outline-none focus:ring-2 ring-offset-2 ring-offset-gray-900 ring-white ring-opacity-60',
+                              selected ? 'bg-white shadow' : 'text-gray-500 hover:bg-white hover:text-gray-800'
+                            )
+                          }
+                        >
+                          {tab}
+                        </Tab>
+                      ))}
+                    </Tab.List>
+                    <Tab.Panels className="mt-2">
+                      {/* Transactions Sent Panel */}
+                      <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60 space-y-6')}>
+                        {transactions.sent.map(transaction => (
+                          <Transaction key={transaction._id} transaction={transaction} sent={true} />
+                        ))}
+                      </Tab.Panel>
+
+                      {/* Transactions Received Panel */}
+                      <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60')}>
+                        {transactions.received.map(transaction => (
+                          <Transaction key={transaction._id} transaction={transaction} />
+                        ))}
+                      </Tab.Panel>
+                    </Tab.Panels>
+                  </Tab.Group>
+                  <div className="p-2 bg-gray-50">
+                    <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                      <span className="flex items-center justify-center">
+                        <button className="text-sm font-medium text-gray-600 cursor-pointer">Show resolved</button>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Popover.Panel>
+        </Transition>
+      </Popover>
+
+      {/* Notifications dropdown */}
+      <Popover className="relative">
+        <Popover.Button
+          className={classNames(
+            type === 'character' ? 'text-gray-200' : '',
+            type === 'campaign' ? 'text-gray-200' : '',
+            'relative shrink-0 p-3 rounded-full hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white'
+          )}
+        >
+          <span className="sr-only">View notifications</span>
+          <BellIcon className="h-6 w-6" aria-hidden="true" />
+          {/* <span className="absolute top-1 right-1 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span> */}
+        </Popover.Button>
+
+        <Transition
+          as={Fragment}
+          enter="transition ease-out duration-200"
+          enterFrom="opacity-0 translate-y-1"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition ease-in duration-150"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-1"
+        >
+          <Popover.Panel className="absolute z-10 w-72 px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
+            <div className="overflow-y-scroll hide-scrollbar max-h-screen rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+              <div className="relative flex flex-col bg-white">
+                {notifications.map(not => (
+                  <div
+                    key={not._id}
+                    className={classNames('flex m-2 mb-1 p-2 rounded-lg', !not.dismissed ? 'bg-gray-50 hover:bg-gray-100 cursor-pointer' : '')}
+                    onClick={() => dispatch(dismissNotification(not))}
+                  >
+                    <div className="shrink-0">
+                      <CheckCircleIcon className={classNames('h-6 w-6', not.dismissed ? 'text-gray-400' : 'text-green-400')} aria-hidden="true" />
+                    </div>
+                    <div className="ml-3 flex-1 pt-0.5">
+                      <p className={classNames('text-sm font-medium', not.dismissed ? 'text-gray-400' : 'text-gray-900')}>{not.heading}</p>
+                      <p className={classNames('mt-1 text-sm', not.dismissed ? 'text-gray-400' : 'text-gray-500')}>{not.message}</p>
+                    </div>
+                  </div>
+                ))}
+                <div className="p-2 bg-gray-50">
+                  {notifications.length ? (
+                    <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                      <span className="flex items-center justify-center">
+                        <button className="text-sm font-medium text-gray-600 cursor-pointer">Mark all as read</button>
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md">
+                      <span className="flex items-center justify-center text-sm font-medium text-gray-400">No notifications</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Popover.Panel>
+        </Transition>
+      </Popover>
 
       {/* Secondary navigation dropdown */}
       <Menu as="div" className="ml-4 relative shrink-0">
@@ -205,30 +343,7 @@ const RightSectionOnDesktop = () => {
   );
 };
 
-const MenuButton = ({ open }) => {
-  return (
-    <div className="absolute right-0 shrink-0 lg:hidden">
-      {/* Mobile menu button */}
-      <Popover.Button className="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-gray-200 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white">
-        <span className="sr-only">Open main menu</span>
-        {open ? <XIcon className="block h-6 w-6" aria-hidden="true" /> : <MenuIcon className="block h-6 w-6" aria-hidden="true" />}
-      </Popover.Button>
-    </div>
-  );
-};
-
-const Logo = ({ title, type }) => {
-  return (
-    <div className="absolute left-0 py-5 shrink-0 lg:static">
-      <Link to={`/${type}s`}>
-        <span className="sr-only">{title}</span>
-        <h3 className="text-xl font-display uppercase text-white">{title}</h3>
-      </Link>
-    </div>
-  );
-};
-
-const SheetPageHeader = ({ title, type }) => {
+const SheetPageHeader = ({ title, transactions, type }) => {
   const currentUser = useSelector(selectCurrentUser);
   return (
     <Popover
@@ -240,15 +355,48 @@ const SheetPageHeader = ({ title, type }) => {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <div className="relative flex flex-wrap items-center justify-center lg:justify-between pt-4 pb-8 lg:py-0">
               {/* Logo */}
-              <Logo title={title} type={type} />
+              <div className="absolute left-0 py-5 shrink-0 lg:static">
+                <Link to={`/${type}s`}>
+                  <span className="sr-only">{title}</span>
+                  <h3 className="text-xl font-display uppercase text-white">{title}</h3>
+                </Link>
+              </div>
+
               {/* Right section on desktop */}
-              <RightSectionOnDesktop />
+              <RightSectionOnDesktop transactions={transactions || { received: [], sent: [] }} type={type} />
+
               {/* Desktop navigation */}
-              <DesktopNavigation type={type} />
-              {/* Menu button */}
-              <MenuButton open={open} />
+              <div className="w-full py-5 mb-8 lg:border-t lg:border-white lg:border-opacity-20">
+                <div className="lg:grid lg:grid-cols-3 lg:gap-8 lg:items-center">
+                  {/* Primary navigation */}
+                  <div className="hidden lg:block lg:col-span-2">
+                    <nav className="flex space-x-4">
+                      {navigation[type].map(item => (
+                        <NavLink
+                          key={item.name}
+                          to={item.href}
+                          className={({ isActive }) =>
+                            classNames(isActive ? 'text-white bg-white/10' : 'text-gray-300', 'text-sm font-medium rounded-md px-3 py-2 hover:bg-white/10 hover:text-white min-w-max')
+                          }
+                        >
+                          {item.name}
+                        </NavLink>
+                      ))}
+                    </nav>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Menu button */}
+              <div className="absolute right-0 shrink-0 lg:hidden">
+                <Popover.Button className="bg-transparent p-2 rounded-md inline-flex items-center justify-center text-gray-200 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white">
+                  <span className="sr-only">Open main menu</span>
+                  {open ? <XIcon className="block h-6 w-6" aria-hidden="true" /> : <MenuIcon className="block h-6 w-6" aria-hidden="true" />}
+                </Popover.Button>
+              </div>
             </div>
           </div>
+
           {/* Mobile navigation */}
           <MobileNavigation title={title} type={type} user={currentUser} />
         </>

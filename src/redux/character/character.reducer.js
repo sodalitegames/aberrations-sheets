@@ -1,4 +1,5 @@
 import SheetActionTypes from '../sheet/sheet.types';
+import AppActionTypes from '../app/app.types';
 
 import { replaceItemById, removeItemById } from '../../utils/arrays';
 
@@ -25,7 +26,6 @@ const characterReducer = (state = INITIAL_STATE, action) => {
         error: null,
       };
     case SheetActionTypes.FETCH_CURRENT_SHEET_SUCCESS:
-      console.log(action.payload);
       return {
         ...state,
         current: action.payload.currentSheet,
@@ -37,6 +37,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.UPDATE_SHEET_SUCCESS:
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           ...action.payload.updatedSheet,
@@ -53,6 +54,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       if (createdResourceType === 'logs') createdResourceType = 'characterLogs';
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           [createdResourceType]: [newResource, ...state.current[createdResourceType]],
@@ -63,6 +65,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       if (updatedResourceType === 'logs') updatedResourceType = 'characterLogs';
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           [updatedResourceType]: replaceItemById(state.current[updatedResourceType], updatedResource._id, updatedResource),
@@ -73,6 +76,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       if (deletedResourceType === 'logs') deletedResourceType = 'characterLogs';
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           [deletedResourceType]: removeItemById(state.current[deletedResourceType], resourceId),
@@ -81,6 +85,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.ADD_CAMPAIGN_TO_CHARACTER_SUCCESS:
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           campaign: action.payload.campaign,
@@ -89,6 +94,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS:
       return {
         ...state,
+        error: null,
         current: {
           ...state.current,
           campaign: undefined,
@@ -110,6 +116,12 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: action.payload.error,
+      };
+    case AppActionTypes.SET_SLIDE_OVER:
+    case AppActionTypes.SET_MODAL:
+      return {
+        ...state,
+        error: null,
       };
     default:
       return state;

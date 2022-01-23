@@ -3,15 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
-import Detail from '../../../shared/Detail';
+import Input from '../../../shared/form/Input';
+import Detail from '../../../shared/form/Detail';
 
 const EditStat = ({ id }) => {
   const dispatch = useDispatch();
@@ -36,8 +35,6 @@ const EditStat = ({ id }) => {
     e.preventDefault();
 
     dispatch(updateSheetStart('characters', charSheet._id, { [id]: { points, modifier, experience, advantage } }));
-
-    dispatch(setModal(null));
   };
 
   return (

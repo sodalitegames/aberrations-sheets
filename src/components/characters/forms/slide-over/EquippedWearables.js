@@ -3,15 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Row from '../../../shared/Row';
-import { SelectInput } from '../../../shared/Select';
+import Row from '../../../shared/form/Row';
+import { SelectInput } from '../../../shared/form/Select';
 
-import Wearable from '../../display/Wearable';
+import DisplayWearable from '../../../sheets/display/DisplayWearable';
 
 const calculateStatMods = equippedWearables => {
   let fortitude = 0;
@@ -238,8 +237,6 @@ const EquippedWearables = () => {
         equipped: { ...charSheet.equipped, wearables: body },
       })
     );
-
-    dispatch(setSlideOver(null));
   };
 
   return (
@@ -248,7 +245,7 @@ const EquippedWearables = () => {
         <SelectInput name="head" value={head ? head._id : ''} options={headList} changeHandler={selectHead} />
         {head ? (
           <ul className="mt-3 divide-y divide-gray-200">
-            <Wearable wearable={head} noButtonPanel />
+            <DisplayWearable wearable={head} noButtonPanel />
           </ul>
         ) : null}
       </Row>
@@ -256,7 +253,7 @@ const EquippedWearables = () => {
         <SelectInput name="face" value={face ? face._id : ''} options={faceList} changeHandler={selectFace} />
         {face ? (
           <ul className="mt-3 divide-y divide-gray-200">
-            <Wearable wearable={face} noButtonPanel />
+            <DisplayWearable wearable={face} noButtonPanel />
           </ul>
         ) : null}
       </Row>
@@ -264,7 +261,7 @@ const EquippedWearables = () => {
         <SelectInput name="torso" value={torso ? torso._id : ''} options={torsoList} changeHandler={selectTorso} />
         {torso ? (
           <ul className="mt-3 divide-y divide-gray-200">
-            <Wearable wearable={torso} noButtonPanel />
+            <DisplayWearable wearable={torso} noButtonPanel />
           </ul>
         ) : null}
       </Row>
@@ -272,7 +269,7 @@ const EquippedWearables = () => {
         <SelectInput name="arms" value={arms ? arms._id : ''} options={armsList} changeHandler={selectArms} />
         {arms ? (
           <ul className="mt-3 divide-y divide-gray-200">
-            <Wearable wearable={arms} noButtonPanel />
+            <DisplayWearable wearable={arms} noButtonPanel />
           </ul>
         ) : null}
       </Row>
@@ -280,7 +277,7 @@ const EquippedWearables = () => {
         <SelectInput name="hands" value={hands ? hands._id : ''} options={handsList} changeHandler={selectHands} />
         {hands ? (
           <ul className="mt-3 divide-y divide-gray-200">
-            <Wearable wearable={hands} noButtonPanel />
+            <DisplayWearable wearable={hands} noButtonPanel />
           </ul>
         ) : null}
       </Row>
@@ -288,7 +285,7 @@ const EquippedWearables = () => {
         <SelectInput name="legs" value={legs ? legs._id : ''} options={legsList} changeHandler={selectLegs} />
         {legs ? (
           <ul className="mt-3 divide-y divide-gray-200">
-            <Wearable wearable={legs} noButtonPanel />
+            <DisplayWearable wearable={legs} noButtonPanel />
           </ul>
         ) : null}
       </Row>
@@ -296,7 +293,7 @@ const EquippedWearables = () => {
         <SelectInput name="feet" value={feet ? feet._id : ''} options={feetList} changeHandler={selectFeet} />
         {feet ? (
           <ul className="mt-3 divide-y divide-gray-200">
-            <Wearable wearable={feet} noButtonPanel />
+            <DisplayWearable wearable={feet} noButtonPanel />
           </ul>
         ) : null}
       </Row>

@@ -5,11 +5,17 @@ import { useSelector, useDispatch } from 'react-redux';
 import { XIcon, ExclamationIcon } from '@heroicons/react/outline';
 
 import { selectModal } from '../../../redux/app/app.selectors';
+import { selectResourceError } from '../../../redux/resource/resource.selectors';
+import { selectCharacterError } from '../../../redux/character/character.selectors';
+import { selectCampaignError } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal } from '../../../redux/app/app.actions';
 
 import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
+import { formatValidationErrors } from '../../../utils/validationErrors';
+
+import Notice from '../../../components/shared/Notice';
 
 // Character Sheet
 import DeleteCharacter from '../../../components/characters/forms/modal/DeleteCharacter';
@@ -22,25 +28,29 @@ import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoi
 import Mortality from '../../../components/characters/forms/modal/Mortality';
 import EditStat from '../../../components/characters/forms/modal/EditStat';
 import EditCondition from '../../../components/characters/forms/modal/EditCondition';
-import DeleteCharResource from '../../../components/characters/forms/modal/DeleteCharResource';
-import DisplayBelonging from '../../../components/characters/forms/modal/DisplayBelonging';
-import AcceptInvite from '../../../components/characters/forms/modal/AcceptInvite';
-import DeclineInvite from '../../../components/characters/forms/modal/DeclineInvite';
 import LeaveCampaign from '../../../components/characters/forms/modal/LeaveCampaign';
 
 // Campaign Sheet
 import SendInvite from '../../../components/campaigns/forms/modal/SendInvite';
-import DeleteCampResource from '../../../components/campaigns/forms/modal/DeleteCampResource';
 
-export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, children }) => {
+// Shared
+import ShowBelonging from '../../../components/sheets/forms/modal/ShowBelonging';
+import DeleteResource from '../../../components/sheets/forms/modal/DeleteResource';
+import UpdateInviteStatus from '../../../components/sheets/forms/modal/UpdateInviteStatus';
+
+export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children }) => {
   const dispatch = useDispatch();
+
+  const characterError = useSelector(selectCharacterError);
+  const campaignError = useSelector(selectCampaignError);
+  const resourceError = useSelector(selectResourceError);
 
   return (
     <form onSubmit={submitHandler}>
       <div>
         {/* Icon */}
         {type === 'alert' ? (
-          <div className="mx-auto shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+          <div className="mx-4 shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:h-10 sm:w-10">
             <ExclamationIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
           </div>
         ) : null}
@@ -54,14 +64,19 @@ export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, 
         </div>
       </div>
 
+      {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+      {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+      {resourceError ? <Notice status="error" heading={resourceError.statusText} message="An error occured fetching additional resource data. Please try again later." /> : null}
+
       {/* Action buttons panel */}
       <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
         <button
           type="submit"
           className={classNames(
-            type === 'alert' ? 'bg-red-700 hover:bg-red-800 focus:ring-red-500' : 'bg-dark hover:bg-dark-400 focus:ring-dark-200',
+            submitDisabled ? 'bg-gray-200 text-gray-400 cursor-default' : type === 'alert' ? 'bg-red-700 hover:bg-red-800 focus:ring-red-500' : 'bg-dark hover:bg-dark-400 focus:ring-dark-200',
             'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm'
           )}
+          disabled={submitDisabled}
         >
           {submitText}
         </button>
@@ -147,7 +162,6 @@ const Modal = () => {
               {/* Character Sheet */}
               {modal && modal.type === ModalTypes.deleteCharacter ? <DeleteCharacter /> : null}
               {modal && modal.type === ModalTypes.takeARest ? <TakeARest /> : null}
-              {modal && modal.type === ModalTypes.displayBelonging ? <DisplayBelonging id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
               {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
               {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney /> : null}
@@ -156,13 +170,13 @@ const Modal = () => {
               {modal && modal.type === ModalTypes.editMortality ? <Mortality /> : null}
               {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} /> : null}
-              {modal && modal.type === ModalTypes.deleteCharResource ? <DeleteCharResource id={modal.id} data={modal.data} /> : null}
-              {modal && modal.type === ModalTypes.acceptInvite ? <AcceptInvite id={modal.id} /> : null}
-              {modal && modal.type === ModalTypes.declineInvite ? <DeclineInvite id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.leaveCampaign ? <LeaveCampaign /> : null}
               {/* Campaign Sheet */}
               {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
-              {modal && modal.type === ModalTypes.deleteCampResource ? <DeleteCampResource id={modal.id} data={modal.data} /> : null}
+              {/* Shared */}
+              {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging id={modal.id} data={modal.data} /> : null}
+              {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} /> : null}
+              {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus id={modal.id} data={modal.data} /> : null}
             </div>
           </Transition.Child>
         </div>

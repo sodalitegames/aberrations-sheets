@@ -4,7 +4,7 @@ import { selectCurrentCampaign, selectActiveSession } from '../../redux/campaign
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 
 const CampaignGameplayPage = () => {
   const campSheet = useSelector(selectCurrentCampaign);

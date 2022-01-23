@@ -4,7 +4,7 @@ import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 
 import StatsTracker from '../../components/campaigns/StatsTracker';
 

@@ -2,7 +2,7 @@ import { AcademicCapIcon, BadgeCheckIcon, CashIcon, ClockIcon, ReceiptRefundIcon
 
 import classNames from '../../utils/classNames';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
 const actions = [

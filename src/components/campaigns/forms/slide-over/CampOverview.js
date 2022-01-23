@@ -3,12 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import TextArea from '../../../shared/TextArea';
+import TextArea from '../../../shared/form/TextArea';
 
 const CampOverview = () => {
   const dispatch = useDispatch();
@@ -29,8 +28,6 @@ const CampOverview = () => {
     if (!overview) return alert('Must provide overview');
 
     dispatch(updateSheetStart('campaigns', campSheet._id, { overview }));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

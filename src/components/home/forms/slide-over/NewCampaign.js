@@ -3,14 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentUser } from '../../../../redux/user/user.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { createSheetForUserStart } from '../../../../redux/user/user.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Detail from '../../../shared/Detail';
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
+import Detail from '../../../shared/form/Detail';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
 
 const NewCampaign = () => {
   const dispatch = useDispatch();
@@ -30,8 +29,6 @@ const NewCampaign = () => {
     if (!details) return alert('Must provide a details');
 
     dispatch(createSheetForUserStart('campaigns', { name, ccName: currentUser.name, ccNickname, overview, details }));
-
-    dispatch(setSlideOver(null));
   };
 
   return (

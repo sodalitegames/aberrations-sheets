@@ -15,10 +15,10 @@ import classNames from '../../utils/classNames';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 import Button from '../../components/shared/Button';
 import Notice from '../../components/shared/Notice';
-import ListContainer from '../../components/shared/ListContainer';
+import ListContainer from '../../components/shared/data/ListContainer';
 
 const unescapeHtml = content => {
   if (!content) return '';

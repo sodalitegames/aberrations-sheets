@@ -3,13 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
-import TextArea from '../../../shared/TextArea';
+import Input from '../../../shared/form/Input';
+import TextArea from '../../../shared/form/TextArea';
 
 const SendInvite = () => {
   const dispatch = useDispatch();
@@ -30,8 +29,6 @@ const SendInvite = () => {
     e.preventDefault();
 
     dispatch(createSheetResourceStart('campaigns', campSheet._id, 'invites', { campaignName, ccName, charSheetId: charId, message }));
-
-    dispatch(setModal(null));
   };
 
   return (

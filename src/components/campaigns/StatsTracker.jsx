@@ -1,4 +1,4 @@
-import DropdownButton from './DropdownButton';
+import DropdownButton from '../shared/DropdownButton';
 
 const actions = [
   { name: 'Roll', href: '#' },

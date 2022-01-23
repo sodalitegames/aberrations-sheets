@@ -3,12 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
+import Input from '../../../shared/form/Input';
 
 const Mortality = () => {
   const dispatch = useDispatch();
@@ -27,8 +26,6 @@ const Mortality = () => {
     e.preventDefault();
 
     dispatch(updateSheetStart('characters', charSheet._id, { mortality: +mortality }));
-
-    dispatch(setModal(null));
   };
 
   return (

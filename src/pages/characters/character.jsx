@@ -11,17 +11,17 @@ import SlideOverTypes from '../../utils/SlideOverTypes';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 import Button from '../../components/shared/Button';
-import InfoList from '../../components/shared/InfoList';
-import { ButtonPanel } from '../../components/shared/ListItem';
-import ListContainer from '../../components/shared/ListContainer';
-
-import Species from '../../components/characters/display/Species';
-import CharacterLog from '../../components/characters/display/CharacterLog';
+import InfoList from '../../components/shared/data/InfoList';
+import { ButtonPanel } from '../../components/shared/data/ListItem';
+import ListContainer from '../../components/shared/data/ListContainer';
 import EmptyState from '../../components/shared/EmptyState';
-import Invite from '../../components/characters/display/Invite';
-import Campaign from '../../components/characters/display/Campaign';
+
+import DisplaySpecies from '../../components/sheets/display/DisplaySpecies';
+import DisplayLog from '../../components/sheets/display/DisplayLog';
+import DisplayInvite from '../../components/sheets/display/DisplayInvite';
+import DisplayCampaign from '../../components/characters/display/DisplayCampaign';
 
 const CharacterCharacterPage = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const CharacterCharacterPage = () => {
       {/* Character Species */}
       <PanelSection title="Character Species">
         <div className="flow-root">
-          <Species species={charSheet.species} />
+          <DisplaySpecies species={charSheet.species} />
         </div>
       </PanelSection>
 
@@ -62,15 +62,15 @@ const CharacterCharacterPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={charSheet.characterLogs}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm })), text: 'Add a new Character Log' }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'Add a new Character Log' }}
             empty={{
               heading: 'No Character Logs',
               message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.charLogForm })), text: 'New Character Log' },
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'New Character Log' },
             }}
           >
             {charSheet.characterLogs.map(log => (
-              <CharacterLog key={log._id} log={log} />
+              <DisplayLog key={log._id} log={log} sheetType="characters" />
             ))}
           </ListContainer>
         </div>
@@ -80,14 +80,14 @@ const CharacterCharacterPage = () => {
       <PanelSection title={charSheet.campaign ? 'Campaign Details' : 'Campaign Invitations'}>
         <div className="flow-root mt-2">
           {charSheet.campaign ? (
-            <Campaign campaign={charSheet.campaign} />
+            <DisplayCampaign campaign={charSheet.campaign} />
           ) : charSheet.invites.filter(invite => invite.status === 'Pending').length ? (
             <>
               <ListContainer>
                 {charSheet.invites
                   .filter(invite => invite.status === 'Pending')
                   .map(invite => (
-                    <Invite key={invite._id} invite={invite} />
+                    <DisplayInvite key={invite._id} invite={invite} sheetType="characters" />
                   ))}
               </ListContainer>
 

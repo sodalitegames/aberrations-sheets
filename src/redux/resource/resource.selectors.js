@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 
 const selectResources = state => state.resources;
 
+export const selectResourceError = createSelector([selectResources], resources => resources.error);
+
 export const selectSpecies = createSelector([selectResources], resources => resources.species);
 
 export const selectWeapons = createSelector([selectResources], resources => resources.weapons);
