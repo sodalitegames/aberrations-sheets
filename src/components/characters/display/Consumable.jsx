@@ -8,7 +8,10 @@ import InfoList from '../../shared/InfoList';
 const Consumable = ({ consumable, condensed, noButtonPanel }) => {
   if (condensed === 'view') {
     return (
-      <ListItem heading={`${consumable.name} (Level ${consumable.level})`} view={{ type: ModalTypes.displayBelonging, id: consumable._id, data: { type: 'consumables' } }}>
+      <ListItem
+        heading={`${consumable.name} (Level ${consumable.level})`}
+        view={{ type: ModalTypes.showBelonging, id: consumable._id, data: { sheetType: 'characters', resourceType: 'consumables' } }}
+      >
         <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
         <p className="text-sm text-gray-500 truncate">{consumable.handle}</p>
       </ListItem>
@@ -23,7 +26,7 @@ const Consumable = ({ consumable, condensed, noButtonPanel }) => {
     <ListItem
       heading={consumable.name}
       noButtonPanel={noButtonPanel}
-      editable={{ type: SlideOverTypes.consumableForm, id: consumable._id }}
+      editable={{ type: SlideOverTypes.consumableForm, id: consumable._id, data: { sheetType: 'characters' } }}
       deletable={{
         type: ModalTypes.deleteResource,
         id: consumable._id,

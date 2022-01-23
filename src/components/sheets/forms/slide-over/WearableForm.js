@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
+import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
@@ -11,10 +12,11 @@ import Input from '../../../shared/Input';
 import TextArea from '../../../shared/TextArea';
 import Select from '../../../shared/Select';
 
-const Wearable = ({ id }) => {
+const Wearable = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -26,19 +28,36 @@ const Wearable = ({ id }) => {
   const [equipped, setEquipped] = useState(false);
 
   useEffect(() => {
-    if (id && charSheet) {
-      const currentWearable = charSheet.wearables.find(wearable => wearable._id === id);
+    if (data.sheetType === 'characters') {
+      if (id && charSheet) {
+        const currentWearable = charSheet.wearables.find(wearable => wearable._id === id);
 
-      setName(currentWearable.name);
-      setDescription(currentWearable.description);
-      setBodyArea(currentWearable.bodyArea);
-      setFortitude(currentWearable.statMods.fortitude);
-      setAgility(currentWearable.statMods.agility);
-      setPersona(currentWearable.statMods.persona);
-      setAptitude(currentWearable.statMods.aptitude);
-      setEquipped(currentWearable.equipped);
+        setName(currentWearable.name);
+        setDescription(currentWearable.description);
+        setBodyArea(currentWearable.bodyArea);
+        setFortitude(currentWearable.statMods.fortitude);
+        setAgility(currentWearable.statMods.agility);
+        setPersona(currentWearable.statMods.persona);
+        setAptitude(currentWearable.statMods.aptitude);
+        setEquipped(currentWearable.equipped);
+      }
     }
-  }, [id, charSheet]);
+
+    if (data.sheetType === 'campaigns') {
+      if (id && campSheet) {
+        const currentWearable = campSheet.wearables.find(wearable => wearable._id === id);
+
+        setName(currentWearable.name);
+        setDescription(currentWearable.description);
+        setBodyArea(currentWearable.bodyArea);
+        setFortitude(currentWearable.statMods.fortitude);
+        setAgility(currentWearable.statMods.agility);
+        setPersona(currentWearable.statMods.persona);
+        setAptitude(currentWearable.statMods.aptitude);
+        setEquipped(currentWearable.equipped);
+      }
+    }
+  }, [id, data.sheetType, charSheet, campSheet]);
 
   const selectBodyArea = e => {
     if (!e.target.value) return setBodyArea(null);
@@ -54,12 +73,14 @@ const Wearable = ({ id }) => {
     if (!bodyArea) return alert('Must provide a bodyArea');
     if (!description) return alert('Must provide a description');
 
+    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
+
     if (id) {
-      dispatch(updateSheetResourceStart('characters', charSheet._id, 'wearables', id, { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'wearables', id, { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }));
       return;
     }
 
-    dispatch(createSheetResourceStart('characters', charSheet._id, 'wearables', { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }));
+    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'wearables', { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }));
   };
 
   return (

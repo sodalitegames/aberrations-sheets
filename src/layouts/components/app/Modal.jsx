@@ -28,7 +28,6 @@ import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoi
 import Mortality from '../../../components/characters/forms/modal/Mortality';
 import EditStat from '../../../components/characters/forms/modal/EditStat';
 import EditCondition from '../../../components/characters/forms/modal/EditCondition';
-import DisplayBelonging from '../../../components/characters/forms/modal/DisplayBelonging';
 import AcceptInvite from '../../../components/characters/forms/modal/AcceptInvite';
 import DeclineInvite from '../../../components/characters/forms/modal/DeclineInvite';
 import LeaveCampaign from '../../../components/characters/forms/modal/LeaveCampaign';
@@ -37,6 +36,7 @@ import LeaveCampaign from '../../../components/characters/forms/modal/LeaveCampa
 import SendInvite from '../../../components/campaigns/forms/modal/SendInvite';
 
 // Shared
+import ShowBelonging from '../../../components/sheets/forms/modal/ShowBelonging';
 import DeleteResource from '../../../components/sheets/forms/modal/DeleteResource';
 
 export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, children }) => {
@@ -162,7 +162,6 @@ const Modal = () => {
               {/* Character Sheet */}
               {modal && modal.type === ModalTypes.deleteCharacter ? <DeleteCharacter /> : null}
               {modal && modal.type === ModalTypes.takeARest ? <TakeARest /> : null}
-              {modal && modal.type === ModalTypes.displayBelonging ? <DisplayBelonging id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
               {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
               {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney /> : null}
@@ -177,6 +176,7 @@ const Modal = () => {
               {/* Campaign Sheet */}
               {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
               {/* Shared */}
+              {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} /> : null}
             </div>
           </Transition.Child>

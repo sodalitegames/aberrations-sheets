@@ -24,11 +24,11 @@ const CharacterWearablesPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={charSheet.wearables}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm })), text: 'Add a new Wearable' }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, data: { sheetType: 'characters' } })), text: 'Add a new Wearable' }}
             empty={{
               heading: 'No Wearables',
               message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm })), text: 'New Wearable' },
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, data: { sheetType: 'characters' } })), text: 'New Wearable' },
             }}
           >
             {charSheet.wearables.map(wearable => (

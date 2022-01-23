@@ -8,7 +8,7 @@ import InfoList from '../../shared/InfoList';
 const Usable = ({ usable, condensed, noButtonPanel }) => {
   if (condensed === 'view') {
     return (
-      <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.displayBelonging, id: usable._id, data: { type: 'usables' } }}>
+      <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.showBelonging, id: usable._id, data: { sheetType: 'characters', resourceType: 'usables' } }}>
         <InfoList list={[{ title: usable.description, value: usable.description }]} />
       </ListItem>
     );
@@ -22,7 +22,7 @@ const Usable = ({ usable, condensed, noButtonPanel }) => {
     <ListItem
       heading={usable.name}
       noButtonPanel={noButtonPanel}
-      editable={{ type: SlideOverTypes.usableForm, id: usable._id }}
+      editable={{ type: SlideOverTypes.usableForm, id: usable._id, data: { sheetType: 'characters' } }}
       deletable={{
         type: ModalTypes.deleteResource,
         id: usable._id,

@@ -26,11 +26,6 @@ import RollDice from '../../../components/characters/forms/slide-over/RollDice';
 import EquippedBelongings from '../../../components/characters/forms/slide-over/EquippedBelongings';
 import EquippedWearables from '../../../components/characters/forms/slide-over/EquippedWearables';
 import PurchaseAugmentation from '../../../components/characters/forms/slide-over/PurchaseAugmentation';
-import NewWeapon from '../../../components/characters/forms/slide-over/NewWeapon';
-import EditWeapon from '../../../components/characters/forms/slide-over/EditWeapon';
-import Wearable from '../../../components/characters/forms/slide-over/Wearable';
-import Consumable from '../../../components/characters/forms/slide-over/Consumable';
-import Usable from '../../../components/characters/forms/slide-over/Usable';
 import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
 
@@ -41,6 +36,11 @@ import ManageInvites from '../../../components/campaigns/forms/slide-over/Manage
 
 // Shared
 import LogForm from '../../../components/sheets/forms/slide-over/LogForm';
+import NewWeapon from '../../../components/sheets/forms/slide-over/NewWeaponForm';
+import EditWeapon from '../../../components/sheets/forms/slide-over/EditWeaponForm';
+import Wearable from '../../../components/sheets/forms/slide-over/WearableForm';
+import Consumable from '../../../components/sheets/forms/slide-over/ConsumableForm';
+import Usable from '../../../components/sheets/forms/slide-over/UsableForm';
 
 export const SlideOverForm = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
   const dispatch = useDispatch();
@@ -182,11 +182,6 @@ const SlideOver = () => {
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <EquippedBelongings id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? <EquippedWearables /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeapon /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeapon id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <Wearable id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <Consumable id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <Usable id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
                 {/* Campaign Sheet */}
@@ -194,6 +189,11 @@ const SlideOver = () => {
                 {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}
                 {/* Shared */}
+                {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeapon data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeapon id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <Wearable id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <Consumable id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <Usable id={slideOver.id} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm id={slideOver.id} data={slideOver.data} /> : null}
               </div>
             </Transition.Child>

@@ -1,7 +1,6 @@
 const ModalTypes = {
   deleteCharacter: 'DELETE_CHARACTER',
 
-  displayBelonging: 'DISPLAY_BELONGING',
   takeDamage: 'TAKE_DAMAGE',
   healDamage: 'HEAL_DAMAGE',
   receiveMoney: 'RECEIVE_MONEY',
@@ -20,6 +19,7 @@ const ModalTypes = {
   sendInvite: 'SEND_INVITE',
 
   deleteResource: 'DELETE_RESOURCE',
+  showBelonging: 'SHOW_BELONGING',
 };
 
 export default ModalTypes;

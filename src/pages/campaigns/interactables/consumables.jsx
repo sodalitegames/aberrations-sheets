@@ -24,11 +24,11 @@ const CampaignConsumablesPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.consumables}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm })), text: 'Add a new Consumable' }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm, data: { sheetType: 'campaigns' } })), text: 'Add a new Consumable' }}
             empty={{
               heading: 'No Consumables',
               message: 'This feature is coming soon...',
-              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm })), text: 'New Consumable' },
+              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm, data: {sheetType: 'campaigns'} })), text: 'New Consumable' },
             }}
           >
             {campSheet.consumables.map(consumable => (

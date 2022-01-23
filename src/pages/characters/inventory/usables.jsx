@@ -24,11 +24,11 @@ const CharacterUsablesPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={charSheet.usables}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'Add a new Usable' }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, data: { sheetType: 'characters' } })), text: 'Add a new Usable' }}
             empty={{
               heading: 'No Usables',
               message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'New Usable' },
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, data: { sheetType: 'characters' } })), text: 'New Usable' },
             }}
           >
             {charSheet.usables.map(usable => (

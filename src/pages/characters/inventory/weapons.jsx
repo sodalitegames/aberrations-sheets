@@ -34,11 +34,11 @@ const CharacterWeaponsPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={charSheet.weapons}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'Add a new Weapon' }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm, data: { sheetType: 'characters' } })), text: 'Add a new Weapon' }}
             empty={{
               heading: 'No Weapons',
               message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'New Weapon' },
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm, data: { sheetType: 'characters' } })), text: 'New Weapon' },
             }}
           >
             {charSheet.weapons.map(weapon => (

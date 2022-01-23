@@ -35,7 +35,10 @@ const getWearableMods = (FOR, AGL, PER, APT) => {
 const Wearable = ({ wearable, condensed, noButtonPanel }) => {
   if (condensed === 'view') {
     return (
-      <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} view={{ type: ModalTypes.displayBelonging, id: wearable._id, data: { type: 'wearables' } }}>
+      <ListItem
+        heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`}
+        view={{ type: ModalTypes.showBelonging, id: wearable._id, data: { sheetType: 'characters', resourceType: 'wearables' } }}
+      >
         <InfoList list={[getWearableMods(wearable.statMods.fortitude, wearable.statMods.agility, wearable.statMods.persona, wearable.statMods.aptitude)]} />
       </ListItem>
     );
@@ -49,7 +52,7 @@ const Wearable = ({ wearable, condensed, noButtonPanel }) => {
     <ListItem
       heading={wearable.name}
       noButtonPanel={noButtonPanel}
-      editable={{ type: SlideOverTypes.wearableForm, id: wearable._id }}
+      editable={{ type: SlideOverTypes.wearableForm, id: wearable._id, data: { sheetType: 'characters' } }}
       deletable={{
         type: ModalTypes.deleteResource,
         id: wearable._id,

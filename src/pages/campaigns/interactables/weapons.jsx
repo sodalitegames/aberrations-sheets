@@ -24,11 +24,11 @@ const CampaignWeaponsPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.weapons}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'Add a new Weapon' }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm, data: { sheetType: 'campaigns' } })), text: 'Add a new Weapon' }}
             empty={{
               heading: 'No Weapons',
               message: 'This feature is coming soon...',
-              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'New Weapon' },
+              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm, data: {sheetType: 'campaigns'} })), text: 'New Weapon' },
             }}
           >
             {campSheet.weapons.map(weapon => (

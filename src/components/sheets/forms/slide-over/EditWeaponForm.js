@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
+import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
@@ -14,10 +15,11 @@ import TextArea from '../../../shared/TextArea';
 import Select from '../../../shared/Select';
 import Detail from '../../../shared/Detail';
 
-const EditWeapon = ({ id }) => {
+const EditWeapon = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   const [type, setType] = useState('');
   const [name, setName] = useState('');
@@ -29,19 +31,36 @@ const EditWeapon = ({ id }) => {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    if (id && charSheet) {
-      const currentWeapon = charSheet.weapons.find(weapon => weapon._id === id);
+    if (data.sheetType === 'characters') {
+      if (id && charSheet) {
+        const currentWeapon = charSheet.weapons.find(weapon => weapon._id === id);
 
-      setType(currentWeapon.type);
-      setName(currentWeapon.name);
-      setNickname(currentWeapon.nickname);
-      setAssociatedStat(currentWeapon.associatedStat);
-      setLevelDamage(currentWeapon.levelDamage);
-      setRange(currentWeapon.range);
-      setAbility(currentWeapon.ability);
-      setDescription(currentWeapon.description);
+        setType(currentWeapon.type);
+        setName(currentWeapon.name);
+        setNickname(currentWeapon.nickname);
+        setAssociatedStat(currentWeapon.associatedStat);
+        setLevelDamage(currentWeapon.levelDamage);
+        setRange(currentWeapon.range);
+        setAbility(currentWeapon.ability);
+        setDescription(currentWeapon.description);
+      }
     }
-  }, [id, charSheet]);
+
+    if (data.sheetType === 'campaigns') {
+      if (id && campSheet) {
+        const currentWeapon = campSheet.weapons.find(weapon => weapon._id === id);
+
+        setType(currentWeapon.type);
+        setName(currentWeapon.name);
+        setNickname(currentWeapon.nickname);
+        setAssociatedStat(currentWeapon.associatedStat);
+        setLevelDamage(currentWeapon.levelDamage);
+        setRange(currentWeapon.range);
+        setAbility(currentWeapon.ability);
+        setDescription(currentWeapon.description);
+      }
+    }
+  }, [id, data.sheetType, charSheet, campSheet]);
 
   const selectStat = e => {
     if (!e.target.value) return setAssociatedStat('');
@@ -58,17 +77,19 @@ const EditWeapon = ({ id }) => {
 
     if (!levelDamage) return alert('Must provide levelDamage');
 
+    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
+
     if (type === 'Custom' || type === 'Improvised') {
       if (!name) return alert('Must provide a name');
       if (!associatedStat) return alert('Must provide an associatedStat');
       if (!range) return alert('Must provide a range');
 
-      dispatch(updateSheetResourceStart('characters', charSheet._id, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description }));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description }));
       return;
     }
 
     dispatch(
-      updateSheetResourceStart('characters', charSheet._id, 'weapons', id, {
+      updateSheetResourceStart(data.sheetType, sheetId, 'weapons', id, {
         nickname,
         levelDamage,
         description,

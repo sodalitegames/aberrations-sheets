@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
+import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 import { selectWeapons } from '../../../../redux/resource/resource.selectors';
 
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
@@ -18,11 +19,12 @@ import Detail from '../../../shared/Detail';
 import { LoadingSpinner } from '../../../shared/SubmitButton';
 import Row from '../../../shared/Row';
 
-const NewWeapon = () => {
+const NewWeapon = ({ data }) => {
   const dispatch = useDispatch();
 
   const fetchedWeapons = useSelector(selectWeapons);
   const charSheet = useSelector(selectCurrentCharacter);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   const [weapon, setWeapon] = useState(null);
   const [weaponsList, setWeaponsList] = useState([]);
@@ -44,7 +46,7 @@ const NewWeapon = () => {
   }, [dispatch, fetchedWeapons]);
 
   useEffect(() => {
-    if (charSheet && fetchedWeapons) {
+    if (fetchedWeapons) {
       const mappedWeaponsList = fetchedWeapons.map(weap => {
         return {
           id: weap._id,
@@ -111,7 +113,7 @@ const NewWeapon = () => {
       setWeaponsList(mappedWeaponsList);
       setWeaponsSelectList(newWeaponsList);
     }
-  }, [charSheet, fetchedWeapons]);
+  }, [fetchedWeapons]);
 
   const selectWeapon = e => {
     if (!e.target.value) return setWeapon(null);
@@ -140,17 +142,19 @@ const NewWeapon = () => {
 
     if (!levelDamage) return alert('Must provide levelDamage');
 
+    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
+
     if (weapon === 'Custom' || weapon === 'Improvised') {
       if (!name) return alert('Must provide a name');
       if (!associatedStat) return alert('Must provide an associatedStat');
       if (!range) return alert('Must provide a range');
 
-      dispatch(createSheetResourceStart('characters', charSheet._id, 'weapons', { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, description }));
+      dispatch(createSheetResourceStart(data.sheetType, sheetId, 'weapons', { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, description }));
       return;
     }
 
     dispatch(
-      createSheetResourceStart('characters', charSheet._id, 'weapons', {
+      createSheetResourceStart(data.sheetType, sheetId, 'weapons', {
         type: weapon.type,
         name: weapon.name,
         nickname,

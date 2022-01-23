@@ -16,7 +16,7 @@ const DisplayWeapon = ({ weapon, condensed, noButtonPanel, listItem }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem heading={`${weapon.name} (Level ${weapon.levelDamage})`} view={{ type: ModalTypes.displayBelonging, id: weapon._id, data: { type: 'weapons' } }}>
+        <ListItem heading={`${weapon.name} (Level ${weapon.levelDamage})`} view={{ type: ModalTypes.showBelonging, id: weapon._id, data: { sheetType: 'characters', resourceType: 'weapons' } }}>
           <InfoList list={createWeaponList(weapon.associatedStat, weapon.range, weapon.ability)} />
         </ListItem>
       );
@@ -34,7 +34,7 @@ const DisplayWeapon = ({ weapon, condensed, noButtonPanel, listItem }) => {
       <ListItem
         heading={weapon.nickname ? `${weapon.nickname} (${weapon.name})` : weapon.name}
         noButtonPanel={noButtonPanel}
-        editable={{ type: SlideOverTypes.editWeaponForm, id: weapon._id }}
+        editable={{ type: SlideOverTypes.editWeaponForm, id: weapon._id, data: { sheetType: 'characters' } }}
         deletable={{
           type: ModalTypes.deleteResource,
           id: weapon._id,

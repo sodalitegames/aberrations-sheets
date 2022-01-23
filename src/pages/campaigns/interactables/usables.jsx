@@ -24,11 +24,11 @@ const CampaignUsablesPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.usables}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'Add a new Usable' }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, data: { sheetType: 'campaigns' } })), text: 'Add a new Usable' }}
             empty={{
               heading: 'No Usables',
               message: 'This feature is coming soon...',
-              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'New Usable' },
+              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, data: {sheetType: 'campaigns'} })), text: 'New Usable' },
             }}
           >
             {campSheet.usables.map(usable => (

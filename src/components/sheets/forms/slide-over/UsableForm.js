@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
+import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
@@ -11,10 +12,11 @@ import Input from '../../../shared/Input';
 import TextArea from '../../../shared/TextArea';
 import Select from '../../../shared/Select';
 
-const Usable = ({ id }) => {
+const Usable = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   const [name, setName] = useState('');
   const [type, setType] = useState('');
@@ -22,15 +24,28 @@ const Usable = ({ id }) => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    if (id && charSheet) {
-      const currentUsable = charSheet.usables.find(usable => usable._id === id);
+    if (data.sheetType === 'characters') {
+      if (id && charSheet) {
+        const currentUsable = charSheet.usables.find(usable => usable._id === id);
 
-      setName(currentUsable.name);
-      setType(currentUsable.type);
-      setDescription(currentUsable.description);
-      setQuantity(currentUsable.quantity);
+        setName(currentUsable.name);
+        setType(currentUsable.type);
+        setDescription(currentUsable.description);
+        setQuantity(currentUsable.quantity);
+      }
     }
-  }, [id, charSheet]);
+
+    if (data.sheetType === 'campaigns') {
+      if (id && campSheet) {
+        const currentUsable = campSheet.usables.find(usable => usable._id === id);
+
+        setName(currentUsable.name);
+        setType(currentUsable.type);
+        setDescription(currentUsable.description);
+        setQuantity(currentUsable.quantity);
+      }
+    }
+  }, [id, data.sheetType, charSheet, campSheet]);
 
   const selectType = e => {
     if (!e.target.value) return setType(null);
@@ -45,12 +60,14 @@ const Usable = ({ id }) => {
     if (!description) return alert('Must provide a description');
     if (!quantity) return alert('Must provide a quantity');
 
+    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
+
     if (id) {
-      dispatch(updateSheetResourceStart('characters', charSheet._id, 'usables', id, { name, type, description, quantity }));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'usables', id, { name, type, description, quantity }));
       return;
     }
 
-    dispatch(createSheetResourceStart('characters', charSheet._id, 'usables', { name, type, description, quantity }));
+    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'usables', { name, type, description, quantity }));
   };
 
   return (

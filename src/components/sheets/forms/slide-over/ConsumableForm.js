@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectConsumableCategories } from '../../../../redux/resource/resource.selectors';
+import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
@@ -16,10 +17,11 @@ import CheckboxGroup, { Checkbox } from '../../../shared/CheckboxGroup';
 import { LoadingSpinner } from '../../../shared/SubmitButton';
 import Row from '../../../shared/Row';
 
-const Consumable = ({ id }) => {
+const Consumable = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   const fetchedCategories = useSelector(selectConsumableCategories);
 
@@ -40,7 +42,7 @@ const Consumable = ({ id }) => {
   }, [dispatch, fetchedCategories]);
 
   useEffect(() => {
-    if (charSheet && fetchedCategories) {
+    if (fetchedCategories) {
       const newCategoriesList = fetchedCategories.map(categ => {
         return {
           universalId: categ._id,
@@ -51,21 +53,37 @@ const Consumable = ({ id }) => {
 
       setCategoriesList(newCategoriesList);
     }
-  }, [charSheet, fetchedCategories]);
+  }, [fetchedCategories]);
 
   useEffect(() => {
-    if (id && charSheet) {
-      const currentConsumable = charSheet.consumables.find(consumable => consumable._id === id);
+    if (data.sheetType === 'characters') {
+      if (id && charSheet) {
+        const currentConsumable = charSheet.consumables.find(consumable => consumable._id === id);
 
-      setName(currentConsumable.name);
-      setLevel(currentConsumable.level);
-      setUses(currentConsumable.uses);
-      setCategories(currentConsumable.categories);
-      setAssociatedStat(currentConsumable.associatedStat);
-      setQuantity(currentConsumable.quantity);
-      setDescription(currentConsumable.description);
+        setName(currentConsumable.name);
+        setLevel(currentConsumable.level);
+        setUses(currentConsumable.uses);
+        setCategories(currentConsumable.categories);
+        setAssociatedStat(currentConsumable.associatedStat);
+        setQuantity(currentConsumable.quantity);
+        setDescription(currentConsumable.description);
+      }
     }
-  }, [id, charSheet]);
+
+    if (data.sheetType === 'campaigns') {
+      if (id && campSheet) {
+        const currentConsumable = campSheet.consumables.find(consumable => consumable._id === id);
+
+        setName(currentConsumable.name);
+        setLevel(currentConsumable.level);
+        setUses(currentConsumable.uses);
+        setCategories(currentConsumable.categories);
+        setAssociatedStat(currentConsumable.associatedStat);
+        setQuantity(currentConsumable.quantity);
+        setDescription(currentConsumable.description);
+      }
+    }
+  }, [id, data.sheetType, charSheet, campSheet]);
 
   const selectStat = e => {
     if (!e.target.value) return setAssociatedStat(null);
@@ -96,12 +114,14 @@ const Consumable = ({ id }) => {
       body.associatedStat = associatedStat;
     }
 
+    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
+
     if (id) {
-      dispatch(updateSheetResourceStart('characters', charSheet._id, 'consumables', id, body));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'consumables', id, body));
       return;
     }
 
-    dispatch(createSheetResourceStart('characters', charSheet._id, 'consumables', body));
+    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'consumables', body));
   };
 
   return (
