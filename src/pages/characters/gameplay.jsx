@@ -19,7 +19,7 @@ import Button from '../../components/shared/Button';
 import Chip from '../../components/shared/Chip';
 import ListContainer from '../../components/shared/ListContainer';
 
-import Weapon from '../../components/characters/display/Weapon';
+import DisplayWeapon from '../../components/sheets/display/DisplayWeapon';
 import Wearable from '../../components/characters/display/Wearable';
 import Consumable from '../../components/characters/display/Consumable';
 import Usable from '../../components/characters/display/Usable';
@@ -130,7 +130,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedWeapons.map(weapon => (
-                <Weapon key={weapon._id} weapon={weapon} condensed="view" />
+                <DisplayWeapon key={weapon._id} weapon={weapon} condensed="view" listItem />
               ))}
             </ListContainer>
           </div>

@@ -27,7 +27,7 @@ const Weapon = ({ weapon, condensed, noButtonPanel }) => {
 
   return (
     <ListItem
-      heading={weapon.nickname || weapon.name}
+      heading={weapon.nickname ? `${weapon.nickname} (${weapon.name})` : weapon.name}
       noButtonPanel={noButtonPanel}
       editable={{ type: SlideOverTypes.editWeaponForm, id: weapon._id }}
       deletable={{

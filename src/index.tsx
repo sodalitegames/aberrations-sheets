@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import { store } from './redux/store';
@@ -31,6 +31,12 @@ import PrivacyPage from './pages/home/privacy';
 import CharacterGameplayPage from './pages/characters/gameplay';
 import CharacterInventoryPage from './pages/characters/inventory';
 import CharacterCharacterPage from './pages/characters/character';
+
+// Nested Character Inventory Pages
+import CharacterWeaponsPage from './pages/characters/inventory/weapons';
+import CharacterWearablesPage from './pages/characters/inventory/wearables';
+import CharacterConsumablesPage from './pages/characters/inventory/consumables';
+import CharacterUsablesPage from './pages/characters/inventory/usables';
 
 // Campaign Pages
 import CampaignGameplayPage from './pages/campaigns/gameplay';
@@ -73,20 +79,27 @@ ReactDOM.render(
                   <Route path="privacy" element={<PrivacyPage />} />
                 </Route>
                 <Route path="characters/:charId" element={<CharacterSheet />}>
-                  {/* <Route index element={<CharacterGameplayPage />} /> */}
+                  <Route index element={<Navigate to="gameplay" />} />
                   <Route path="gameplay" element={<CharacterGameplayPage />} />
                   <Route path="character" element={<CharacterCharacterPage />} />
-                  <Route path="inventory" element={<CharacterInventoryPage />} />
+                  <Route path="inventory" element={<CharacterInventoryPage />}>
+                    <Route index element={<Navigate to="weapons" />} />
+                    <Route path="weapons" element={<CharacterWeaponsPage />} />
+                    <Route path="wearables" element={<CharacterWearablesPage />} />
+                    <Route path="consumables" element={<CharacterConsumablesPage />} />
+                    <Route path="usables" element={<CharacterUsablesPage />} />
+                  </Route>
                   <Route path="notes" element={<SheetNotesPage sheetType="characters" />} />
                   <Route path="resources" element={<SheetResourcesPage sheetType="characters" />} />
                 </Route>
                 <Route path="campaigns/:campId" element={<CampaignSheet />}>
-                  {/* <Route index element={<CampaignGameplayPage />} /> */}
+                  <Route index element={<Navigate to="gameplay" />} />
                   <Route path="gameplay" element={<CampaignGameplayPage />} />
                   <Route path="combat" element={<CampaignCombatPage />} />
                   <Route path="campaign" element={<CampaignCampaignPage />} />
                   <Route path="players" element={<CampaignPlayersPage />} />
                   <Route path="interactables" element={<CampaignInteractablesPage />}>
+                    <Route index element={<Navigate to="npcs" />} />
                     <Route path="npcs" element={<CampaignNpcsPage />} />
                     <Route path="creatures" element={<CampaignCreaturesPage />} />
                     <Route path="environments" element={<CampaignEnvironmentsPage />} />
