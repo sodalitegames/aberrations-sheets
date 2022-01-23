@@ -271,8 +271,8 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
 
     if (!config?.keepOpen) {
       // Close out the modal or slideover if it is open
-      yield put(setSlideOver(null));
-      yield put(setModal(null));
+      if (config?.slideOver) yield put(setSlideOver(null));
+      if (config?.modal) yield put(setModal(null));
     }
   } catch (err) {
     yield put(deleteSheetResourceFailure(sheetType, err.response.data));

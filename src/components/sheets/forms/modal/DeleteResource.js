@@ -30,11 +30,11 @@ const DeleteResource = ({ id, data }) => {
     }
 
     if (data.sheetType === 'characters') {
-      dispatch(deleteSheetResourceStart('characters', charSheet._id, data.resourceType, id));
+      dispatch(deleteSheetResourceStart('characters', charSheet._id, data.resourceType, id, { modal: true }));
     }
 
     if (data.sheetType === 'campaigns') {
-      dispatch(deleteSheetResourceStart('campaigns', campSheet._id, data.resourceType, id));
+      dispatch(deleteSheetResourceStart('campaigns', campSheet._id, data.resourceType, id, { modal: true }));
     }
   };
 

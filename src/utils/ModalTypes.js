@@ -12,14 +12,13 @@ const ModalTypes = {
 
   takeARest: 'TAKE_A_REST',
 
-  acceptInvite: 'ACCEPT_INVITE',
-  declineInvite: 'DECLINE_INVITE',
   leaveCampaign: 'LEAVE_CAMPAIGN',
 
   sendInvite: 'SEND_INVITE',
 
   deleteResource: 'DELETE_RESOURCE',
   showBelonging: 'SHOW_BELONGING',
+  updateInviteStatus: 'UPDATE_INVITE_STATUS',
 };
 
 export default ModalTypes;

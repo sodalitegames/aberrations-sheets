@@ -6,7 +6,7 @@ import { SlideOverContainer } from '../../../../layouts/components/app/SlideOver
 
 import ListContainer from '../../../shared/ListContainer';
 
-import Invite from '../../display/Invite';
+import DisplayInvite from '../../../sheets/display/DisplayInvite';
 
 const ManageInvites = () => {
   const campSheet = useSelector(selectCurrentCampaign);
@@ -16,7 +16,7 @@ const ManageInvites = () => {
       <div className="px-6">
         <ListContainer>
           {campSheet.invites.map(invite => (
-            <Invite key={invite._id} invite={invite} />
+            <DisplayInvite key={invite._id} invite={invite} sheetType="campaigns" />
           ))}
         </ListContainer>
       </div>

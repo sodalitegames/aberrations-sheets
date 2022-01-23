@@ -20,7 +20,8 @@ import ListContainer from '../../components/shared/ListContainer';
 import Species from '../../components/characters/display/Species';
 import DisplayLog from '../../components/sheets/display/DisplayLog';
 import EmptyState from '../../components/shared/EmptyState';
-import Invite from '../../components/characters/display/Invite';
+
+import DisplayInvite from '../../components/sheets/display/DisplayInvite';
 import Campaign from '../../components/characters/display/Campaign';
 
 const CharacterCharacterPage = () => {
@@ -87,7 +88,7 @@ const CharacterCharacterPage = () => {
                 {charSheet.invites
                   .filter(invite => invite.status === 'Pending')
                   .map(invite => (
-                    <Invite key={invite._id} invite={invite} />
+                    <DisplayInvite key={invite._id} invite={invite} sheetType="characters" />
                   ))}
               </ListContainer>
 
