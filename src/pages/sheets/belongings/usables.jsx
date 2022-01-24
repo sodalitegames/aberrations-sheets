@@ -93,7 +93,9 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
                 <Button onClick={() => equipBelonging({ id: usable._id, type: 'usables', status: usable.equipped, unequippable: !usable.equippable })}>{usable.equipped ? 'Unequip' : 'Equip'}</Button>
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: usable._id, data: { type: 'usables' } }))}>{usable.npcId ? 'Unassign' : 'Assign'}</Button>
+                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: usable._id, data: { type: 'usables', name: usable.name } }))}>
+                  {usable.npcId ? 'Unassign' : 'Assign'}
+                </Button>
               ) : null}
               {sheetType === 'campaigns' ? (
                 <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'usables', usable._id, { active: !usable.active }))}>

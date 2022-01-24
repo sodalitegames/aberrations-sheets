@@ -93,7 +93,9 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
                 <Button onClick={() => equipBelonging({ id: weapon._id, type: 'weapons', status: weapon.equipped })}>{weapon.equipped ? 'Unequip' : 'Equip'}</Button>
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: weapon._id, data: { type: 'weapons' } }))}>{weapon.npcId ? 'Unassign' : 'Assign'}</Button>
+                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: weapon._id, data: { type: 'weapons', name: weapon.name } }))}>
+                  {weapon.npcId ? 'Unassign' : 'Assign'}
+                </Button>
               ) : null}
               {sheetType === 'campaigns' ? (
                 <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'weapons', weapon._id, { active: !weapon.active }))}>

@@ -93,7 +93,9 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
                 <Button onClick={() => equipBelonging({ id: wearable._id, type: 'wearables', status: wearable.equipped })}>{wearable.equipped ? 'Unequip' : 'Equip'}</Button>
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: wearable._id, data: { type: 'wearables' } }))}>{wearable.npcId ? 'Unassign' : 'Assign'}</Button>
+                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: wearable._id, data: { type: 'wearables', name: wearable.name } }))}>
+                  {wearable.npcId ? 'Unassign' : 'Assign'}
+                </Button>
               ) : null}
               {sheetType === 'campaigns' ? (
                 <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'wearables', wearable._id, { active: !wearable.active }))}>
