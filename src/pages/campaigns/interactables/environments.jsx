@@ -35,6 +35,7 @@ const CampaignEnvironmentsPage = () => {
     }
 
     setEnvironment(campSheet.environments[0]);
+    setId(campSheet.environments[0]?._id);
   }, [id, campSheet]);
 
   console.log(environment);
@@ -54,7 +55,11 @@ const CampaignEnvironmentsPage = () => {
             }}
           >
             {campSheet.environments.map(environment => (
-              <div key={environment._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(environment._id)}>
+              <div
+                key={environment._id}
+                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === environment._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+                onClick={() => setId(environment._id)}
+              >
                 <DisplayEnvironment key={environment._id} environment={environment} condensed listItem />
                 {environment.active ? (
                   <div className="shrink-0 ml-2" title="Active">
@@ -76,7 +81,7 @@ const CampaignEnvironmentsPage = () => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'environments', environment._id, { active: !environment.active }))}>
+              <Button dark={environment.active} onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'environments', environment._id, { active: !environment.active }))}>
                 {environment.active ? 'Deactivate' : 'Activate'}
               </Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.environmentForm, id: environment._id }))}>Edit</Button>

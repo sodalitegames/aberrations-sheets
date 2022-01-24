@@ -39,6 +39,7 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
     }
 
     setWearable(sheetType === 'characters' ? charSheet.wearables[0] : campSheet.wearables[0]);
+    setId(sheetType === 'characters' ? charSheet.wearables[0]?._id : campSheet.wearables[0]?._id);
   }, [sheetType, id, campSheet, charSheet]);
 
   console.log(wearable);
@@ -58,7 +59,11 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.wearables : campSheet.wearables).map(wearable => (
-              <div key={wearable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(wearable._id)}>
+              <div
+                key={wearable._id}
+                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === wearable._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+                onClick={() => setId(wearable._id)}
+              >
                 <DisplayWearable key={wearable._id} wearable={wearable} sheetType={sheetType} condensed listItem />
 
                 {/* Display if it's a character sheet wearable is equipped */}
@@ -90,15 +95,21 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
 
             <div className="col-span-1 space-y-4 pl-8">
               {sheetType === 'characters' ? (
-                <Button onClick={() => equipBelonging({ id: wearable._id, type: 'wearables', status: wearable.equipped })}>{wearable.equipped ? 'Unequip' : 'Equip'}</Button>
-              ) : null}
-              {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: wearable._id, data: { type: 'wearables', name: wearable.name } }))}>
-                  {wearable.npcId ? 'Unassign' : 'Assign'}
+                <Button dark={wearable.equipped} onClick={() => equipBelonging({ id: wearable._id, type: 'wearables', status: wearable.equipped })}>
+                  {wearable.equipped ? 'Unequip' : 'Equip'}
                 </Button>
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'wearables', wearable._id, { active: !wearable.active }))}>
+                wearable.npcId ? (
+                  <Button dark onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'wearables', wearable._id, { npcId: null }))}>
+                    Unassign
+                  </Button>
+                ) : (
+                  <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: wearable._id, data: { type: 'wearables', name: wearable.name } }))}>Assign</Button>
+                )
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button dark={wearable.active} onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'wearables', wearable._id, { active: !wearable.active }))}>
                   {wearable.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}

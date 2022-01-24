@@ -35,6 +35,7 @@ const CampaignCreaturesPage = () => {
     }
 
     setCreature(campSheet.creatures[0]);
+    setId(campSheet.creatures[0]?._id);
   }, [id, campSheet]);
 
   console.log(creature);
@@ -54,7 +55,11 @@ const CampaignCreaturesPage = () => {
             }}
           >
             {campSheet.creatures.map(creature => (
-              <div key={creature._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(creature._id)}>
+              <div
+                key={creature._id}
+                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === creature._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+                onClick={() => setId(creature._id)}
+              >
                 <DisplayCreature key={creature._id} creature={creature} condensed listItem />
                 {creature.active ? (
                   <div className="shrink-0 ml-2" title="Active">
@@ -76,7 +81,7 @@ const CampaignCreaturesPage = () => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'creatures', creature._id, { active: !creature.active }))}>
+              <Button dark={creature.active} onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'creatures', creature._id, { active: !creature.active }))}>
                 {creature.active ? 'Deactivate' : 'Activate'}
               </Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id }))}>Edit</Button>

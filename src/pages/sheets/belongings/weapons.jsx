@@ -39,6 +39,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
     }
 
     setWeapon(sheetType === 'characters' ? charSheet.weapons[0] : campSheet.weapons[0]);
+    setId(sheetType === 'characters' ? charSheet.weapons[0]?._id : campSheet.weapons[0]?._id);
   }, [sheetType, id, campSheet, charSheet]);
 
   console.log(weapon);
@@ -58,7 +59,11 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.weapons : campSheet.weapons).map(weapon => (
-              <div key={weapon._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(weapon._id)}>
+              <div
+                key={weapon._id}
+                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === weapon._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+                onClick={() => setId(weapon._id)}
+              >
                 <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={sheetType} condensed listItem />
 
                 {/* Display if it's a character sheet weapon is equipped */}
@@ -90,15 +95,21 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
 
             <div className="col-span-1 space-y-4 pl-8">
               {sheetType === 'characters' ? (
-                <Button onClick={() => equipBelonging({ id: weapon._id, type: 'weapons', status: weapon.equipped })}>{weapon.equipped ? 'Unequip' : 'Equip'}</Button>
-              ) : null}
-              {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: weapon._id, data: { type: 'weapons', name: weapon.name } }))}>
-                  {weapon.npcId ? 'Unassign' : 'Assign'}
+                <Button dark={weapon.equipped} onClick={() => equipBelonging({ id: weapon._id, type: 'weapons', status: weapon.equipped })}>
+                  {weapon.equipped ? 'Unequip' : 'Equip'}
                 </Button>
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'weapons', weapon._id, { active: !weapon.active }))}>
+                weapon.npcId ? (
+                  <Button dark onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'weapons', weapon._id, { npcId: null }))}>
+                    Unassign
+                  </Button>
+                ) : (
+                  <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: weapon._id, data: { type: 'weapons', name: weapon.name } }))}>Assign</Button>
+                )
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button dark={weapon.active} onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'weapons', weapon._id, { active: !weapon.active }))}>
                   {weapon.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}

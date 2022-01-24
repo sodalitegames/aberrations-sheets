@@ -39,6 +39,7 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
     }
 
     setConsumable(sheetType === 'characters' ? charSheet.consumables[0] : campSheet.consumables[0]);
+    setId(sheetType === 'characters' ? charSheet.consumables[0]?._id : campSheet.consumables[0]?._id);
   }, [sheetType, id, campSheet, charSheet]);
 
   console.log(consumable);
@@ -58,7 +59,11 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.consumables : campSheet.consumables).map(consumable => (
-              <div key={consumable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(consumable._id)}>
+              <div
+                key={consumable._id}
+                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === consumable._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+                onClick={() => setId(consumable._id)}
+              >
                 <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={sheetType} condensed listItem />
 
                 {/* Display if it's a character sheet consumable is equipped */}
@@ -90,15 +95,21 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
 
             <div className="col-span-1 space-y-4 pl-8">
               {sheetType === 'characters' ? (
-                <Button onClick={() => equipBelonging({ id: consumable._id, type: 'consumables', status: consumable.equipped })}>{consumable.equipped ? 'Unequip' : 'Equip'}</Button>
-              ) : null}
-              {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: consumable._id, data: { type: 'consumables', name: consumable.name } }))}>
-                  {consumable.npcId ? 'Unassign' : 'Assign'}
+                <Button dark={consumable.equipped} onClick={() => equipBelonging({ id: consumable._id, type: 'consumables', status: consumable.equipped })}>
+                  {consumable.equipped ? 'Unequip' : 'Equip'}
                 </Button>
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'consumables', consumable._id, { active: !consumable.active }))}>
+                consumable.npcId ? (
+                  <Button dark onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'consumables', consumable._id, { npcId: null }))}>
+                    Unassign
+                  </Button>
+                ) : (
+                  <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: consumable._id, data: { type: 'consumables', name: consumable.name } }))}>Assign</Button>
+                )
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button dark={consumable.active} onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'consumables', consumable._id, { active: !consumable.active }))}>
                   {consumable.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}

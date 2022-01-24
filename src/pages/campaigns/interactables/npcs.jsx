@@ -35,6 +35,7 @@ const CampaignNpcsPage = () => {
     }
 
     setNpc(campSheet.npcs[0]);
+    setId(campSheet.npcs[0]?._id);
   }, [id, campSheet]);
 
   console.log(npc);
@@ -54,7 +55,7 @@ const CampaignNpcsPage = () => {
             }}
           >
             {campSheet.npcs.map(npc => (
-              <div key={npc._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(npc._id)}>
+              <div key={npc._id} className={classNames('flex justify-between items-center px-2 cursor-pointer', id === npc._id ? 'bg-gray-100' : 'hover:bg-gray-50')} onClick={() => setId(npc._id)}>
                 <DisplayNpc key={npc._id} npc={npc} condensed listItem />
                 {npc.active ? (
                   <div className="shrink-0 ml-2" title="Active">
@@ -76,7 +77,9 @@ const CampaignNpcsPage = () => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'npcs', npc._id, { active: !npc.active }))}>{npc.active ? 'Deactivate' : 'Activate'}</Button>
+              <Button dark={npc.active} onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'npcs', npc._id, { active: !npc.active }))}>
+                {npc.active ? 'Deactivate' : 'Activate'}
+              </Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id }))}>Edit</Button>
               <Button
                 alert
