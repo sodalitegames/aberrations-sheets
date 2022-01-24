@@ -59,7 +59,7 @@ const CampaignCampaignPage = () => {
               </div>
             </div>
             <div className="ml-5 mt-5 flex flex-col shrink-0 justify-center sm:mt-0 space-y-2">
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newSession }))} disabled>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newSessionForm }))} disabled>
                 Create New Session
               </Button>
             </div>

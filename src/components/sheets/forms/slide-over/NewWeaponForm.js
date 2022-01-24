@@ -19,7 +19,7 @@ import Detail from '../../../shared/form/Detail';
 import { LoadingSpinner } from '../../../shared/form/SubmitButton';
 import Row from '../../../shared/form/Row';
 
-const NewWeapon = ({ data }) => {
+const NewWeaponForm = ({ data }) => {
   const dispatch = useDispatch();
 
   const fetchedWeapons = useSelector(selectWeapons);
@@ -233,4 +233,4 @@ const NewWeapon = ({ data }) => {
   );
 };
 
-export default NewWeapon;
+export default NewWeaponForm;

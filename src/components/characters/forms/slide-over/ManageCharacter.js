@@ -68,7 +68,7 @@ const ManageCharacter = () => {
       {/* <TextArea slideOver label="Character Description" name="charDescription" rows={6} value={charDescription} changeHandler={setCharDescription} />
       <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} /> */}
       <Row slideOver name="deleteCharacter" label="Delete Character">
-        <Button alert type="button" onClick={() => dispatch(setModal({ type: ModalTypes.deleteCharacter }))}>
+        <Button alert type="button" onClick={() => dispatch(setModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'characters' } }))}>
           Permanently Delete {charSheet.characterName}
         </Button>
       </Row>

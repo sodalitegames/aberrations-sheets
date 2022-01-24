@@ -1,6 +1,5 @@
 const ModalTypes = {
-  deleteCharacter: 'DELETE_CHARACTER',
-
+  // Character Forms
   takeDamage: 'TAKE_DAMAGE',
   healDamage: 'HEAL_DAMAGE',
   receiveMoney: 'RECEIVE_MONEY',
@@ -9,16 +8,20 @@ const ModalTypes = {
   editMortality: 'EDIT_MORTALITY',
   editStat: 'EDIT_STAT',
   editCondition: 'EDIT_CONDITION',
-
   takeARest: 'TAKE_A_REST',
+  errorEquippingBelonging: 'ERROR_EQUIPPING_BELONGING',
 
-  leaveCampaign: 'LEAVE_CAMPAIGN',
-
+  // Campaign Forms
   sendInvite: 'SEND_INVITE',
+  assignBelonging: 'ASSIGN_BELONGING',
 
+  // Shared Forms
+  deleteSheet: 'DELETE_SHEET',
   deleteResource: 'DELETE_RESOURCE',
   showBelonging: 'SHOW_BELONGING',
   updateInviteStatus: 'UPDATE_INVITE_STATUS',
+  updateTransactionStatus: 'UPDATE_TRANSACTION_STATUS',
+  removeCharacterFromCampaign: 'REMOVE_CHARACTER_FROM_CAMPAIGN',
 };
 
 export default ModalTypes;

@@ -15,7 +15,7 @@ import TextArea from '../../../shared/form/TextArea';
 import Select from '../../../shared/form/Select';
 import Detail from '../../../shared/form/Detail';
 
-const EditWeapon = ({ id, data }) => {
+const EditWeaponForm = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -151,4 +151,4 @@ const EditWeapon = ({ id, data }) => {
   );
 };
 
-export default EditWeapon;
+export default EditWeaponForm;

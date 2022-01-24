@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
@@ -7,10 +7,12 @@ import { selectCurrentCharacter } from '../../../redux/character/character.selec
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
+import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 import classNames from '../../../utils/classNames';
+import equipBelonging from '../../../utils/equipBelonging';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -27,7 +29,17 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [wearable, setWearable] = useState(sheetType === 'characters' ? charSheet.wearables[0] : campSheet.wearables[0]);
+  const [wearable, setWearable] = useState(null);
+  const [id, setId] = useState(null);
+
+  useEffect(() => {
+    if (id) {
+      setWearable(sheetType === 'characters' ? charSheet.wearables.find(wear => wear._id === id) : campSheet.wearables.find(wear => wear._id === id));
+      return;
+    }
+
+    setWearable(sheetType === 'characters' ? charSheet.wearables[0] : campSheet.wearables[0]);
+  }, [sheetType, id, campSheet, charSheet]);
 
   console.log(wearable);
 
@@ -46,7 +58,7 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.wearables : campSheet.wearables).map(wearable => (
-              <div key={wearable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setWearable(wearable)}>
+              <div key={wearable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(wearable._id)}>
                 <DisplayWearable key={wearable._id} wearable={wearable} sheetType={sheetType} condensed listItem />
 
                 {/* Display if it's a character sheet wearable is equipped */}
@@ -77,9 +89,17 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              {sheetType === 'characters' ? <Button>{wearable.equipped ? 'Unequip' : 'Equip'}</Button> : null}
-              {sheetType === 'campaigns' ? <Button>{wearable.npcId ? 'Unassign' : 'Assign'}</Button> : null}
-              {sheetType === 'campaigns' ? <Button>{wearable.active ? 'Deactivate' : 'Activate'}</Button> : null}
+              {sheetType === 'characters' ? (
+                <Button onClick={() => equipBelonging({ id: wearable._id, type: 'wearables', status: wearable.equipped })}>{wearable.equipped ? 'Unequip' : 'Equip'}</Button>
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: wearable._id, data: { type: 'wearables' } }))}>{wearable.npcId ? 'Unassign' : 'Assign'}</Button>
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'wearables', wearable._id, { active: !wearable.active }))}>
+                  {wearable.active ? 'Deactivate' : 'Activate'}
+                </Button>
+              ) : null}
               <Button>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, id: wearable._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button

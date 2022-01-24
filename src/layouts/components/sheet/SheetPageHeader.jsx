@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectAllNotifications } from '../../../redux/app/app.selectors';
+import { selectAllNotifications, selectNotifications } from '../../../redux/app/app.selectors';
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
 
 import { dismissNotification } from '../../../redux/app/app.actions';
@@ -170,7 +170,8 @@ const Transaction = ({ transaction, sent }) => {
 const RightSectionOnDesktop = ({ transactions, type }) => {
   const dispatch = useDispatch();
 
-  const notifications = useSelector(selectAllNotifications);
+  const allNotifications = useSelector(selectAllNotifications);
+  const unreadNotifications = useSelector(selectNotifications);
 
   return (
     <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
@@ -185,7 +186,9 @@ const RightSectionOnDesktop = ({ transactions, type }) => {
         >
           <span className="sr-only">View transactions</span>
           <ChatAltIcon className="h-6 w-6" aria-hidden="true" />
-          {/* <span className="absolute top-1 right-1 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span> */}
+          {transactions.sent.length || transactions.received.length ? (
+            <span className="absolute top-1 right-0 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span>
+          ) : null}
         </Popover.Button>
 
         <Transition
@@ -203,7 +206,7 @@ const RightSectionOnDesktop = ({ transactions, type }) => {
                 <div className="w-full max-w-md px-2 sm:px-0">
                   <Tab.Group>
                     <Tab.List className="flex p-1 space-x-1 bg-gray-50">
-                      {['Sent', 'Received'].map((tab, index) => (
+                      {['Received', 'Sent'].map((tab, index) => (
                         <Tab
                           key={index}
                           className={({ selected }) =>
@@ -219,28 +222,51 @@ const RightSectionOnDesktop = ({ transactions, type }) => {
                       ))}
                     </Tab.List>
                     <Tab.Panels className="mt-2">
-                      {/* Transactions Sent Panel */}
-                      <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60 space-y-6')}>
-                        {transactions.sent.map(transaction => (
-                          <Transaction key={transaction._id} transaction={transaction} sent={true} />
-                        ))}
-                      </Tab.Panel>
-
                       {/* Transactions Received Panel */}
                       <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60')}>
-                        {transactions.received.map(transaction => (
-                          <Transaction key={transaction._id} transaction={transaction} />
-                        ))}
+                        {transactions.received.length ? (
+                          <Fragment>
+                            {transactions.received.map(transaction => (
+                              <Transaction key={transaction._id} transaction={transaction} />
+                            ))}
+
+                            {/* Show Resolved Button */}
+                            <div className="mt-4 flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                              <span className="flex items-center justify-center">
+                                <button className="text-sm font-medium cursor-pointer">Show resolved</button>
+                              </span>
+                            </div>
+                          </Fragment>
+                        ) : (
+                          <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md">
+                            <span className="flex items-center justify-center text-sm font-medium text-gray-400">No received transactions</span>
+                          </div>
+                        )}
+                      </Tab.Panel>
+
+                      {/* Transactions Sent Panel */}
+                      <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60 space-y-6')}>
+                        {transactions.sent.length ? (
+                          <Fragment>
+                            {transactions.sent.map(transaction => (
+                              <Transaction key={transaction._id} transaction={transaction} sent={true} />
+                            ))}
+
+                            {/* Show Resolved Button */}
+                            <div className="mt-4 flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+                              <span className="flex items-center justify-center">
+                                <button className="text-sm font-medium cursor-pointer">Show resolved</button>
+                              </span>
+                            </div>
+                          </Fragment>
+                        ) : (
+                          <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md">
+                            <span className="flex items-center justify-center text-sm font-medium text-gray-400">No sent transactions</span>
+                          </div>
+                        )}
                       </Tab.Panel>
                     </Tab.Panels>
                   </Tab.Group>
-                  <div className="p-2 bg-gray-50">
-                    <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                      <span className="flex items-center justify-center">
-                        <button className="text-sm font-medium text-gray-600 cursor-pointer">Show resolved</button>
-                      </span>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -259,7 +285,7 @@ const RightSectionOnDesktop = ({ transactions, type }) => {
         >
           <span className="sr-only">View notifications</span>
           <BellIcon className="h-6 w-6" aria-hidden="true" />
-          {/* <span className="absolute top-1 right-1 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span> */}
+          {unreadNotifications.length ? <span className="absolute top-1 right-1 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span> : null}
         </Popover.Button>
 
         <Transition
@@ -274,7 +300,7 @@ const RightSectionOnDesktop = ({ transactions, type }) => {
           <Popover.Panel className="absolute z-10 w-72 px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
             <div className="overflow-y-scroll hide-scrollbar max-h-screen rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
               <div className="relative flex flex-col bg-white">
-                {notifications.map(not => (
+                {allNotifications.map(not => (
                   <div
                     key={not._id}
                     className={classNames('flex m-2 mb-1 p-2 rounded-lg', !not.dismissed ? 'bg-gray-50 hover:bg-gray-100 cursor-pointer' : '')}
@@ -290,7 +316,7 @@ const RightSectionOnDesktop = ({ transactions, type }) => {
                   </div>
                 ))}
                 <div className="p-2 bg-gray-50">
-                  {notifications.length ? (
+                  {allNotifications.length ? (
                     <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                       <span className="flex items-center justify-center">
                         <button className="text-sm font-medium text-gray-600 cursor-pointer">Mark all as read</button>

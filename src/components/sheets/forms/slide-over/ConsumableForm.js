@@ -17,7 +17,7 @@ import CheckboxGroup, { Checkbox } from '../../../shared/form/CheckboxGroup';
 import { LoadingSpinner } from '../../../shared/form/SubmitButton';
 import Row from '../../../shared/form/Row';
 
-const Consumable = ({ id, data }) => {
+const ConsumableForm = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -172,4 +172,4 @@ const Consumable = ({ id, data }) => {
   );
 };
 
-export default Consumable;
+export default ConsumableForm;

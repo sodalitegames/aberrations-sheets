@@ -12,7 +12,7 @@ import Input from '../../../shared/form/Input';
 import TextArea from '../../../shared/form/TextArea';
 import Select from '../../../shared/form/Select';
 
-const Usable = ({ id, data }) => {
+const UsableForm = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -98,4 +98,4 @@ const Usable = ({ id, data }) => {
   );
 };
 
-export default Usable;
+export default UsableForm;

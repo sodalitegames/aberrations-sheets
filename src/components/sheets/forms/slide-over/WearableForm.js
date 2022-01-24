@@ -12,7 +12,7 @@ import Input from '../../../shared/form/Input';
 import TextArea from '../../../shared/form/TextArea';
 import Select from '../../../shared/form/Select';
 
-const Wearable = ({ id, data }) => {
+const WearableForm = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -116,4 +116,4 @@ const Wearable = ({ id, data }) => {
   );
 };
 
-export default Wearable;
+export default WearableForm;

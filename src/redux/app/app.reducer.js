@@ -31,7 +31,7 @@ const appReducer = (state = INITIAL_STATE, action) => {
     case AppActionTypes.ADD_NOTIFICATION:
       return {
         ...state,
-        notifications: [...state.notifications, { ...action.payload, _id: state.notifications.length + 1, dismissed: false }],
+        notifications: [{ ...action.payload, _id: state.notifications.length + 1, dismissed: false }, ...state.notifications],
       };
     case AppActionTypes.DISMISS_NOTIFICATION:
       return {

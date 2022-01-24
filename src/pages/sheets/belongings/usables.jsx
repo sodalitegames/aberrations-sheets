@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
@@ -7,10 +7,12 @@ import { selectCurrentCharacter } from '../../../redux/character/character.selec
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
+import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 import classNames from '../../../utils/classNames';
+import equipBelonging from '../../../utils/equipBelonging';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -27,7 +29,17 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [usable, setUsable] = useState(sheetType === 'characters' ? charSheet.usables[0] : campSheet.usables[0]);
+  const [usable, setUsable] = useState(null);
+  const [id, setId] = useState(null);
+
+  useEffect(() => {
+    if (id) {
+      setUsable(sheetType === 'characters' ? charSheet.usables.find(usab => usab._id === id) : campSheet.usables.find(usab => usab._id === id));
+      return;
+    }
+
+    setUsable(sheetType === 'characters' ? charSheet.usables[0] : campSheet.usables[0]);
+  }, [sheetType, id, campSheet, charSheet]);
 
   console.log(usable);
 
@@ -46,7 +58,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.usables : campSheet.usables).map(usable => (
-              <div key={usable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setUsable(usable)}>
+              <div key={usable._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(usable._id)}>
                 <DisplayUsable key={usable._id} usable={usable} sheetType={sheetType} condensed listItem />
 
                 {/* Display if it's a character sheet usable is equipped */}
@@ -77,9 +89,17 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              {sheetType === 'characters' ? <Button>{usable.equipped ? 'Unequip' : 'Equip'}</Button> : null}
-              {sheetType === 'campaigns' ? <Button>{usable.npcId ? 'Unassign' : 'Assign'}</Button> : null}
-              {sheetType === 'campaigns' ? <Button>{usable.active ? 'Deactivate' : 'Activate'}</Button> : null}
+              {sheetType === 'characters' ? (
+                <Button onClick={() => equipBelonging({ id: usable._id, type: 'usables', status: usable.equipped, unequippable: !usable.equippable })}>{usable.equipped ? 'Unequip' : 'Equip'}</Button>
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: usable._id, data: { type: 'usables' } }))}>{usable.npcId ? 'Unassign' : 'Assign'}</Button>
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'usables', usable._id, { active: !usable.active }))}>
+                  {usable.active ? 'Deactivate' : 'Activate'}
+                </Button>
+              ) : null}
               <Button>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, id: usable._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button

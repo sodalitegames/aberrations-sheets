@@ -18,7 +18,6 @@ import { formatValidationErrors } from '../../../utils/validationErrors';
 import Notice from '../../../components/shared/Notice';
 
 // Character Sheet
-import DeleteCharacter from '../../../components/characters/forms/modal/DeleteCharacter';
 import TakeARest from '../../../components/characters/forms/modal/TakeARest';
 import TakeDamage from '../../../components/characters/forms/modal/TakeDamage';
 import HealDamage from '../../../components/characters/forms/modal/HealDamage';
@@ -28,15 +27,19 @@ import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoi
 import Mortality from '../../../components/characters/forms/modal/Mortality';
 import EditStat from '../../../components/characters/forms/modal/EditStat';
 import EditCondition from '../../../components/characters/forms/modal/EditCondition';
-import LeaveCampaign from '../../../components/characters/forms/modal/LeaveCampaign';
+import ErrorEquippingBelonging from '../../../components/characters/forms/modal/ErrorEquippingBelonging';
 
 // Campaign Sheet
 import SendInvite from '../../../components/campaigns/forms/modal/SendInvite';
+import AssignBelonging from '../../../components/campaigns/forms/modal/AssignBelonging';
 
 // Shared
+import DeleteSheet from '../../../components/sheets/forms/modal/DeleteSheet';
 import ShowBelonging from '../../../components/sheets/forms/modal/ShowBelonging';
 import DeleteResource from '../../../components/sheets/forms/modal/DeleteResource';
 import UpdateInviteStatus from '../../../components/sheets/forms/modal/UpdateInviteStatus';
+import UpdateTransactionStatus from '../../../components/sheets/forms/modal/UpdateTransactionStatus';
+import RemoveCharacterFromCampaign from '../../../components/sheets/forms/modal/RemoveCharacterFromCampaign';
 
 export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children }) => {
   const dispatch = useDispatch();
@@ -160,7 +163,6 @@ const Modal = () => {
               </div>
               {/* Forms */}
               {/* Character Sheet */}
-              {modal && modal.type === ModalTypes.deleteCharacter ? <DeleteCharacter /> : null}
               {modal && modal.type === ModalTypes.takeARest ? <TakeARest /> : null}
               {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
               {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
@@ -170,13 +172,17 @@ const Modal = () => {
               {modal && modal.type === ModalTypes.editMortality ? <Mortality /> : null}
               {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
               {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} /> : null}
-              {modal && modal.type === ModalTypes.leaveCampaign ? <LeaveCampaign /> : null}
+              {modal && modal.type === ModalTypes.errorEquippingBelonging ? <ErrorEquippingBelonging id={modal.id} data={modal.data} /> : null}
               {/* Campaign Sheet */}
               {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
+              {modal && modal.type === ModalTypes.assignBelonging ? <AssignBelonging id={modal.id} data={modal.data} /> : null}
               {/* Shared */}
+              {modal && modal.type === ModalTypes.deleteSheet ? <DeleteSheet data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} /> : null}
               {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus id={modal.id} data={modal.data} /> : null}
+              {modal && modal.type === ModalTypes.updateTransactionStatus ? <UpdateTransactionStatus id={modal.id} data={modal.data} /> : null}
+              {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} /> : null}
             </div>
           </Transition.Child>
         </div>

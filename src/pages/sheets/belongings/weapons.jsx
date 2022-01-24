@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
@@ -7,10 +7,12 @@ import { selectCurrentCharacter } from '../../../redux/character/character.selec
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
+import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 import classNames from '../../../utils/classNames';
+import equipBelonging from '../../../utils/equipBelonging';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -27,7 +29,17 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [weapon, setWeapon] = useState(sheetType === 'characters' ? charSheet.weapons[0] || null : campSheet.weapons[0] || null);
+  const [weapon, setWeapon] = useState(null);
+  const [id, setId] = useState(null);
+
+  useEffect(() => {
+    if (id) {
+      setWeapon(sheetType === 'characters' ? charSheet.weapons.find(weap => weap._id === id) : campSheet.weapons.find(weap => weap._id === id));
+      return;
+    }
+
+    setWeapon(sheetType === 'characters' ? charSheet.weapons[0] : campSheet.weapons[0]);
+  }, [sheetType, id, campSheet, charSheet]);
 
   console.log(weapon);
 
@@ -46,7 +58,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
             }}
           >
             {(sheetType === 'characters' ? charSheet.weapons : campSheet.weapons).map(weapon => (
-              <div key={weapon._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setWeapon(weapon)}>
+              <div key={weapon._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(weapon._id)}>
                 <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={sheetType} condensed listItem />
 
                 {/* Display if it's a character sheet weapon is equipped */}
@@ -77,9 +89,17 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              {sheetType === 'characters' ? <Button>{weapon.equipped ? 'Unequip' : 'Equip'}</Button> : null}
-              {sheetType === 'campaigns' ? <Button>{weapon.npcId ? 'Unassign' : 'Assign'}</Button> : null}
-              {sheetType === 'campaigns' ? <Button>{weapon.active ? 'Deactivate' : 'Activate'}</Button> : null}
+              {sheetType === 'characters' ? (
+                <Button onClick={() => equipBelonging({ id: weapon._id, type: 'weapons', status: weapon.equipped })}>{weapon.equipped ? 'Unequip' : 'Equip'}</Button>
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: weapon._id, data: { type: 'weapons' } }))}>{weapon.npcId ? 'Unassign' : 'Assign'}</Button>
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'weapons', weapon._id, { active: !weapon.active }))}>
+                  {weapon.active ? 'Deactivate' : 'Activate'}
+                </Button>
+              ) : null}
               <Button>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.editWeaponForm, id: weapon._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
