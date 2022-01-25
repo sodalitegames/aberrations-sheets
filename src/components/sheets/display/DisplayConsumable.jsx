@@ -1,5 +1,6 @@
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
+import { capitalize } from '../../../utils/strings';
 
 import ListItem from '../../shared/data/ListItem';
 import DescriptionList from '../../shared/data/DescriptionList';
@@ -45,7 +46,7 @@ const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, list
             { name: 'Level', values: [consumable.level], half: true },
             { name: 'Quantity', values: [consumable.quantity], half: true },
             { name: 'Uses', values: [consumable.uses], half: true },
-            consumable.associatedStat ? { name: 'Associated Stat', values: [consumable.associatedStat], half: true } : null,
+            consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
             { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
             consumable.description ? { name: 'Description', values: [consumable.description] } : null,
           ]}
@@ -64,7 +65,7 @@ const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, list
             { name: 'Level', values: [consumable.level], half: true },
             { name: 'Quantity', values: [consumable.quantity], half: true },
             { name: 'Uses', values: [consumable.uses], half: true },
-            consumable.associatedStat ? { name: 'Associated Stat', values: [consumable.associatedStat], half: true } : null,
+            consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
             { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
             consumable.description ? { name: 'Description', values: [consumable.description] } : null,
           ]}

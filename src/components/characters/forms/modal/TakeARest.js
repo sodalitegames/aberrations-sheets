@@ -6,12 +6,12 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
+import { correctCurrentHp } from '../../../../utils/updateHealth';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
 import Select from '../../../shared/form/Select';
 import Notice from '../../../shared/Notice';
-import { healDamage } from '../../../../utils/updateHealth';
 
 const TakeARest = () => {
   const dispatch = useDispatch();
@@ -106,7 +106,7 @@ const TakeARest = () => {
           'characters',
           charSheet._id,
           {
-            currentHp: healDamage(charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 5 : 0)),
+            currentHp: correctCurrentHp(charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 5 : 0), charSheet.maxHp + (upgradedFortitude ? 5 : 0)),
             conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
             fortitude: { ...fortitude, advantage: 0 },
             agility: { ...agility, advantage: 0 },
@@ -126,7 +126,7 @@ const TakeARest = () => {
           'characters',
           charSheet._id,
           {
-            currentHp: charSheet.currentHp + Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2),
+            currentHp: correctCurrentHp(charSheet.currentHp + Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2), charSheet.maxHp),
             conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured - 1, disturbed: charSheet.conditions.disturbed - 1 },
             fortitude: { ...charSheet.fortitude, advantage: 0 },
             agility: { ...charSheet.agility, advantage: 0 },

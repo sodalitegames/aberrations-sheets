@@ -1,3 +1,18 @@
+export const correctCurrentHp = (newCurrent, newMax) => {
+  // Current health cannot be more than max health
+  if (newCurrent > newMax) return newMax;
+
+  return newCurrent;
+};
+
+export const calculateNewCurrentHp = (current, max, newMax) => {
+  // Add the difference between newMax and old max to the currentHp
+  const newCurrent = current + (newMax - max);
+
+  // Calculate and return new current hp
+  return correctCurrentHp(newCurrent, newMax);
+};
+
 export const takeDamage = (current, updated, max) => {
   let results = {
     currentHp: updated,
@@ -47,11 +62,4 @@ export const takeDamage = (current, updated, max) => {
   }
 
   return results;
-};
-
-export const healDamage = (updated, max) => {
-  // Current health cannot be more than max health
-  if (updated > max) return max;
-
-  return updated;
 };

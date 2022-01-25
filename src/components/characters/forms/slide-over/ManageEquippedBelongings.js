@@ -1,7 +1,14 @@
 import { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCharacter, selectEquippedWeapons, selectEquippedWearables, selectEquippedConsumables, selectEquippedUsables } from '../../../../redux/character/character.selectors';
+import {
+  selectCurrentCharacter,
+  selectEquippedWeapons,
+  selectEquippedWearables,
+  selectEquippedConsumables,
+  selectEquippedUsables,
+  selectEquipmentMods,
+} from '../../../../redux/character/character.selectors';
 
 import { setNestedModal } from '../../../../redux/app/app.actions';
 
@@ -26,6 +33,7 @@ const ManageEquippedBelongings = ({ data }) => {
   const equippedWearables = useSelector(selectEquippedWearables);
   const equippedConsumables = useSelector(selectEquippedConsumables);
   const equippedUsables = useSelector(selectEquippedUsables);
+  const equipmentMods = useSelector(selectEquipmentMods);
 
   return (
     <SlideOverContainer title={`Manage equipped ${capitalize(data.type)}`} description={`Manage your equipped ${capitalize(data.type)} below.`} cancelText="Done">
@@ -82,6 +90,7 @@ const ManageEquippedBelongings = ({ data }) => {
                               belongingType: 'wearables',
                               belonging: belonging,
                               equippedList: equippedWearables,
+                              equipmentMods,
                               nested: true,
                             }),
                         },

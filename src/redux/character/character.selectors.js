@@ -19,3 +19,17 @@ export const selectEquippedWearables = createSelector([selectCurrentCharacter], 
 export const selectEquippedConsumables = createSelector([selectCurrentCharacter], current => (current ? current.consumables.filter(consumable => consumable.equipped) : []));
 
 export const selectEquippedUsables = createSelector([selectCurrentCharacter], current => (current ? current.usables.filter(usable => usable.equipped) : []));
+
+export const selectEquipmentMods = createSelector([selectEquippedWearables], equippedWearables =>
+  equippedWearables
+    ? equippedWearables.reduce(
+        (mods, wearable) => ({
+          fortitude: mods.fortitude + wearable.statMods.fortitude,
+          agility: mods.agility + wearable.statMods.agility,
+          persona: mods.persona + wearable.statMods.persona,
+          aptitude: mods.aptitude + wearable.statMods.aptitude,
+        }),
+        { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
+      )
+    : { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
+);

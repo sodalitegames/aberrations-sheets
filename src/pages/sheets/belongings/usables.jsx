@@ -96,6 +96,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
               {sheetType === 'characters' ? (
                 <Button
                   dark={usable.equipped}
+                  disabled={!usable.equippable}
                   onClick={() =>
                     equipBelonging({
                       sheetType,
@@ -106,7 +107,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
                     })
                   }
                 >
-                  {usable.equipped ? 'Unequip' : 'Equip'}
+                  {usable.equippable ? (usable.equipped ? 'Unequip' : 'Equip') : 'Unequippable'}
                 </Button>
               ) : null}
               {sheetType === 'campaigns' ? (

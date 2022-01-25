@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
+import { selectCurrentCharacter, selectEquipmentMods } from '../../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+import { createSheetResourceStart, updateSheetResourceStart, updateSheetStart } from '../../../../redux/sheet/sheet.actions';
+
+import { calculateNewCurrentHp } from '../../../../utils/updateHealth';
+import { correctStatMod } from '../../../../utils/equipBelonging';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -17,6 +20,7 @@ const WearableForm = ({ id, data }) => {
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
+  const equipmentMods = useSelector(selectEquipmentMods);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -67,11 +71,65 @@ const WearableForm = ({ id, data }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    if (equipped) return alert('You cannot edit a wearable that is equipped. Please unequipp and try again.');
-
     if (!name) return alert('Must provide a name');
     if (!bodyArea) return alert('Must provide a bodyArea');
     if (!description) return alert('Must provide a description');
+
+    if (data.sheetType === 'characters' && equipped) {
+      const currentWearable = charSheet.wearables.find(wearable => wearable._id === id);
+
+      let body = {};
+
+      if (currentWearable.statMods.fortitude !== fortitude) {
+        // Get the difference of the new and old fortidue mod
+        const diff = fortitude - currentWearable.statMods.fortitude;
+
+        const newFortitudeModifier = correctStatMod(equipmentMods.fortitude + diff);
+
+        body.fortitude = {
+          ...charSheet.fortitude,
+          modifier: newFortitudeModifier,
+        };
+
+        // Calculate the new maxHp
+        const newMaxHp = (newFortitudeModifier + charSheet.fortitude.points) * 5;
+
+        body.currentHp = calculateNewCurrentHp(charSheet.currentHp, charSheet.maxHp, newMaxHp);
+      }
+
+      if (currentWearable.statMods.agility !== agility) {
+        // Get the difference of the new and old agility mod
+        const diff = agility - currentWearable.statMods.agility;
+
+        body.agility = {
+          ...charSheet.agility,
+          modifier: correctStatMod(equipmentMods.agility + diff),
+        };
+      }
+
+      if (currentWearable.statMods.persona !== persona) {
+        // Get the difference of the new and old persona mod
+        const diff = persona - currentWearable.statMods.persona;
+
+        body.persona = {
+          ...charSheet.persona,
+          modifier: correctStatMod(equipmentMods.persona + diff),
+        };
+      }
+
+      if (currentWearable.statMods.aptitude !== aptitude) {
+        // Get the difference of the new and old aptitude mod
+        const diff = aptitude - currentWearable.statMods.aptitude;
+
+        body.aptitude = {
+          ...charSheet.aptitude,
+          modifier: correctStatMod(equipmentMods.aptitude + diff),
+        };
+      }
+
+      // Update the sheet with the mod changes
+      dispatch(updateSheetStart('characters', charSheet._id, body));
+    }
 
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 

@@ -5,7 +5,7 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
-import { takeDamage } from '../../../../utils/updateHealth';
+import { correctCurrentHp, takeDamage } from '../../../../utils/updateHealth';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
@@ -58,7 +58,7 @@ const TakeDamage = () => {
     const { currentHp, injured, nearlyDead } = takeDamage(charSheet.currentHp, charSheet.currentHp - +damage, charSheet.maxHp);
 
     let body = {
-      currentHp,
+      currentHp: correctCurrentHp(currentHp, charSheet.maxHp),
     };
 
     if (injured) {

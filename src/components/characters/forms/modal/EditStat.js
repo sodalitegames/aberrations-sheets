@@ -6,6 +6,7 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
+import { calculateNewCurrentHp } from '../../../../utils/updateHealth';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
@@ -34,7 +35,20 @@ const EditStat = ({ id }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { [id]: { points, modifier, experience, advantage } }, { modal: true }));
+    let body = {
+      [id]: { points: parseInt(points), modifier: parseInt(modifier), experience, advantage },
+    };
+
+    if (id === 'fortitude') {
+      if (charSheet[id].points + charSheet[id].modifier !== body[id].points + body[id].modifier) {
+        // Get the new maxHp
+        const newMaxHp = (body[id].points + body[id].modifier) * 5;
+
+        body.currentHp = calculateNewCurrentHp(charSheet.currentHp, charSheet.maxHp, newMaxHp);
+      }
+    }
+
+    dispatch(updateSheetStart('characters', charSheet._id, body, { modal: true }));
   };
 
   return (
@@ -42,7 +56,7 @@ const EditStat = ({ id }) => {
       <Input label="Natural" name="points" type="number" value={points} changeHandler={setPoints} />
       <Detail label="Modifier" detail={modifier} />
       <Input label="Experience" name="experience" type="number" value={experience} changeHandler={setExperience} />
-      <Input label="Advantage" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
+      <Input label="Stat Advantage (Opt.)" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
     </ModalForm>
   );
 };

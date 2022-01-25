@@ -5,7 +5,7 @@ import { selectCurrentCharacter } from '../../../../redux/character/character.se
 
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
-import { healDamage } from '../../../../utils/updateHealth';
+import { correctCurrentHp } from '../../../../utils/updateHealth';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
@@ -22,9 +22,9 @@ const HealDamage = () => {
   const [status, setStatus] = useState('success');
 
   useEffect(() => {
-    const updatedHp = healDamage(charSheet.currentHp + +damage, charSheet.maxHp);
+    const updatedHp = correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp);
 
-    const actionsArr = [`You will be at ${healDamage(charSheet.currentHp + +damage, charSheet.maxHp)} health.`];
+    const actionsArr = [`You will be at ${correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp)} health.`];
 
     // If they will not be mauled and were mauled previously
     if (charSheet.currentHp < charSheet.maxHp / 5 && updatedHp >= charSheet.maxHp / 5) {
@@ -64,7 +64,7 @@ const HealDamage = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { currentHp: healDamage(charSheet.currentHp + +damage, charSheet.maxHp) }, { modal: true }));
+    dispatch(updateSheetStart('characters', charSheet._id, { currentHp: correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp) }, { modal: true }));
   };
 
   return (
