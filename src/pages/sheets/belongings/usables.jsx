@@ -101,12 +101,10 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
                   onClick={() =>
                     equipBelonging({
                       sheetType,
-                      sheetId: charSheet._id,
+                      sheet: charSheet,
                       belongingType: 'usables',
-                      belongingId: usable._id,
-                      status: usable.equipped,
-                      unequippable: !usable.equippable,
-                      list: equippedUsables,
+                      belonging: usable,
+                      equippedList: equippedUsables,
                     })
                   }
                 >

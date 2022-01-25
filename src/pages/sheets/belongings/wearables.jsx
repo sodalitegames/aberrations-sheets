@@ -96,10 +96,7 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
 
             <div className="col-span-1 space-y-4 pl-8">
               {sheetType === 'characters' ? (
-                <Button
-                  dark={wearable.equipped}
-                  onClick={() => equipBelonging({ sheetType, sheetId: charSheet._id, belongingType: 'wearables', belongingId: wearable._id, status: wearable.equipped, list: equippedWearables })}
-                >
+                <Button dark={wearable.equipped} onClick={() => equipBelonging({ sheetType, sheet: charSheet, belongingType: 'wearables', belonging: wearable, equippedList: equippedWearables })}>
                   {wearable.equipped ? 'Unequip' : 'Equip'}
                 </Button>
               ) : null}

@@ -96,10 +96,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
 
             <div className="col-span-1 space-y-4 pl-8">
               {sheetType === 'characters' ? (
-                <Button
-                  dark={weapon.equipped}
-                  onClick={() => equipBelonging({ sheetType, sheetId: charSheet._id, belongingType: 'weapons', belongingId: weapon._id, status: weapon.equipped, list: equippedWeapons })}
-                >
+                <Button dark={weapon.equipped} onClick={() => equipBelonging({ sheetType, sheet: charSheet, belongingType: 'weapons', belonging: weapon, equippedList: equippedWeapons })}>
                   {weapon.equipped ? 'Unequip' : 'Equip'}
                 </Button>
               ) : null}

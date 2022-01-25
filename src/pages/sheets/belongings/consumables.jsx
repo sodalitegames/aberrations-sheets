@@ -98,9 +98,7 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
               {sheetType === 'characters' ? (
                 <Button
                   dark={consumable.equipped}
-                  onClick={() =>
-                    equipBelonging({ sheetType, sheetId: charSheet._id, belongingType: 'consumables', belongingId: consumable._id, status: consumable.equipped, list: equippedConsumables })
-                  }
+                  onClick={() => equipBelonging({ sheetType, sheet: charSheet, belongingType: 'consumables', belonging: consumable, equippedList: equippedConsumables })}
                 >
                   {consumable.equipped ? 'Unequip' : 'Equip'}
                 </Button>
