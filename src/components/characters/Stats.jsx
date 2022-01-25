@@ -1,15 +1,20 @@
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { PencilIcon } from '@heroicons/react/solid';
+
+import { selectEquipmentMods } from '../../redux/character/character.selectors';
 
 import { setModal } from '../../redux/app/app.actions';
 
 import ModalTypes from '../../utils/ModalTypes';
+import { correctStatMod } from '../../utils/equipBelonging';
 
 import Chip from '../shared/Chip';
 
 const Stats = ({ stats, power, mortality, slowed }) => {
   const dispatch = useDispatch();
+
+  const equipmentMods = useSelector(selectEquipmentMods);
 
   return (
     <div>
@@ -45,7 +50,14 @@ const Stats = ({ stats, power, mortality, slowed }) => {
                   </h5>
                   {stat.points + stat.modifier}
                   <span className="text-sm font-medium text-gray-500">
-                    {stat.points} NAT &amp; {stat.modifier} MOD
+                    {stat.points} NAT &amp;{' '}
+                    {correctStatMod(equipmentMods[stat.name.toLowerCase()]) !== stat.modifier ? (
+                      <span>
+                        <span className="text-red-800 text-xs line-through">{stat.modifier} MOD</span> <span>{correctStatMod(equipmentMods[stat.name.toLowerCase()])} MOD</span>
+                      </span>
+                    ) : (
+                      <span>{stat.modifier} MOD</span>
+                    )}
                   </span>
                 </div>
 
