@@ -1,4 +1,5 @@
 import SheetActionTypes from '../sheet/sheet.types';
+import AppActionTypes from '../app/app.types';
 
 import { replaceItemById, removeItemById } from '../../utils/arrays';
 
@@ -110,6 +111,12 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: action.payload.error,
+      };
+    case AppActionTypes.SET_MODAL:
+    case AppActionTypes.SET_SLIDE_OVER:
+      return {
+        ...state,
+        error: null,
       };
     default:
       return state;

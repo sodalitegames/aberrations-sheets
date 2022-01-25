@@ -4,7 +4,7 @@ const ModalTypes = {
   healDamage: 'HEAL_DAMAGE',
   receiveMoney: 'RECEIVE_MONEY',
   payMoney: 'PAY_MONEY',
-  editUpgradePoints: 'EDIT_UPGRADE_POINTS',
+  editSpentUpgradePoints: 'EDIT_SPENT_UPGRADE_POINTS',
   editMortality: 'EDIT_MORTALITY',
   editStat: 'EDIT_STAT',
   editCondition: 'EDIT_CONDITION',

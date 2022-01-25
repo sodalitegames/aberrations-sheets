@@ -91,7 +91,7 @@ const CharacterGameplayPage = () => {
             <span className={classNames(charSheet.currentHp >= charSheet.maxHp / 2 ? 'text-green-800' : '', charSheet.currentHp >= charSheet.maxHp / 4 ? 'text-yellow-800' : 'text-red-800')}>
               {charSheet.currentHp} / {charSheet.maxHp}
             </span>
-            <span className="text-sm font-medium text-gray-500 uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
+            <span className="text-sm font-medium text-gray-500 text-center uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
           </div>
           <div className="mt-6">
             <Button onClick={() => dispatch(setModal({ type: ModalTypes.takeDamage }))}>Take Damage</Button>
@@ -201,7 +201,7 @@ const CharacterGameplayPage = () => {
       <PanelSection>
         <div className="flex justify-between flex-wrap md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
-          <Chip editable={{ type: ModalTypes.editUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
+          <Chip editable={{ type: ModalTypes.editSpentUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
             {charSheet.upgradePoints} Upgrade {charSheet.upgradePoints === 1 ? 'Point' : 'Points'}
           </Chip>
         </div>

@@ -1,21 +1,23 @@
 export const getHealthMessage = (current, max) => {
-  return current <= 0
-    ? `You're as dead as a doornail`
+  return current < -max
+    ? `You are Totally Dead`
+    : current <= 0
+    ? `You are Nearly Dead`
     : current === 1
-    ? `You're as good as dead`
+    ? `You are as good as dead`
     : current < max / 5
-    ? `You're in mauled condition`
+    ? `You are mauled and will gain 1 injured each time you take damage`
     : current < max / 2
-    ? `You're in bloodied condition`
+    ? `You are bloodied`
     : current >= (max / 4) * 3
-    ? `You're in great condition`
+    ? `You are in great condition`
     : current >= (max / 4) * 2
-    ? `You're in good condition`
-    : `You're in perfect condition`;
+    ? `You are in good condition`
+    : `You are in perfect condition`;
 };
 
 export const getWalletMessage = wallet => {
-  return 'Cash on your person';
+  return wallet <= 0 ? 'You literally have no money' : 'Cash on your person';
 };
 
 export const getTransactionHeading = ({ senderName, recipientName, sellPrice, documentType, document }, sent) => {

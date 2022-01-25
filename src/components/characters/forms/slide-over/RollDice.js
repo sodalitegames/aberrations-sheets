@@ -25,6 +25,7 @@ const RollDice = () => {
   const [stat, setStat] = useState('');
   const [dice, setDice] = useState(0);
   const [advantage, setAdvantage] = useState(0);
+  const [additionalDice, setAdditionalDice] = useState(0);
 
   const [rollData, setRollData] = useState(null);
 
@@ -37,20 +38,20 @@ const RollDice = () => {
   };
 
   const getSubmitText = () => {
+    if (stat) {
+      return `Roll for ${capitalize(statKey)} (${calcDice() + parseInt(additionalDice)} ${calcDice() + parseInt(additionalDice) === 1 ? 'die' : 'dice'}) with ${calcAdvantage()} Advantage.`;
+    }
+
     if (!dice) {
       return `Roll Dice`;
     }
 
-    if (stat) {
-      return `Roll for ${capitalize(statKey)} (${calcDice()} ${calcDice() === 1 ? 'die' : 'dice'}) with ${calcAdvantage()} Advantage.`;
-    }
-
-    return `Roll ${dice} ${dice === 1 ? 'die' : 'dice'} with ${advantage} Advantage.`;
+    return `Roll ${dice} ${dice === '1' ? 'die' : 'dice'} with ${advantage} Advantage.`;
   };
 
   const selectStat = e => {
     if (!e.target.value) {
-      setStat(null);
+      setStat('');
       setStatKey('');
     }
     setStatKey(e.target.value);
@@ -67,7 +68,7 @@ const RollDice = () => {
       return;
     }
 
-    const data = rollDice(calcDice(), calcAdvantage(), statKey);
+    const data = rollDice(calcDice() + parseInt(additionalDice), calcAdvantage(), statKey);
     setRollData(data);
 
     // If any injured, disturbed, or experience was gained, save that to the database
@@ -109,12 +110,13 @@ const RollDice = () => {
           ) : statKey === 'persona' || statKey === 'aptitude' ? (
             <Detail slideOver label="Disturbed Advantage" detail={-charSheet.conditions.disturbed} />
           ) : null}
-          <Input slideOver label="Roll Advantage" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
+          <Input slideOver label="Roll Advantage (Opt.)" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
+          <Input slideOver label="Additional Dice (Opt.)" name="additionalDice" type="number" value={additionalDice} changeHandler={setAdditionalDice} />
         </>
       ) : (
         <>
           <Input slideOver label="Dice" name="dice" type="number" value={dice} changeHandler={setDice} />
-          <Input slideOver label="Advantage" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
+          <Input slideOver label="Advantage (Opt.)" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
         </>
       )}
       {stat ? <Notice status="info" message="If you make a roll, any experience or conditions you may gain will be automatically added to your character sheet." /> : null}

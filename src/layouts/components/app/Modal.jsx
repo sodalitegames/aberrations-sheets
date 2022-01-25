@@ -23,7 +23,7 @@ import TakeDamage from '../../../components/characters/forms/modal/TakeDamage';
 import HealDamage from '../../../components/characters/forms/modal/HealDamage';
 import ReceiveMoney from '../../../components/characters/forms/modal/ReceiveMoney';
 import PayMoney from '../../../components/characters/forms/modal/PayMoney';
-import UpgradePoints from '../../../components/characters/forms/modal/UpgradePoints';
+import SpentUpgradePoints from '../../../components/characters/forms/modal/SpentUpgradePoints';
 import Mortality from '../../../components/characters/forms/modal/Mortality';
 import EditStat from '../../../components/characters/forms/modal/EditStat';
 import EditCondition from '../../../components/characters/forms/modal/EditCondition';
@@ -130,7 +130,7 @@ const Modal = () => {
   const modal = useSelector(selectModal);
 
   return (
-    <Transition.Root show={!!modal?.modal} as={Fragment}>
+    <Transition.Root show={!!modal} as={Fragment}>
       <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={() => dispatch(setModal(null))}>
         <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
           <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
@@ -228,7 +228,7 @@ const ModalForms = ({ modal, nested }) => {
       {modal && modal.type === ModalTypes.healDamage ? <HealDamage nested={nested} /> : null}
       {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney nested={nested} /> : null}
       {modal && modal.type === ModalTypes.payMoney ? <PayMoney nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.editUpgradePoints ? <UpgradePoints nested={nested} /> : null}
+      {modal && modal.type === ModalTypes.editSpentUpgradePoints ? <SpentUpgradePoints nested={nested} /> : null}
       {modal && modal.type === ModalTypes.editMortality ? <Mortality nested={nested} /> : null}
       {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} nested={nested} /> : null}
