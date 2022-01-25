@@ -28,7 +28,7 @@ const NewCampaign = () => {
     if (!overview) return alert('Must provide an overview');
     if (!details) return alert('Must provide a details');
 
-    dispatch(createSheetForUserStart('campaigns', { name, ccName: currentUser.name, ccNickname, overview, details }));
+    dispatch(createSheetForUserStart('campaigns', { name, ccName: currentUser.name, ccNickname, overview, details }, { slideOver: true }));
   };
 
   return (

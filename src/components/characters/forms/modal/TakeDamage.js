@@ -19,7 +19,7 @@ const TakeDamage = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { currentHp: charSheet.currentHp - +damage }));
+    dispatch(updateSheetStart('characters', charSheet._id, { currentHp: charSheet.currentHp - +damage }, { modal: true }));
   };
 
   return (

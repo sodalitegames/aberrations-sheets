@@ -40,7 +40,7 @@ const AssignBelonging = ({ id, data }) => {
     if (!npcId) alert('You must select an Npc');
     if (!npc) alert('You must select an Npc');
 
-    dispatch(updateSheetResourceStart('campaigns', campSheet._id, data.type, id, { npcId: npcId }));
+    dispatch(updateSheetResourceStart('campaigns', campSheet._id, data.type, id, { npcId: npcId }, { modal: true }));
   };
 
   return (

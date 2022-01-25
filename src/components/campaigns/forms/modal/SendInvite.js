@@ -28,7 +28,7 @@ const SendInvite = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(createSheetResourceStart('campaigns', campSheet._id, 'invites', { campaignName, ccName, charSheetId: charId, message }));
+    dispatch(createSheetResourceStart('campaigns', campSheet._id, 'invites', { campaignName, ccName, charSheetId: charId, message }, { modal: true }));
   };
 
   return (

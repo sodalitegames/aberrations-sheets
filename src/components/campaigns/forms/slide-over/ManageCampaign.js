@@ -46,12 +46,17 @@ const ManageCampaign = () => {
     if (!details) return alert('Must provide a details');
 
     dispatch(
-      updateSheetStart('campaigns', campSheet._id, {
-        ccNickname,
-        name,
-        overview,
-        details,
-      })
+      updateSheetStart(
+        'campaigns',
+        campSheet._id,
+        {
+          ccNickname,
+          name,
+          overview,
+          details,
+        },
+        { slideOver: true }
+      )
     );
   };
 

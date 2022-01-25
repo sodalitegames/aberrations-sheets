@@ -19,7 +19,7 @@ const ReceiveMoney = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { wallet: charSheet.wallet + +amount }));
+    dispatch(updateSheetStart('characters', charSheet._id, { wallet: charSheet.wallet + +amount }, { modal: true }));
   };
 
   return (

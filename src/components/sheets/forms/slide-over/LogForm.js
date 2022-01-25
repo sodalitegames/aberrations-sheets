@@ -48,11 +48,11 @@ const LogForm = ({ id, data }) => {
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (id) {
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'logs', id, { date, content }));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'logs', id, { date, content }, { slideOver: true }));
       return;
     }
 
-    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'logs', { date, content }));
+    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'logs', { date, content }, { slideOver: true }));
   };
 
   return (

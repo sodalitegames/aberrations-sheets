@@ -149,22 +149,28 @@ const NewWeaponForm = ({ data }) => {
       if (!associatedStat) return alert('Must provide an associatedStat');
       if (!range) return alert('Must provide a range');
 
-      dispatch(createSheetResourceStart(data.sheetType, sheetId, 'weapons', { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, description }));
+      dispatch(createSheetResourceStart(data.sheetType, sheetId, 'weapons', { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, description }, { slideOver: true }));
       return;
     }
 
     dispatch(
-      createSheetResourceStart(data.sheetType, sheetId, 'weapons', {
-        type: weapon.type,
-        name: weapon.name,
-        nickname,
-        associatedStat: weapon.associatedStat,
-        levelDamage,
-        range: weapon.range,
-        ability: weapon.ability,
-        description,
-        universalId: weapon.universalId,
-      })
+      createSheetResourceStart(
+        data.sheetType,
+        sheetId,
+        'weapons',
+        {
+          type: weapon.type,
+          name: weapon.name,
+          nickname,
+          associatedStat: weapon.associatedStat,
+          levelDamage,
+          range: weapon.range,
+          ability: weapon.ability,
+          description,
+          universalId: weapon.universalId,
+        },
+        { slideOver: true }
+      )
     );
   };
 

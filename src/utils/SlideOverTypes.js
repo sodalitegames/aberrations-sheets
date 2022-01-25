@@ -7,7 +7,6 @@ const SlideOverTypes = {
   manageCharacter: 'MANAGE_CHARACTER',
   rollDice: 'ROLL_DICE',
   manageEquippedBelongings: 'MANAGE_EQUIPPED_BELONGINGS',
-  manageEquippedWearables: 'MANAGE_EQUIPPED_WEARABLES',
   purchaseAugmentation: 'PURCHASE_AUGMENTATION',
   charDescriptionForm: 'CHARACTER_DESCRIPTION_FORM',
   charBackgroundForm: 'CHARACTER_BACKGROUND_FORM',

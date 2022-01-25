@@ -76,11 +76,11 @@ const WearableForm = ({ id, data }) => {
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (id) {
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'wearables', id, { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'wearables', id, { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }, { slideOver: true }));
       return;
     }
 
-    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'wearables', { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }));
+    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'wearables', { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }, { slideOver: true }));
   };
 
   return (

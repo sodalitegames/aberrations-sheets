@@ -8,7 +8,7 @@ import { deleteSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-const DeleteSheet = ({ data }) => {
+const DeleteSheet = ({ data, nested }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const DeleteSheet = ({ data }) => {
         return alert('You cannot delete this character until you leave the campaign you are in.');
       }
 
-      dispatch(deleteSheetStart('characters', charSheet._id));
+      dispatch(deleteSheetStart('characters', charSheet._id, { modal: nested ? false : true, nestedModal: nested ? true : false }));
 
       navigate('/characters');
     }
@@ -33,7 +33,7 @@ const DeleteSheet = ({ data }) => {
         return alert('You cannot delete this campaign until you remove all the players that are in it.');
       }
 
-      dispatch(deleteSheetStart('campaigns', campSheet._id));
+      dispatch(deleteSheetStart('campaigns', campSheet._id, { modal: nested ? false : true, nestedModal: nested ? true : false }));
 
       navigate('/campaigns');
     }
@@ -41,6 +41,7 @@ const DeleteSheet = ({ data }) => {
 
   return (
     <ModalForm
+      nested={nested}
       type="alert"
       title="Hold up, this is permanent and irreversable."
       submitText={`Yes, I want to permanently delete ${data.sheetType === 'characters' ? charSheet.characterName : campSheet.name}`}

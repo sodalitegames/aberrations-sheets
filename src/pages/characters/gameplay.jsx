@@ -123,11 +123,11 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedWeapons}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' })), text: 'Manage equipped Weapons' }}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons' } })), text: 'Manage equipped Weapons' }}
               empty={{
                 heading: 'No Equipped Weapons',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' })), text: 'Equip Weapon' },
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons' } })), text: 'Equip Weapon' },
               }}
             >
               {equippedWeapons.map(weapon => (
@@ -142,11 +142,11 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedWearables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedWearables })), text: 'Manage equipped Wearables' }}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'wearables' } })), text: 'Manage equipped Wearables' }}
               empty={{
                 heading: 'No Equipped Wearables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedWearables })), text: 'Equip Wearable' },
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'wearables' } })), text: 'Equip Wearable' },
               }}
             >
               {equippedWearables.map(wearable => (
@@ -163,11 +163,11 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedConsumables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' })), text: 'Manage equipped Consumables' }}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables' } })), text: 'Manage equipped Consumables' }}
               empty={{
                 heading: 'No Equipped Consumables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' })), text: 'Equip Consumable' },
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables' } })), text: 'Equip Consumable' },
               }}
             >
               {equippedConsumables.map(consumable => (
@@ -182,11 +182,11 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedUsables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' })), text: 'Manage equipped Usables' }}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables' } })), text: 'Manage equipped Usables' }}
               empty={{
                 heading: 'No Equipped Usables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' })), text: 'Equip Usable' },
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables' } })), text: 'Equip Usable' },
               }}
             >
               {equippedUsables.map(usable => (

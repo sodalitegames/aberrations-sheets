@@ -27,7 +27,7 @@ const CampDetails = () => {
 
     if (!details) return alert('Must provide details');
 
-    dispatch(updateSheetStart('campaigns', campSheet._id, { details }));
+    dispatch(updateSheetStart('campaigns', campSheet._id, { details }, { slideOver: true }));
   };
 
   return (

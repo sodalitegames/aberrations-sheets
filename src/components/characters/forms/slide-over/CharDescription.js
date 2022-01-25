@@ -27,7 +27,7 @@ const CharDescription = () => {
 
     if (!charDescription) return alert('Must provide charDescription');
 
-    dispatch(updateSheetStart('characters', charSheet._id, { charDescription }));
+    dispatch(updateSheetStart('characters', charSheet._id, { charDescription }, { slideOver: true }));
   };
 
   return (

@@ -74,9 +74,9 @@ export const fetchSheetsForUserFailure = error => ({
 });
 
 // CREATE SHEET FOR USER
-export const createSheetForUserStart = (sheetType, body) => ({
+export const createSheetForUserStart = (sheetType, body, config) => ({
   type: UserActionTypes.CREATE_SHEET_FOR_USER_START,
-  payload: { sheetType, body },
+  payload: { sheetType, body, config },
 });
 
 export const createSheetForUserSuccess = (sheetType, newSheet) => ({

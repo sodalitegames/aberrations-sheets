@@ -34,7 +34,7 @@ const EditStat = ({ id }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { [id]: { points, modifier, experience, advantage } }));
+    dispatch(updateSheetStart('characters', charSheet._id, { [id]: { points, modifier, experience, advantage } }, { modal: true }));
   };
 
   return (

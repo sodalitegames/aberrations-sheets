@@ -85,8 +85,8 @@ const PurchaseAugmentation = () => {
 
     const { name, pointCost, description, universalId } = augmentation;
 
-    dispatch(createSheetResourceStart('characters', charSheet._id, 'augmentations', { name, pointCost, description, universalId }));
-    dispatch(updateSheetStart('characters', charSheet._id, { upgradePoints: charSheet.upgradePoints - pointCost }));
+    dispatch(createSheetResourceStart('characters', charSheet._id, 'augmentations', { name, pointCost, description, universalId }, { slideOver: true }));
+    dispatch(updateSheetStart('characters', charSheet._id, { upgradePoints: charSheet.upgradePoints - pointCost }, { slideOver: true }));
   };
 
   return (

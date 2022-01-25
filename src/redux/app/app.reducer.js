@@ -4,15 +4,9 @@ import { replaceItemById } from '../../utils/arrays';
 
 const INITIAL_STATE = {
   modal: null,
+  nestedModal: null,
   slideOver: null,
-  notifications: [
-    // {
-    //   _id: '1',
-    //   heading: 'Successfully saved!',
-    //   message: 'Anyone with a link can now view this file.',
-    //   dismissed: false,
-    // }
-  ],
+  notifications: [],
   alert: null,
 };
 
@@ -22,6 +16,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         modal: action.payload,
+      };
+    case AppActionTypes.SET_NESTED_MODAL:
+      return {
+        ...state,
+        nestedModal: action.payload,
       };
     case AppActionTypes.SET_SLIDE_OVER:
       return {

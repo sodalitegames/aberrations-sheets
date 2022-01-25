@@ -68,20 +68,24 @@ const NewCharacter = () => {
     if (!species) return alert('Must select a species');
 
     dispatch(
-      createSheetForUserStart('characters', {
-        playerName: currentUser.name,
-        playerNickname,
-        characterName,
-        charDescription,
-        charBackground,
-        speciesId: species.id,
-        speciesName: species.name,
-        currentHp: species.stats.fortitude * 5,
-        fortitude: { points: species.stats.fortitude },
-        agility: { points: species.stats.agility },
-        persona: { points: species.stats.persona },
-        aptitude: { points: species.stats.aptitude },
-      })
+      createSheetForUserStart(
+        'characters',
+        {
+          playerName: currentUser.name,
+          playerNickname,
+          characterName,
+          charDescription,
+          charBackground,
+          speciesId: species.id,
+          speciesName: species.name,
+          currentHp: species.stats.fortitude * 5,
+          fortitude: { points: species.stats.fortitude },
+          agility: { points: species.stats.agility },
+          persona: { points: species.stats.persona },
+          aptitude: { points: species.stats.aptitude },
+        },
+        { slideOver: true }
+      )
     );
   };
 

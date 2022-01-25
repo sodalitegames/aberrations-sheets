@@ -12,10 +12,10 @@ export const selectPermissions = createSelector([selectCharacter], character => 
 
 export const selectReload = createSelector([selectCharacter], character => character.reload);
 
-export const selectEquippedWeapons = createSelector([selectCurrentCharacter], current => current.weapons.filter(weapon => weapon.equipped));
+export const selectEquippedWeapons = createSelector([selectCurrentCharacter], current => (current ? current.weapons.filter(weapon => weapon.equipped) : []));
 
-export const selectEquippedWearables = createSelector([selectCurrentCharacter], current => current.wearables.filter(wearable => wearable.equipped));
+export const selectEquippedWearables = createSelector([selectCurrentCharacter], current => (current ? current.wearables.filter(wearable => wearable.equipped) : []));
 
-export const selectEquippedConsumables = createSelector([selectCurrentCharacter], current => current.consumables.filter(consumable => consumable.equipped));
+export const selectEquippedConsumables = createSelector([selectCurrentCharacter], current => (current ? current.consumables.filter(consumable => consumable.equipped) : []));
 
-export const selectEquippedUsables = createSelector([selectCurrentCharacter], current => current.usables.filter(usable => usable.equipped));
+export const selectEquippedUsables = createSelector([selectCurrentCharacter], current => (current ? current.usables.filter(usable => usable.equipped) : []));

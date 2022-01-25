@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
+import { selectCurrentCharacter, selectEquippedWeapons } from '../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
@@ -28,6 +28,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
+  const equippedWeapons = useSelector(selectEquippedWeapons);
 
   const [weapon, setWeapon] = useState(null);
   const [id, setId] = useState(null);
@@ -95,7 +96,10 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
 
             <div className="col-span-1 space-y-4 pl-8">
               {sheetType === 'characters' ? (
-                <Button dark={weapon.equipped} onClick={() => equipBelonging({ id: weapon._id, type: 'weapons', status: weapon.equipped })}>
+                <Button
+                  dark={weapon.equipped}
+                  onClick={() => equipBelonging({ sheetType, sheetId: charSheet._id, belongingType: 'weapons', belongingId: weapon._id, status: weapon.equipped, list: equippedWeapons })}
+                >
                   {weapon.equipped ? 'Unequip' : 'Equip'}
                 </Button>
               ) : null}

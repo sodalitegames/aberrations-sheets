@@ -12,7 +12,7 @@ const createWeaponList = (stat, range, ability) => {
   return weapon;
 };
 
-const DisplayWeapon = ({ weapon, condensed, noButtonPanel, listItem, sheetType }) => {
+const DisplayWeapon = ({ weapon, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
@@ -24,7 +24,7 @@ const DisplayWeapon = ({ weapon, condensed, noButtonPanel, listItem, sheetType }
 
     if (condensed) {
       return (
-        <ListItem heading={`${weapon.nickname || weapon.name} (Level ${weapon.levelDamage})`}>
+        <ListItem heading={`${weapon.nickname || weapon.name} (Level ${weapon.levelDamage})`} actions={actions}>
           <InfoList list={[`${capitalize(weapon.associatedStat)} | ${weapon.range} Range`]} />
         </ListItem>
       );

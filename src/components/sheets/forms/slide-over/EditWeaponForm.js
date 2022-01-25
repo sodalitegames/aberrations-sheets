@@ -84,16 +84,23 @@ const EditWeaponForm = ({ id, data }) => {
       if (!associatedStat) return alert('Must provide an associatedStat');
       if (!range) return alert('Must provide a range');
 
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description }));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description }, { slideOver: true }));
       return;
     }
 
     dispatch(
-      updateSheetResourceStart(data.sheetType, sheetId, 'weapons', id, {
-        nickname,
-        levelDamage,
-        description,
-      })
+      updateSheetResourceStart(
+        data.sheetType,
+        sheetId,
+        'weapons',
+        id,
+        {
+          nickname,
+          levelDamage,
+          description,
+        },
+        { slideOver: true }
+      )
     );
   };
 

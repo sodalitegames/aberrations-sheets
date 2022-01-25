@@ -1,5 +1,4 @@
 import SheetActionTypes from '../sheet/sheet.types';
-import AppActionTypes from '../app/app.types';
 
 import { replaceItemById, removeItemById } from '../../utils/arrays';
 
@@ -116,12 +115,6 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: action.payload.error,
-      };
-    case AppActionTypes.SET_SLIDE_OVER:
-    case AppActionTypes.SET_MODAL:
-      return {
-        ...state,
-        error: null,
       };
     default:
       return state;

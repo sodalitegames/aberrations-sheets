@@ -11,7 +11,7 @@ import DisplayWearable from '../../display/DisplayWearable';
 import DisplayConsumable from '../../display/DisplayConsumable';
 import DisplayUsable from '../../display/DisplayUsable';
 
-const ShowBelonging = ({ id, data }) => {
+const ShowBelonging = ({ id, data, nested }) => {
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
@@ -36,7 +36,7 @@ const ShowBelonging = ({ id, data }) => {
   }, [charSheet, campSheet, id, data]);
 
   return (
-    <ModalContainer>
+    <ModalContainer nested={nested}>
       {belonging ? (
         <>
           {data.resourceType === 'weapons' ? (

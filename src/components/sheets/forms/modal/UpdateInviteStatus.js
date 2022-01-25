@@ -14,7 +14,7 @@ import Notice from '../../../shared/Notice';
 
 import DisplayInvite from '../../display/DisplayInvite';
 
-const UpdateInviteStatus = ({ id, data }) => {
+const UpdateInviteStatus = ({ id, data, nested }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -50,11 +50,12 @@ const UpdateInviteStatus = ({ id, data }) => {
 
     const sheetId = data.sheetType === 'characters' ? charSheet._id : campSheet._id;
 
-    dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'invites', id, { status: status }));
+    dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'invites', id, { status: status }, { modal: nested ? false : true, nestedModal: nested ? true : false }));
   };
 
   return (
     <ModalForm
+      nested={nested}
       title={
         status === 'Accepted'
           ? 'Accept Campaign Invitation'

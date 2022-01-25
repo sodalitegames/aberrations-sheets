@@ -25,7 +25,7 @@ const UpgradePoints = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { upgradePoints }));
+    dispatch(updateSheetStart('characters', charSheet._id, { upgradePoints }, { modal: true }));
   };
 
   return (

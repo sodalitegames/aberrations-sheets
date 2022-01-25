@@ -5,7 +5,7 @@ import ListItem from '../../shared/data/ListItem';
 import DescriptionList from '../../shared/data/DescriptionList';
 import InfoList from '../../shared/data/InfoList';
 
-const DisplayUsable = ({ usable, condensed, noButtonPanel, listItem, sheetType }) => {
+const DisplayUsable = ({ usable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
@@ -17,7 +17,7 @@ const DisplayUsable = ({ usable, condensed, noButtonPanel, listItem, sheetType }
 
     if (condensed) {
       return (
-        <ListItem heading={`${usable.name} (${usable.quantity} ${usable.unit || 'Units'})`}>
+        <ListItem heading={`${usable.name} (${usable.quantity} ${usable.unit || 'Units'})`} actions={actions}>
           <InfoList list={[usable.type]} />
         </ListItem>
       );

@@ -117,11 +117,11 @@ const ConsumableForm = ({ id, data }) => {
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (id) {
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'consumables', id, body));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'consumables', id, body, { slideOver: true }));
       return;
     }
 
-    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'consumables', body));
+    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'consumables', body, { slideOver: true }));
   };
 
   return (

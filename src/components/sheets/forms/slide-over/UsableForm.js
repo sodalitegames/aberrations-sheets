@@ -63,11 +63,11 @@ const UsableForm = ({ id, data }) => {
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (id) {
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'usables', id, { name, type, description, quantity }));
+      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'usables', id, { name, type, description, quantity }, { slideOver: true }));
       return;
     }
 
-    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'usables', { name, type, description, quantity }));
+    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'usables', { name, type, description, quantity }, { slideOver: true }));
   };
 
   return (

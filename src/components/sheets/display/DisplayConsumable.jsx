@@ -5,20 +5,19 @@ import ListItem from '../../shared/data/ListItem';
 import DescriptionList from '../../shared/data/DescriptionList';
 import InfoList from '../../shared/data/InfoList';
 
-const DisplayConsumable = ({ consumable, condensed, noButtonPanel, listItem, sheetType }) => {
+const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
         <ListItem heading={`${consumable.name} (Level ${consumable.level})`} view={{ type: ModalTypes.showBelonging, id: consumable._id, data: { sheetType: sheetType, resourceType: 'consumables' } }}>
           <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
-          <p className="text-sm text-gray-500 truncate">{consumable.handle}</p>
         </ListItem>
       );
     }
 
     if (condensed) {
       return (
-        <ListItem heading={`${consumable.name} (Level ${consumable.level})`}>
+        <ListItem heading={`${consumable.name} (Level ${consumable.level})`} actions={actions}>
           <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
         </ListItem>
       );

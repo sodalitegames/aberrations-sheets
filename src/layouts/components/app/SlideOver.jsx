@@ -15,6 +15,8 @@ import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import { formatValidationErrors } from '../../../utils/validationErrors';
 
+import { NestedModal } from './Modal';
+
 import Notice from '../../../components/shared/Notice';
 
 import NewCharacter from '../../../components/home/forms/slide-over/NewCharacter';
@@ -23,8 +25,7 @@ import NewCampaign from '../../../components/home/forms/slide-over/NewCampaign';
 // Character Sheet
 import ManageCharacter from '../../../components/characters/forms/slide-over/ManageCharacter';
 import RollDice from '../../../components/characters/forms/slide-over/RollDice';
-import EquippedBelongings from '../../../components/characters/forms/slide-over/EquippedBelongings';
-import EquippedWearables from '../../../components/characters/forms/slide-over/EquippedWearables';
+import ManageEquippedBelongings from '../../../components/characters/forms/slide-over/ManageEquippedBelongings';
 import PurchaseAugmentation from '../../../components/characters/forms/slide-over/PurchaseAugmentation';
 import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
@@ -160,7 +161,6 @@ export const SlideOverContainer = ({ title, description, cancelText, children })
 
 const SlideOver = () => {
   const dispatch = useDispatch();
-
   const slideOver = useSelector(selectSlideOver);
 
   return (
@@ -185,8 +185,7 @@ const SlideOver = () => {
                 {/* Character Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <EquippedBelongings id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? <EquippedWearables /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <ManageEquippedBelongings data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
@@ -211,6 +210,9 @@ const SlideOver = () => {
             </Transition.Child>
           </div>
         </div>
+
+        {/* Nested Modal */}
+        <NestedModal />
       </Dialog>
     </Transition.Root>
   );

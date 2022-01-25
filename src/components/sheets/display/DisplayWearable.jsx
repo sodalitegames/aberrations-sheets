@@ -32,7 +32,7 @@ const getWearableMods = (FOR, AGL, PER, APT) => {
   return stats.join(' / ');
 };
 
-const DisplayWearable = ({ wearable, condensed, noButtonPanel, listItem, sheetType }) => {
+const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
@@ -47,7 +47,7 @@ const DisplayWearable = ({ wearable, condensed, noButtonPanel, listItem, sheetTy
 
     if (condensed) {
       return (
-        <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`}>
+        <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} actions={actions}>
           <InfoList list={[getWearableMods(wearable.statMods.fortitude, wearable.statMods.agility, wearable.statMods.persona, wearable.statMods.aptitude)]} />
         </ListItem>
       );

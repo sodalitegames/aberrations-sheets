@@ -113,15 +113,20 @@ const TakeARest = () => {
       }
 
       dispatch(
-        updateSheetStart('characters', charSheet._id, {
-          currentHp: charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 5 : 0),
-          conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
-          fortitude: { ...fortitude, advantage: 0 },
-          agility: { ...agility, advantage: 0 },
-          persona: { ...persona, advantage: 0 },
-          aptitude: { ...aptitude, advantage: 0 },
-          upgradePoints: charSheet.upgradePoints + upgradePoints,
-        })
+        updateSheetStart(
+          'characters',
+          charSheet._id,
+          {
+            currentHp: charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 5 : 0),
+            conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
+            fortitude: { ...fortitude, advantage: 0 },
+            agility: { ...agility, advantage: 0 },
+            persona: { ...persona, advantage: 0 },
+            aptitude: { ...aptitude, advantage: 0 },
+            upgradePoints: charSheet.upgradePoints + upgradePoints,
+          },
+          { modal: true }
+        )
       );
 
       return;
@@ -129,14 +134,19 @@ const TakeARest = () => {
 
     if (rest === 'nap') {
       dispatch(
-        updateSheetStart('characters', charSheet._id, {
-          currentHp: charSheet.currentHp + Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2),
-          conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured - 1, disturbed: charSheet.conditions.disturbed - 1 },
-          fortitude: { ...charSheet.fortitude, advantage: 0 },
-          agility: { ...charSheet.agility, advantage: 0 },
-          persona: { ...charSheet.agility, advantage: 0 },
-          aptitude: { ...charSheet.aptitude, advantage: 0 },
-        })
+        updateSheetStart(
+          'characters',
+          charSheet._id,
+          {
+            currentHp: charSheet.currentHp + Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2),
+            conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured - 1, disturbed: charSheet.conditions.disturbed - 1 },
+            fortitude: { ...charSheet.fortitude, advantage: 0 },
+            agility: { ...charSheet.agility, advantage: 0 },
+            persona: { ...charSheet.agility, advantage: 0 },
+            aptitude: { ...charSheet.aptitude, advantage: 0 },
+          },
+          { modal: true }
+        )
       );
 
       return;

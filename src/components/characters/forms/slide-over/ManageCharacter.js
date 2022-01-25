@@ -46,12 +46,17 @@ const ManageCharacter = () => {
     if (!charBackground) return alert('Must provide a charBackground');
 
     dispatch(
-      updateSheetStart('characters', charSheet._id, {
-        playerNickname,
-        characterName,
-        charDescription,
-        charBackground,
-      })
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        {
+          playerNickname,
+          characterName,
+          charDescription,
+          charBackground,
+        },
+        { slideOver: true }
+      )
     );
   };
 

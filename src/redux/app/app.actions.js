@@ -5,6 +5,11 @@ export const setModal = modal => ({
   payload: modal,
 });
 
+export const setNestedModal = nestedModal => ({
+  type: AppActionTypes.SET_NESTED_MODAL,
+  payload: nestedModal,
+});
+
 export const setSlideOver = slideOver => ({
   type: AppActionTypes.SET_SLIDE_OVER,
   payload: slideOver,

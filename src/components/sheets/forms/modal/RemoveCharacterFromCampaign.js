@@ -18,7 +18,7 @@ const RemoveCharacterFromCampaign = ({ data }) => {
 
     const sheetId = data.sheetType === 'characters' ? charSheet._id : campSheet._id;
 
-    dispatch(removeCharacterFromCampaignStart(data.sheetType, sheetId, data.body));
+    dispatch(removeCharacterFromCampaignStart(data.sheetType, sheetId, data.body, { modal: true }));
   };
 
   return (

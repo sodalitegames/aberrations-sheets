@@ -27,7 +27,7 @@ const CharBackground = () => {
 
     if (!charBackground) return alert('Must provide charBackground');
 
-    dispatch(updateSheetStart('characters', charSheet._id, { charBackground }));
+    dispatch(updateSheetStart('characters', charSheet._id, { charBackground }, { slideOver: true }));
   };
 
   return (
