@@ -171,7 +171,6 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
     if (config?.modal) yield put(setModal(null));
     if (config?.nestedModal) yield put(setModal(null));
   } catch (err) {
-    console.log(err);
     yield put(createSheetResourceFailure(sheetType, err.response.data));
   }
 }

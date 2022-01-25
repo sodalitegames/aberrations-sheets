@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAllNotifications, selectNotifications } from '../../../redux/app/app.selectors';
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
 
-import { dismissNotification } from '../../../redux/app/app.actions';
+import { dismissNotification, clearAllNotifications } from '../../../redux/app/app.actions';
 import { signOutStart } from '../../../redux/user/user.actions';
 
 import { Menu, Popover, Transition, Tab } from '@headlessui/react';
@@ -319,7 +319,9 @@ const RightSectionOnDesktop = ({ transactions, type }) => {
                   {allNotifications.length ? (
                     <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                       <span className="flex items-center justify-center">
-                        <button className="text-sm font-medium text-gray-600 cursor-pointer">Mark all as read</button>
+                        <button className="text-sm font-medium text-gray-600 cursor-pointer" onClick={() => dispatch(clearAllNotifications())}>
+                          Clear all notifications
+                        </button>
                       </span>
                     </div>
                   ) : (

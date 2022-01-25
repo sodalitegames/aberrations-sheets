@@ -43,8 +43,6 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
     setId(sheetType === 'characters' ? charSheet.weapons[0]?._id : campSheet.weapons[0]?._id);
   }, [sheetType, id, campSheet, charSheet]);
 
-  console.log(weapon);
-
   return (
     <SheetPageContent title="Weapons" columns={4}>
       {/* All Weapons */}

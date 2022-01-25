@@ -61,8 +61,6 @@ const TakeDamage = () => {
       currentHp,
     };
 
-    console.log(injured);
-
     if (injured) {
       body.conditions = {
         ...charSheet.conditions,

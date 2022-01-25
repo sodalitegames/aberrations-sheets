@@ -60,7 +60,7 @@ export default function CharacterSheet() {
   return (
     <div className="min-h-screen flex flex-col justify-between">
       <div>
-        {reload ? <Banner icon="info" theme="secondary" message={reload} button={{ text: 'Reload', custom: () => dispatch(fetchCurrentSheetStart('campaigns', campId)) }} /> : null}
+        {reload ? <Banner icon="info" theme="neutral" message={reload} button={{ text: 'Reload', custom: () => dispatch(fetchCurrentSheetStart('campaigns', campId)) }} /> : null}
         <div>
           <SheetPageHeader title={campSheet ? `Aberrations RPG Sheets -  ${campSheet.name}` : 'Aberrations RPG Sheets'} transactions={campSheet ? campSheet.transactions : null} type="campaign" />
           <main className="-mt-24 pb-8">

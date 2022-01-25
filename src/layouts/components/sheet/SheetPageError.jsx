@@ -25,7 +25,7 @@ const SheetPageError = ({ type, error }) => {
             <Link
               to="/"
               className={classNames(
-                'inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent1-deep',
+                'inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2',
                 type === 'characters'
                   ? 'bg-accent2-deep hover:bg-accent2-dark focus:ring-accent2-deep'
                   : type === 'campaigns'

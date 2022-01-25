@@ -25,6 +25,10 @@ export const dismissNotification = notification => ({
   payload: notification,
 });
 
+export const clearAllNotifications = () => ({
+  type: AppActionTypes.CLEAR_ALL_NOTIFICATIONS,
+});
+
 export const setAlert = alert => ({
   type: AppActionTypes.SET_ALERT,
   payload: alert,

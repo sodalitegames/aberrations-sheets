@@ -38,8 +38,6 @@ const CampaignEnvironmentsPage = () => {
     setId(campSheet.environments[0]?._id);
   }, [id, campSheet]);
 
-  console.log(environment);
-
   return (
     <SheetPageContent title="Npcs" columns={4}>
       {/* All Environments */}

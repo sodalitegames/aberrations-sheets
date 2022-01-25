@@ -43,8 +43,6 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
     setId(sheetType === 'characters' ? charSheet.usables[0]?._id : campSheet.usables[0]?._id);
   }, [sheetType, id, campSheet, charSheet]);
 
-  console.log(usable);
-
   return (
     <SheetPageContent title="Usables" columns={4}>
       {/* All Usables */}

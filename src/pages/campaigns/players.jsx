@@ -42,8 +42,6 @@ const CampaignPlayersPage = () => {
     setPlayer(campSheet.players[0]);
   }, [id, campSheet]);
 
-  console.log(player);
-
   useEffect(() => {
     if (!speciesList) {
       dispatch(fetchResourceStart('species'));

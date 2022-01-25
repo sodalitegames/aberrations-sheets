@@ -38,8 +38,6 @@ const CampaignCreaturesPage = () => {
     setId(campSheet.creatures[0]?._id);
   }, [id, campSheet]);
 
-  console.log(creature);
-
   return (
     <SheetPageContent title="Npcs" columns={4}>
       {/* All Creatures */}

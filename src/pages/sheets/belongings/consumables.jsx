@@ -43,8 +43,6 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
     setId(sheetType === 'characters' ? charSheet.consumables[0]?._id : campSheet.consumables[0]?._id);
   }, [sheetType, id, campSheet, charSheet]);
 
-  console.log(consumable);
-
   return (
     <SheetPageContent title="Consumables" columns={4}>
       {/* All Consumables */}

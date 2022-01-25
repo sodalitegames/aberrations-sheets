@@ -56,7 +56,7 @@ const CharacterSheet = () => {
         {permissions?.isCC ? (
           <Banner
             icon="info"
-            theme="secondary"
+            theme="neutral"
             message={`You are viewing ${charSheet.playerNickname || charSheet.playerName}'s character sheet as a CC, with limited permissions.`}
             // button={{ text: 'Learn more', href: '/about' }}
             closable

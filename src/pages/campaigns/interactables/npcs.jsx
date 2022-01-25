@@ -38,8 +38,6 @@ const CampaignNpcsPage = () => {
     setId(campSheet.npcs[0]?._id);
   }, [id, campSheet]);
 
-  console.log(npc);
-
   return (
     <SheetPageContent title="Npcs" columns={4}>
       {/* All Npcs */}

@@ -7,8 +7,6 @@ import { Transition } from '@headlessui/react';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 
-export const Notification = ({ notification }) => {};
-
 const Notifications = ({ notifications }) => {
   const dispatch = useDispatch();
 

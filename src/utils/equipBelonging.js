@@ -6,8 +6,6 @@ import { setModal, setNestedModal } from '../redux/app/app.actions';
 import ModalTypes from './ModalTypes';
 
 const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedList, nested }) => {
-  console.log('Equip Belonging:', sheetType, sheet, belongingType, belonging, equippedList, nested);
-
   if (sheetType !== 'characters') return;
 
   if (belonging.unequippable) return alert('This belonging is unequippable');
@@ -30,8 +28,6 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
           })
         );
       }
-
-      console.log('MATH', 5 - -3);
     }
 
     store.dispatch(updateSheetResourceStart(sheetType, sheet._id, belongingType, belonging._id, { equipped: false }));

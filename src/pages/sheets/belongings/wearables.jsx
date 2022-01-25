@@ -43,8 +43,6 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
     setId(sheetType === 'characters' ? charSheet.wearables[0]?._id : campSheet.wearables[0]?._id);
   }, [sheetType, id, campSheet, charSheet]);
 
-  console.log(wearable);
-
   return (
     <SheetPageContent title="Wearables" columns={4}>
       {/* All Wearables */}
