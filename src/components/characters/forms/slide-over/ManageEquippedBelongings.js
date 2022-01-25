@@ -35,9 +35,8 @@ const ManageEquippedBelongings = ({ data }) => {
             {charSheet[data.type].map(belonging => {
               if (data.type === 'weapons') {
                 return (
-                  <Fragment>
+                  <Fragment key={belonging._id}>
                     <DisplayWeapon
-                      key={belonging._id}
                       weapon={belonging}
                       listItem
                       condensed
@@ -48,11 +47,11 @@ const ManageEquippedBelongings = ({ data }) => {
                           click: () =>
                             equipBelonging({
                               sheetType: 'characters',
-                              sheetId: charSheet._id,
+                              sheet: charSheet,
                               belongingType: 'weapons',
-                              belongingId: belonging._id,
-                              status: belonging.equipped,
-                              list: equippedWeapons,
+                              belonging: belonging,
+                              equippedList: equippedWeapons,
+                              nested: true,
                             }),
                         },
                         {
@@ -67,9 +66,8 @@ const ManageEquippedBelongings = ({ data }) => {
 
               if (data.type === 'wearables') {
                 return (
-                  <Fragment>
+                  <Fragment key={belonging._id}>
                     <DisplayWearable
-                      key={belonging._id}
                       wearable={belonging}
                       listItem
                       condensed
@@ -80,11 +78,11 @@ const ManageEquippedBelongings = ({ data }) => {
                           click: () =>
                             equipBelonging({
                               sheetType: 'characters',
-                              sheetId: charSheet._id,
+                              sheet: charSheet,
                               belongingType: 'wearables',
-                              belongingId: belonging._id,
-                              status: belonging.equipped,
-                              list: equippedWearables,
+                              belonging: belonging,
+                              equippedList: equippedWearables,
+                              nested: true,
                             }),
                         },
                         {
@@ -99,9 +97,8 @@ const ManageEquippedBelongings = ({ data }) => {
 
               if (data.type === 'consumables') {
                 return (
-                  <Fragment>
+                  <Fragment key={belonging._id}>
                     <DisplayConsumable
-                      key={belonging._id}
                       consumable={belonging}
                       listItem
                       condensed
@@ -112,11 +109,11 @@ const ManageEquippedBelongings = ({ data }) => {
                           click: () =>
                             equipBelonging({
                               sheetType: 'characters',
-                              sheetId: charSheet._id,
+                              sheet: charSheet,
                               belongingType: 'consumables',
-                              belongingId: belonging._id,
-                              status: belonging.equipped,
-                              list: equippedConsumables,
+                              belonging: belonging,
+                              equippedList: equippedConsumables,
+                              nested: true,
                             }),
                         },
                         {
@@ -131,9 +128,8 @@ const ManageEquippedBelongings = ({ data }) => {
 
               if (data.type === 'usables') {
                 return (
-                  <Fragment>
+                  <Fragment key={belonging._id}>
                     <DisplayUsable
-                      key={belonging._id}
                       usable={belonging}
                       listItem
                       condensed
@@ -144,11 +140,11 @@ const ManageEquippedBelongings = ({ data }) => {
                           click: () =>
                             equipBelonging({
                               sheetType: 'characters',
-                              sheetId: charSheet._id,
+                              sheet: charSheet,
                               belongingType: 'usables',
-                              belongingId: belonging._id,
-                              status: belonging.equipped,
-                              list: equippedUsables,
+                              belonging: belonging,
+                              equippedList: equippedUsables,
+                              nested: true,
                             }),
                         },
                         {
@@ -161,7 +157,7 @@ const ManageEquippedBelongings = ({ data }) => {
                 );
               }
 
-              return 'Something went wrong loading belonging data.';
+              return <p key={belonging._id}>Something went wrong loading belonging data.</p>;
             })}
           </ListContainer>
         ) : (
