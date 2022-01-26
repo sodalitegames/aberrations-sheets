@@ -146,7 +146,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
                   {weapon.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, transactionType: 'weapons', document: weapon } }))}>Give or Sell</Button>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: 'weapons', document: weapon } }))}>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.editWeaponForm, id: weapon._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert

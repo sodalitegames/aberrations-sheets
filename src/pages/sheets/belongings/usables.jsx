@@ -158,7 +158,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
                   {usable.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, transactionType: 'usables', document: usable } }))}>Give or Sell</Button>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: 'usables', document: usable } }))}>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, id: usable._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert

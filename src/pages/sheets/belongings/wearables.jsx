@@ -150,7 +150,13 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
                   {wearable.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, transactionType: 'wearables', document: wearable } }))}>Give or Sell</Button>
+              <Button
+                disabled={wearable.equipped}
+                onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: 'wearables', document: wearable } }))}
+              >
+                Give or Sell
+              </Button>
+              {wearable.equipped ? <p className="text-sm italic text-gray-400">You must unequip this wearable before you can give or sell it.</p> : null}
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, id: wearable._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert

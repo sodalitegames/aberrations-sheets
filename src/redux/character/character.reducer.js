@@ -52,6 +52,25 @@ const characterReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.CREATE_SHEET_RESOURCE_SUCCESS:
       let { resourceType: createdResourceType, newResource } = action.payload;
       if (createdResourceType === 'logs') createdResourceType = 'characterLogs';
+
+      // If resource type is transaction, update the state accordingly
+      if (createdResourceType === 'transactions') {
+        const transactionType = newResource.sheetId === state.current._id ? 'sent' : 'received';
+
+        return {
+          ...state,
+          error: null,
+          current: {
+            ...state.current,
+            transactions: {
+              ...state.current.transactions,
+              [transactionType]: [newResource, ...state.current[createdResourceType][transactionType]],
+            },
+          },
+        };
+      }
+
+      // Otherwise, return updates as normal
       return {
         ...state,
         error: null,
@@ -63,6 +82,25 @@ const characterReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.UPDATE_SHEET_RESOURCE_SUCCESS:
       let { resourceType: updatedResourceType, updatedResource } = action.payload;
       if (updatedResourceType === 'logs') updatedResourceType = 'characterLogs';
+
+      // If resource type is transaction, update the state accordingly
+      if (updatedResourceType === 'transactions') {
+        const transactionType = updatedResource.sheetId === state.current._id ? 'sent' : 'received';
+
+        return {
+          ...state,
+          error: null,
+          current: {
+            ...state.current,
+            transactions: {
+              ...state.current.transactions,
+              [transactionType]: replaceItemById(state.current[updatedResourceType][transactionType], updatedResource._id, updatedResource),
+            },
+          },
+        };
+      }
+
+      // Otherwise, return updates as normal
       return {
         ...state,
         error: null,
@@ -74,6 +112,27 @@ const characterReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.DELETE_SHEET_RESOURCE_SUCCESS:
       let { resourceType: deletedResourceType, resourceId } = action.payload;
       if (deletedResourceType === 'logs') deletedResourceType = 'characterLogs';
+
+      // If resource type is transaction, update the state accordingly
+      if (deletedResourceType === 'transactions') {
+        // Set transaction type
+        let transactionType = 'received';
+        if (state.current.transactions.sent.find(transac => transac._id === resourceId)) transactionType = 'sent';
+
+        return {
+          ...state,
+          error: null,
+          current: {
+            ...state.current,
+            transactions: {
+              ...state.current.transactions,
+              [transactionType]: removeItemById(state.current[deletedResourceType][transactionType], resourceId),
+            },
+          },
+        };
+      }
+
+      // Otherwise, return updates as normal
       return {
         ...state,
         error: null,
