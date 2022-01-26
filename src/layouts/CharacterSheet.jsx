@@ -67,7 +67,7 @@ const CharacterSheet = () => {
           <SheetPageHeader
             title={charSheet ? `Aberrations RPG Sheets - ${charSheet.characterName}` : 'Aberrations RPG Sheets'}
             transactions={charSheet ? charSheet.transactions : null}
-            type="character"
+            type="characters"
           />
           <main className="-mt-24 pb-8">
             {!loading && charSheet ? (
