@@ -33,8 +33,6 @@ const ErrorEquippingBelonging = ({ data, nested }) => {
 
   const [belongingToReplace, setBelongingToReplace] = useState(null);
 
-  console.log('LOOK', nested);
-
   const getTitleText = () => {
     if (data.belongingType === 'weapons') {
       return `You already have 2 weapons equipped. Would you like to replace one of them with ${data.belonging.nickname || data.belonging.name}?`;
@@ -59,7 +57,6 @@ const ErrorEquippingBelonging = ({ data, nested }) => {
     e.preventDefault();
 
     const config = { modal: nested ? false : true, nestedModal: nested ? true : false };
-    console.log(config);
 
     if (data.belongingType !== 'wearables' && !belongingToReplace) return alert('You must select an equipped belonging to replace.');
     if (data.belongingType === 'usables' && !data.belonging.equippable) return alert('This usable is not equippable.');
