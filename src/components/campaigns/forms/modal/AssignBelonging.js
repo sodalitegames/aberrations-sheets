@@ -5,6 +5,8 @@ import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selec
 
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
+import { getBelongingTypeCapitalized } from '../../../../utils/displayBelongings';
+
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
 import ListContainer from '../../../shared/data/ListContainer';
@@ -51,9 +53,7 @@ const AssignBelonging = ({ id, data }) => {
           modal: true,
           notification: {
             status: 'success',
-            heading: `${
-              data.type === 'weapons' ? 'Weapon' : data.type === 'wearables' ? 'Wearable' : data.type === 'consumables' ? 'Consumable' : data.type === 'usables' ? 'Usable' : 'Belonging'
-            } Assigned`,
+            heading: `${getBelongingTypeCapitalized(data.type)} Assigned`,
             message: `You have successfully assigned ${data.name} to ${npc?.name}.`,
           },
         }

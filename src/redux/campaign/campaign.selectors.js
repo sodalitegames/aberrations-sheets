@@ -17,3 +17,15 @@ export const selectCompletedSessions = createSelector([selectCurrentCampaign], c
 export const selectFutureSessions = createSelector([selectCurrentCampaign], current => current.sessions.filter(session => !session.completed && !session.active));
 
 export const selectActiveSession = createSelector([selectCurrentCampaign], current => current.sessions.find(session => session.active));
+
+export const selectPendingTransactions = createSelector([selectCurrentCampaign], current =>
+  current
+    ? { sent: current.transactions.sent.filter(transac => transac.status === 'Pending'), received: current.transactions.received.filter(transac => transac.status === 'Pending') }
+    : { sent: [], received: [] }
+);
+
+export const selectResolvedTransactions = createSelector([selectCurrentCampaign], current =>
+  current
+    ? { sent: current.transactions.sent.filter(transac => transac.status !== 'Pending'), received: current.transactions.received.filter(transac => transac.status !== 'Pending') }
+    : { sent: [], received: [] }
+);

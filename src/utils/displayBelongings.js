@@ -1,3 +1,33 @@
+export const getBelongingType = belType => {
+  switch (belType) {
+    case 'weapons':
+      return 'weapon';
+    case 'wearables':
+      return 'wearable';
+    case 'consumables':
+      return 'consumable';
+    case 'usables':
+      return 'usable';
+    default:
+      return 'belonging';
+  }
+};
+
+export const getBelongingTypeCapitalized = belType => {
+  switch (belType) {
+    case 'weapons':
+      return 'Weapon';
+    case 'wearables':
+      return 'Wearable';
+    case 'consumables':
+      return 'Consumable';
+    case 'usables':
+      return 'Usable';
+    default:
+      return 'Belonging';
+  }
+};
+
 export const getWeaponRangeString = range => {
   switch (range) {
     case 'Close':

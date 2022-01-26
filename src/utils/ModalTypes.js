@@ -20,7 +20,7 @@ const ModalTypes = {
   deleteResource: 'DELETE_RESOURCE',
   showBelonging: 'SHOW_BELONGING',
   updateInviteStatus: 'UPDATE_INVITE_STATUS',
-  updateTransactionStatus: 'UPDATE_TRANSACTION_STATUS',
+  manageTransaction: 'MANAGE_TRANSACTION',
   removeCharacterFromCampaign: 'REMOVE_CHARACTER_FROM_CAMPAIGN',
 };
 

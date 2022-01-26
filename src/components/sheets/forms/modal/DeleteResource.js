@@ -5,7 +5,10 @@ import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selec
 
 import { deleteSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
+import { getBelongingType } from '../../../../utils/displayBelongings';
+
 import { ModalForm } from '../../../../layouts/components/app/Modal';
+
 import Notice from '../../../shared/Notice';
 
 // Example data object below
@@ -66,9 +69,7 @@ const DeleteResource = ({ id, data, nested }) => {
             message={
               data.resourceType === 'wearables'
                 ? `Deleting this wearable will also unequip it, and will remove any modifiers it may be adding to your stats.`
-                : `Deleting this ${
-                    data.resourceType === 'weapons' ? 'weapon' : data.resourceType === 'consumables' ? 'consumable' : data.resourceType === 'usables' ? 'usable' : 'belonging'
-                  } will also unequip it.`
+                : `Deleting this ${getBelongingType(data.resourceType)} will also unequip it.`
             }
           />
         ) : null}

@@ -77,7 +77,7 @@ const UpdateInviteStatus = ({ id, data, nested }) => {
         status === 'Accepted'
           ? 'Accept Campaign Invitation'
           : status === 'Declined'
-          ? 'Are you sure you want to decline?'
+          ? 'Are you sure you want to decline this invite?'
           : status === 'Revoked'
           ? 'Are you sure you want to revoke this invite?'
           : 'Update Invite Status'
@@ -107,7 +107,7 @@ const UpdateInviteStatus = ({ id, data, nested }) => {
           required
         />
       ) : (
-        <Select label="Update Status" name="status" value={status} options={[{ name: 'Revoked', id: 'Revoked' }]} changeHandler={selectStatus} required />
+        <Select label="Update Status" name="status" value={status} options={[{ name: 'Revoke', id: 'Revoked' }]} changeHandler={selectStatus} required />
       )}
 
       {invite ? (
@@ -117,7 +117,7 @@ const UpdateInviteStatus = ({ id, data, nested }) => {
       ) : null}
 
       {status === 'Declined' || status === 'Revoked' ? (
-        <Notice noIcon status="error" message={`You will not be change your decision once you have ${status === 'Declined' ? 'declined' : 'revoked'} this invitation`} />
+        <Notice noIcon status="error" message={`You will not be able to change your decision once you have ${status === 'Declined' ? 'declined' : 'revoked'} this invitation.`} />
       ) : null}
     </ModalForm>
   );

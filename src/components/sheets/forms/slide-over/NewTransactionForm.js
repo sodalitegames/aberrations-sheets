@@ -6,18 +6,17 @@ import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selec
 
 import { createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
+import { getBelongingType, getBelongingTypeCapitalized } from '../../../../utils/displayBelongings';
+
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import Input from '../../../shared/form/Input';
 import Select from '../../../shared/form/Select';
 import TextArea from '../../../shared/form/TextArea';
 import Row from '../../../shared/form/Row';
-
-import DisplayWeapon from '../../display/DisplayWeapon';
-import DisplayWearable from '../../display/DisplayWearable';
-import DisplayConsumable from '../../display/DisplayConsumable';
-import DisplayUsable from '../../display/DisplayUsable';
 import Notice from '../../../shared/Notice';
+
+import { DisplayTransactionDocument } from '../../display/DisplayTransaction';
 
 const NewTransactionForm = ({ data }) => {
   const dispatch = useDispatch();
@@ -38,7 +37,7 @@ const NewTransactionForm = ({ data }) => {
 
       const newRecipientList = charSheet.campaign ? charSheet.campaign.players.filter(player => player._id !== charSheet._id).map(player => ({ name: player.characterName, id: player._id })) : [];
 
-      if (charSheet.campaign) newRecipientList.push({ name: `${charSheet.campaign.ccNickname || charSheet.campaign.ccName} (CC)`, id: charSheet.campaign._id });
+      if (charSheet.campaign) newRecipientList.push({ name: charSheet.campaign.ccNickname || charSheet.campaign.ccName, id: charSheet.campaign._id });
 
       setRecipientList(newRecipientList);
     }
@@ -93,7 +92,7 @@ const NewTransactionForm = ({ data }) => {
   };
 
   return (
-    <SlideOverForm title="Create a New Transaction" description="Fill out the information below to create your new transaction." submitText="Send transaction" submitHandler={submitHandler}>
+    <SlideOverForm title="Create a New Transaction" description="Fill out the information below to create your new transaction." submitText="Create transaction" submitHandler={submitHandler}>
       <Input slideOver label="Sender Name" name="senderName" type="text" value={senderName} changeHandler={setSenderName} required />
       <Select slideOver label="Recipient" name="recipientId" options={recipientList} changeHandler={selectRecipient} required />
       <Input slideOver label="Sell Price (Opt.)" name="sellPrice" type="number" min="0" value={sellPrice} changeHandler={setSellPrice} />
@@ -101,52 +100,23 @@ const NewTransactionForm = ({ data }) => {
 
       {/* Display Document Being Sent */}
       {data.document ? (
-        <Row
-          slideOver
-          label={`${
-            data.documentType === 'wallet'
-              ? 'Amount'
-              : data.documentType === 'weapons'
-              ? 'Weapon'
-              : data.documentType === 'wearables'
-              ? 'Wearable'
-              : data.documentType === 'consumables'
-              ? 'Consumable'
-              : data.documentType === 'usables'
-              ? 'Usable'
-              : 'Belonging'
-          } Being Sent`}
-          name="document"
-        >
-          {data.documentType === 'weapons' ? (
-            <DisplayWeapon weapon={data.document} sheetType={data.sheetType} />
-          ) : data.documentType === 'wearables' ? (
-            <DisplayWearable wearable={data.document} sheetType={data.sheetType} />
-          ) : data.documentType === 'consumables' ? (
-            <DisplayConsumable consumable={data.document} sheetType={data.sheetType} />
-          ) : data.documentType === 'usables' ? (
-            <DisplayUsable usable={data.document} sheetType={data.sheetType} />
-          ) : data.documentType === 'wallet' ? (
-            JSON.stringify(data.document)
-          ) : (
-            <p>No document type was provided</p>
-          )}
+        <Row slideOver label={`${data.documentType === 'wallet' ? 'Amount' : getBelongingTypeCapitalized(data.documentType)} Being Sent`} name="document">
+          <DisplayTransactionDocument document={data.document} documentType={data.documentType} sheetType={data.sheetType} />
         </Row>
       ) : (
         <Row slideOver label="Document Being Sent" name="document">
           <p>No document to be sent was provided</p>
         </Row>
       )}
+
       {data.document.equipped ? (
         <Notice
           noIcon
-          status="error"
+          status="warn"
           message={
             data.documentType === 'wearables'
-              ? `If accepted, transferring this wearable will also unequip it, and will remove any modifiers it may be adding to your stats.`
-              : `If accepted, transferring this ${
-                  data.documentType === 'weapons' ? 'weapon' : data.documentType === 'consumables' ? 'consumable' : data.documentType === 'usables' ? 'usable' : 'belonging'
-                } will also unequip it.`
+              ? `If sent and accepted, transferring this wearable will unequip it from your person, and will remove any modifiers it may be adding to your stats.`
+              : `If sent and accepted, transferring this ${getBelongingType(data.documentType)} will unequip it from your person.`
           }
         />
       ) : null}

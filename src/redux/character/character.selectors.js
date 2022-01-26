@@ -33,3 +33,15 @@ export const selectEquipmentMods = createSelector([selectEquippedWearables], equ
       )
     : { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
 );
+
+export const selectPendingTransactions = createSelector([selectCurrentCharacter], current =>
+  current
+    ? { sent: current.transactions.sent.filter(transac => transac.status === 'Pending'), received: current.transactions.received.filter(transac => transac.status === 'Pending') }
+    : { sent: [], received: [] }
+);
+
+export const selectResolvedTransactions = createSelector([selectCurrentCharacter], current =>
+  current
+    ? { sent: current.transactions.sent.filter(transac => transac.status !== 'Pending'), received: current.transactions.received.filter(transac => transac.status !== 'Pending') }
+    : { sent: [], received: [] }
+);

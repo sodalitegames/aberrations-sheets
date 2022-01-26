@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 
 import { Popover, Transition, Tab } from '@headlessui/react';
 import { ChatAltIcon } from '@heroicons/react/outline';
@@ -7,7 +7,81 @@ import classNames from '../../../utils/classNames';
 
 import DisplayTransaction from '../../../components/sheets/display/DisplayTransaction';
 
-const SheetPageTransactions = ({ transactions, type }) => {
+const TabPanelFooter = ({ showButton, buttonText, showMessage, messageText, buttonClick }) => {
+  return showButton ? (
+    <div className="mt-4 flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+      <span className="flex items-center justify-center">
+        <button className="text-sm font-medium cursor-pointer" onClick={buttonClick}>
+          {buttonText}
+        </button>
+      </span>
+    </div>
+  ) : showMessage ? (
+    <div className="mt-4 flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md text-gray-400">
+      <span className="flex items-center justify-center">
+        <span className="text-sm font-medium">{messageText}</span>
+      </span>
+    </div>
+  ) : null;
+};
+
+const TransactionsTabPanel = ({ pending, resolved, type, sent }) => {
+  const [showResolved, setShowResolved] = useState(false);
+
+  return (
+    <Fragment>
+      {pending.length || resolved.length ? (
+        !showResolved ? (
+          <Fragment>
+            {/* Pending Transactions */}
+            {pending.length ? (
+              pending.map(transaction => <DisplayTransaction key={transaction._id} transaction={transaction} sheetType={type} sent={sent} />)
+            ) : (
+              <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md">
+                <span className="flex items-center justify-center text-sm font-medium text-gray-400">No pending transactions</span>
+              </div>
+            )}
+
+            {/* Panel Footer */}
+            <TabPanelFooter
+              showButton={resolved.length}
+              buttonText="Show resolved transactions"
+              showMessage={!resolved.length}
+              messageText="No resolved transactions"
+              buttonClick={() => setShowResolved(true)}
+            />
+          </Fragment>
+        ) : (
+          <Fragment>
+            {/* Resolved Transactions */}
+            {resolved.length ? (
+              resolved.map(transaction => <DisplayTransaction key={transaction._id} transaction={transaction} sheetType={type} sent={sent} resolved />)
+            ) : (
+              <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md">
+                <span className="flex items-center justify-center text-sm font-medium text-gray-400">No resolved transactions</span>
+              </div>
+            )}
+
+            {/* Panel Footer */}
+            <TabPanelFooter
+              showButton={pending.length}
+              buttonText="Show pending transactions"
+              showMessage={!pending.length}
+              messageText="No pending transactions"
+              buttonClick={() => setShowResolved(false)}
+            />
+          </Fragment>
+        )
+      ) : (
+        <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md">
+          <span className="flex items-center justify-center text-sm font-medium text-gray-400">No {sent ? 'sent' : 'received'} transactions</span>
+        </div>
+      )}
+    </Fragment>
+  );
+};
+
+const SheetPageTransactions = ({ pending, resolved, type }) => {
   return (
     <Popover className="relative mr-1">
       <Popover.Button
@@ -19,9 +93,8 @@ const SheetPageTransactions = ({ transactions, type }) => {
       >
         <span className="sr-only">View transactions</span>
         <ChatAltIcon className="h-6 w-6" aria-hidden="true" />
-        {transactions.sent.length || transactions.received.length ? (
-          <span className="absolute top-1 right-0 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span>
-        ) : null}
+        {/* Show notification if there are pending transactions the player has received, but not if there are pending transactions they have sent, because they can't do anything about those */}
+        {pending.received.length ? <span className="absolute top-1 right-0 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span> : null}
       </Popover.Button>
 
       <Transition
@@ -57,46 +130,12 @@ const SheetPageTransactions = ({ transactions, type }) => {
                   <Tab.Panels className="mt-2">
                     {/* Transactions Received Panel */}
                     <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60')}>
-                      {transactions.received.length ? (
-                        <Fragment>
-                          {transactions.received.map(transaction => (
-                            <DisplayTransaction key={transaction._id} transaction={transaction} condensed />
-                          ))}
-
-                          {/* Show Resolved Button */}
-                          <div className="mt-4 flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                            <span className="flex items-center justify-center">
-                              <button className="text-sm font-medium cursor-pointer">Show resolved</button>
-                            </span>
-                          </div>
-                        </Fragment>
-                      ) : (
-                        <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md">
-                          <span className="flex items-center justify-center text-sm font-medium text-gray-400">No received transactions</span>
-                        </div>
-                      )}
+                      <TransactionsTabPanel pending={pending.received} resolved={resolved.received} type={type} />
                     </Tab.Panel>
 
                     {/* Transactions Sent Panel */}
                     <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60 space-y-6')}>
-                      {transactions.sent.length ? (
-                        <Fragment>
-                          {transactions.sent.map(transaction => (
-                            <DisplayTransaction key={transaction._id} transaction={transaction} sent={true} condensed />
-                          ))}
-
-                          {/* Show Resolved Button */}
-                          <div className="mt-4 flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                            <span className="flex items-center justify-center">
-                              <button className="text-sm font-medium cursor-pointer">Show resolved</button>
-                            </span>
-                          </div>
-                        </Fragment>
-                      ) : (
-                        <div className="flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md">
-                          <span className="flex items-center justify-center text-sm font-medium text-gray-400">No sent transactions</span>
-                        </div>
-                      )}
+                      <TransactionsTabPanel pending={pending.sent} resolved={resolved.sent} type={type} sent={true} />
                     </Tab.Panel>
                   </Tab.Panels>
                 </Tab.Group>

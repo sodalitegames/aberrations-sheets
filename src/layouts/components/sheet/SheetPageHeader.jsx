@@ -40,7 +40,7 @@ const SheetPageHeader = ({ title, transactions, type }) => {
               {/* Right section on desktop */}
               <div className="hidden lg:ml-4 lg:flex lg:items-center lg:py-5 lg:pr-0.5">
                 {/* Transactions dropdown */}
-                <SheetPageTransactions transactions={transactions || { received: [], sent: [] }} type={type} />
+                <SheetPageTransactions pending={transactions.pending} resolved={transactions.resolved} type={type} />
 
                 {/* Notifications dropdown */}
                 <SheetPageNotifications type={type} />

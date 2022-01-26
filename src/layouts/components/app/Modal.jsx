@@ -38,7 +38,7 @@ import DeleteSheet from '../../../components/sheets/forms/modal/DeleteSheet';
 import ShowBelonging from '../../../components/sheets/forms/modal/ShowBelonging';
 import DeleteResource from '../../../components/sheets/forms/modal/DeleteResource';
 import UpdateInviteStatus from '../../../components/sheets/forms/modal/UpdateInviteStatus';
-import UpdateTransactionStatus from '../../../components/sheets/forms/modal/UpdateTransactionStatus';
+import ManageTransaction from '../../../components/sheets/forms/modal/ManageTransaction';
 import RemoveCharacterFromCampaign from '../../../components/sheets/forms/modal/RemoveCharacterFromCampaign';
 
 export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children, nested }) => {
@@ -241,7 +241,7 @@ const ModalForms = ({ modal, nested }) => {
       {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus id={modal.id} data={modal.data} nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.updateTransactionStatus ? <UpdateTransactionStatus id={modal.id} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.manageTransaction ? <ManageTransaction id={modal.id} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} nested={nested} /> : null}
     </Fragment>
   );

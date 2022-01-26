@@ -5,6 +5,7 @@ import { setModal, setNestedModal } from '../redux/app/app.actions';
 
 import ModalTypes from './ModalTypes';
 import { calculateNewCurrentHp } from './updateHealth';
+import { getBelongingTypeCapitalized } from './displayBelongings';
 
 export const correctStatMod = mod => {
   // Maximum modifier amount is five
@@ -54,17 +55,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
         {
           notification: {
             status: 'success',
-            heading: `${
-              belongingType === 'weapons'
-                ? 'Weapon'
-                : belongingType === 'wearables'
-                ? 'Wearable'
-                : belongingType === 'consumables'
-                ? 'Consumable'
-                : belongingType === 'usables'
-                ? 'Usable'
-                : 'Belonging'
-            } Unequipped`,
+            heading: `${getBelongingTypeCapitalized(belongingType)} Unequipped`,
             message: `You have successfully unequipped ${belonging.nickname || belonging.name}.`,
           },
         }
@@ -148,9 +139,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
         ...config,
         notification: {
           status: 'success',
-          heading: `${
-            belongingType === 'weapons' ? 'Weapon' : belongingType === 'wearables' ? 'Wearable' : belongingType === 'consumables' ? 'Consumable' : belongingType === 'usables' ? 'Usable' : 'Belonging'
-          } Equipped`,
+          heading: `${getBelongingTypeCapitalized(belongingType)} Equipped`,
           message: `You have successfully equipped ${belonging.nickname || belonging.name}.`,
         },
       }

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCampaign, selectCampaignError, selectLoading, selectReload } from '../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectCampaignError, selectLoading, selectReload, selectPendingTransactions, selectResolvedTransactions } from '../redux/campaign/campaign.selectors';
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
@@ -26,6 +26,8 @@ export default function CharacterSheet() {
   const error = useSelector(selectCampaignError);
   const loading = useSelector(selectLoading);
   const reload = useSelector(selectReload);
+  const pendingTransactions = useSelector(selectPendingTransactions);
+  const resolvedTransactions = useSelector(selectResolvedTransactions);
 
   useEffect(() => {
     if (campId) {
@@ -62,7 +64,11 @@ export default function CharacterSheet() {
       <div>
         {reload ? <Banner icon="info" theme="neutral" message={reload} button={{ text: 'Reload', custom: () => dispatch(fetchCurrentSheetStart('campaigns', campId)) }} /> : null}
         <div>
-          <SheetPageHeader title={campSheet ? `Aberrations RPG Sheets -  ${campSheet.name}` : 'Aberrations RPG Sheets'} transactions={campSheet ? campSheet.transactions : null} type="campaigns" />
+          <SheetPageHeader
+            title={campSheet ? `Aberrations RPG Sheets -  ${campSheet.name}` : 'Aberrations RPG Sheets'}
+            transactions={{ pending: pendingTransactions, resolved: resolvedTransactions }}
+            type="campaigns"
+          />
           <main className="-mt-24 pb-8">
             {!loading && campSheet ? (
               <React.Suspense fallback={<Loading />}>
