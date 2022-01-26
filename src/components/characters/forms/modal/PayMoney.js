@@ -19,7 +19,14 @@ const PayMoney = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { wallet: charSheet.wallet - +amount }, { modal: true }));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { wallet: charSheet.wallet - +amount },
+        { modal: true, notification: { status: 'success', heading: 'Money Paid', message: `You have successfully paid ${amount} monies.` } }
+      )
+    );
   };
 
   return (

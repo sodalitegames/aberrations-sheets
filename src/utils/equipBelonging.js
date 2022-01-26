@@ -44,7 +44,32 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
       }
     }
 
-    store.dispatch(updateSheetResourceStart(sheetType, sheet._id, belongingType, belonging._id, { equipped: false }));
+    store.dispatch(
+      updateSheetResourceStart(
+        sheetType,
+        sheet._id,
+        belongingType,
+        belonging._id,
+        { equipped: false },
+        {
+          notification: {
+            status: 'success',
+            heading: `${
+              belongingType === 'weapons'
+                ? 'Weapon'
+                : belongingType === 'wearables'
+                ? 'Wearable'
+                : belongingType === 'consumables'
+                ? 'Consumable'
+                : belongingType === 'usables'
+                ? 'Usable'
+                : 'Belonging'
+            } Unequipped`,
+            message: `You have successfully unequipped ${belonging.nickname || belonging.name}.`,
+          },
+        }
+      )
+    );
     return;
   }
 
@@ -112,7 +137,25 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
       return;
   }
 
-  store.dispatch(updateSheetResourceStart(sheetType, sheet._id, belongingType, belonging._id, { equipped: true }, config));
+  store.dispatch(
+    updateSheetResourceStart(
+      sheetType,
+      sheet._id,
+      belongingType,
+      belonging._id,
+      { equipped: true },
+      {
+        ...config,
+        notification: {
+          status: 'success',
+          heading: `${
+            belongingType === 'weapons' ? 'Weapon' : belongingType === 'wearables' ? 'Wearable' : belongingType === 'consumables' ? 'Consumable' : belongingType === 'usables' ? 'Usable' : 'Belonging'
+          } Equipped`,
+          message: `You have successfully equipped ${belonging.nickname || belonging.name}.`,
+        },
+      }
+    )
+  );
 };
 
 export default equipBelonging;

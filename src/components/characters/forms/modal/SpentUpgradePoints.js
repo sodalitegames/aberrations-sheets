@@ -26,7 +26,14 @@ const SpentUpgradePoints = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { spentUpgradePoints }, { modal: true }));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { spentUpgradePoints },
+        { modal: true, notification: { status: 'success', heading: 'Upgrade Points Updated', message: `You have successfully updated your spent upgrade points to ${spentUpgradePoints}.` } }
+      )
+    );
   };
 
   return (

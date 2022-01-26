@@ -18,6 +18,7 @@ const DisplayAugmentation = ({ aug, noButtonPanel }) => {
           title: `Are you sure you want to remove ${aug.name}?`,
           message: 'You will not be able to undo this action, and you will NOT receive your upgrade points back.',
           submitText: `Yes, remove ${aug.name}`,
+          notification: { heading: 'Augmentation Removed', message: `You have successfully removed ${aug.name}.` },
         },
       }}
     >

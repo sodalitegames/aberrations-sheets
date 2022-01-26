@@ -18,7 +18,16 @@ const RemoveCharacterFromCampaign = ({ data }) => {
 
     const sheetId = data.sheetType === 'characters' ? charSheet._id : campSheet._id;
 
-    dispatch(removeCharacterFromCampaignStart(data.sheetType, sheetId, data.body, { modal: true }));
+    dispatch(
+      removeCharacterFromCampaignStart(data.sheetType, sheetId, data.body, {
+        modal: true,
+        notification: {
+          status: 'alert',
+          heading: data.sheetType === 'characters' ? 'Left Campaign' : 'Player Removed',
+          message: data.sheetType === 'characters' ? `You have left ${charSheet.campaign?.name}.` : `You have removed ${data.playerName} from ${campSheet.name}.`,
+        },
+      })
+    );
   };
 
   return (

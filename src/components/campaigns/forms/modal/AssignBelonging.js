@@ -40,7 +40,25 @@ const AssignBelonging = ({ id, data }) => {
     if (!npcId) alert('You must select an Npc');
     if (!npc) alert('You must select an Npc');
 
-    dispatch(updateSheetResourceStart('campaigns', campSheet._id, data.type, id, { npcId: npcId }, { modal: true }));
+    dispatch(
+      updateSheetResourceStart(
+        'campaigns',
+        campSheet._id,
+        data.type,
+        id,
+        { npcId: npcId },
+        {
+          modal: true,
+          notification: {
+            status: 'success',
+            heading: `${
+              data.type === 'weapons' ? 'Weapon' : data.type === 'wearables' ? 'Wearable' : data.type === 'consumables' ? 'Consumable' : data.type === 'usables' ? 'Usable' : 'Belonging'
+            } Assigned`,
+            message: `You have successfully assigned ${data.name} to ${npc?.name}.`,
+          },
+        }
+      )
+    );
   };
 
   return (

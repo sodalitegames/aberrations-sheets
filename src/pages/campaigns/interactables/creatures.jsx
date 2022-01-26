@@ -79,7 +79,27 @@ const CampaignCreaturesPage = () => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button dark={creature.active} onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'creatures', creature._id, { active: !creature.active }))}>
+              <Button
+                dark={creature.active}
+                onClick={() =>
+                  dispatch(
+                    updateSheetResourceStart(
+                      'campaigns',
+                      campSheet._id,
+                      'creatures',
+                      creature._id,
+                      { active: !creature.active },
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `Creature ${creature.active ? 'Deactivated' : 'Activated'}`,
+                          message: `You have successfully ${creature.active ? 'deactivated' : 'activated'} ${creature.name}.`,
+                        },
+                      }
+                    )
+                  )
+                }
+              >
                 {creature.active ? 'Deactivate' : 'Activate'}
               </Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id }))}>Edit</Button>
@@ -95,6 +115,7 @@ const CampaignCreaturesPage = () => {
                         resourceType: 'creatures',
                         title: `Are you sure you want to delete ${creature.name}?`,
                         submitText: `Yes, delete ${creature.name}`,
+                        notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
                       },
                     })
                   )

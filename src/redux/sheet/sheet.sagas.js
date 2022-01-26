@@ -83,8 +83,8 @@ export function* updateSheet({ payload: { sheetType, sheetId, body, config } }) 
 
     yield put(updateSheetSuccess(sheetType, response.data.data.sheet));
 
-    // Add a notification
-    yield put(addNotification({ heading: 'Updated', message: 'Your sheet has been updated' }));
+    // Add a notification, if configured to do so
+    if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
     if (config?.slideOver) yield put(setSlideOver(null));
@@ -112,8 +112,8 @@ export function* deleteSheet({ payload: { sheetType, sheetId, config } }) {
 
     yield put(deleteSheetSuccess(sheetType, sheetId, response.data.data));
 
-    // Add a notification
-    yield put(addNotification({ heading: 'Deleted', message: 'Your sheet has been deleted' }));
+    // Add a notification, if configured to do so
+    if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
     if (config?.slideOver) yield put(setSlideOver(null));
@@ -163,8 +163,8 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
 
     yield put(createSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
 
-    // Add a notification
-    yield put(addNotification({ heading: `${resourceType} created`, message: `${response.data.data.doc.name || resourceType} has been created` }));
+    // Add a notification, if configured to do so
+    if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
     if (config?.slideOver) yield put(setSlideOver(null));
@@ -197,7 +197,7 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
 
       yield put(addCampaignToCharacterSuccess(sheetType, response.data.data.campaign));
 
-      // Add a notification
+      // Add a notification to alert that they have joined the campaign
       yield put(addNotification({ heading: 'Joined Campaign', message: `You have joined ${response.data.data.campaign.name}` }));
     }
 
@@ -223,8 +223,8 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
 
     yield put(updateSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
 
-    // Add a notification
-    yield put(addNotification({ heading: `${resourceType} updated`, message: `${response.data.data.doc.name || resourceType} has been updated` }));
+    // Add a notification, if configured to do so
+    if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
     if (config?.slideOver) yield put(setSlideOver(null));
@@ -261,8 +261,8 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
 
     yield put(deleteSheetResourceSuccess(sheetType, resourceType, resourceId, response.data.data));
 
-    // Add a notification
-    yield put(addNotification({ heading: `${resourceType} deleted`, message: `${resourceType} has been deleted` }));
+    // Add a notification, if configured to do so
+    if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
     if (config?.slideOver) yield put(setSlideOver(null));
@@ -292,8 +292,8 @@ export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, bo
 
       yield put(removeCharacterFromCampaignSuccess(sheetType, response.data));
 
-      // Add a notification
-      yield put(addNotification({ heading: `Left Campaign`, message: `You have left Campaign #${response.data.metadata.campId}` }));
+      // Add a notification, if configured to do so
+      if (config?.notification) yield put(addNotification(config?.notification));
 
       // Close out the modal, nestedModal, or slideover if it is open
       if (config?.slideOver) yield put(setSlideOver(null));
@@ -317,8 +317,8 @@ export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, bo
 
       yield put(removeCharacterFromCampaignSuccess(sheetType, response.data));
 
-      // Add a notification
-      yield put(addNotification({ heading: `Player Removed`, message: `Character #${response.data.metadata.charId} has been removed from your campaign` }));
+      // Add a notification, if configured to do so
+      if (config?.notification) yield put(addNotification(config?.notification));
 
       // Close out the modal, nestedModal, or slideover if it is open
       if (config?.slideOver) yield put(setSlideOver(null));

@@ -72,7 +72,9 @@ const TakeDamage = () => {
       body.mortality = charSheet.mortality + 1;
     }
 
-    dispatch(updateSheetStart('characters', charSheet._id, body, { modal: true }));
+    dispatch(
+      updateSheetStart('characters', charSheet._id, body, { modal: true, notification: { status: 'success', heading: 'Damage Taken', message: `You have successfully taken ${damage} damage.` } })
+    );
   };
 
   return (

@@ -55,7 +55,7 @@ const ManageCharacter = () => {
           charDescription,
           charBackground,
         },
-        { slideOver: true }
+        { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Updated', message: `You have successfully updated ${characterName}.` } }
       )
     );
   };

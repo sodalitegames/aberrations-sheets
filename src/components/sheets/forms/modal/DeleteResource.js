@@ -35,11 +35,23 @@ const DeleteResource = ({ id, data, nested }) => {
     }
 
     if (data.sheetType === 'characters') {
-      dispatch(deleteSheetResourceStart('characters', charSheet._id, data.resourceType, id, { modal: nested ? false : true, nestedModal: nested ? true : false }));
+      dispatch(
+        deleteSheetResourceStart('characters', charSheet._id, data.resourceType, id, {
+          modal: nested ? false : true,
+          nestedModal: nested ? true : false,
+          notification: data.notification ? { status: 'alert', ...data.notification } : null,
+        })
+      );
     }
 
     if (data.sheetType === 'campaigns') {
-      dispatch(deleteSheetResourceStart('campaigns', campSheet._id, data.resourceType, id, { modal: nested ? false : true, nestedModal: nested ? true : false }));
+      dispatch(
+        deleteSheetResourceStart('campaigns', campSheet._id, data.resourceType, id, {
+          modal: nested ? false : true,
+          nestedModal: nested ? true : false,
+          notification: data.notification ? { status: 'alert', ...data.notification } : null,
+        })
+      );
     }
   };
 

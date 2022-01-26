@@ -113,7 +113,7 @@ const TakeARest = () => {
             persona: { ...persona, advantage: 0 },
             aptitude: { ...aptitude, advantage: 0 },
           },
-          { modal: true }
+          { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
         )
       );
 
@@ -133,7 +133,7 @@ const TakeARest = () => {
             persona: { ...charSheet.agility, advantage: 0 },
             aptitude: { ...charSheet.aptitude, advantage: 0 },
           },
-          { modal: true }
+          { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
         )
       );
 

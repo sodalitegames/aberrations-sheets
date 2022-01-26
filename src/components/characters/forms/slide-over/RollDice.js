@@ -3,10 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
+import { addNotification } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { rollDice } from '../../../../utils/roll';
 import { capitalize } from '../../../../utils/strings';
+import { getRolledDiceNotificationMessage } from '../../../../utils/messages';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -14,6 +16,7 @@ import Input from '../../../shared/form/Input';
 import Select from '../../../shared/form/Select';
 import Detail from '../../../shared/form/Detail';
 import Notice from '../../../shared/Notice';
+
 import RollResults, { ResultsMessages } from '../../RollResults';
 
 const RollDice = () => {
@@ -53,10 +56,24 @@ const RollDice = () => {
     if (!e.target.value) {
       setStat('');
       setStatKey('');
+      return;
     }
+
+    if (e.target.value === 'none') {
+      setStat('');
+      setStatKey(e.target.value);
+      return;
+    }
+
+    // If not empty or none, set the stat key and stat
     setStatKey(e.target.value);
-    if (e.target.value === 'none') return setStat('');
     setStat(charSheet[e.target.value]);
+
+    // Clear all other state
+    setDice(3);
+    setAdditionalDice(0);
+    setAdvantage(0);
+    setRollData(null);
   };
 
   const submitHandler = async e => {
@@ -64,22 +81,51 @@ const RollDice = () => {
 
     if (!stat) {
       const data = rollDice(parseInt(dice), parseInt(advantage));
+
+      // Add a notification with a message about your results
+      dispatch(addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) }));
+
       setRollData(data);
       return;
     }
 
     const data = rollDice(calcDice() + parseInt(additionalDice), calcAdvantage(), statKey);
+
+    // Add a notification with a message about your results
+    dispatch(addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) }));
+
     setRollData(data);
 
     // If any injured, disturbed, or experience was gained, save that to the database
     if (data.injured) {
-      dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured + data.injured } }));
+      dispatch(
+        updateSheetStart(
+          'characters',
+          charSheet._id,
+          { conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured + data.injured } },
+          { notification: { status: 'success', heading: 'Gained Injured', message: `You have gained ${data.injured} injured.` } }
+        )
+      );
     }
     if (data.disturbed) {
-      dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, disturbed: charSheet.conditions.disturbed + data.disturbed } }));
+      dispatch(
+        updateSheetStart(
+          'characters',
+          charSheet._id,
+          { conditions: { ...charSheet.conditions, disturbed: charSheet.conditions.disturbed + data.disturbed } },
+          { notification: { status: 'success', heading: 'Gained Disturbed', message: `You have gained ${data.disturbed} disturbed.` } }
+        )
+      );
     }
     if (data.experience) {
-      dispatch(updateSheetStart('characters', charSheet._id, { [data.stat]: { ...charSheet[data.stat], experience: charSheet[data.stat].experience + data.experience } }));
+      dispatch(
+        updateSheetStart(
+          'characters',
+          charSheet._id,
+          { [data.stat]: { ...charSheet[data.stat], experience: charSheet[data.stat].experience + data.experience } },
+          { notification: { status: 'success', heading: 'Gained Experience', message: `You have gained ${data.experience} experience.` } }
+        )
+      );
     }
   };
 
@@ -98,7 +144,6 @@ const RollDice = () => {
           { name: 'None', id: 'none' },
         ]}
         changeHandler={selectStat}
-        required
       />
 
       {stat ? (

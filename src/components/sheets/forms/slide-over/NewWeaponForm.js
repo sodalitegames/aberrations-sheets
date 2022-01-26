@@ -18,6 +18,7 @@ import Select from '../../../shared/form/Select';
 import Detail from '../../../shared/form/Detail';
 import { LoadingSpinner } from '../../../shared/form/SubmitButton';
 import Row from '../../../shared/form/Row';
+import { getWeaponRangeString } from '../../../../utils/displayBelongings';
 
 const NewWeaponForm = ({ data }) => {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ const NewWeaponForm = ({ data }) => {
 
   const [nickname, setNickname] = useState('');
   const [levelDamage, setLevelDamage] = useState(1);
+  const [quantity, setQuantity] = useState(1);
   const [description, setDescription] = useState('');
 
   const [name, setName] = useState('');
@@ -141,6 +143,7 @@ const NewWeaponForm = ({ data }) => {
     if (!weapon) return alert('Must provide a weapon');
 
     if (!levelDamage) return alert('Must provide levelDamage');
+    if (!quantity) return alert('Must provide a quantity');
 
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
@@ -149,7 +152,15 @@ const NewWeaponForm = ({ data }) => {
       if (!associatedStat) return alert('Must provide an associatedStat');
       if (!range) return alert('Must provide a range');
 
-      dispatch(createSheetResourceStart(data.sheetType, sheetId, 'weapons', { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, description }, { slideOver: true }));
+      dispatch(
+        createSheetResourceStart(
+          data.sheetType,
+          sheetId,
+          'weapons',
+          { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, quantity, description },
+          { slideOver: true, notification: { status: 'success', heading: 'Weapon Created', message: `You have successfully created ${nickname || name}.` } }
+        )
+      );
       return;
     }
 
@@ -166,10 +177,11 @@ const NewWeaponForm = ({ data }) => {
           levelDamage,
           range: weapon.range,
           ability: weapon.ability,
+          quantity,
           description,
           universalId: weapon.universalId,
         },
-        { slideOver: true }
+        { slideOver: true, notification: { status: 'success', heading: 'Weapon Created', message: `You have successfully created ${nickname || weapon.name}.` } }
       )
     );
   };
@@ -214,6 +226,7 @@ const NewWeaponForm = ({ data }) => {
                 changeHandler={selectRange}
                 required
               />
+              <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
               <TextArea slideOver label="Ability (Opt.)" name="ability" rows={4} value={ability} changeHandler={setAbility} />
               <TextArea slideOver label="Description (Opt.)" name="description" rows={4} value={description} changeHandler={setDescription} />
             </>
@@ -224,8 +237,9 @@ const NewWeaponForm = ({ data }) => {
               <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
               <Detail slideOver label="Associated Stat" detail={capitalize(weapon.associatedStat)} />
               <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} required />
-              <Detail slideOver label="Range" detail={weapon.range} />
+              <Detail slideOver label="Range" detail={getWeaponRangeString(weapon.range)} />
               <Detail slideOver label="Ability" detail={weapon.ability} />
+              <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
               <TextArea slideOver label="Description (Opt.)" name="description" rows={5} value={description} changeHandler={setDescription} />
             </>
           ) : null}

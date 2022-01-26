@@ -6,16 +6,8 @@ import DescriptionList from '../../shared/data/DescriptionList';
 import Button from '../../shared/Button';
 import ModalTypes from '../../../utils/ModalTypes';
 
-const DisplayCampaign = ({ campaign, condensed }) => {
+const DisplayCampaign = ({ campaign }) => {
   const dispatch = useDispatch();
-
-  if (condensed === 'view') {
-    return 'view';
-  }
-
-  if (condensed === 'expandable') {
-    return 'expandable';
-  }
 
   return (
     <div>

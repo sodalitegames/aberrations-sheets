@@ -75,7 +75,27 @@ const CampaignNpcsPage = () => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button dark={npc.active} onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'npcs', npc._id, { active: !npc.active }))}>
+              <Button
+                dark={npc.active}
+                onClick={() =>
+                  dispatch(
+                    updateSheetResourceStart(
+                      'campaigns',
+                      campSheet._id,
+                      'npcs',
+                      npc._id,
+                      { active: !npc.active },
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `Npc ${npc.active ? 'Deactivated' : 'Activated'}`,
+                          message: `You have successfully ${npc.active ? 'deactivated' : 'activated'} ${npc.name}.`,
+                        },
+                      }
+                    )
+                  )
+                }
+              >
                 {npc.active ? 'Deactivate' : 'Activate'}
               </Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id }))}>Edit</Button>
@@ -91,6 +111,7 @@ const CampaignNpcsPage = () => {
                         resourceType: 'npcs',
                         title: `Are you sure you want to delete ${npc.name}?`,
                         submitText: `Yes, delete ${npc.name}`,
+                        notification: { heading: 'Npc Deleted', message: `You have successfully deleted ${npc.name}.` },
                       },
                     })
                   )

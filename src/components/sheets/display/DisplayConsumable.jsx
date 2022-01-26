@@ -6,6 +6,25 @@ import ListItem from '../../shared/data/ListItem';
 import DescriptionList from '../../shared/data/DescriptionList';
 import InfoList from '../../shared/data/InfoList';
 
+const ConsumableDetails = ({ consumable, sheetType }) => {
+  return (
+    <DescriptionList
+      list={[
+        { name: 'Level', values: [consumable.level], half: true },
+        { name: 'Quantity', values: [consumable.quantity], half: true },
+        { name: 'Uses', values: [consumable.uses], half: true },
+        sheetType === 'characters' ? { name: 'Equipped', values: [consumable.equipped ? 'Yes' : 'No'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Active', values: [consumable.active ? 'Yes' : 'No'], half: true } : null,
+        consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? consumable.npcId : 'Unassigned'], half: true } : null,
+        { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
+        consumable.description ? { name: 'Description', values: [consumable.description] } : null,
+      ]}
+      classes="mt-2"
+    />
+  );
+};
+
 const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
@@ -38,20 +57,11 @@ const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, list
             title: `Are you sure you want to delete ${consumable.name}?`,
             submitText: `Yes, delete ${consumable.name}`,
             equipped: consumable.equipped,
+            notification: { heading: 'Consumable Deleted', message: `You have successfully deleted ${consumable.name}.` },
           },
         }}
       >
-        <DescriptionList
-          list={[
-            { name: 'Level', values: [consumable.level], half: true },
-            { name: 'Quantity', values: [consumable.quantity], half: true },
-            { name: 'Uses', values: [consumable.uses], half: true },
-            consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
-            { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
-            consumable.description ? { name: 'Description', values: [consumable.description] } : null,
-          ]}
-          classes="mt-2"
-        />
+        <ConsumableDetails consumable={consumable} sheetType={sheetType} />
       </ListItem>
     );
   }
@@ -60,17 +70,7 @@ const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, list
     <div className="py-3">
       <h3 className="text-sm font-semibold text-gray-800">{consumable.name}</h3>
       <div>
-        <DescriptionList
-          list={[
-            { name: 'Level', values: [consumable.level], half: true },
-            { name: 'Quantity', values: [consumable.quantity], half: true },
-            { name: 'Uses', values: [consumable.uses], half: true },
-            consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
-            { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
-            consumable.description ? { name: 'Description', values: [consumable.description] } : null,
-          ]}
-          classes="mt-2"
-        />
+        <ConsumableDetails consumable={consumable} sheetType={sheetType} />
       </div>
     </div>
   );

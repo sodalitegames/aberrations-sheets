@@ -48,7 +48,12 @@ const EditStat = ({ id }) => {
       }
     }
 
-    dispatch(updateSheetStart('characters', charSheet._id, body, { modal: true }));
+    dispatch(
+      updateSheetStart('characters', charSheet._id, body, {
+        modal: true,
+        notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your ${id.toLowerCase()} stat.` },
+      })
+    );
   };
 
   return (

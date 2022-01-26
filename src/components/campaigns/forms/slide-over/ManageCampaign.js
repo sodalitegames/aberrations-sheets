@@ -55,7 +55,7 @@ const ManageCampaign = () => {
           overview,
           details,
         },
-        { slideOver: true }
+        { slideOver: true, notification: { status: 'success', heading: 'Campaign Sheet Updated', message: `You have successfully updated ${name}.` } }
       )
     );
   };

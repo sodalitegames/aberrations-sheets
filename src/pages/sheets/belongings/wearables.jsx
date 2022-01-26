@@ -104,7 +104,21 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
               ) : null}
               {sheetType === 'campaigns' ? (
                 wearable.npcId ? (
-                  <Button dark onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'wearables', wearable._id, { npcId: null }))}>
+                  <Button
+                    dark
+                    onClick={() =>
+                      dispatch(
+                        updateSheetResourceStart(
+                          sheetType,
+                          campSheet._id,
+                          'wearables',
+                          wearable._id,
+                          { npcId: null },
+                          { notification: { status: 'success', heading: 'Wearable Unassigned', message: `You have successfully unassigned ${wearable.name}.` } }
+                        )
+                      )
+                    }
+                  >
                     Unassign
                   </Button>
                 ) : (
@@ -112,11 +126,31 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
                 )
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button dark={wearable.active} onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'wearables', wearable._id, { active: !wearable.active }))}>
+                <Button
+                  dark={wearable.active}
+                  onClick={() =>
+                    dispatch(
+                      updateSheetResourceStart(
+                        sheetType,
+                        campSheet._id,
+                        'wearables',
+                        wearable._id,
+                        { active: !wearable.active },
+                        {
+                          notification: {
+                            status: 'success',
+                            heading: `Wearable ${wearable.active ? 'Deactivated' : 'Activated'}`,
+                            message: `You have successfully ${wearable.active ? 'deactivated' : 'activated'} ${wearable.name}.`,
+                          },
+                        }
+                      )
+                    )
+                  }
+                >
                   {wearable.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}
-              <Button>Give or Sell</Button>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, transactionType: 'wearables', document: wearable } }))}>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, id: wearable._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert
@@ -132,6 +166,7 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
                         title: `Are you sure you want to delete ${wearable.name}?`,
                         submitText: `Yes, delete ${wearable.name}`,
                         equipped: wearable.equipped,
+                        notification: { heading: 'Wearable Deleted', message: `You have successfully deleted ${wearable.name}.` },
                       },
                     })
                   )

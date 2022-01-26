@@ -50,7 +50,24 @@ const UpdateInviteStatus = ({ id, data, nested }) => {
 
     const sheetId = data.sheetType === 'characters' ? charSheet._id : campSheet._id;
 
-    dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'invites', id, { status: status }, { modal: nested ? false : true, nestedModal: nested ? true : false }));
+    dispatch(
+      updateSheetResourceStart(
+        data.sheetType,
+        sheetId,
+        'invites',
+        id,
+        { status: status },
+        {
+          modal: nested ? false : true,
+          nestedModal: nested ? true : false,
+          notification: {
+            status: status === 'Declined' || status === 'Revoked' ? 'alert' : 'success',
+            heading: 'Invite Status Updated',
+            message: `You have successfully ${status.toLowerCase()} this invite.`,
+          },
+        }
+      )
+    );
   };
 
   return (

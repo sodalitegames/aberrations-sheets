@@ -18,6 +18,10 @@ const DisplayLog = ({ sheetType, log }) => {
           resourceType: 'logs',
           title: `Are you sure you want to delete this ${sheetType === 'campaigns' ? `captain's` : 'character'} log?`,
           submitText: `Yes, delete this ${sheetType === 'campaigns' ? `captain's` : 'character'} log`,
+          notification: {
+            heading: sheetType === 'characters' ? 'Character Log Deleted' : `Captain's Log Deleted`,
+            message: `You have successfully deleted ${sheetType === 'characters' ? 'character' : `captain's`} log from ${formatDate(log.date)}.`,
+          },
         },
       }}
     >

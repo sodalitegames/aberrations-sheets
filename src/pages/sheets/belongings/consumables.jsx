@@ -103,7 +103,21 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
               ) : null}
               {sheetType === 'campaigns' ? (
                 consumable.npcId ? (
-                  <Button dark onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'consumables', consumable._id, { npcId: null }))}>
+                  <Button
+                    dark
+                    onClick={() =>
+                      dispatch(
+                        updateSheetResourceStart(
+                          sheetType,
+                          campSheet._id,
+                          'consumables',
+                          consumable._id,
+                          { npcId: null },
+                          { notification: { status: 'success', heading: 'Consumable Unassigned', message: `You have successfully unassigned ${consumable.name}.` } }
+                        )
+                      )
+                    }
+                  >
                     Unassign
                   </Button>
                 ) : (
@@ -111,11 +125,33 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
                 )
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button dark={consumable.active} onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'consumables', consumable._id, { active: !consumable.active }))}>
+                <Button
+                  dark={consumable.active}
+                  onClick={() =>
+                    dispatch(
+                      updateSheetResourceStart(
+                        sheetType,
+                        campSheet._id,
+                        'consumables',
+                        consumable._id,
+                        { active: !consumable.active },
+                        {
+                          notification: {
+                            status: 'success',
+                            heading: `Consumable ${consumable.active ? 'Deactivated' : 'Activated'}`,
+                            message: `You have successfully ${consumable.active ? 'deactivated' : 'activated'} ${consumable.name}.`,
+                          },
+                        }
+                      )
+                    )
+                  }
+                >
                   {consumable.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}
-              <Button>Give or Sell</Button>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, transactionType: 'consumables', document: consumable } }))}>
+                Give or Sell
+              </Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm, id: consumable._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert
@@ -130,6 +166,7 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
                         title: `Are you sure you want to delete ${consumable.name}?`,
                         submitText: `Yes, delete ${consumable.name}`,
                         equipped: consumable.equipped,
+                        notification: { heading: 'Consumable Deleted', message: `You have successfully deleted ${consumable.name}.` },
                       },
                     })
                   )

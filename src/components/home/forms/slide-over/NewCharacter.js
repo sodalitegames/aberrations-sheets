@@ -84,7 +84,7 @@ const NewCharacter = () => {
           persona: { points: species.stats.persona },
           aptitude: { points: species.stats.aptitude },
         },
-        { slideOver: true }
+        { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Created', message: `You have successfully successfully created ${characterName}.` } }
       )
     );
   };

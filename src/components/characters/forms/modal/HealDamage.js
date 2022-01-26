@@ -64,7 +64,14 @@ const HealDamage = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { currentHp: correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp) }, { modal: true }));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { currentHp: correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp) },
+        { modal: true, notification: { status: 'success', heading: 'Healed Damage', message: `You have successfully healed ${damage} damage.` } }
+      )
+    );
   };
 
   return (

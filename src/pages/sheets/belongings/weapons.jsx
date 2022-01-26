@@ -100,7 +100,21 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
               ) : null}
               {sheetType === 'campaigns' ? (
                 weapon.npcId ? (
-                  <Button dark onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'weapons', weapon._id, { npcId: null }))}>
+                  <Button
+                    dark
+                    onClick={() =>
+                      dispatch(
+                        updateSheetResourceStart(
+                          sheetType,
+                          campSheet._id,
+                          'weapons',
+                          weapon._id,
+                          { npcId: null },
+                          { notification: { status: 'success', heading: 'Weapon Unassigned', message: `You have successfully unassigned ${weapon.nickname || weapon.name}.` } }
+                        )
+                      )
+                    }
+                  >
                     Unassign
                   </Button>
                 ) : (
@@ -108,11 +122,31 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
                 )
               ) : null}
               {sheetType === 'campaigns' ? (
-                <Button dark={weapon.active} onClick={() => dispatch(updateSheetResourceStart(sheetType, campSheet._id, 'weapons', weapon._id, { active: !weapon.active }))}>
+                <Button
+                  dark={weapon.active}
+                  onClick={() =>
+                    dispatch(
+                      updateSheetResourceStart(
+                        sheetType,
+                        campSheet._id,
+                        'weapons',
+                        weapon._id,
+                        { active: !weapon.active },
+                        {
+                          notification: {
+                            status: 'success',
+                            heading: `Weapon ${weapon.active ? 'Deactivated' : 'Activated'}`,
+                            message: `You have successfully ${weapon.active ? 'deactivated' : 'activated'} ${weapon.nickname || weapon.name}.`,
+                          },
+                        }
+                      )
+                    )
+                  }
+                >
                   {weapon.active ? 'Deactivate' : 'Activate'}
                 </Button>
               ) : null}
-              <Button>Give or Sell</Button>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, transactionType: 'weapons', document: weapon } }))}>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.editWeaponForm, id: weapon._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert
@@ -127,6 +161,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
                         title: `Are you sure you want to delete ${weapon.nickname || weapon.name}?`,
                         submitText: `Yes, delete ${weapon.nickname || weapon.name}`,
                         equipped: weapon.equipped,
+                        notification: { heading: 'Weapon Deleted', message: `You have successfully deleted ${weapon.name}.` },
                       },
                     })
                   )

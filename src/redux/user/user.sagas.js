@@ -169,8 +169,8 @@ export function* createSheetForUser({ payload: { sheetType, body, config } }) {
 
     yield put(createSheetForUserSuccess(sheetType, response.data.data.sheet));
 
-    // Add a notification
-    yield put(addNotification({ heading: 'Sheet Created Successfully', message: `Your ${sheetType === 'characters' ? 'character' : 'campaign'} sheet has been created` }));
+    // Add a notification, if configured to do so
+    if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
     if (config?.slideOver) yield put(setSlideOver(null));

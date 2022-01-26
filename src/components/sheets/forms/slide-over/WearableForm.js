@@ -29,6 +29,7 @@ const WearableForm = ({ id, data }) => {
   const [agility, setAgility] = useState(0);
   const [persona, setPersona] = useState(0);
   const [aptitude, setAptitude] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [equipped, setEquipped] = useState(false);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ const WearableForm = ({ id, data }) => {
         setAgility(currentWearable.statMods.agility);
         setPersona(currentWearable.statMods.persona);
         setAptitude(currentWearable.statMods.aptitude);
+        setQuantity(currentWearable.quantity);
         setEquipped(currentWearable.equipped);
       }
     }
@@ -58,6 +60,7 @@ const WearableForm = ({ id, data }) => {
         setAgility(currentWearable.statMods.agility);
         setPersona(currentWearable.statMods.persona);
         setAptitude(currentWearable.statMods.aptitude);
+        setQuantity(currentWearable.quantity);
         setEquipped(currentWearable.equipped);
       }
     }
@@ -74,6 +77,7 @@ const WearableForm = ({ id, data }) => {
     if (!name) return alert('Must provide a name');
     if (!bodyArea) return alert('Must provide a bodyArea');
     if (!description) return alert('Must provide a description');
+    if (!quantity) return alert('Must provide a quantity');
 
     if (data.sheetType === 'characters' && equipped) {
       const currentWearable = charSheet.wearables.find(wearable => wearable._id === id);
@@ -134,11 +138,28 @@ const WearableForm = ({ id, data }) => {
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (id) {
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'wearables', id, { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }, { slideOver: true }));
+      dispatch(
+        updateSheetResourceStart(
+          data.sheetType,
+          sheetId,
+          'wearables',
+          id,
+          { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude }, quantity },
+          { slideOver: true, notification: { status: 'success', heading: 'Wearable Updated', message: `You have successfully updated ${name}.` } }
+        )
+      );
       return;
     }
 
-    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'wearables', { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude } }, { slideOver: true }));
+    dispatch(
+      createSheetResourceStart(
+        data.sheetType,
+        sheetId,
+        'wearables',
+        { name, bodyArea, description, statMods: { fortitude, agility, persona, aptitude }, quantity },
+        { slideOver: true, notification: { status: 'success', heading: 'Wearable Created', message: `You have successfully created ${name}.` } }
+      )
+    );
   };
 
   return (
@@ -148,7 +169,7 @@ const WearableForm = ({ id, data }) => {
       submitText={id ? 'Save wearable' : 'Create wearable'}
       submitHandler={submitHandler}
     >
-      <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} />
+      <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} required />
       <Select
         slideOver
         label="Body Area"
@@ -164,12 +185,14 @@ const WearableForm = ({ id, data }) => {
           { name: 'Feet', id: 'feet' },
         ]}
         changeHandler={selectBodyArea}
+        required
       />
-      <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} />
+      <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} required />
       <Input slideOver label="Fortitude Mod" name="fortitude" type="number" value={fortitude} changeHandler={setFortitude} />
       <Input slideOver label="Agility Mod" name="agility" type="number" value={agility} changeHandler={setAgility} />
       <Input slideOver label="Persona Mod" name="persona" type="number" value={persona} changeHandler={setPersona} />
       <Input slideOver label="Aptitude Mod" name="aptitude" type="number" value={aptitude} changeHandler={setAptitude} />
+      <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
     </SlideOverForm>
   );
 };

@@ -28,7 +28,15 @@ const SendInvite = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(createSheetResourceStart('campaigns', campSheet._id, 'invites', { campaignName, ccName, charSheetId: charId, message }, { modal: true }));
+    dispatch(
+      createSheetResourceStart(
+        'campaigns',
+        campSheet._id,
+        'invites',
+        { campaignName, ccName, charSheetId: charId, message },
+        { modal: true, notification: { status: 'success', heading: 'Invite Sent', message: `You have successfully sent an invite to character #${charId}` } }
+      )
+    );
   };
 
   return (

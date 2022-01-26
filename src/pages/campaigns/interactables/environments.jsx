@@ -79,7 +79,27 @@ const CampaignEnvironmentsPage = () => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button dark={environment.active} onClick={() => dispatch(updateSheetResourceStart('campaigns', campSheet._id, 'environments', environment._id, { active: !environment.active }))}>
+              <Button
+                dark={environment.active}
+                onClick={() =>
+                  dispatch(
+                    updateSheetResourceStart(
+                      'campaigns',
+                      campSheet._id,
+                      'environments',
+                      environment._id,
+                      { active: !environment.active },
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `Environment ${environment.active ? 'Deactivated' : 'Activated'}`,
+                          message: `You have successfully ${environment.active ? 'deactivated' : 'activated'} ${environment.name}.`,
+                        },
+                      }
+                    )
+                  )
+                }
+              >
                 {environment.active ? 'Deactivate' : 'Activate'}
               </Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.environmentForm, id: environment._id }))}>Edit</Button>
@@ -95,6 +115,7 @@ const CampaignEnvironmentsPage = () => {
                         resourceType: 'environments',
                         title: `Are you sure you want to delete ${environment.name}?`,
                         submitText: `Yes, delete ${environment.name}`,
+                        notification: { heading: 'Environment Deleted', message: `You have successfully deleted ${environment.name}.` },
                       },
                     })
                   )
