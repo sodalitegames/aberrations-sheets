@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../../../../redux/user/user.selectors';
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
+import { setNestedModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import ModalTypes from '../../../../utils/ModalTypes';
@@ -68,8 +68,8 @@ const ManageCampaign = () => {
       {/* <TextArea slideOver label="Campaign Overview" name="overview" rows={4} value={overview} changeHandler={setOverview} />
       <TextArea slideOver label="Campaign Details" name="details" rows={8} value={details} changeHandler={setDetails} /> */}
       <Row slideOver name="deleteCharacter" label="Delete Character">
-        <Button alert type="button" onClick={() => dispatch(setModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'campaigns' } }))}>
-          Permanently Delete {campSheet.name}
+        <Button alert type="button" onClick={() => dispatch(setNestedModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'campaigns' } }, { nestedModal: true, slideOver: true }))}>
+          Permanently Delete {campSheet?.name}
         </Button>
       </Row>
     </SlideOverForm>

@@ -19,10 +19,10 @@ const tabs = [
 ];
 
 const interactableStates = [
-  { title: 'All', href: 'all', description: 'View and edit both active and inactive Interactables.', current: false },
+  { title: 'All', href: 'all', description: 'View and edit both active and inactive Interactables. You will not see your archived interactables here.', current: false },
   { title: 'Active', href: 'active', description: 'Active Interactables show up on the gameplay tab, and if an Npc or Creature, the combat table. ', current: true },
   { title: 'Inactive', href: 'inactive', description: 'Inactive Interactables are hidden elsewhere, but can be viewed and edited here.', current: false },
-  { title: 'Archive', href: 'archive', description: 'The interactables that you have previously had, but gave away, sold, or deleted.', current: false },
+  { title: 'Archived', href: 'archive', description: 'The interactables that you have previously had, but gave away, sold, or deleted.', current: false },
 ];
 
 const CampaignInteractablesPage = () => {

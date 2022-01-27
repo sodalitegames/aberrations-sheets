@@ -24,7 +24,7 @@ export const DisplayTransactionDocument = ({ document, documentType, sheetType }
       ) : documentType === 'usables' ? (
         <DisplayUsable usable={document} sheetType={sheetType} />
       ) : documentType === 'wallet' ? (
-        JSON.stringify(document)
+        <p className="text-sm text-gray-900 mb-4">{document.amount} monies</p>
       ) : (
         <p>No document type was provided</p>
       )}

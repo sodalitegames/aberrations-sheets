@@ -46,6 +46,8 @@ const WearableDetails = ({ wearable, sheetType }) => {
         { name: 'Agility Mod', values: [wearable.statMods.agility], half: true },
         { name: 'Persona Mod', values: [wearable.statMods.persona], half: true },
         { name: 'Aptitude Mod', values: [wearable.statMods.aptitude], half: true },
+        wearable.metadata?.givenBy ? { name: 'Received From', value: [wearable.metadata.givenBy], half: true } : null,
+        wearable.metadata?.givenTo ? { name: 'Given To', value: [wearable.metadata.givenTo], half: true } : null,
       ]}
       classes="mt-2"
     />

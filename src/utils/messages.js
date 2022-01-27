@@ -25,10 +25,10 @@ export const getTransactionHeading = ({ senderName, recipientName, sellPrice, do
 
   if (sent) {
     if (documentType === 'wallet') {
-      if (status === 'Accepted') return `${recipientName} accepted your offer to pay them ${document.wallet} monies`;
-      if (status === 'Declined') return `${recipientName} declined your offer to pay them ${document.wallet} monies`;
-      if (status === 'Revoked') return `You revoked your offer to pay ${recipientName} ${document.wallet} monies`;
-      if (status === 'Pending') return `You offered to pay ${recipientName} ${document.wallet} monies`;
+      if (status === 'Accepted') return `${recipientName} accepted your offer to pay them ${document.amount} monies`;
+      if (status === 'Declined') return `${recipientName} declined your offer to pay them ${document.amount} monies`;
+      if (status === 'Revoked') return `You revoked your offer to pay ${recipientName} ${document.amount} monies`;
+      if (status === 'Pending') return `You offered to pay ${recipientName} ${document.amount} monies`;
 
       return;
     }
@@ -51,10 +51,10 @@ export const getTransactionHeading = ({ senderName, recipientName, sellPrice, do
   }
 
   if (documentType === 'wallet') {
-    if (status === 'Accepted') return `You accepted ${senderName}'s offer to pay you ${document.wallet} monies`;
-    if (status === 'Declined') return `You declined ${senderName}'s offer to pay you ${document.wallet} monies`;
-    if (status === 'Revoked') return `${senderName} revoked their offer to pay you ${document.wallet} monies`;
-    if (status === 'Pending') return `${senderName} has offered to pay you ${document.wallet} monies`;
+    if (status === 'Accepted') return `You accepted ${senderName}'s offer to pay you ${document.amount} monies`;
+    if (status === 'Declined') return `You declined ${senderName}'s offer to pay you ${document.amount} monies`;
+    if (status === 'Revoked') return `${senderName} revoked their offer to pay you ${document.amount} monies`;
+    if (status === 'Pending') return `${senderName} has offered to pay you ${document.amount} monies`;
     return;
   }
 
