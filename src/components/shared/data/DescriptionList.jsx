@@ -13,15 +13,15 @@ const DescriptionList = ({ list, classes }) => {
                 // check if it has a title
                 if (value.title) {
                   return (
-                    <dd key={index} title={value.title} className="mt-1 text-sm text-gray-900">
-                      <NewlineText text={String(value.value)} />
+                    <dd key={index} title={value.title || ''} className="mt-1 text-sm text-gray-900">
+                      <NewlineText text={String(value.value || '')} />
                     </dd>
                   );
                 }
 
                 return (
                   <dd key={index} className="mt-1 text-sm text-gray-900">
-                    <NewlineText text={String(value)} />
+                    <NewlineText text={String(value || '')} />
                   </dd>
                 );
               })}

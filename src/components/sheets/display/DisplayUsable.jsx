@@ -11,7 +11,7 @@ const UsableDetails = ({ usable, sheetType }) => {
       list={[
         { name: 'Type', values: [usable.type], half: true },
         { name: 'Quantity', values: [`${usable.quantity} ${usable.units || 'units'}`], half: true },
-        { name: 'Equippable', values: [usable.equppable ? 'Yes' : 'No'], half: true },
+        { name: 'Equippable', values: [usable.equippable ? 'Yes' : 'No'], half: true },
         sheetType === 'characters' ? { name: 'Equipped', values: [usable.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [usable.active ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [usable.npcId ? usable.npcId : 'Unassigned'] } : null,

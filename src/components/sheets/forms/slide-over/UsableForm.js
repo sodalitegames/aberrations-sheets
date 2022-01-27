@@ -11,6 +11,7 @@ import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 import Input from '../../../shared/form/Input';
 import TextArea from '../../../shared/form/TextArea';
 import Select from '../../../shared/form/Select';
+import Toggle from '../../../shared/form/Toggle';
 
 const UsableForm = ({ id, data }) => {
   const dispatch = useDispatch();
@@ -118,7 +119,7 @@ const UsableForm = ({ id, data }) => {
         required
       />
       <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} required />
-      <Input slideOver label="Equippable" name="equippable" type="number" value={equippable} changeHandler={setEquippable} />
+      <Toggle slideOver label="Equippable" name="equippable" enabled={equippable} setEnabled={setEquippable} />
       <Input slideOver label="Quantity" name="quantity" type="text" value={quantity} changeHandler={setQuantity} required />
       <Input slideOver label="Units" name="units" type="text" value={units} changeHandler={setUnits} required />
     </SlideOverForm>
