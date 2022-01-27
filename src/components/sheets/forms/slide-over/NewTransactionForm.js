@@ -35,9 +35,11 @@ const NewTransactionForm = ({ data }) => {
     if (data.sheetType === 'characters') {
       setSenderName(charSheet.characterName);
 
-      const newRecipientList = charSheet.campaign ? charSheet.campaign.players.filter(player => player._id !== charSheet._id).map(player => ({ name: player.characterName, id: player._id })) : [];
+      const newRecipientList = charSheet.campaign
+        ? charSheet.campaign.players.filter(player => player._id !== charSheet._id).map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }))
+        : [];
 
-      if (charSheet.campaign) newRecipientList.push({ name: charSheet.campaign.ccNickname || charSheet.campaign.ccName, id: charSheet.campaign._id });
+      if (charSheet.campaign) newRecipientList.push({ name: charSheet.campaign.ccNickname || charSheet.campaign.ccName, id: charSheet.campaign._id, sheetType: 'campaigns' });
 
       setRecipientList(newRecipientList);
     }
@@ -45,7 +47,7 @@ const NewTransactionForm = ({ data }) => {
     if (data.sheetType === 'campaigns') {
       setSenderName(campSheet.ccNickname || campSheet.ccName);
 
-      const newRecipientList = campSheet.players.map(player => ({ name: player.characterName, id: player._id }));
+      const newRecipientList = campSheet.players.map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }));
       setRecipientList(newRecipientList);
     }
   }, [data.sheetType, campSheet, charSheet]);
@@ -76,7 +78,17 @@ const NewTransactionForm = ({ data }) => {
         data.sheetType,
         sheetId,
         'transactions',
-        { senderName, recipientName: recipientInfo.name, receivingSheetId: recipientInfo.id, message, sellPrice, document: data.document, documentType: data.documentType },
+        {
+          sheetType: data.sheetType,
+          senderName,
+          recipientName: recipientInfo.name,
+          receivingSheetId: recipientInfo.id,
+          receivingSheetType: recipientInfo.sheetType,
+          message,
+          sellPrice,
+          document: data.document,
+          documentType: data.documentType,
+        },
         {
           slideOver: true,
           notification: {

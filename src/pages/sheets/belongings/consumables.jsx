@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
-import { selectCurrentCharacter, selectEquippedConsumables } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { selectCurrentCharacter, selectEquippedConsumables, selectConsumables as selectCharConsumables } from '../../../redux/character/character.selectors';
+import { selectCurrentCampaign, selectConsumables as selectCampConsumables } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
@@ -30,18 +30,21 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
   const campSheet = useSelector(selectCurrentCampaign);
   const equippedConsumables = useSelector(selectEquippedConsumables);
 
+  const charConsumables = useSelector(selectCharConsumables);
+  const campConsumables = useSelector(selectCampConsumables);
+
   const [consumable, setConsumable] = useState(null);
   const [id, setId] = useState(null);
 
   useEffect(() => {
     if (id) {
-      setConsumable(sheetType === 'characters' ? charSheet.consumables.find(cons => cons._id === id) : campSheet.consumables.find(cons => cons._id === id));
+      setConsumable(sheetType === 'characters' ? charConsumables.find(cons => cons._id === id) : campConsumables.find(cons => cons._id === id));
       return;
     }
 
-    setConsumable(sheetType === 'characters' ? charSheet.consumables[0] : campSheet.consumables[0]);
-    setId(sheetType === 'characters' ? charSheet.consumables[0]?._id : campSheet.consumables[0]?._id);
-  }, [sheetType, id, campSheet, charSheet]);
+    setConsumable(sheetType === 'characters' ? charConsumables[0] : campConsumables[0]);
+    setId(sheetType === 'characters' ? charConsumables[0]?._id : campConsumables[0]?._id);
+  }, [sheetType, id, charConsumables, campConsumables]);
 
   return (
     <SheetPageContent title="Consumables" columns={4}>
@@ -49,7 +52,7 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
       <PanelSection title="Manage Consumables">
         <div className="flow-root mt-2">
           <ListContainer
-            list={sheetType === 'characters' ? charSheet.consumables : campSheet.consumables}
+            list={sheetType === 'characters' ? charConsumables : campConsumables}
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm, data: { sheetType: sheetType } })), text: 'Add a new Consumable' }}
             empty={{
               heading: 'No Consumables',
@@ -57,7 +60,7 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
               button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm, data: { sheetType: sheetType } })), text: 'New Consumable' },
             }}
           >
-            {(sheetType === 'characters' ? charSheet.consumables : campSheet.consumables).map(consumable => (
+            {(sheetType === 'characters' ? charConsumables : campConsumables).map(consumable => (
               <div
                 key={consumable._id}
                 className={classNames('flex justify-between items-center px-2 cursor-pointer', id === consumable._id ? 'bg-gray-100' : 'hover:bg-gray-50')}

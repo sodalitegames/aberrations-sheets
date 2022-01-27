@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
-import { selectCurrentCharacter, selectEquippedUsables } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { selectCurrentCharacter, selectEquippedUsables, selectUsables as selectCharUsables } from '../../../redux/character/character.selectors';
+import { selectCurrentCampaign, selectUsables as selectCampUsables } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
@@ -30,18 +30,21 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
   const campSheet = useSelector(selectCurrentCampaign);
   const equippedUsables = useSelector(selectEquippedUsables);
 
+  const charUsables = useSelector(selectCharUsables);
+  const campUsables = useSelector(selectCampUsables);
+
   const [usable, setUsable] = useState(null);
   const [id, setId] = useState(null);
 
   useEffect(() => {
     if (id) {
-      setUsable(sheetType === 'characters' ? charSheet.usables.find(usab => usab._id === id) : campSheet.usables.find(usab => usab._id === id));
+      setUsable(sheetType === 'characters' ? charUsables.find(usab => usab._id === id) : campUsables.find(usab => usab._id === id));
       return;
     }
 
-    setUsable(sheetType === 'characters' ? charSheet.usables[0] : campSheet.usables[0]);
-    setId(sheetType === 'characters' ? charSheet.usables[0]?._id : campSheet.usables[0]?._id);
-  }, [sheetType, id, campSheet, charSheet]);
+    setUsable(sheetType === 'characters' ? charUsables[0] : campUsables[0]);
+    setId(sheetType === 'characters' ? charUsables[0]?._id : campUsables[0]?._id);
+  }, [sheetType, id, charUsables, campUsables]);
 
   return (
     <SheetPageContent title="Usables" columns={4}>
@@ -49,7 +52,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
       <PanelSection title="Manage Usables">
         <div className="flow-root mt-2">
           <ListContainer
-            list={sheetType === 'characters' ? charSheet.usables : campSheet.usables}
+            list={sheetType === 'characters' ? charUsables : campUsables}
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, data: { sheetType: sheetType } })), text: 'Add a new Usable' }}
             empty={{
               heading: 'No Usables',
@@ -57,7 +60,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
               button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm, data: { sheetType: sheetType } })), text: 'New Usable' },
             }}
           >
-            {(sheetType === 'characters' ? charSheet.usables : campSheet.usables).map(usable => (
+            {(sheetType === 'characters' ? charUsables : campUsables).map(usable => (
               <div
                 key={usable._id}
                 className={classNames('flex justify-between items-center px-2 cursor-pointer', id === usable._id ? 'bg-gray-100' : 'hover:bg-gray-50')}

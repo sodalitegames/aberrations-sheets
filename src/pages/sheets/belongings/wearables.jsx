@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
-import { selectCurrentCharacter, selectEquippedWearables, selectEquipmentMods } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { selectCurrentCharacter, selectEquippedWearables, selectEquipmentMods, selectWearables as selectCharWearables } from '../../../redux/character/character.selectors';
+import { selectCurrentCampaign, selectWearables as selectCampWearables } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
@@ -31,18 +31,21 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
   const equippedWearables = useSelector(selectEquippedWearables);
   const equipmentMods = useSelector(selectEquipmentMods);
 
+  const charWearables = useSelector(selectCharWearables);
+  const campWearables = useSelector(selectCampWearables);
+
   const [wearable, setWearable] = useState(null);
   const [id, setId] = useState(null);
 
   useEffect(() => {
     if (id) {
-      setWearable(sheetType === 'characters' ? charSheet.wearables.find(wear => wear._id === id) : campSheet.wearables.find(wear => wear._id === id));
+      setWearable(sheetType === 'characters' ? charWearables.find(wear => wear._id === id) : campWearables.find(wear => wear._id === id));
       return;
     }
 
-    setWearable(sheetType === 'characters' ? charSheet.wearables[0] : campSheet.wearables[0]);
-    setId(sheetType === 'characters' ? charSheet.wearables[0]?._id : campSheet.wearables[0]?._id);
-  }, [sheetType, id, campSheet, charSheet]);
+    setWearable(sheetType === 'characters' ? charWearables[0] : campWearables[0]);
+    setId(sheetType === 'characters' ? charWearables[0]?._id : campWearables[0]?._id);
+  }, [sheetType, id, charWearables, campWearables]);
 
   return (
     <SheetPageContent title="Wearables" columns={4}>
@@ -50,7 +53,7 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
       <PanelSection title="Manage Wearables">
         <div className="flow-root mt-2">
           <ListContainer
-            list={sheetType === 'characters' ? charSheet.wearables : campSheet.wearables}
+            list={sheetType === 'characters' ? charWearables : campWearables}
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, data: { sheetType: sheetType } })), text: 'Add a new Wearable' }}
             empty={{
               heading: 'No Wearables',
@@ -58,7 +61,7 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
               button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, data: { sheetType: sheetType } })), text: 'New Wearable' },
             }}
           >
-            {(sheetType === 'characters' ? charSheet.wearables : campSheet.wearables).map(wearable => (
+            {(sheetType === 'characters' ? charWearables : campWearables).map(wearable => (
               <div
                 key={wearable._id}
                 className={classNames('flex justify-between items-center px-2 cursor-pointer', id === wearable._id ? 'bg-gray-100' : 'hover:bg-gray-50')}

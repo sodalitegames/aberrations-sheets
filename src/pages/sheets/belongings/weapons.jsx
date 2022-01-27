@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
-import { selectCurrentCharacter, selectEquippedWeapons } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { selectCurrentCharacter, selectEquippedWeapons, selectWeapons as selectCharWeapons } from '../../../redux/character/character.selectors';
+import { selectCurrentCampaign, selectWeapons as selectCampWeapons } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
@@ -30,18 +30,21 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
   const campSheet = useSelector(selectCurrentCampaign);
   const equippedWeapons = useSelector(selectEquippedWeapons);
 
+  const charWeapons = useSelector(selectCharWeapons);
+  const campWeapons = useSelector(selectCampWeapons);
+
   const [weapon, setWeapon] = useState(null);
   const [id, setId] = useState(null);
 
   useEffect(() => {
     if (id) {
-      setWeapon(sheetType === 'characters' ? charSheet.weapons.find(weap => weap._id === id) : campSheet.weapons.find(weap => weap._id === id));
+      setWeapon(sheetType === 'characters' ? charWeapons.find(weap => weap._id === id) : campWeapons.find(weap => weap._id === id));
       return;
     }
 
-    setWeapon(sheetType === 'characters' ? charSheet.weapons[0] : campSheet.weapons[0]);
-    setId(sheetType === 'characters' ? charSheet.weapons[0]?._id : campSheet.weapons[0]?._id);
-  }, [sheetType, id, campSheet, charSheet]);
+    setWeapon(sheetType === 'characters' ? charWeapons[0] : campWeapons[0]);
+    setId(sheetType === 'characters' ? charWeapons[0]?._id : campWeapons[0]?._id);
+  }, [sheetType, id, charWeapons, campWeapons]);
 
   return (
     <SheetPageContent title="Weapons" columns={4}>
@@ -49,7 +52,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
       <PanelSection title="Manage Weapons">
         <div className="flow-root mt-2">
           <ListContainer
-            list={sheetType === 'characters' ? charSheet.weapons : campSheet.weapons}
+            list={sheetType === 'characters' ? charWeapons : campWeapons}
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm, data: { sheetType: sheetType } })), text: 'Add a new Weapon' }}
             empty={{
               heading: 'No Weapons',
@@ -57,7 +60,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
               button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm, data: { sheetType: sheetType } })), text: 'New Weapon' },
             }}
           >
-            {(sheetType === 'characters' ? charSheet.weapons : campSheet.weapons).map(weapon => (
+            {(sheetType === 'characters' ? charWeapons : campWeapons).map(weapon => (
               <div
                 key={weapon._id}
                 className={classNames('flex justify-between items-center px-2 cursor-pointer', id === weapon._id ? 'bg-gray-100' : 'hover:bg-gray-50')}

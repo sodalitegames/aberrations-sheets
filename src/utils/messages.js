@@ -43,7 +43,7 @@ export const getTransactionHeading = ({ senderName, recipientName, sellPrice, do
     }
 
     if (status === 'Accepted') return `${recipientName} accepted your offer to give them ${document.nickname || document.name}`;
-    if (status === 'Declined') return `${recipientName} decline your offer to give them ${document.nickname || document.name}`;
+    if (status === 'Declined') return `${recipientName} declined your offer to give them ${document.nickname || document.name}`;
     if (status === 'Revoked') return `You revoked your offer to give ${recipientName} your ${document.nickname || document.name}`;
     if (status === 'Pending') return `You offered to give ${recipientName} your ${document.nickname || document.name}`;
 
