@@ -4,9 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { selectSpecies } from '../../../redux/resource/resource.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
+import { fetchResourceStart } from '../../../redux/resource/resource.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
@@ -23,7 +25,9 @@ import DisplayNpc from '../../../components/campaigns/display/DisplayNpc';
 
 const CampaignNpcsPage = () => {
   const dispatch = useDispatch();
+
   const campSheet = useSelector(selectCurrentCampaign);
+  const speciesList = useSelector(selectSpecies);
 
   const [npc, setNpc] = useState(null);
   const [id, setId] = useState(null);
@@ -37,6 +41,12 @@ const CampaignNpcsPage = () => {
     setNpc(campSheet.npcs[0]);
     setId(campSheet.npcs[0]?._id);
   }, [id, campSheet]);
+
+  useEffect(() => {
+    if (!speciesList) {
+      dispatch(fetchResourceStart('species'));
+    }
+  }, [dispatch, speciesList]);
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
@@ -71,7 +81,7 @@ const CampaignNpcsPage = () => {
         {npc ? (
           <div className="grid gap-8 grid-cols-3 divide-x divide-gray-200">
             <div className="col-span-2">
-              <DisplayNpc npc={npc} />
+              <DisplayNpc npc={npc} species={speciesList} />
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">

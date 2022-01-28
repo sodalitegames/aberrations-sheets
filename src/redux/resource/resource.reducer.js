@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   augmentations: null,
   consumableCategories: null,
   creatureTypes: null,
+  npcTypes: null,
   error: null,
 };
 

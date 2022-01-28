@@ -11,17 +11,17 @@ const DescriptionList = ({ list, classes }) => {
               <dt className="text-xs font-base text-gray-500">{item.name}</dt>
               {item.values.map((value, index) => {
                 // check if it has a title
-                if (value.title) {
+                if (value?.title) {
                   return (
-                    <dd key={index} title={value.title === undefined ? 'a decription list error occurred' : value.title} className="mt-1 text-sm text-gray-900">
-                      <NewlineText text={String(value.value === undefined ? 'a decription list error occurred' : value.value)} />
+                    <dd key={index} title={value.title === undefined ? 'undefined (description list)' : value.title} className="mt-1 text-sm text-gray-900">
+                      <NewlineText text={String(value.value === undefined ? 'undefined (description list)' : value.value)} />
                     </dd>
                   );
                 }
 
                 return (
                   <dd key={index} className="mt-1 text-sm text-gray-900">
-                    <NewlineText text={String(value === undefined ? 'a decription list error occurred' : value)} />
+                    <NewlineText text={String(value === undefined ? 'undefined (description list)' : value)} />
                   </dd>
                 );
               })}
