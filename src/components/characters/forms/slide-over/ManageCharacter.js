@@ -4,18 +4,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../../../../redux/user/user.selectors';
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver, setModal } from '../../../../redux/app/app.actions';
+import { setNestedModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import Input from '../../../shared/Input';
+import Input from '../../../shared/form/Input';
 // import TextArea from '../../../shared/TextArea';
-import Row from '../../../shared/Row';
-import Detail from '../../../shared/Detail';
+import Row from '../../../shared/form/Row';
+import Detail from '../../../shared/form/Detail';
 import Button from '../../../shared/Button';
 
-import Species from '../../../characters/display/Species';
+import DisplaySpecies from '../../../sheets/display/DisplaySpecies';
 import ModalTypes from '../../../../utils/ModalTypes';
 
 const ManageCharacter = () => {
@@ -46,15 +46,18 @@ const ManageCharacter = () => {
     if (!charBackground) return alert('Must provide a charBackground');
 
     dispatch(
-      updateSheetStart('characters', charSheet._id, {
-        playerNickname,
-        characterName,
-        charDescription,
-        charBackground,
-      })
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        {
+          playerNickname,
+          characterName,
+          charDescription,
+          charBackground,
+        },
+        { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Updated', message: `You have successfully updated ${characterName}.` } }
+      )
     );
-
-    dispatch(setSlideOver(null));
   };
 
   return (
@@ -63,15 +66,13 @@ const ManageCharacter = () => {
       <Input slideOver label="Player Nickname (Opt.)" type="text" name="playerName" value={playerNickname} changeHandler={setPlayerNickname} />
       <Input slideOver label="Character Name" type="text" name="characterName" value={characterName} changeHandler={setCharacterName} />
       <Row slideOver name="species" label="Character Species">
-        <ul className="mt-3 divide-y divide-gray-200">
-          <Species species={charSheet.species} />
-        </ul>
+        <ul className="mt-3 divide-y divide-gray-200">{charSheet ? <DisplaySpecies species={charSheet.species} /> : null}</ul>
       </Row>
       {/* <TextArea slideOver label="Character Description" name="charDescription" rows={6} value={charDescription} changeHandler={setCharDescription} />
       <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} /> */}
       <Row slideOver name="deleteCharacter" label="Delete Character">
-        <Button alert type="button" onClick={() => dispatch(setModal({ type: ModalTypes.deleteCharacter }))}>
-          Permanently Delete {charSheet.characterName}
+        <Button alert type="button" onClick={() => dispatch(setNestedModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'characters' } }, { nestedModal: true, slideOver: true }))}>
+          Permanently Delete {charSheet?.characterName}
         </Button>
       </Row>
     </SlideOverForm>

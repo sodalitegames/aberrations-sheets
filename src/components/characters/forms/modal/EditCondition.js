@@ -3,14 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
+import Input from '../../../shared/form/Input';
 
 const EditCondition = ({ id }) => {
   const dispatch = useDispatch();
@@ -28,9 +27,14 @@ const EditCondition = ({ id }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, [id]: points } }));
-
-    dispatch(setModal(null));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { conditions: { ...charSheet.conditions, [id]: points } },
+        { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your ${id.toLowerCase()} condition.` } }
+      )
+    );
   };
 
   return (

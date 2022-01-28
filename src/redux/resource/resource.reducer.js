@@ -6,10 +6,11 @@ const INITIAL_STATE = {
   augmentations: null,
   consumableCategories: null,
   creatureTypes: null,
+  npcTypes: null,
   error: null,
 };
 
-const userReducer = (state = INITIAL_STATE, action) => {
+const resourceReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case ResourceActionTypes.FETCH_RESOURCE_SUCCESS:
       return {
@@ -28,4 +29,4 @@ const userReducer = (state = INITIAL_STATE, action) => {
   }
 };
 
-export default userReducer;
+export default resourceReducer;

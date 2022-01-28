@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
+import { correctCurrentHp } from '../../../../utils/updateHealth';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Select from '../../../shared/Select';
+import Select from '../../../shared/form/Select';
 import Notice from '../../../shared/Notice';
 
 const TakeARest = () => {
@@ -26,7 +26,6 @@ const TakeARest = () => {
     setRest(e.target.value);
 
     if (e.target.value === 'slumber') {
-      let upgradePoints = 0;
       let actionsArr = [
         `You'll Recover ${charSheet.fortitude.points + charSheet.fortitude.modifier} health points`,
         `All points in Injured and Disturbed will be removed`,
@@ -34,23 +33,17 @@ const TakeARest = () => {
       ];
 
       if (charSheet.fortitude.experience >= charSheet.fortitude.points) {
-        upgradePoints++;
         actionsArr.push(`Foritude stat leveled up (and experience will be reset)`);
       }
       if (charSheet.agility.experience >= charSheet.agility.points) {
-        upgradePoints++;
         actionsArr.push(`Agility stat leveled up (and experience will be reset)`);
       }
       if (charSheet.persona.experience >= charSheet.persona.points) {
-        upgradePoints++;
         actionsArr.push(`Persona stat leveled up (and experience will be reset)`);
       }
       if (charSheet.aptitude.experience >= charSheet.aptitude.points) {
-        upgradePoints++;
         actionsArr.push(`Aptitude stat leveled up (and experience will be reset)`);
       }
-
-      if (upgradePoints) actionsArr.push(`You'll Receive ${upgradePoints} Upgrade Points`);
 
       setActions(actionsArr);
     }
@@ -73,12 +66,10 @@ const TakeARest = () => {
     let aptitude = JSON.parse(JSON.stringify(charSheet.aptitude));
 
     if (rest === 'slumber') {
-      let upgradePoints = 0;
       let upgradedFortitude = false;
 
       if (fortitude.experience >= fortitude.points) {
         upgradedFortitude = true;
-        upgradePoints++;
         fortitude = {
           ...fortitude,
           points: fortitude.points + 1,
@@ -87,7 +78,6 @@ const TakeARest = () => {
       }
 
       if (agility.experience >= agility.points) {
-        upgradePoints++;
         agility = {
           ...agility,
           points: agility.points + 1,
@@ -96,7 +86,6 @@ const TakeARest = () => {
       }
 
       if (persona.experience >= persona.points) {
-        upgradePoints++;
         persona = {
           ...persona,
           points: persona.points + 1,
@@ -105,7 +94,6 @@ const TakeARest = () => {
       }
 
       if (aptitude.experience >= aptitude.points) {
-        upgradePoints++;
         aptitude = {
           ...aptitude,
           points: aptitude.points + 1,
@@ -114,35 +102,40 @@ const TakeARest = () => {
       }
 
       dispatch(
-        updateSheetStart('characters', charSheet._id, {
-          currentHp: charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 5 : 0),
-          conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
-          fortitude: { ...fortitude, advantage: 0 },
-          agility: { ...agility, advantage: 0 },
-          persona: { ...persona, advantage: 0 },
-          aptitude: { ...aptitude, advantage: 0 },
-          upgradePoints: charSheet.upgradePoints + upgradePoints,
-        })
+        updateSheetStart(
+          'characters',
+          charSheet._id,
+          {
+            currentHp: correctCurrentHp(charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 5 : 0), charSheet.maxHp + (upgradedFortitude ? 5 : 0)),
+            conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
+            fortitude: { ...fortitude, advantage: 0 },
+            agility: { ...agility, advantage: 0 },
+            persona: { ...persona, advantage: 0 },
+            aptitude: { ...aptitude, advantage: 0 },
+          },
+          { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
+        )
       );
-
-      dispatch(setModal(null));
 
       return;
     }
 
     if (rest === 'nap') {
       dispatch(
-        updateSheetStart('characters', charSheet._id, {
-          currentHp: charSheet.currentHp + Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2),
-          conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured - 1, disturbed: charSheet.conditions.disturbed - 1 },
-          fortitude: { ...charSheet.fortitude, advantage: 0 },
-          agility: { ...charSheet.agility, advantage: 0 },
-          persona: { ...charSheet.agility, advantage: 0 },
-          aptitude: { ...charSheet.aptitude, advantage: 0 },
-        })
+        updateSheetStart(
+          'characters',
+          charSheet._id,
+          {
+            currentHp: correctCurrentHp(charSheet.currentHp + Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2), charSheet.maxHp),
+            conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured - 1, disturbed: charSheet.conditions.disturbed - 1 },
+            fortitude: { ...charSheet.fortitude, advantage: 0 },
+            agility: { ...charSheet.agility, advantage: 0 },
+            persona: { ...charSheet.agility, advantage: 0 },
+            aptitude: { ...charSheet.aptitude, advantage: 0 },
+          },
+          { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
+        )
       );
-
-      dispatch(setModal(null));
 
       return;
     }

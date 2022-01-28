@@ -1,104 +1,45 @@
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCharacter } from '../../redux/character/character.selectors';
-
-import { setSlideOver } from '../../redux/app/app.actions';
-
-import SlideOverTypes from '../../utils/SlideOverTypes';
+import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
-import ListContainer from '../../components/shared/ListContainer';
+import PanelSection from '../../components/sheets/PanelSection';
 
-import Weapon from '../../components/characters/display/Weapon';
-import Wearable from '../../components/characters/display/Wearable';
-import Consumable from '../../components/characters/display/Consumable';
-import Usable from '../../components/characters/display/Usable';
+import SelectButton from '../../components/shared/SelectButton';
+import TabsNavigation from '../../components/sheets/TabsNavigation';
+
+const tabs = [
+  { name: 'Weapons', href: 'weapons' },
+  { name: 'Wearables', href: 'wearables' },
+  { name: 'Consumables', href: 'consumables' },
+  { name: 'Usables', href: 'usables' },
+];
+
+const inventoryStates = [
+  { title: 'Current Inventory', href: 'current', description: 'The belongings that you currently have in your SURONIS or equipped.', current: true },
+  { title: 'Inventory Archive - Coming Soon', href: 'archive', description: 'The belongings that you have previously had, but used, gave away, sold, or deleted.', current: false },
+  { title: 'Group Inventory - Coming Soon', href: 'group', description: 'The belongings that you and your campaign group collectively have, until a player claims it as their own.', current: false },
+];
 
 const CharacterInventoryPage = () => {
-  const dispatch = useDispatch();
-
-  const charSheet = useSelector(selectCurrentCharacter);
+  const [selected, setSelected] = useState(inventoryStates[0]);
 
   return (
-    <SheetPageContent title="Inventory" columns={4}>
-      {/* Weapons */}
-      <PanelSection title="Weapons">
-        <div className="flow-root mt-2">
-          <ListContainer
-            list={charSheet.weapons}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'Add a new Weapon' }}
-            empty={{
-              heading: 'No Weapons',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm })), text: 'New Weapon' },
-            }}
-          >
-            {charSheet.weapons.map(weapon => (
-              <Weapon key={weapon._id} weapon={weapon} />
-            ))}
-          </ListContainer>
-        </div>
-      </PanelSection>
+    <div className="space-y-6">
+      <SheetPageContent title="Inventory">
+        {/* Tabs */}
+        <PanelSection>
+          <div className="flex justify-between items-center flex-wrap">
+            <TabsNavigation tabs={tabs} sheetType="characters" />
+            <SelectButton value={selected} onChange={setSelected} options={inventoryStates} />
+          </div>
+        </PanelSection>
+      </SheetPageContent>
 
-      {/* Wearables */}
-      <PanelSection title="Wearables">
-        <div className="flow-root mt-2">
-          <ListContainer
-            list={charSheet.wearables}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm })), text: 'Add a new Wearable' }}
-            empty={{
-              heading: 'No Wearables',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm })), text: 'New Wearable' },
-            }}
-          >
-            {charSheet.wearables.map(wearable => (
-              <Wearable key={wearable._id} wearable={wearable} />
-            ))}
-          </ListContainer>
-        </div>
-      </PanelSection>
-
-      {/* Consumables */}
-      <PanelSection title="Consumables">
-        <div className="flow-root mt-2">
-          <ListContainer
-            list={charSheet.consumables}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm })), text: 'Add a new Consumable' }}
-            empty={{
-              heading: 'No Consumables',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.consumableForm })), text: 'New Consumable' },
-            }}
-          >
-            {charSheet.consumables.map(consumable => (
-              <Consumable key={consumable._id} consumable={consumable} />
-            ))}
-          </ListContainer>
-        </div>
-      </PanelSection>
-
-      {/* Usables */}
-      <PanelSection title="Usables">
-        <div className="flow-root mt-2">
-          <ListContainer
-            list={charSheet.usables}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'Add a new Usable' }}
-            empty={{
-              heading: 'No Usables',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.usableForm })), text: 'New Usable' },
-            }}
-          >
-            {charSheet.usables.map(usable => (
-              <Usable key={usable._id} usable={usable} />
-            ))}
-          </ListContainer>
-        </div>
-      </PanelSection>
-    </SheetPageContent>
+      {/* Outlet for Subpages */}
+      <Outlet />
+      {/* End Outlet for Subpages */}
+    </div>
   );
 };
 

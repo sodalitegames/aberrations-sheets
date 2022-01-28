@@ -3,15 +3,15 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
+import { calculateNewCurrentHp } from '../../../../utils/updateHealth';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
-import Detail from '../../../shared/Detail';
+import Input from '../../../shared/form/Input';
+import Detail from '../../../shared/form/Detail';
 
 const EditStat = ({ id }) => {
   const dispatch = useDispatch();
@@ -35,9 +35,25 @@ const EditStat = ({ id }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { [id]: { points, modifier, experience, advantage } }));
+    let body = {
+      [id]: { points: parseInt(points), modifier: parseInt(modifier), experience, advantage },
+    };
 
-    dispatch(setModal(null));
+    if (id === 'fortitude') {
+      if (charSheet[id].points + charSheet[id].modifier !== body[id].points + body[id].modifier) {
+        // Get the new maxHp
+        const newMaxHp = (body[id].points + body[id].modifier) * 5;
+
+        body.currentHp = calculateNewCurrentHp(charSheet.currentHp, charSheet.maxHp, newMaxHp);
+      }
+    }
+
+    dispatch(
+      updateSheetStart('characters', charSheet._id, body, {
+        modal: true,
+        notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your ${id.toLowerCase()} stat.` },
+      })
+    );
   };
 
   return (
@@ -45,7 +61,7 @@ const EditStat = ({ id }) => {
       <Input label="Natural" name="points" type="number" value={points} changeHandler={setPoints} />
       <Detail label="Modifier" detail={modifier} />
       <Input label="Experience" name="experience" type="number" value={experience} changeHandler={setExperience} />
-      <Input label="Advantage" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
+      <Input label="Stat Advantage (Opt.)" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
     </ModalForm>
   );
 };

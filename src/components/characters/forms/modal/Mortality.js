@@ -3,12 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setModal } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../../../../layouts/components/app/Modal';
 
-import Input from '../../../shared/Input';
+import Input from '../../../shared/form/Input';
 
 const Mortality = () => {
   const dispatch = useDispatch();
@@ -26,9 +25,14 @@ const Mortality = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { mortality: +mortality }));
-
-    dispatch(setModal(null));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { mortality: +mortality },
+        { modal: true, notification: { status: 'success', heading: 'Mortality Updated', message: `You have successfully updated your mortality to ${mortality}.` } }
+      )
+    );
   };
 
   return (

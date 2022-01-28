@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCharacter, selectError, selectLoading, selectPermissions } from '../redux/character/character.selectors';
+import { selectCurrentCharacter, selectCharacterError, selectLoading, selectPermissions, selectPendingTransactions, selectResolvedTransactions } from '../redux/character/character.selectors';
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
@@ -22,9 +22,11 @@ const CharacterSheet = () => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
-  const error = useSelector(selectError);
+  const error = useSelector(selectCharacterError);
   const loading = useSelector(selectLoading);
   const permissions = useSelector(selectPermissions);
+  const pendingTransactions = useSelector(selectPendingTransactions);
+  const resolvedTransactions = useSelector(selectResolvedTransactions);
 
   useEffect(() => {
     if (charId) {
@@ -55,7 +57,7 @@ const CharacterSheet = () => {
         {permissions?.isCC ? (
           <Banner
             icon="info"
-            theme="secondary"
+            theme="neutral"
             message={`You are viewing ${charSheet.playerNickname || charSheet.playerName}'s character sheet as a CC, with limited permissions.`}
             // button={{ text: 'Learn more', href: '/about' }}
             closable
@@ -63,7 +65,11 @@ const CharacterSheet = () => {
         ) : null}
 
         <div>
-          <SheetPageHeader title={charSheet ? `Aberrations RPG Sheets - ${charSheet.characterName}` : 'Aberrations RPG Sheets'} type="character" />
+          <SheetPageHeader
+            title={charSheet ? `Aberrations RPG Sheets - ${charSheet.characterName}` : 'Aberrations RPG Sheets'}
+            transactions={{ pending: pendingTransactions, resolved: resolvedTransactions }}
+            type="characters"
+          />
           <main className="-mt-24 pb-8">
             {!loading && charSheet ? (
               <React.Suspense fallback={<Loading />}>

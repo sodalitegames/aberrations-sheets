@@ -14,16 +14,17 @@ import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 import Stats from '../../components/characters/Stats';
 import Conditions from '../../components/characters/Conditions';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 import Button from '../../components/shared/Button';
 import Chip from '../../components/shared/Chip';
-import ListContainer from '../../components/shared/ListContainer';
+import ListContainer from '../../components/shared/data/ListContainer';
 
-import Weapon from '../../components/characters/display/Weapon';
-import Wearable from '../../components/characters/display/Wearable';
-import Consumable from '../../components/characters/display/Consumable';
-import Usable from '../../components/characters/display/Usable';
-import Augmentation from '../../components/characters/display/Augmentation';
+import DisplayAugmentation from '../../components/characters/display/DisplayAugmentation';
+
+import DisplayWeapon from '../../components/sheets/display/DisplayWeapon';
+import DisplayWearable from '../../components/sheets/display/DisplayWearable';
+import DisplayConsumable from '../../components/sheets/display/DisplayConsumable';
+import DisplayUsable from '../../components/sheets/display/DisplayUsable';
 
 const CharacterGameplayPage = () => {
   const dispatch = useDispatch();
@@ -90,7 +91,7 @@ const CharacterGameplayPage = () => {
             <span className={classNames(charSheet.currentHp >= charSheet.maxHp / 2 ? 'text-green-800' : '', charSheet.currentHp >= charSheet.maxHp / 4 ? 'text-yellow-800' : 'text-red-800')}>
               {charSheet.currentHp} / {charSheet.maxHp}
             </span>
-            <span className="text-sm font-medium text-gray-500 uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
+            <span className="text-sm font-medium text-gray-500 text-center uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
           </div>
           <div className="mt-6">
             <Button onClick={() => dispatch(setModal({ type: ModalTypes.takeDamage }))}>Take Damage</Button>
@@ -122,15 +123,15 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedWeapons}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' })), text: 'Manage equipped Weapons' }}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons' } })), text: 'Manage equipped Weapons' }}
               empty={{
                 heading: 'No Equipped Weapons',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'weapons' })), text: 'Equip Weapon' },
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons' } })), text: 'Equip Weapon' },
               }}
             >
               {equippedWeapons.map(weapon => (
-                <Weapon key={weapon._id} weapon={weapon} condensed="view" />
+                <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="characters" condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -141,15 +142,15 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedWearables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedWearables })), text: 'Manage equipped Wearables' }}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'wearables' } })), text: 'Manage equipped Wearables' }}
               empty={{
                 heading: 'No Equipped Wearables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedWearables })), text: 'Equip Wearable' },
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'wearables' } })), text: 'Equip Wearable' },
               }}
             >
               {equippedWearables.map(wearable => (
-                <Wearable key={wearable._id} wearable={wearable} condensed="view" />
+                <DisplayWearable key={wearable._id} wearable={wearable} sheetType="characters" condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -162,15 +163,15 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedConsumables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' })), text: 'Manage equipped Consumables' }}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables' } })), text: 'Manage equipped Consumables' }}
               empty={{
                 heading: 'No Equipped Consumables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'consumables' })), text: 'Equip Consumable' },
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables' } })), text: 'Equip Consumable' },
               }}
             >
               {equippedConsumables.map(consumable => (
-                <Consumable key={consumable._id} consumable={consumable} condensed="view" />
+                <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="characters" condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -181,15 +182,15 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedUsables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' })), text: 'Manage equipped Usables' }}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables' } })), text: 'Manage equipped Usables' }}
               empty={{
                 heading: 'No Equipped Usables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, id: 'usables' })), text: 'Equip Usable' },
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables' } })), text: 'Equip Usable' },
               }}
             >
               {equippedUsables.map(usable => (
-                <Usable key={usable._id} usable={usable} condensed="view" />
+                <DisplayUsable key={usable._id} usable={usable} sheetType="characters" condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -200,7 +201,7 @@ const CharacterGameplayPage = () => {
       <PanelSection>
         <div className="flex justify-between flex-wrap md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
-          <Chip editable={{ type: ModalTypes.editUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
+          <Chip editable={{ type: ModalTypes.editSpentUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
             {charSheet.upgradePoints} Upgrade {charSheet.upgradePoints === 1 ? 'Point' : 'Points'}
           </Chip>
         </div>
@@ -215,7 +216,7 @@ const CharacterGameplayPage = () => {
             }}
           >
             {charSheet.augmentations.map(aug => (
-              <Augmentation key={aug._id} aug={aug} />
+              <DisplayAugmentation key={aug._id} aug={aug} />
             ))}
           </ListContainer>
         </div>

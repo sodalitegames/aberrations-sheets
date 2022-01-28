@@ -3,12 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import TextArea from '../../../shared/TextArea';
+import TextArea from '../../../shared/form/TextArea';
 
 const CharBackground = () => {
   const dispatch = useDispatch();
@@ -28,9 +27,14 @@ const CharBackground = () => {
 
     if (!charBackground) return alert('Must provide charBackground');
 
-    dispatch(updateSheetStart('characters', charSheet._id, { charBackground }));
-
-    dispatch(setSlideOver(null));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { charBackground },
+        { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Updated', message: 'You have successfully updated your character background.' } }
+      )
+    );
   };
 
   return (

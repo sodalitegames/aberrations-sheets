@@ -16,6 +16,7 @@ import {
   createSheetForUserSuccess,
   createSheetForUserFailure,
 } from './user.actions';
+import { setModal, setSlideOver, addNotification } from '../app/app.actions';
 
 import authApi, { signUserIn, signUserUp, getUser } from '../../apis/auth.api';
 import sheetsApi, { getSheetsForPlayer, createSheetForPlayer } from '../../apis/sheets.api';
@@ -162,11 +163,19 @@ export function* onCreateSheetForUserStart() {
   yield takeLatest(UserActionTypes.CREATE_SHEET_FOR_USER_START, createSheetForUser);
 }
 
-export function* createSheetForUser({ payload: { sheetType, body } }) {
+export function* createSheetForUser({ payload: { sheetType, body, config } }) {
   try {
     const response = yield createSheetForPlayer(sheetType, body);
 
     yield put(createSheetForUserSuccess(sheetType, response.data.data.sheet));
+
+    // Add a notification, if configured to do so
+    if (config?.notification) yield put(addNotification(config?.notification));
+
+    // Close out the modal, nestedModal, or slideover if it is open
+    if (config?.slideOver) yield put(setSlideOver(null));
+    if (config?.modal) yield put(setModal(null));
+    if (config?.nestedModal) yield put(setModal(null));
   } catch (err) {
     yield put(createSheetForUserFailure(err.response.data));
   }

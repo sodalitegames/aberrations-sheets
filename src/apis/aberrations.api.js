@@ -17,4 +17,6 @@ export const fetchWeapons = () => aberrationsApi.get('/weapons?type=Standard');
 export const fetchConsumableCategories = () => aberrationsApi.get('/consumables-categories');
 export const fetchCreatureTypes = () => aberrationsApi.get('/creature-types');
 
+export const fetchNpcTypes = () => aberrationsApi.get('/preset-npc-types');
+
 export default aberrationsApi;

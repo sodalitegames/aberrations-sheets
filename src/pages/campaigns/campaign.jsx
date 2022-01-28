@@ -12,14 +12,14 @@ import classNames from '../../utils/classNames';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
-import InfoList from '../../components/shared/InfoList';
-import { ButtonPanel } from '../../components/shared/ListItem';
-import ListContainer from '../../components/shared/ListContainer';
+import PanelSection from '../../components/sheets/PanelSection';
+import InfoList from '../../components/shared/data/InfoList';
+import { ButtonPanel } from '../../components/shared/data/ListItem';
+import ListContainer from '../../components/shared/data/ListContainer';
 import Button from '../../components/shared/Button';
 
-import CaptainsLog from '../../components/campaigns/display/CaptainsLog';
-import SessionDetails from '../../components/campaigns/SessionDetails';
+import DisplayLog from '../../components/sheets/display/DisplayLog';
+import EditSession from '../../components/campaigns/EditSession';
 
 const CampaignCampaignPage = () => {
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ const CampaignCampaignPage = () => {
               </div>
             </div>
             <div className="ml-5 mt-5 flex flex-col shrink-0 justify-center sm:mt-0 space-y-2">
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newSession }))} disabled>
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newSessionForm }))} disabled>
                 Create New Session
               </Button>
             </div>
@@ -83,7 +83,7 @@ const CampaignCampaignPage = () => {
                         </Disclosure.Button>
                       </dt>
                       <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                        <SessionDetails session={activeSession} />
+                        <EditSession session={activeSession} />
                       </Disclosure.Panel>
                     </>
                   )}
@@ -110,7 +110,7 @@ const CampaignCampaignPage = () => {
                         </Disclosure.Button>
                       </dt>
                       <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                        <SessionDetails session={session} />
+                        <EditSession session={session} />
                       </Disclosure.Panel>
                     </>
                   )}
@@ -137,7 +137,7 @@ const CampaignCampaignPage = () => {
                         </Disclosure.Button>
                       </dt>
                       <Disclosure.Panel as="dd" className="mt-2 pr-12">
-                        <SessionDetails session={session} />
+                        <EditSession session={session} />
                       </Disclosure.Panel>
                     </>
                   )}
@@ -153,15 +153,15 @@ const CampaignCampaignPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.captainsLogs}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.captainsLogForm })), text: `Add a new Captain's Log` }}
+            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } })), text: `Add a new Captain's Log` }}
             empty={{
               heading: `No Captain's Logs`,
               message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.captainsLogForm })), text: `New Captain's Log` },
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } })), text: `New Captain's Log` },
             }}
           >
             {campSheet.captainsLogs.map(log => (
-              <CaptainsLog key={log._id} log={log} />
+              <DisplayLog key={log._id} log={log} sheetType="campaigns" />
             ))}
           </ListContainer>
         </div>

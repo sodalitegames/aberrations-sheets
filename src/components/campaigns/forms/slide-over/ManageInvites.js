@@ -1,52 +1,26 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { setSlideOver } from '../../../../redux/app/app.actions';
-import { updateSheetStart } from '../../../../redux/sheet/sheet.actions';
+import { SlideOverContainer } from '../../../../layouts/components/app/SlideOver';
 
-import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
+import ListContainer from '../../../shared/data/ListContainer';
 
-import ListContainer from '../../../shared/ListContainer';
-
-import Invite from '../../display/Invite';
+import DisplayInvite from '../../../sheets/display/DisplayInvite';
 
 const ManageInvites = () => {
-  const dispatch = useDispatch();
-
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [overview, setOverview] = useState('');
-
-  useEffect(() => {
-    if (campSheet) {
-      setOverview(campSheet.overview);
-    }
-  }, [campSheet]);
-
-  const submitHandler = async e => {
-    e.preventDefault();
-
-    if (!overview) return alert('Must provide overview');
-
-    dispatch(updateSheetStart('campaigns', campSheet._id, { overview }));
-
-    dispatch(setSlideOver(null));
-  };
-
-  console.log(campSheet);
-
   return (
-    <SlideOverForm title="Manage Sent Invites" description="Manage your sent invitations below." submitText="Save changes" cancelText="Done" submitHandler={submitHandler} submitDisabled={true}>
+    <SlideOverContainer title="Manage Sent Invites" description="Manage your sent invitations below." cancelText="Done">
       <div className="px-6">
         <ListContainer>
           {campSheet.invites.map(invite => (
-            <Invite key={invite._id} invite={invite} />
+            <DisplayInvite key={invite._id} invite={invite} sheetType="campaigns" />
           ))}
         </ListContainer>
       </div>
-    </SlideOverForm>
+    </SlideOverContainer>
   );
 };
 

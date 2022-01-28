@@ -4,6 +4,12 @@ const selectApp = state => state.app;
 
 export const selectModal = createSelector([selectApp], app => app.modal);
 
+export const selectNestedModal = createSelector([selectApp], app => app.nestedModal);
+
 export const selectSlideOver = createSelector([selectApp], app => app.slideOver);
 
-export const selectFlashMessages = createSelector([selectApp], app => app.flashMessages);
+export const selectAllNotifications = createSelector([selectApp], app => app.notifications);
+
+export const selectNotifications = createSelector([selectApp], app => app.notifications.filter(not => !not.dismissed));
+
+export const selectAlert = createSelector([selectApp], app => app.alert);

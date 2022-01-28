@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 
 // ReactQuill theme stylesheets
 // import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 
-import { selectCurrentCharacter } from '../../redux/character/character.selectors';
+import { selectCurrentCharacter, selectPermissions } from '../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 
 import { createSheetResourceStart, deleteSheetResourceStart, updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
@@ -15,10 +16,10 @@ import classNames from '../../utils/classNames';
 
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
-import PanelSection from '../../components/shared/PanelSection';
+import PanelSection from '../../components/sheets/PanelSection';
 import Button from '../../components/shared/Button';
 import Notice from '../../components/shared/Notice';
-import ListContainer from '../../components/shared/ListContainer';
+import ListContainer from '../../components/shared/data/ListContainer';
 
 const unescapeHtml = content => {
   if (!content) return '';
@@ -30,6 +31,7 @@ const SheetNotesPage = ({ sheetType }) => {
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
+  const permissions = useSelector(selectPermissions);
 
   const sheets = {
     characters: charSheet,
@@ -81,6 +83,32 @@ const SheetNotesPage = ({ sheetType }) => {
 
     if (saved) setSaved(false);
   };
+
+  if (sheetType === 'characters' && permissions?.isCC) {
+    return (
+      <SheetPageContent title="Notes">
+        {/* No Permissions Panel */}
+        <PanelSection>
+          <div className="sm:flex py-8 px-2 justify-between items-center">
+            <div className="sm:flex items-center">
+              <div>
+                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">No Permission</h1>
+                <p className="mt-1 text-base text-gray-500">You do not have permission to view {charSheet.characterName}'s notes.</p>
+              </div>
+            </div>
+            <div className="space-x-3 sm:pl-6">
+              <Link
+                to="/about"
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 bg-accent2-deep hover:bg-accent2-dark focus:ring-accent2-deep"
+              >
+                Learn More
+              </Link>
+            </div>
+          </div>
+        </PanelSection>
+      </SheetPageContent>
+    );
+  }
 
   return (
     <SheetPageContent title="Notes" columns={3}>
