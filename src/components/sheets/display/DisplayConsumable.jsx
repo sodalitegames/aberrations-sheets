@@ -1,24 +1,45 @@
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
+import { capitalize } from '../../../utils/strings';
 
 import ListItem from '../../shared/data/ListItem';
 import DescriptionList from '../../shared/data/DescriptionList';
 import InfoList from '../../shared/data/InfoList';
 
-const DisplayConsumable = ({ consumable, condensed, noButtonPanel, listItem, sheetType }) => {
+const ConsumableDetails = ({ consumable, sheetType }) => {
+  return (
+    <DescriptionList
+      list={[
+        { name: 'Level', values: [consumable.level], half: true },
+        { name: 'Quantity', values: [consumable.quantity], half: true },
+        { name: 'Uses', values: [consumable.uses], half: true },
+        sheetType === 'characters' ? { name: 'Equipped', values: [consumable.equipped ? 'Yes' : 'No'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Active', values: [consumable.active ? 'Yes' : 'No'], half: true } : null,
+        consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? consumable.npcId : 'Unassigned'], half: true } : null,
+        { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
+        consumable.description ? { name: 'Description', values: [consumable.description] } : null,
+        consumable.metadata?.givenBy ? { name: 'Received From', value: [consumable.metadata.givenBy], half: true } : null,
+        consumable.metadata?.givenTo ? { name: 'Given To', value: [consumable.metadata.givenTo], half: true } : null,
+      ]}
+      classes="mt-2"
+    />
+  );
+};
+
+const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
         <ListItem heading={`${consumable.name} (Level ${consumable.level})`} view={{ type: ModalTypes.showBelonging, id: consumable._id, data: { sheetType: sheetType, resourceType: 'consumables' } }}>
           <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
-          <p className="text-sm text-gray-500 truncate">{consumable.handle}</p>
         </ListItem>
       );
     }
 
     if (condensed) {
       return (
-        <ListItem heading={`${consumable.name} (Level ${consumable.level})`}>
+        <ListItem heading={`${consumable.name} (Level ${consumable.level})`} actions={actions}>
           <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
         </ListItem>
       );
@@ -38,20 +59,11 @@ const DisplayConsumable = ({ consumable, condensed, noButtonPanel, listItem, she
             title: `Are you sure you want to delete ${consumable.name}?`,
             submitText: `Yes, delete ${consumable.name}`,
             equipped: consumable.equipped,
+            notification: { heading: 'Consumable Deleted', message: `You have successfully deleted ${consumable.name}.` },
           },
         }}
       >
-        <DescriptionList
-          list={[
-            { name: 'Level', values: [consumable.level], half: true },
-            { name: 'Quantity', values: [consumable.quantity], half: true },
-            { name: 'Uses', values: [consumable.uses], half: true },
-            consumable.associatedStat ? { name: 'Associated Stat', values: [consumable.associatedStat], half: true } : null,
-            { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
-            consumable.description ? { name: 'Description', values: [consumable.description] } : null,
-          ]}
-          classes="mt-2"
-        />
+        <ConsumableDetails consumable={consumable} sheetType={sheetType} />
       </ListItem>
     );
   }
@@ -60,17 +72,7 @@ const DisplayConsumable = ({ consumable, condensed, noButtonPanel, listItem, she
     <div className="py-3">
       <h3 className="text-sm font-semibold text-gray-800">{consumable.name}</h3>
       <div>
-        <DescriptionList
-          list={[
-            { name: 'Level', values: [consumable.level], half: true },
-            { name: 'Quantity', values: [consumable.quantity], half: true },
-            { name: 'Uses', values: [consumable.uses], half: true },
-            consumable.associatedStat ? { name: 'Associated Stat', values: [consumable.associatedStat], half: true } : null,
-            { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
-            consumable.description ? { name: 'Description', values: [consumable.description] } : null,
-          ]}
-          classes="mt-2"
-        />
+        <ConsumableDetails consumable={consumable} sheetType={sheetType} />
       </div>
     </div>
   );

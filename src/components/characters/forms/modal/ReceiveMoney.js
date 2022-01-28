@@ -19,7 +19,14 @@ const ReceiveMoney = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { wallet: charSheet.wallet + +amount }));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { wallet: charSheet.wallet + +amount },
+        { modal: true, notification: { status: 'success', heading: 'Money Received', message: `You have successfully received ${amount} monies.` } }
+      )
+    );
   };
 
   return (

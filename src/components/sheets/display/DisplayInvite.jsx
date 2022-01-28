@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 
-import { setModal } from '../../../redux/app/app.actions';
+import { setModal, setNestedModal } from '../../../redux/app/app.actions';
 
 import ModalTypes from '../../../utils/ModalTypes';
 import { formatDate } from '../../../utils/formatDate';
@@ -33,16 +33,22 @@ const DisplayInvite = ({ invite, noActions, sheetType }) => {
           </div>
         ) : (
           <div className="mt-4">
-            <Button onClick={() => dispatch(setModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Revoked' } }))}>Revoke Invite</Button>
+            <Button onClick={() => dispatch(setNestedModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Revoked' } }))}>Revoke Invite</Button>
             <Button
               text
               classes="mt-2"
               onClick={() =>
                 dispatch(
-                  setModal({
+                  setNestedModal({
                     type: ModalTypes.deleteResource,
                     id: invite._id,
-                    data: { sheetType: sheetType, resourceType: 'invites', title: 'Are you sure you want to delete this invite?', submitText: 'Yes, delete this invite' },
+                    data: {
+                      sheetType: sheetType,
+                      resourceType: 'invites',
+                      title: 'Are you sure you want to delete this invite?',
+                      submitText: 'Yes, delete this invite',
+                      notification: { heading: 'Invite Deleted', message: `You have successfully deleted invite to Character #${invite.charSheetId}.` },
+                    },
                   })
                 )
               }
@@ -57,10 +63,16 @@ const DisplayInvite = ({ invite, noActions, sheetType }) => {
             text
             onClick={() =>
               dispatch(
-                setModal({
+                setNestedModal({
                   type: ModalTypes.deleteResource,
                   id: invite._id,
-                  data: { sheetType: sheetType, resourceType: 'invites', title: 'Are you sure you want to delete this invite?', submitText: 'Yes, delete this invite' },
+                  data: {
+                    sheetType: sheetType,
+                    resourceType: 'invites',
+                    title: 'Are you sure you want to delete this invite?',
+                    submitText: 'Yes, delete this invite',
+                    notification: { heading: 'Invite Deleted', message: `You have successfully deleted invite to Character #${invite.charSheetId}.` },
+                  },
                 })
               )
             }

@@ -1,4 +1,4 @@
-// import ModalTypes from '../../../utils/ModalTypes';
+import { getSpeciesAbility } from '../../../utils/displaySpecies';
 
 import ListItem from '../../shared/data/ListItem';
 import DescriptionList from '../../shared/data/DescriptionList';
@@ -10,22 +10,26 @@ import DisplayWearable from '../../sheets/display/DisplayWearable';
 import DisplayConsumable from '../../sheets/display/DisplayConsumable';
 import DisplayUsable from '../../sheets/display/DisplayUsable';
 
+const PlayerDetails = ({ player, species }) => {
+  return (
+    <DescriptionList
+      list={[
+        { name: 'Player Name', values: [player.playerNickname ? `${player.playerNickname} (${player.playerName})` : player.playerName], half: true },
+        { name: 'Character Power', values: [player.power], half: true },
+        { name: 'Species', values: [player.speciesName], half: true },
+        { name: 'Mortality', values: [player.mortality], half: true },
+        { name: 'Upgrade Points', values: [player.upgradePoints], half: true },
+        { name: 'Wallet', values: [player.wallet], half: true },
+        { name: 'Active', values: [player.active ? 'Yes' : 'No'], half: true },
+        { name: 'Species Ability', values: [getSpeciesAbility(player.speciesId, species)] },
+      ]}
+      classes="my-2"
+    />
+  );
+};
+
 const DisplayPlayer = ({ player, species, condensed, listItem }) => {
-  const getSpeciesAbility = speciesId => {
-    if (!species) return 'Loading...';
-    const currSpec = species.find(spec => spec._id === speciesId);
-    return currSpec.ability;
-  };
-
   if (listItem) {
-    // if (condensed === 'view') {
-    //   return (
-    //     <ListItem heading={player.characterName} view={{ type: ModalTypes.showPlayer, id: player._id }}>
-    //       <InfoList list={[`Played by ${player.playerNickname || player.playerName}`]} />
-    //     </ListItem>
-    //   );
-    // }
-
     if (condensed) {
       return (
         <ListItem heading={player.characterName}>
@@ -36,13 +40,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
 
     return (
       <ListItem heading={player.playerNickname ? `${player.playerNickname} (${player.playerName})` : player.playerName}>
-        <DescriptionList
-          list={[
-            { name: 'Character Name', values: [player.characterName] },
-            { name: 'Character Power', values: [player.power] },
-          ]}
-          classes="mt-2"
-        />
+        <PlayerDetails player={player} species={species} />
       </ListItem>
     );
   }
@@ -50,18 +48,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
   return (
     <div className="py-3">
       <h3 className="text-lg border-b border-gray-200 mb-4 font-semibold text-gray-800">{player.characterName}</h3>
-      <DescriptionList
-        list={[
-          { name: 'Player Name', values: [player.playerNickname ? `${player.playerNickname} (${player.playerName})` : player.playerName], half: true },
-          { name: 'Character Power', values: [player.power], half: true },
-          { name: 'Species', values: [player.speciesName], half: true },
-          { name: 'Mortality', values: [player.mortality], half: true },
-          { name: 'Upgrade Points', values: [player.upgradePoints], half: true },
-          { name: 'Wallet', values: [player.wallet], half: true },
-          { name: 'Species Ability', values: [getSpeciesAbility(player.speciesId)] },
-        ]}
-        classes="my-2"
-      />
+      <PlayerDetails player={player} species={species} />
 
       <h3 className="text-lg border-b border-gray-200 mt-8 mb-4 font-semibold text-gray-800">Active Stats</h3>
       {/* Do I want to show stat experience and advantage as well? */}

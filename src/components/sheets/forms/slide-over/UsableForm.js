@@ -11,8 +11,9 @@ import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 import Input from '../../../shared/form/Input';
 import TextArea from '../../../shared/form/TextArea';
 import Select from '../../../shared/form/Select';
+import Toggle from '../../../shared/form/Toggle';
 
-const Usable = ({ id, data }) => {
+const UsableForm = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -21,7 +22,9 @@ const Usable = ({ id, data }) => {
   const [name, setName] = useState('');
   const [type, setType] = useState('');
   const [description, setDescription] = useState('');
+  const [equippable, setEquippable] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [units, setUnits] = useState('');
 
   useEffect(() => {
     if (data.sheetType === 'characters') {
@@ -31,7 +34,9 @@ const Usable = ({ id, data }) => {
         setName(currentUsable.name);
         setType(currentUsable.type);
         setDescription(currentUsable.description);
+        setEquippable(currentUsable.equippable);
         setQuantity(currentUsable.quantity);
+        setUnits(currentUsable.units || '');
       }
     }
 
@@ -42,7 +47,9 @@ const Usable = ({ id, data }) => {
         setName(currentUsable.name);
         setType(currentUsable.type);
         setDescription(currentUsable.description);
+        setEquippable(currentUsable.equippable);
         setQuantity(currentUsable.quantity);
+        setUnits(currentUsable.units || '');
       }
     }
   }, [id, data.sheetType, charSheet, campSheet]);
@@ -59,15 +66,33 @@ const Usable = ({ id, data }) => {
     if (!type) return alert('Must provide a type');
     if (!description) return alert('Must provide a description');
     if (!quantity) return alert('Must provide a quantity');
+    if (!units) return alert('Must provide a unit of measurement');
 
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (id) {
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'usables', id, { name, type, description, quantity }));
+      dispatch(
+        updateSheetResourceStart(
+          data.sheetType,
+          sheetId,
+          'usables',
+          id,
+          { name, type, description, equippable, quantity, units },
+          { slideOver: true, notification: { status: 'success', heading: 'Usable Updated', message: `You have successfully updated ${name}.` } }
+        )
+      );
       return;
     }
 
-    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'usables', { name, type, description, quantity }));
+    dispatch(
+      createSheetResourceStart(
+        data.sheetType,
+        sheetId,
+        'usables',
+        { name, type, description, equippable, quantity, units },
+        { slideOver: true, notification: { status: 'success', heading: 'Usable Created', message: `You have successfully created ${name}.` } }
+      )
+    );
   };
 
   return (
@@ -77,7 +102,7 @@ const Usable = ({ id, data }) => {
       submitText={id ? 'Save usable' : 'Create usable'}
       submitHandler={submitHandler}
     >
-      <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} />
+      <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} required />
       <Select
         slideOver
         label="Type"
@@ -91,11 +116,14 @@ const Usable = ({ id, data }) => {
           { name: 'One of A Kind', id: 'One of A Kind' },
         ]}
         changeHandler={selectType}
+        required
       />
-      <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} />
-      <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} />
+      <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} required />
+      <Toggle slideOver label="Equippable" name="equippable" enabled={equippable} setEnabled={setEquippable} />
+      <Input slideOver label="Quantity" name="quantity" type="text" value={quantity} changeHandler={setQuantity} required />
+      <Input slideOver label="Units" name="units" type="text" value={units} changeHandler={setUnits} required />
     </SlideOverForm>
   );
 };
 
-export default Usable;
+export default UsableForm;

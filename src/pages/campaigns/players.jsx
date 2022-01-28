@@ -31,8 +31,16 @@ const CampaignPlayersPage = () => {
   const speciesList = useSelector(selectSpecies);
 
   const [player, setPlayer] = useState(campSheet.players[0]);
+  const [id, setId] = useState(null);
 
-  console.log(player);
+  useEffect(() => {
+    if (id) {
+      setPlayer(campSheet.players.find(player => player._id === id));
+      return;
+    }
+
+    setPlayer(campSheet.players[0]);
+  }, [id, campSheet]);
 
   useEffect(() => {
     if (!speciesList) {
@@ -55,7 +63,7 @@ const CampaignPlayersPage = () => {
             }}
           >
             {campSheet.players.map(player => (
-              <div key={player._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setPlayer(player)}>
+              <div key={player._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(player._id)}>
                 <DisplayPlayer key={player._id} player={player} condensed listItem />
                 {player.active ? (
                   <div className="shrink-0 ml-2" title="Equipped">
@@ -93,7 +101,15 @@ const CampaignPlayersPage = () => {
 
               {/* Player Actions */}
               <Button>{player.active ? 'Deactivate' : 'Activate'}</Button>
-              <Button>Remove From Campaign</Button>
+              <Button
+                onClick={() =>
+                  dispatch(
+                    setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'campaigns', playerName: player.playerNickname || player.playerName, body: { charId: player._id } } })
+                  )
+                }
+              >
+                Remove From Campaign
+              </Button>
             </div>
           </div>
         ) : (

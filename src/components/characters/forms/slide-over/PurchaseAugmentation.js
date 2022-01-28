@@ -85,8 +85,16 @@ const PurchaseAugmentation = () => {
 
     const { name, pointCost, description, universalId } = augmentation;
 
-    dispatch(createSheetResourceStart('characters', charSheet._id, 'augmentations', { name, pointCost, description, universalId }));
-    dispatch(updateSheetStart('characters', charSheet._id, { upgradePoints: charSheet.upgradePoints - pointCost }));
+    dispatch(
+      createSheetResourceStart(
+        'characters',
+        charSheet._id,
+        'augmentations',
+        { name, pointCost, description, universalId },
+        { notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` } }
+      )
+    );
+    dispatch(updateSheetStart('characters', charSheet._id, { spentUpgradePoints: charSheet.spentUpgradePoints + pointCost }, { slideOver: true }));
   };
 
   return (

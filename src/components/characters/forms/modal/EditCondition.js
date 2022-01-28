@@ -27,7 +27,14 @@ const EditCondition = ({ id }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { conditions: { ...charSheet.conditions, [id]: points } }));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { conditions: { ...charSheet.conditions, [id]: points } },
+        { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your ${id.toLowerCase()} condition.` } }
+      )
+    );
   };
 
   return (

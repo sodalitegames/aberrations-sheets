@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 
-import { selectCurrentCharacter } from '../../redux/character/character.selectors';
+import { selectCurrentCharacter, selectPermissions } from '../../redux/character/character.selectors';
 
 import { setSlideOver } from '../../redux/app/app.actions';
 
@@ -27,6 +27,7 @@ const CharacterCharacterPage = () => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
+  const permissions = useSelector(selectPermissions);
 
   const [copied, setCopied] = useState(false);
 
@@ -60,19 +61,23 @@ const CharacterCharacterPage = () => {
       {/* Character Logs */}
       <PanelSection title="Character Logs">
         <div className="flow-root mt-2">
-          <ListContainer
-            list={charSheet.characterLogs}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'Add a new Character Log' }}
-            empty={{
-              heading: 'No Character Logs',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'New Character Log' },
-            }}
-          >
-            {charSheet.characterLogs.map(log => (
-              <DisplayLog key={log._id} log={log} sheetType="characters" />
-            ))}
-          </ListContainer>
+          {permissions?.isCC ? (
+            <p className="text-sm italic text-gray-400">You do not have permission to view {charSheet.characterName}'s character logs.</p>
+          ) : (
+            <ListContainer
+              list={charSheet.characterLogs}
+              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'Add a new Character Log' }}
+              empty={{
+                heading: 'No Character Logs',
+                message: 'Get started by creating your first one now',
+                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'New Character Log' },
+              }}
+            >
+              {charSheet.characterLogs.map(log => (
+                <DisplayLog key={log._id} log={log} sheetType="characters" />
+              ))}
+            </ListContainer>
+          )}
         </div>
       </PanelSection>
 

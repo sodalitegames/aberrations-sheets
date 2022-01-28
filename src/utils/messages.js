@@ -1,43 +1,94 @@
 export const getHealthMessage = (current, max) => {
-  return current <= 0
-    ? `You're as dead as a doornail`
+  return current < -max
+    ? `You are Totally Dead`
+    : current <= 0
+    ? `You are Nearly Dead`
     : current === 1
-    ? `You're as good as dead`
+    ? `You are as good as dead`
     : current < max / 5
-    ? `You're in mauled condition`
+    ? `You are mauled and will gain 1 injured each time you take damage`
     : current < max / 2
-    ? `You're in bloodied condition`
+    ? `You are bloodied`
     : current >= (max / 4) * 3
-    ? `You're in great condition`
+    ? `You are in great condition`
     : current >= (max / 4) * 2
-    ? `You're in good condition`
-    : `You're in perfect condition`;
+    ? `You are in good condition`
+    : `You are in perfect condition`;
 };
 
 export const getWalletMessage = wallet => {
-  return 'Cash on your person';
+  return wallet <= 0 ? 'You literally have no money' : 'Cash on your person';
 };
 
-export const getTransactionHeading = ({ senderName, recipientName, sellPrice, documentType, document }, sent) => {
+export const getTransactionHeading = ({ senderName, recipientName, sellPrice, documentType, document, status }, sent) => {
+  if (status === 'Error') return `Something went wrong with this transaction`;
+
   if (sent) {
     if (documentType === 'wallet') {
-      return `You offered to pay ${recipientName} ${document.wallet} monies`;
+      if (status === 'Accepted') return `${recipientName} accepted your offer to pay them ${document.amount} monies`;
+      if (status === 'Declined') return `${recipientName} declined your offer to pay them ${document.amount} monies`;
+      if (status === 'Revoked') return `You revoked your offer to pay ${recipientName} ${document.amount} monies`;
+      if (status === 'Pending') return `You offered to pay ${recipientName} ${document.amount} monies`;
+
+      return;
     }
 
     if (sellPrice) {
-      return `You asked ${recipientName} to buy your ${document.name} for ${sellPrice} monies`;
+      if (status === 'Accepted') return `${recipientName} accepted your offer to buy your ${document.nickname || document.name} for ${sellPrice} monies`;
+      if (status === 'Declined') return `${recipientName} declined your offer to buy your ${document.nickname || document.name} for ${sellPrice} monies`;
+      if (status === 'Revoked') return `You revoked your offer to sell ${recipientName} your ${document.nickname || document.name} for ${sellPrice} monies`;
+      if (status === 'Pending') return `You offered to sell ${recipientName} your ${document.nickname || document.name} for ${sellPrice} monies`;
+
+      return;
     }
 
-    return `You offered your ${document.name} to ${recipientName}`;
+    if (status === 'Accepted') return `${recipientName} accepted your offer to give them ${document.nickname || document.name}`;
+    if (status === 'Declined') return `${recipientName} declined your offer to give them ${document.nickname || document.name}`;
+    if (status === 'Revoked') return `You revoked your offer to give ${recipientName} your ${document.nickname || document.name}`;
+    if (status === 'Pending') return `You offered to give ${recipientName} your ${document.nickname || document.name}`;
+
+    return;
   }
 
   if (documentType === 'wallet') {
-    return `${senderName} wants to pay you ${document.wallet} monies`;
+    if (status === 'Accepted') return `You accepted ${senderName}'s offer to pay you ${document.amount} monies`;
+    if (status === 'Declined') return `You declined ${senderName}'s offer to pay you ${document.amount} monies`;
+    if (status === 'Revoked') return `${senderName} revoked their offer to pay you ${document.amount} monies`;
+    if (status === 'Pending') return `${senderName} has offered to pay you ${document.amount} monies`;
+    return;
   }
 
   if (sellPrice) {
-    return `${senderName} wants to sell you their ${document.name} for ${sellPrice} monies`;
+    if (status === 'Accepted') return `You accepted ${senderName}'s offer to sell you their ${document.nickname || document.name} for ${sellPrice} monies`;
+    if (status === 'Declined') return `You declined ${senderName}'s offer to sell you their ${document.nickname || document.name} for ${sellPrice} monies`;
+    if (status === 'Revoked') return `${senderName} revoked their offer to sell you their ${document.nickname || document.name} for ${sellPrice} monies`;
+    if (status === 'Pending') return `${senderName} has offered to sell you their ${document.nickname || document.name} for ${sellPrice} monies`;
+
+    return;
   }
 
-  return `${senderName} wants to give you their ${document.name}`;
+  if (status === 'Accepted') return `You accepted ${senderName}'s offer to give you their ${document.nickname || document.name}`;
+  if (status === 'Declined') return `You declined ${senderName}'s offer to give you their ${document.nickname || document.name}`;
+  if (status === 'Revoked') return `${senderName} revoked their offer to give you their ${document.nickname || document.name}`;
+  if (status === 'Pending') return `${senderName} has offered to give you their ${document.nickname || document.name}`;
+
+  return;
+};
+
+export const getRolledDiceNotificationMessage = (rollData, stat) => {
+  // If not rolling for a stat
+  if (!stat) {
+    if (rollData.crit) {
+      return `You rolled ${rollData.rolls.length} ${rollData.rolls.length > 1 ? 'dice' : 'die'} and got a critical success (${rollData.successes} successes)`;
+    }
+
+    return `You rolled ${rollData.rolls.length} ${rollData.rolls.length > 1 ? 'dice' : 'die'} and got ${rollData.successes} / ${rollData.rolls.length} successess.`;
+  }
+
+  // If rolling for a stat
+  if (rollData.crit) {
+    return `You rolled for ${stat} (${rollData.rolls.length} ${rollData.rolls.length > 1 ? 'dice' : 'die'}) and got a critical success (${rollData.successes} successes)`;
+  }
+
+  return `You rolled for ${stat} (${rollData.rolls.length} ${rollData.rolls.length > 1 ? 'dice' : 'die'}) and got ${rollData.successes} / ${rollData.rolls.length} successess.`;
 };

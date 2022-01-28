@@ -7,6 +7,7 @@ import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selec
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../../utils/strings';
+import { getWeaponRangeString } from '../../../../utils/displayBelongings';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -15,7 +16,7 @@ import TextArea from '../../../shared/form/TextArea';
 import Select from '../../../shared/form/Select';
 import Detail from '../../../shared/form/Detail';
 
-const EditWeapon = ({ id, data }) => {
+const EditWeaponForm = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -28,6 +29,7 @@ const EditWeapon = ({ id, data }) => {
   const [levelDamage, setLevelDamage] = useState(1);
   const [range, setRange] = useState('');
   const [ability, setAbility] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const [description, setDescription] = useState('');
 
   useEffect(() => {
@@ -42,6 +44,7 @@ const EditWeapon = ({ id, data }) => {
         setLevelDamage(currentWeapon.levelDamage);
         setRange(currentWeapon.range);
         setAbility(currentWeapon.ability);
+        setQuantity(currentWeapon.quantity);
         setDescription(currentWeapon.description);
       }
     }
@@ -57,6 +60,7 @@ const EditWeapon = ({ id, data }) => {
         setLevelDamage(currentWeapon.levelDamage);
         setRange(currentWeapon.range);
         setAbility(currentWeapon.ability);
+        setQuantity(currentWeapon.quantity);
         setDescription(currentWeapon.description);
       }
     }
@@ -76,6 +80,7 @@ const EditWeapon = ({ id, data }) => {
     e.preventDefault();
 
     if (!levelDamage) return alert('Must provide levelDamage');
+    if (!quantity) return alert('Must provide a quantity');
 
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
@@ -84,16 +89,33 @@ const EditWeapon = ({ id, data }) => {
       if (!associatedStat) return alert('Must provide an associatedStat');
       if (!range) return alert('Must provide a range');
 
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'weapons', id, { name, nickname, associatedStat, levelDamage, range, ability, description }));
+      dispatch(
+        updateSheetResourceStart(
+          data.sheetType,
+          sheetId,
+          'weapons',
+          id,
+          { name, nickname, associatedStat, levelDamage, range, ability, quantity, description },
+          { slideOver: true, notification: { status: 'success', heading: 'Weapon Updated', message: `You have successfully updated ${nickname || name}.` } }
+        )
+      );
       return;
     }
 
     dispatch(
-      updateSheetResourceStart(data.sheetType, sheetId, 'weapons', id, {
-        nickname,
-        levelDamage,
-        description,
-      })
+      updateSheetResourceStart(
+        data.sheetType,
+        sheetId,
+        'weapons',
+        id,
+        {
+          nickname,
+          levelDamage,
+          description,
+          quantity,
+        },
+        { slideOver: true, notification: { status: 'success', heading: 'Weapon Updated', message: `You have successfully updated ${name}.` } }
+      )
     );
   };
 
@@ -102,7 +124,7 @@ const EditWeapon = ({ id, data }) => {
       {type === 'Custom' || type === 'Improvised' ? (
         <>
           <Detail slideOver label="Type" detail={type} />
-          <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} />
+          <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} required />
           <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
           <Select
             slideOver
@@ -116,8 +138,9 @@ const EditWeapon = ({ id, data }) => {
               { name: 'Aptitude', id: 'aptitude' },
             ]}
             changeHandler={selectStat}
+            required
           />
-          <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} />
+          <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} required />
           <Select
             slideOver
             label="Range"
@@ -132,6 +155,7 @@ const EditWeapon = ({ id, data }) => {
             changeHandler={selectRange}
             required
           />
+          <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
           <TextArea slideOver label="Ability (Opt.)" name="ability" rows={4} value={ability} changeHandler={setAbility} />
           <TextArea slideOver label="Description (Opt.)" name="description" rows={4} value={description} changeHandler={setDescription} />
         </>
@@ -141,9 +165,10 @@ const EditWeapon = ({ id, data }) => {
           <Detail slideOver label="Name" detail={name} />
           <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
           <Detail slideOver label="Associated Stat" detail={capitalize(associatedStat)} />
-          <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} />
-          <Detail slideOver label="Range" detail={range} />
+          <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} required />
+          <Detail slideOver label="Range" detail={getWeaponRangeString(range)} />
           <Detail slideOver label="Ability" detail={ability} />
+          <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
           <TextArea slideOver label="Description (Opt.)" name="description" rows={5} value={description} changeHandler={setDescription} />
         </>
       ) : null}
@@ -151,4 +176,4 @@ const EditWeapon = ({ id, data }) => {
   );
 };
 
-export default EditWeapon;
+export default EditWeaponForm;

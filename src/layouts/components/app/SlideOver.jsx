@@ -15,6 +15,8 @@ import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import { formatValidationErrors } from '../../../utils/validationErrors';
 
+import { NestedModal } from './Modal';
+
 import Notice from '../../../components/shared/Notice';
 
 import NewCharacter from '../../../components/home/forms/slide-over/NewCharacter';
@@ -23,24 +25,29 @@ import NewCampaign from '../../../components/home/forms/slide-over/NewCampaign';
 // Character Sheet
 import ManageCharacter from '../../../components/characters/forms/slide-over/ManageCharacter';
 import RollDice from '../../../components/characters/forms/slide-over/RollDice';
-import EquippedBelongings from '../../../components/characters/forms/slide-over/EquippedBelongings';
-import EquippedWearables from '../../../components/characters/forms/slide-over/EquippedWearables';
+import ManageEquippedBelongings from '../../../components/characters/forms/slide-over/ManageEquippedBelongings';
 import PurchaseAugmentation from '../../../components/characters/forms/slide-over/PurchaseAugmentation';
 import CharDescription from '../../../components/characters/forms/slide-over/CharDescription';
 import CharBackground from '../../../components/characters/forms/slide-over/CharBackground';
 
 // Campaign Sheet
+import ManageCampaign from '../../../components/campaigns/forms/slide-over/ManageCampaign';
 import CampOverview from '../../../components/campaigns/forms/slide-over/CampOverview';
 import CampDetails from '../../../components/campaigns/forms/slide-over/CampDetails';
 import ManageInvites from '../../../components/campaigns/forms/slide-over/ManageInvites';
+import NewSessionForm from '../../../components/campaigns/forms/slide-over/NewSessionForm';
+import NpcForm from '../../../components/campaigns/forms/slide-over/NpcForm';
+import CreatureForm from '../../../components/campaigns/forms/slide-over/CreatureForm';
+import EnvironmentForm from '../../../components/campaigns/forms/slide-over/EnvironmentForm';
 
 // Shared
 import LogForm from '../../../components/sheets/forms/slide-over/LogForm';
-import NewWeapon from '../../../components/sheets/forms/slide-over/NewWeaponForm';
-import EditWeapon from '../../../components/sheets/forms/slide-over/EditWeaponForm';
-import Wearable from '../../../components/sheets/forms/slide-over/WearableForm';
-import Consumable from '../../../components/sheets/forms/slide-over/ConsumableForm';
-import Usable from '../../../components/sheets/forms/slide-over/UsableForm';
+import NewWeaponForm from '../../../components/sheets/forms/slide-over/NewWeaponForm';
+import EditWeaponForm from '../../../components/sheets/forms/slide-over/EditWeaponForm';
+import WearableForm from '../../../components/sheets/forms/slide-over/WearableForm';
+import ConsumableForm from '../../../components/sheets/forms/slide-over/ConsumableForm';
+import UsableForm from '../../../components/sheets/forms/slide-over/UsableForm';
+import NewTransactionForm from '../../../components/sheets/forms/slide-over/NewTransactionForm';
 
 export const SlideOverForm = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
   const dispatch = useDispatch();
@@ -154,7 +161,6 @@ export const SlideOverContainer = ({ title, description, cancelText, children })
 
 const SlideOver = () => {
   const dispatch = useDispatch();
-
   const slideOver = useSelector(selectSlideOver);
 
   return (
@@ -174,31 +180,39 @@ const SlideOver = () => {
             >
               <div className="w-screen max-w-2xl">
                 {/* Forms */}
-                {/* Character Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.newCharacter ? <NewCharacter /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newCampaign ? <NewCampaign /> : null}
+                {/* Character Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <EquippedBelongings id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedWearables ? <EquippedWearables /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <ManageEquippedBelongings data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
                 {/* Campaign Sheet */}
+                {slideOver && slideOver.type === SlideOverTypes.manageCampaign ? <ManageCampaign /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.newSessionForm ? <NewSessionForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm id={slideOver.id} data={slideOver.data} /> : null}
                 {/* Shared */}
-                {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeapon data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeapon id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <Wearable id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <Consumable id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <Usable id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeaponForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <UsableForm id={slideOver.id} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.newTransactionForm ? <NewTransactionForm data={slideOver.data} /> : null}
               </div>
             </Transition.Child>
           </div>
         </div>
+
+        {/* Nested Modal */}
+        <NestedModal />
       </Dialog>
     </Transition.Root>
   );

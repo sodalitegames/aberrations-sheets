@@ -32,7 +32,29 @@ const getWearableMods = (FOR, AGL, PER, APT) => {
   return stats.join(' / ');
 };
 
-const DisplayWearable = ({ wearable, condensed, noButtonPanel, listItem, sheetType }) => {
+const WearableDetails = ({ wearable, sheetType }) => {
+  return (
+    <DescriptionList
+      list={[
+        { name: 'Body Area', values: [capitalize(wearable.bodyArea)], half: true },
+        sheetType === 'characters' ? { name: 'Equipped', values: [wearable.equipped ? 'Yes' : 'No'], half: true } : null,
+        { name: 'Quantity', values: [wearable.quantity], half: true },
+        sheetType === 'campaigns' ? { name: 'Active', values: [wearable.active ? 'Yes' : 'No'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [wearable.npcId ? wearable.npcId : 'Unassigned'], half: true } : null,
+        { name: 'Description', values: [wearable.description] },
+        { name: 'Fortitude Mod', values: [wearable.statMods.fortitude], half: true },
+        { name: 'Agility Mod', values: [wearable.statMods.agility], half: true },
+        { name: 'Persona Mod', values: [wearable.statMods.persona], half: true },
+        { name: 'Aptitude Mod', values: [wearable.statMods.aptitude], half: true },
+        wearable.metadata?.givenBy ? { name: 'Received From', value: [wearable.metadata.givenBy], half: true } : null,
+        wearable.metadata?.givenTo ? { name: 'Given To', value: [wearable.metadata.givenTo], half: true } : null,
+      ]}
+      classes="mt-2"
+    />
+  );
+};
+
+const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
@@ -47,7 +69,7 @@ const DisplayWearable = ({ wearable, condensed, noButtonPanel, listItem, sheetTy
 
     if (condensed) {
       return (
-        <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`}>
+        <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} actions={actions}>
           <InfoList list={[getWearableMods(wearable.statMods.fortitude, wearable.statMods.agility, wearable.statMods.persona, wearable.statMods.aptitude)]} />
         </ListItem>
       );
@@ -67,20 +89,11 @@ const DisplayWearable = ({ wearable, condensed, noButtonPanel, listItem, sheetTy
             title: `Are you sure you want to delete ${wearable.name}?`,
             submitText: `Yes, delete ${wearable.name}`,
             equipped: wearable.equipped,
+            notification: { heading: 'Wearable Deleted', message: `You have successfully deleted ${wearable.name}.` },
           },
         }}
       >
-        <DescriptionList
-          list={[
-            { name: 'Body Area', values: [capitalize(wearable.bodyArea)] },
-            { name: 'Description', values: [wearable.description] },
-            { name: 'Fortitude Mod', values: [wearable.statMods.fortitude], half: true },
-            { name: 'Agility Mod', values: [wearable.statMods.agility], half: true },
-            { name: 'Persona Mod', values: [wearable.statMods.persona], half: true },
-            { name: 'Aptitude Mod', values: [wearable.statMods.aptitude], half: true },
-          ]}
-          classes="mt-2"
-        />
+        <WearableDetails wearable={wearable} sheetType={sheetType} />
       </ListItem>
     );
   }
@@ -89,17 +102,7 @@ const DisplayWearable = ({ wearable, condensed, noButtonPanel, listItem, sheetTy
     <div className="py-3">
       <h3 className="text-sm font-semibold text-gray-800">{wearable.name}</h3>
       <div>
-        <DescriptionList
-          list={[
-            { name: 'Body Area', values: [capitalize(wearable.bodyArea)] },
-            { name: 'Description', values: [wearable.description] },
-            { name: 'Fortitude Mod', values: [wearable.statMods.fortitude], half: true },
-            { name: 'Agility Mod', values: [wearable.statMods.agility], half: true },
-            { name: 'Persona Mod', values: [wearable.statMods.persona], half: true },
-            { name: 'Aptitude Mod', values: [wearable.statMods.aptitude], half: true },
-          ]}
-          classes="mt-2"
-        />
+        <WearableDetails wearable={wearable} sheetType={sheetType} />
       </div>
     </div>
   );

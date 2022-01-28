@@ -1,16 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { selectCurrentCharacter, selectEquippedWeapons, selectWeapons as selectCharWeapons } from '../../../redux/character/character.selectors';
+import { selectCurrentCampaign, selectWeapons as selectCampWeapons } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
+import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 import classNames from '../../../utils/classNames';
+import equipBelonging from '../../../utils/equipBelonging';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -26,10 +28,23 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
+  const equippedWeapons = useSelector(selectEquippedWeapons);
 
-  const [weapon, setWeapon] = useState(sheetType === 'characters' ? charSheet.weapons[0] || null : campSheet.weapons[0] || null);
+  const charWeapons = useSelector(selectCharWeapons);
+  const campWeapons = useSelector(selectCampWeapons);
 
-  console.log(weapon);
+  const [weapon, setWeapon] = useState(null);
+  const [id, setId] = useState(null);
+
+  useEffect(() => {
+    if (id) {
+      setWeapon(sheetType === 'characters' ? charWeapons.find(weap => weap._id === id) : campWeapons.find(weap => weap._id === id));
+      return;
+    }
+
+    setWeapon(sheetType === 'characters' ? charWeapons[0] : campWeapons[0]);
+    setId(sheetType === 'characters' ? charWeapons[0]?._id : campWeapons[0]?._id);
+  }, [sheetType, id, charWeapons, campWeapons]);
 
   return (
     <SheetPageContent title="Weapons" columns={4}>
@@ -37,7 +52,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
       <PanelSection title="Manage Weapons">
         <div className="flow-root mt-2">
           <ListContainer
-            list={sheetType === 'characters' ? charSheet.weapons : campSheet.weapons}
+            list={sheetType === 'characters' ? charWeapons : campWeapons}
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm, data: { sheetType: sheetType } })), text: 'Add a new Weapon' }}
             empty={{
               heading: 'No Weapons',
@@ -45,8 +60,12 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
               button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.newWeaponForm, data: { sheetType: sheetType } })), text: 'New Weapon' },
             }}
           >
-            {(sheetType === 'characters' ? charSheet.weapons : campSheet.weapons).map(weapon => (
-              <div key={weapon._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setWeapon(weapon)}>
+            {(sheetType === 'characters' ? charWeapons : campWeapons).map(weapon => (
+              <div
+                key={weapon._id}
+                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === weapon._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+                onClick={() => setId(weapon._id)}
+              >
                 <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={sheetType} condensed listItem />
 
                 {/* Display if it's a character sheet weapon is equipped */}
@@ -77,10 +96,60 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              {sheetType === 'characters' ? <Button>{weapon.equipped ? 'Unequip' : 'Equip'}</Button> : null}
-              {sheetType === 'campaigns' ? <Button>{weapon.npcId ? 'Unassign' : 'Assign'}</Button> : null}
-              {sheetType === 'campaigns' ? <Button>{weapon.active ? 'Deactivate' : 'Activate'}</Button> : null}
-              <Button>Give or Sell</Button>
+              {sheetType === 'characters' ? (
+                <Button dark={weapon.equipped} onClick={() => equipBelonging({ sheetType, sheet: charSheet, belongingType: 'weapons', belonging: weapon, equippedList: equippedWeapons })}>
+                  {weapon.equipped ? 'Unequip' : 'Equip'}
+                </Button>
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                weapon.npcId ? (
+                  <Button
+                    dark
+                    onClick={() =>
+                      dispatch(
+                        updateSheetResourceStart(
+                          sheetType,
+                          campSheet._id,
+                          'weapons',
+                          weapon._id,
+                          { npcId: null },
+                          { notification: { status: 'success', heading: 'Weapon Unassigned', message: `You have successfully unassigned ${weapon.nickname || weapon.name}.` } }
+                        )
+                      )
+                    }
+                  >
+                    Unassign
+                  </Button>
+                ) : (
+                  <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: weapon._id, data: { type: 'weapons', name: weapon.name } }))}>Assign</Button>
+                )
+              ) : null}
+              {sheetType === 'campaigns' ? (
+                <Button
+                  dark={weapon.active}
+                  onClick={() =>
+                    dispatch(
+                      updateSheetResourceStart(
+                        sheetType,
+                        campSheet._id,
+                        'weapons',
+                        weapon._id,
+                        { active: !weapon.active },
+                        {
+                          notification: {
+                            status: 'success',
+                            heading: `Weapon ${weapon.active ? 'Deactivated' : 'Activated'}`,
+                            message: `You have successfully ${weapon.active ? 'deactivated' : 'activated'} ${weapon.nickname || weapon.name}.`,
+                          },
+                        }
+                      )
+                    )
+                  }
+                >
+                  {weapon.active ? 'Deactivate' : 'Activate'}
+                </Button>
+              ) : null}
+              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: 'weapons', document: weapon } }))}>Give or Sell</Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.editWeaponForm, id: weapon._id, data: { sheetType: sheetType } }))}>Edit</Button>
               <Button
                 alert
@@ -95,6 +164,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
                         title: `Are you sure you want to delete ${weapon.nickname || weapon.name}?`,
                         submitText: `Yes, delete ${weapon.nickname || weapon.name}`,
                         equipped: weapon.equipped,
+                        notification: { heading: 'Weapon Deleted', message: `You have successfully deleted ${weapon.name}.` },
                       },
                     })
                   )

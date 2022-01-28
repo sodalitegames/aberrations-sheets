@@ -27,7 +27,14 @@ const CampOverview = () => {
 
     if (!overview) return alert('Must provide overview');
 
-    dispatch(updateSheetStart('campaigns', campSheet._id, { overview }));
+    dispatch(
+      updateSheetStart(
+        'campaigns',
+        campSheet._id,
+        { overview },
+        { slideOver: true, notification: { status: 'success', heading: 'Campaign Sheet Updated', message: 'You have successfully updated your campaign overview.' } }
+      )
+    );
   };
 
   return (

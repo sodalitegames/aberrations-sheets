@@ -6,16 +6,8 @@ import DescriptionList from '../../shared/data/DescriptionList';
 import Button from '../../shared/Button';
 import ModalTypes from '../../../utils/ModalTypes';
 
-const DisplayCampaign = ({ campaign, condensed }) => {
+const DisplayCampaign = ({ campaign }) => {
   const dispatch = useDispatch();
-
-  if (condensed === 'view') {
-    return 'view';
-  }
-
-  if (condensed === 'expandable') {
-    return 'expandable';
-  }
 
   return (
     <div>
@@ -32,7 +24,7 @@ const DisplayCampaign = ({ campaign, condensed }) => {
         ]}
       />
       <div className="mt-6">
-        <Button text onClick={() => dispatch(setModal({ type: ModalTypes.leaveCampaign }))}>
+        <Button text onClick={() => dispatch(setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'characters' } }))}>
           Leave Campaign
         </Button>
       </div>

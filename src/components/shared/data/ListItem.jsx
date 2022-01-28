@@ -31,7 +31,7 @@ export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
   );
 };
 
-const ListItem = ({ heading, editable, deletable, editText, deleteText, view, noButtonPanel, children }) => {
+const ListItem = ({ heading, editable, deletable, editText, deleteText, actions, view, noButtonPanel, children }) => {
   const dispatch = useDispatch();
 
   if (view) {
@@ -42,13 +42,34 @@ const ListItem = ({ heading, editable, deletable, editText, deleteText, view, no
             <h3 className="text-sm font-semibold text-gray-800">{heading}</h3>
             {children}
           </div>
-          {view === 'hideButton' ? null : (
-            <div>
-              <Button rounded onClick={() => dispatch(setModal(view))}>
-                View
-              </Button>
+
+          <div>
+            <Button rounded onClick={() => dispatch(setModal(view))}>
+              View
+            </Button>
+          </div>
+        </div>
+      </li>
+    );
+  }
+
+  if (actions) {
+    return (
+      <li className="py-4">
+        <div className="flex items-center space-x-4">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-semibold text-gray-800">{heading}</h3>
+            {children}
+          </div>
+          {actions ? (
+            <div className="space-x-4">
+              {actions.map((button, index) => (
+                <Button key={index} rounded dark={button.dark} onClick={button.click}>
+                  {button.text}
+                </Button>
+              ))}
             </div>
-          )}
+          ) : null}
         </div>
       </li>
     );

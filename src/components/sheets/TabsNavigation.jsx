@@ -49,7 +49,7 @@ const TabsNavigation = ({ tabs, sheetType }) => {
               >
                 {tab.name}
                 <span className={classNames(tab.current ? 'bg-indigo-100 text-indigo-600' : 'bg-gray-100 text-gray-900', 'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block')}>
-                  {sheetType === 'characters' ? charSheet[tab.href].length : campSheet[tab.href].length}
+                  {sheetType === 'characters' ? charSheet[tab.href].filter(el => !el.archived).length : campSheet[tab.href].filter(el => !el.archived).length}
                 </span>
               </NavLink>
             ))}

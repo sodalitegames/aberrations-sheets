@@ -13,3 +13,5 @@ export const selectAugmentations = createSelector([selectResources], resources =
 export const selectConsumableCategories = createSelector([selectResources], resources => resources.consumableCategories);
 
 export const selectCreatureTypes = createSelector([selectResources], resources => resources.creatureTypes);
+
+export const selectNpcTypes = createSelector([selectResources], resources => resources.npcTypes);

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCharacter, selectCharacterError, selectLoading, selectPermissions } from '../redux/character/character.selectors';
+import { selectCurrentCharacter, selectCharacterError, selectLoading, selectPermissions, selectPendingTransactions, selectResolvedTransactions } from '../redux/character/character.selectors';
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
@@ -25,7 +25,8 @@ const CharacterSheet = () => {
   const error = useSelector(selectCharacterError);
   const loading = useSelector(selectLoading);
   const permissions = useSelector(selectPermissions);
-  // const transactions = useSelector(selectTransactions);
+  const pendingTransactions = useSelector(selectPendingTransactions);
+  const resolvedTransactions = useSelector(selectResolvedTransactions);
 
   useEffect(() => {
     if (charId) {
@@ -56,7 +57,7 @@ const CharacterSheet = () => {
         {permissions?.isCC ? (
           <Banner
             icon="info"
-            theme="secondary"
+            theme="neutral"
             message={`You are viewing ${charSheet.playerNickname || charSheet.playerName}'s character sheet as a CC, with limited permissions.`}
             // button={{ text: 'Learn more', href: '/about' }}
             closable
@@ -66,8 +67,8 @@ const CharacterSheet = () => {
         <div>
           <SheetPageHeader
             title={charSheet ? `Aberrations RPG Sheets - ${charSheet.characterName}` : 'Aberrations RPG Sheets'}
-            transactions={charSheet ? charSheet.transactions : null}
-            type="character"
+            transactions={{ pending: pendingTransactions, resolved: resolvedTransactions }}
+            type="characters"
           />
           <main className="-mt-24 pb-8">
             {!loading && charSheet ? (

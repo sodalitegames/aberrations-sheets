@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { selectSpecies } from '../../../redux/resource/resource.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
+import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
+import { fetchResourceStart } from '../../../redux/resource/resource.actions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
@@ -18,15 +21,32 @@ import ListContainer from '../../../components/shared/data/ListContainer';
 
 import Button from '../../../components/shared/Button';
 
-// import DisplayNpc from '../../../components/campaigns/display/DisplayNpc';
+import DisplayNpc from '../../../components/campaigns/display/DisplayNpc';
 
 const CampaignNpcsPage = () => {
   const dispatch = useDispatch();
+
   const campSheet = useSelector(selectCurrentCampaign);
+  const speciesList = useSelector(selectSpecies);
 
-  const [npc, setNpc] = useState(campSheet.npcs[0]);
+  const [npc, setNpc] = useState(null);
+  const [id, setId] = useState(null);
 
-  console.log(npc);
+  useEffect(() => {
+    if (id) {
+      setNpc(campSheet.npcs.find(npc => npc._id === id));
+      return;
+    }
+
+    setNpc(campSheet.npcs[0]);
+    setId(campSheet.npcs[0]?._id);
+  }, [id, campSheet]);
+
+  useEffect(() => {
+    if (!speciesList) {
+      dispatch(fetchResourceStart('species'));
+    }
+  }, [dispatch, speciesList]);
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
@@ -38,15 +58,15 @@ const CampaignNpcsPage = () => {
             button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.npcForm })), text: 'Add a new Npc' }}
             empty={{
               heading: 'No Npcs',
-              message: 'This feature is coming soon...',
-              // button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.npcForm })), text: 'New Npc' },
+              message: 'Get started by creating your first one now',
+              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.npcForm })), text: 'New Npc' },
             }}
           >
             {campSheet.npcs.map(npc => (
-              <div key={npc._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer', npc.equipped ? '' : '')} onClick={() => setNpc(npc)}>
-                {/* <DisplayNpc key={npc._id} npc={npc} condensed listItem /> */}
-                {npc.equipped ? (
-                  <div className="shrink-0 ml-2" title="Equipped">
+              <div key={npc._id} className={classNames('flex justify-between items-center px-2 cursor-pointer', id === npc._id ? 'bg-gray-100' : 'hover:bg-gray-50')} onClick={() => setId(npc._id)}>
+                <DisplayNpc key={npc._id} npc={npc} condensed listItem />
+                {npc.active ? (
+                  <div className="shrink-0 ml-2" title="Active">
                     <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
                   </div>
                 ) : null}
@@ -60,10 +80,34 @@ const CampaignNpcsPage = () => {
       <PanelSection title="Selected Npc" colSpan={3}>
         {npc ? (
           <div className="grid gap-8 grid-cols-3 divide-x divide-gray-200">
-            <div className="col-span-2">{/* <DisplayNpc npc={npc} /> */}</div>
+            <div className="col-span-2">
+              <DisplayNpc npc={npc} species={speciesList} />
+            </div>
 
             <div className="col-span-1 space-y-4 pl-8">
-              <Button>{npc.active ? 'Deactivate' : 'Activate'}</Button>
+              <Button
+                dark={npc.active}
+                onClick={() =>
+                  dispatch(
+                    updateSheetResourceStart(
+                      'campaigns',
+                      campSheet._id,
+                      'npcs',
+                      npc._id,
+                      { active: !npc.active },
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `Npc ${npc.active ? 'Deactivated' : 'Activated'}`,
+                          message: `You have successfully ${npc.active ? 'deactivated' : 'activated'} ${npc.name}.`,
+                        },
+                      }
+                    )
+                  )
+                }
+              >
+                {npc.active ? 'Deactivate' : 'Activate'}
+              </Button>
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id }))}>Edit</Button>
               <Button
                 alert
@@ -77,7 +121,7 @@ const CampaignNpcsPage = () => {
                         resourceType: 'npcs',
                         title: `Are you sure you want to delete ${npc.name}?`,
                         submitText: `Yes, delete ${npc.name}`,
-                        equipped: npc.equipped,
+                        notification: { heading: 'Npc Deleted', message: `You have successfully deleted ${npc.name}.` },
                       },
                     })
                   )

@@ -27,7 +27,14 @@ const CampDetails = () => {
 
     if (!details) return alert('Must provide details');
 
-    dispatch(updateSheetStart('campaigns', campSheet._id, { details }));
+    dispatch(
+      updateSheetStart(
+        'campaigns',
+        campSheet._id,
+        { details },
+        { slideOver: true, notification: { status: 'success', heading: 'Campaign Sheet Updated', message: 'You have successfully updated your campaign details.' } }
+      )
+    );
   };
 
   return (

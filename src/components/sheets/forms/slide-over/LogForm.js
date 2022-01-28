@@ -8,7 +8,7 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../../
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
-import { isoStringDate } from '../../../../utils/formatDate';
+import { formatDate, isoStringDate } from '../../../../utils/formatDate';
 
 import Input from '../../../shared/form/Input';
 import TextArea from '../../../shared/form/TextArea';
@@ -48,11 +48,42 @@ const LogForm = ({ id, data }) => {
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (id) {
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'logs', id, { date, content }));
+      dispatch(
+        updateSheetResourceStart(
+          data.sheetType,
+          sheetId,
+          'logs',
+          id,
+          { date, content },
+          {
+            slideOver: true,
+            notification: {
+              status: 'success',
+              heading: `${data.sheetType === 'characters' ? 'Character' : `Captain's`} Log Updated`,
+              message: `You have successfully updated ${data.sheetType === 'characters' ? 'character' : `captain's`} log created on ${formatDate(date)}.`,
+            },
+          }
+        )
+      );
       return;
     }
 
-    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'logs', { date, content }));
+    dispatch(
+      createSheetResourceStart(
+        data.sheetType,
+        sheetId,
+        'logs',
+        { date, content },
+        {
+          slideOver: true,
+          notification: {
+            status: 'success',
+            heading: `${data.sheetType === 'characters' ? 'Character' : `Captain's`} Log Created`,
+            message: `You have successfully created a ${data.sheetType === 'characters' ? 'character' : `captain's`} log for ${formatDate(date)}.`,
+          },
+        }
+      )
+    );
   };
 
   return (

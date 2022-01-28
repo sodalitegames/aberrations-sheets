@@ -14,7 +14,7 @@ import Notice from '../../../shared/Notice';
 
 import DisplayInvite from '../../display/DisplayInvite';
 
-const UpdateInviteStatus = ({ id, data }) => {
+const UpdateInviteStatus = ({ id, data, nested }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -50,16 +50,34 @@ const UpdateInviteStatus = ({ id, data }) => {
 
     const sheetId = data.sheetType === 'characters' ? charSheet._id : campSheet._id;
 
-    dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'invites', id, { status: status }));
+    dispatch(
+      updateSheetResourceStart(
+        data.sheetType,
+        sheetId,
+        'invites',
+        id,
+        { status: status },
+        {
+          modal: nested ? false : true,
+          nestedModal: nested ? true : false,
+          notification: {
+            status: status === 'Declined' || status === 'Revoked' ? 'alert' : 'success',
+            heading: 'Invite Status Updated',
+            message: `You have successfully ${status.toLowerCase()} this invite.`,
+          },
+        }
+      )
+    );
   };
 
   return (
     <ModalForm
+      nested={nested}
       title={
         status === 'Accepted'
           ? 'Accept Campaign Invitation'
           : status === 'Declined'
-          ? 'Are you sure you want to decline?'
+          ? 'Are you sure you want to decline this invite?'
           : status === 'Revoked'
           ? 'Are you sure you want to revoke this invite?'
           : 'Update Invite Status'
@@ -89,7 +107,7 @@ const UpdateInviteStatus = ({ id, data }) => {
           required
         />
       ) : (
-        <Select label="Update Status" name="status" value={status} options={[{ name: 'Revoked', id: 'Revoked' }]} changeHandler={selectStatus} required />
+        <Select label="Update Status" name="status" value={status} options={[{ name: 'Revoke', id: 'Revoked' }]} changeHandler={selectStatus} required />
       )}
 
       {invite ? (
@@ -99,7 +117,7 @@ const UpdateInviteStatus = ({ id, data }) => {
       ) : null}
 
       {status === 'Declined' || status === 'Revoked' ? (
-        <Notice noIcon status="error" message={`You will not be change your decision once you have ${status === 'Declined' ? 'declined' : 'revoked'} this invitation`} />
+        <Notice noIcon status="error" message={`You will not be able to change your decision once you have ${status === 'Declined' ? 'declined' : 'revoked'} this invitation.`} />
       ) : null}
     </ModalForm>
   );

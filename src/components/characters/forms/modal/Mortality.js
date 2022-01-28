@@ -25,7 +25,14 @@ const Mortality = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(updateSheetStart('characters', charSheet._id, { mortality: +mortality }));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { mortality: +mortality },
+        { modal: true, notification: { status: 'success', heading: 'Mortality Updated', message: `You have successfully updated your mortality to ${mortality}.` } }
+      )
+    );
   };
 
   return (

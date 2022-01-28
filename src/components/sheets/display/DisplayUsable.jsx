@@ -5,7 +5,26 @@ import ListItem from '../../shared/data/ListItem';
 import DescriptionList from '../../shared/data/DescriptionList';
 import InfoList from '../../shared/data/InfoList';
 
-const DisplayUsable = ({ usable, condensed, noButtonPanel, listItem, sheetType }) => {
+const UsableDetails = ({ usable, sheetType }) => {
+  return (
+    <DescriptionList
+      list={[
+        { name: 'Type', values: [usable.type], half: true },
+        { name: 'Quantity', values: [`${usable.quantity} ${usable.units || 'units'}`], half: true },
+        { name: 'Equippable', values: [usable.equippable ? 'Yes' : 'No'], half: true },
+        sheetType === 'characters' ? { name: 'Equipped', values: [usable.equipped ? 'Yes' : 'No'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Active', values: [usable.active ? 'Yes' : 'No'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [usable.npcId ? usable.npcId : 'Unassigned'] } : null,
+        { name: 'Description', values: [usable.description] },
+        usable.metadata?.givenBy ? { name: 'Received From', value: [usable.metadata.givenBy], half: true } : null,
+        usable.metadata?.givenTo ? { name: 'Given To', value: [usable.metadata.givenTo], half: true } : null,
+      ]}
+      classes="mt-2"
+    />
+  );
+};
+
+const DisplayUsable = ({ usable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
@@ -17,7 +36,7 @@ const DisplayUsable = ({ usable, condensed, noButtonPanel, listItem, sheetType }
 
     if (condensed) {
       return (
-        <ListItem heading={`${usable.name} (${usable.quantity} ${usable.unit || 'Units'})`}>
+        <ListItem heading={`${usable.name} (${usable.quantity} ${usable.units || 'units'})`} actions={actions}>
           <InfoList list={[usable.type]} />
         </ListItem>
       );
@@ -31,17 +50,17 @@ const DisplayUsable = ({ usable, condensed, noButtonPanel, listItem, sheetType }
         deletable={{
           type: ModalTypes.deleteResource,
           id: usable._id,
-          data: { sheetType: sheetType, resourceType: 'usables', title: `Are you sure you want to delete ${usable.name}?`, submitText: `Yes, delete ${usable.name}`, equipped: usable.equipped },
+          data: {
+            sheetType: sheetType,
+            resourceType: 'usables',
+            title: `Are you sure you want to delete ${usable.name}?`,
+            submitText: `Yes, delete ${usable.name}`,
+            equipped: usable.equipped,
+            notification: { heading: 'Usable Deleted', message: `You have successfully deleted ${usable.name}.` },
+          },
         }}
       >
-        <DescriptionList
-          list={[
-            { name: 'Type', values: [usable.type], half: true },
-            { name: 'Quantity', values: [usable.quantity], half: true },
-            { name: 'Description', values: [usable.description] },
-          ]}
-          classes="mt-2"
-        />
+        <UsableDetails usable={usable} sheetType={sheetType} />
       </ListItem>
     );
   }
@@ -50,14 +69,7 @@ const DisplayUsable = ({ usable, condensed, noButtonPanel, listItem, sheetType }
     <div className="py-3">
       <h3 className="text-sm font-semibold text-gray-800">{usable.name}</h3>
       <div>
-        <DescriptionList
-          list={[
-            { name: 'Type', values: [usable.type], half: true },
-            { name: 'Quantity', values: [usable.quantity], half: true },
-            { name: 'Description', values: [usable.description] },
-          ]}
-          classes="mt-2"
-        />
+        <UsableDetails usable={usable} sheetType={sheetType} />
       </div>
     </div>
   );

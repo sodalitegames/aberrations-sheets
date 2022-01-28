@@ -17,7 +17,7 @@ import CheckboxGroup, { Checkbox } from '../../../shared/form/CheckboxGroup';
 import { LoadingSpinner } from '../../../shared/form/SubmitButton';
 import Row from '../../../shared/form/Row';
 
-const Consumable = ({ id, data }) => {
+const ConsumableForm = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -117,11 +117,21 @@ const Consumable = ({ id, data }) => {
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (id) {
-      dispatch(updateSheetResourceStart(data.sheetType, sheetId, 'consumables', id, body));
+      dispatch(
+        updateSheetResourceStart(data.sheetType, sheetId, 'consumables', id, body, {
+          slideOver: true,
+          notification: { status: 'success', heading: 'Consumabled Updated', message: `You have successfully updated ${name}.` },
+        })
+      );
       return;
     }
 
-    dispatch(createSheetResourceStart(data.sheetType, sheetId, 'consumables', body));
+    dispatch(
+      createSheetResourceStart(data.sheetType, sheetId, 'consumables', body, {
+        slideOver: true,
+        notification: { status: 'success', heading: 'Consumable Created', message: `You have successfully created ${name}.` },
+      })
+    );
   };
 
   return (
@@ -131,10 +141,10 @@ const Consumable = ({ id, data }) => {
       submitText={id ? 'Save consumable' : 'Create consumable'}
       submitHandler={submitHandler}
     >
-      <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} />
-      <Input slideOver label="Level" name="level" type="number" value={level} changeHandler={setLevel} />
-      <Input slideOver label="Uses" name="uses" type="number" value={uses} changeHandler={setUses} />
-      <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} />
+      <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} required />
+      <Input slideOver label="Level" name="level" type="number" value={level} changeHandler={setLevel} required />
+      <Input slideOver label="Uses" name="uses" type="number" value={uses} changeHandler={setUses} required />
+      <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
 
       {fetchedCategories && categoriesList ? (
         <CheckboxGroup slideOver label="Categories">
@@ -172,4 +182,4 @@ const Consumable = ({ id, data }) => {
   );
 };
 
-export default Consumable;
+export default ConsumableForm;

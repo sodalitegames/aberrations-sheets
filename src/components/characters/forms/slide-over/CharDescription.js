@@ -27,7 +27,14 @@ const CharDescription = () => {
 
     if (!charDescription) return alert('Must provide charDescription');
 
-    dispatch(updateSheetStart('characters', charSheet._id, { charDescription }));
+    dispatch(
+      updateSheetStart(
+        'characters',
+        charSheet._id,
+        { charDescription },
+        { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Updated', message: 'You have successfully updated your character description.' } }
+      )
+    );
   };
 
   return (
