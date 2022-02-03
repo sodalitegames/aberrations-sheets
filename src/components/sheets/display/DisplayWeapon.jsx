@@ -27,8 +27,8 @@ const WeaponDetails = ({ weapon, sheetType }) => {
         sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [weapon.npcId ? weapon.npcId : 'Unassigned'] } : null,
         weapon.ability ? { name: 'Ability', values: [weapon.ability] } : null,
         weapon.description ? { name: 'Description', values: [weapon.description] } : null,
-        weapon.metadata?.givenBy ? { name: 'Received From', value: [weapon.metadata?.givenBy], half: true } : null,
-        weapon.metadata?.givenTo ? { name: 'Given To', value: [weapon.metadata?.givenTo], half: true } : null,
+        weapon.metadata?.givenBy ? { name: 'Received From', values: [weapon.metadata.givenBy], half: true } : null,
+        weapon.metadata?.givenTo ? { name: 'Given To', values: [weapon.metadata.givenTo], half: true } : null,
       ]}
       classes="mt-2"
     />

@@ -19,8 +19,8 @@ const ConsumableDetails = ({ consumable, sheetType }) => {
         sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? consumable.npcId : 'Unassigned'], half: true } : null,
         { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
         consumable.description ? { name: 'Description', values: [consumable.description] } : null,
-        consumable.metadata?.givenBy ? { name: 'Received From', value: [consumable.metadata?.givenBy], half: true } : null,
-        consumable.metadata?.givenTo ? { name: 'Given To', value: [consumable.metadata?.givenTo], half: true } : null,
+        consumable.metadata?.givenBy ? { name: 'Received From', values: [consumable.metadata.givenBy], half: true } : null,
+        consumable.metadata?.givenTo ? { name: 'Given To', values: [consumable.metadata.givenTo], half: true } : null,
       ]}
       classes="mt-2"
     />
