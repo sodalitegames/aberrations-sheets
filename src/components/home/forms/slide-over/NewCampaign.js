@@ -23,7 +23,6 @@ const NewCampaign = () => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    if (!ccNickname) return alert('Must provide a ccNickname');
     if (!name) return alert('Must provide a name');
     if (!overview) return alert('Must provide an overview');
     if (!details) return alert('Must provide a details');

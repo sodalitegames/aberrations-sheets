@@ -16,8 +16,8 @@ const UsableDetails = ({ usable, sheetType }) => {
         sheetType === 'campaigns' ? { name: 'Active', values: [usable.active ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [usable.npcId ? usable.npcId : 'Unassigned'] } : null,
         { name: 'Description', values: [usable.description] },
-        usable.metadata?.givenBy ? { name: 'Received From', value: [usable.metadata.givenBy], half: true } : null,
-        usable.metadata?.givenTo ? { name: 'Given To', value: [usable.metadata.givenTo], half: true } : null,
+        usable.metadata?.givenBy ? { name: 'Received From', values: [usable.metadata.givenBy], half: true } : null,
+        usable.metadata?.givenTo ? { name: 'Given To', values: [usable.metadata.givenTo], half: true } : null,
       ]}
       classes="mt-2"
     />
