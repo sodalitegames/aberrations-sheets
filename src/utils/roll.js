@@ -66,13 +66,13 @@ export const rollDice = (dice, advantage, stat) => {
   });
 
   // set experience, crit, and conditions based on the rolls
-  if (sixes > dice / 2) {
+  if (sixes >= dice / 2) {
     successes = dice;
     experience++;
     crit = true;
   }
 
-  if (ones > dice / 2) {
+  if (ones >= dice / 2) {
     successes = 0;
 
     if (stat === 'fortitude' || stat === 'agility') {
@@ -84,7 +84,7 @@ export const rollDice = (dice, advantage, stat) => {
     }
   }
 
-  if (successes > dice / 2) {
+  if (successes >= dice / 2) {
     experience++;
   }
 
