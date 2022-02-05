@@ -5,62 +5,71 @@ import { selectCurrentUser } from '../../../../redux/user/user.selectors';
 import { selectSpecies } from '../../../../redux/resource/resource.selectors';
 
 import { createSheetForUserStart } from '../../../../redux/user/user.actions';
-import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
+import { useActions } from '../../../../hooks/useActions';
+
+import { ResourceType } from '../../../../models/enums/ResourceType';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
 import Input from '../../../shared/form/Input';
 import TextArea from '../../../shared/form/TextArea';
 import Row from '../../../shared/form/Row';
-import { SelectInput } from '../../../shared/form/Select';
+import { SelectInput, SelectOption } from '../../../shared/form/Select';
 import { LoadingSpinner } from '../../../shared/form/SubmitButton';
 import Detail from '../../../shared/form/Detail';
 
 import DisplaySpecies from '../../../sheets/display/DisplaySpecies';
+import { Species } from '../../../../models/interfaces/data';
 
-const NewCharacter = () => {
+const NewCharacter: React.FC = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector(selectCurrentUser);
-  const speciesList = useSelector(selectSpecies);
 
-  const [newSpeciesList, setNewSpeciesList] = useState(null);
+  const currentUser = useSelector(selectCurrentUser);
+  const fetchedSpecies = useSelector(selectSpecies);
+
+  const { fetchResourceStart } = useActions();
+
+  const [speciesList, setSpeciesList] = useState<SelectOption[]>([]);
 
   const [playerNickname, setPlayerNickname] = useState('');
   const [characterName, setCharacterName] = useState('');
   const [charDescription, setCharDescription] = useState('');
   const [charBackground, setCharBackground] = useState('');
-  const [species, setSpecies] = useState(null);
+  const [species, setSpecies] = useState<Species | null>(null);
 
   useEffect(() => {
-    if (!speciesList) {
-      dispatch(fetchResourceStart('species'));
+    if (!fetchedSpecies) {
+      fetchResourceStart(ResourceType.Species);
     }
-  }, [dispatch, speciesList]);
+  }, [fetchResourceStart, fetchedSpecies]);
 
   useEffect(() => {
-    if (speciesList) {
+    if (fetchedSpecies) {
       // Format the species list for the select component
-      const newSpeciesList = speciesList.map(spec => {
+      const speciesList: SelectOption[] = fetchedSpecies.map(spec => {
         return {
           id: spec.id,
           name: spec.name,
         };
       });
 
-      setNewSpeciesList(newSpeciesList);
+      setSpeciesList(speciesList);
     }
-  }, [speciesList]);
+  }, [fetchedSpecies]);
 
-  const selectCurrentSpecies = e => {
-    if (!e.target.value) setSpecies(null);
+  const selectCurrentSpecies = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (!event.target.value || !fetchedSpecies) {
+      setSpecies(null);
+      return;
+    }
 
-    const currSpec = speciesList.find(spec => spec.id === e.target.value);
+    const currSpec = fetchedSpecies.find(spec => spec.id === event.target.value);
 
-    setSpecies(currSpec);
+    setSpecies(currSpec || null);
   };
 
-  const submitHandler = async e => {
-    e.preventDefault();
+  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
     if (!characterName) return alert('Must provide a characterName');
     if (!charDescription) return alert('Must provide a charDescription');
@@ -95,9 +104,9 @@ const NewCharacter = () => {
       <Input slideOver label="Player Nickname (Opt.)" type="text" name="playerName" value={playerNickname} changeHandler={setPlayerNickname} />
       <Input slideOver label="Character Name" type="text" name="characterName" value={characterName} changeHandler={setCharacterName} />
       <Row slideOver name="species" label="Character Species">
-        {speciesList && newSpeciesList ? (
+        {fetchedSpecies && speciesList ? (
           <>
-            <SelectInput name="species" value={species ? species.id : ''} options={newSpeciesList} changeHandler={selectCurrentSpecies} />
+            <SelectInput name="species" value={species ? species.id : ''} options={speciesList} changeHandler={selectCurrentSpecies} />
             {species ? (
               <ul className="mt-3 divide-y divide-gray-200">
                 <DisplaySpecies species={species} />

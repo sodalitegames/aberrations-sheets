@@ -7,7 +7,17 @@ import { Transition } from '@headlessui/react';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 
-const Notifications = ({ notifications }) => {
+interface Notification {
+  heading: string;
+  message: string;
+  dismissed: boolean;
+}
+
+interface NotificationsProps {
+  notifications: Notification[];
+}
+
+const Notifications: React.FC<NotificationsProps> = ({ notifications }) => {
   const dispatch = useDispatch();
 
   return (

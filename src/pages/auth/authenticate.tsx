@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import SigninForm from '../../components/auth/SigninForm';
 import SignupForm from '../../components/auth/SignupForm';
 
-const Authenticate = () => {
-  const [hasAccount, setHasAccount] = useState(localStorage.getItem('hasAccount'));
+const AuthenticatePage = () => {
+  const [hasAccount, setHasAccount] = useState(!!localStorage.getItem('hasAccount'));
 
   useEffect(() => {
     if (hasAccount) {
@@ -52,4 +52,4 @@ const Authenticate = () => {
   );
 };
 
-export default Authenticate;
+export default AuthenticatePage;

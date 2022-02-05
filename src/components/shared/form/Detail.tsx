@@ -1,7 +1,14 @@
 import classNames from '../../../utils/classNames';
 import NewlineText from '../../utility/NewlineText';
 
-const Detail = ({ label, detail, status, slideOver }) => {
+interface DetailProps {
+  label: string;
+  detail: string;
+  status?: 'error' | 'success';
+  slideOver?: boolean;
+}
+
+const Detail: React.FC<DetailProps> = ({ label, detail, status, slideOver }) => {
   if (slideOver) {
     return (
       <div className="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">

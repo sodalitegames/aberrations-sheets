@@ -1,6 +1,10 @@
 import { SpeakerphoneIcon, XIcon } from '@heroicons/react/outline';
 
-const Alert = ({ alert }) => {
+interface AlertProps {
+  alert?: any;
+}
+
+const Alert: React.FC<AlertProps> = ({ alert }) => {
   return (
     <div className="fixed bottom-0 inset-x-0 pb-2 sm:pb-5">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">

@@ -5,7 +5,34 @@ import { CheckCircleIcon, XCircleIcon, ExclamationIcon, InformationCircleIcon, X
 
 import classNames from '../../utils/classNames';
 
-const NoticeIcon = ({ status }) => {
+export enum NoticeStatus {
+  Success = 'success',
+  Warn = 'warn',
+  Info = 'info',
+  Alert = 'alert',
+  Error = 'error',
+  Fail = 'fail',
+}
+
+interface NoticeLinkInt {
+  href: string;
+  text: string;
+  external?: boolean;
+  inline?: boolean;
+}
+
+interface NoticeProps {
+  status: NoticeStatus;
+  heading?: string;
+  message: string | string[];
+  link?: NoticeLinkInt;
+  accent?: boolean;
+  hideable?: boolean;
+  noIcon?: boolean;
+  classes?: string;
+}
+
+const NoticeIcon: React.FC<{ status: NoticeStatus }> = ({ status }) => {
   return (
     <>
       {status === 'success' ? <CheckCircleIcon className="h-5 w-5 text-green-400 dark:text-green-500" aria-hidden="true" /> : null}
@@ -16,8 +43,8 @@ const NoticeIcon = ({ status }) => {
   );
 };
 
-const NoticeText = ({ status, message, link, bold, heading }) => {
-  if (heading) {
+const NoticeText: React.FC<{ status: NoticeStatus; heading?: string; message?: string | string[]; link?: NoticeLinkInt; bold?: boolean }> = ({ status, message, link, bold, heading }) => {
+  if (heading || !message) {
     return (
       <h3
         className={classNames(
@@ -63,7 +90,7 @@ const NoticeText = ({ status, message, link, bold, heading }) => {
   );
 };
 
-const NoticeLink = ({ status, link, arrow }) => {
+const NoticeLink: React.FC<{ status: NoticeStatus; link: NoticeLinkInt; arrow?: boolean }> = ({ status, link, arrow }) => {
   if (link.external) {
     return (
       <a
@@ -89,7 +116,7 @@ const NoticeLink = ({ status, link, arrow }) => {
 
   return (
     <Link
-      href={link.href}
+      to={link.href}
       className={classNames(
         status === 'success' ? 'text-green-700 dark:text-green-400 hover:text-green-600 dark:hover:text-green-500' : '',
         status === 'info' ? 'text-blue-700 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-500' : '',
@@ -109,7 +136,7 @@ const NoticeLink = ({ status, link, arrow }) => {
   );
 };
 
-const NoticeButton = ({ status, link }) => {
+const NoticeButton: React.FC<{ status: NoticeStatus; link: NoticeLinkInt }> = ({ status, link }) => {
   if (link.external) {
     return (
       <a
@@ -136,7 +163,7 @@ const NoticeButton = ({ status, link }) => {
   }
 
   return (
-    <Link href={link.href}>
+    <Link to={link.href}>
       <a
         href={link.href}
         className={classNames(
@@ -161,7 +188,7 @@ const NoticeButton = ({ status, link }) => {
   );
 };
 
-const NoticeCloseButton = ({ status, setShowNotice }) => {
+const NoticeCloseButton: React.FC<{ status: NoticeStatus; setShowNotice: (bool: boolean) => void }> = ({ status, setShowNotice }) => {
   return (
     <button
       type="button"
@@ -186,7 +213,7 @@ const NoticeCloseButton = ({ status, setShowNotice }) => {
   );
 };
 
-export default function Notice({ message, status = 'info', link, accent, heading, hideable, noIcon, classes }) {
+const Notice: React.FC<NoticeProps> = ({ message, status = NoticeStatus.Info, link, accent, heading, hideable, noIcon, classes }) => {
   const [showNotice, setShowNotice] = useState(true);
 
   if (!showNotice) {
@@ -263,4 +290,6 @@ export default function Notice({ message, status = 'info', link, accent, heading
       </div>
     </div>
   );
-}
+};
+
+export default Notice;
