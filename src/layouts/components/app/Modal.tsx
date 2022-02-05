@@ -15,7 +15,7 @@ import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
 import { formatValidationErrors } from '../../../utils/validationErrors';
 
-import Notice from '../../../components/shared/Notice';
+import Notice, { NoticeStatus } from '../../../components/shared/Notice';
 
 // Character Sheet
 import TakeARest from '../../../components/characters/forms/modal/TakeARest';
@@ -41,7 +41,23 @@ import UpdateInviteStatus from '../../../components/sheets/forms/modal/UpdateInv
 import ManageTransaction from '../../../components/sheets/forms/modal/ManageTransaction';
 import RemoveCharacterFromCampaign from '../../../components/sheets/forms/modal/RemoveCharacterFromCampaign';
 
-export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children, nested }) => {
+interface ModalFormProps {
+  title: string;
+  submitText?: string;
+  cancelText?: string;
+  submitDisabled?: boolean;
+  submitHandler: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  nested?: boolean;
+  type?: 'alert';
+}
+
+interface ModalContainerProps {
+  title: string;
+  buttonText?: string;
+  nested?: boolean;
+}
+
+export const ModalForm: React.FC<ModalFormProps> = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children, nested }) => {
   const dispatch = useDispatch();
 
   const characterError = useSelector(selectCharacterError);
@@ -69,7 +85,7 @@ export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, 
 
       {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
       {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
-      {resourceError ? <Notice status="error" heading={resourceError.statusText} message="An error occured fetching additional resource data. Please try again later." /> : null}
+      {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
       {/* Action buttons panel */}
       <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
@@ -95,7 +111,7 @@ export const ModalForm = ({ type, title, submitText, cancelText, submitHandler, 
   );
 };
 
-export const ModalContainer = ({ title, buttonText, children, nested }) => {
+export const ModalContainer: React.FC<ModalContainerProps> = ({ title, buttonText, children, nested }) => {
   const dispatch = useDispatch();
 
   return (
@@ -125,7 +141,7 @@ export const ModalContainer = ({ title, buttonText, children, nested }) => {
   );
 };
 
-const Modal = () => {
+const Modal: React.FC = () => {
   const dispatch = useDispatch();
   const modal = useSelector(selectModal);
 
@@ -173,7 +189,7 @@ const Modal = () => {
 
 export default Modal;
 
-export const NestedModal = () => {
+export const NestedModal: React.FC = () => {
   const dispatch = useDispatch();
   const nestedModal = useSelector(selectNestedModal);
 
@@ -219,30 +235,30 @@ export const NestedModal = () => {
   );
 };
 
-const ModalForms = ({ modal, nested }) => {
+const ModalForms: React.FC<{ modal: any; nested?: boolean }> = ({ modal, nested }) => {
   return (
     <Fragment>
       {/* Character Sheet */}
-      {modal && modal.type === ModalTypes.takeARest ? <TakeARest nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.healDamage ? <HealDamage nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.payMoney ? <PayMoney nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.editSpentUpgradePoints ? <SpentUpgradePoints nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.editMortality ? <Mortality nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.errorEquippingBelonging ? <ErrorEquippingBelonging id={modal.id} data={modal.data} nested={nested} /> : null}
+      {modal && modal.type === ModalTypes.takeARest ? <TakeARest /> : null}
+      {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
+      {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
+      {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney /> : null}
+      {modal && modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
+      {modal && modal.type === ModalTypes.editSpentUpgradePoints ? <SpentUpgradePoints /> : null}
+      {modal && modal.type === ModalTypes.editMortality ? <Mortality /> : null}
+      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
+      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} /> : null}
+      {modal && modal.type === ModalTypes.errorEquippingBelonging ? <ErrorEquippingBelonging data={modal.data} nested={nested} /> : null}
       {/* Campaign Sheet */}
-      {modal && modal.type === ModalTypes.sendInvite ? <SendInvite nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.assignBelonging ? <AssignBelonging id={modal.id} data={modal.data} nested={nested} /> : null}
+      {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
+      {modal && modal.type === ModalTypes.assignBelonging ? <AssignBelonging id={modal.id} data={modal.data} /> : null}
       {/* Shared */}
       {modal && modal.type === ModalTypes.deleteSheet ? <DeleteSheet data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.manageTransaction ? <ManageTransaction id={modal.id} data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} nested={nested} /> : null}
+      {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} /> : null}
     </Fragment>
   );
 };

@@ -4,13 +4,37 @@ import classNames from '../../../utils/classNames';
 
 import Row from './Row';
 
-export const SelectInput = ({ name, value, options, changeHandler, ...otherProps }) => {
+export interface SelectOption {
+  id: string;
+  name: string;
+  displayName?: string;
+  disabled?: boolean;
+  children?: SelectOption[];
+}
+
+interface SelectProps {
+  label: string;
+  name: string;
+  value: string;
+  options: SelectOption[];
+  changeHandler: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
+  slideOver?: boolean;
+}
+
+interface SelectInputProps {
+  name: string;
+  value: string;
+  options: SelectOption[];
+  changeHandler: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+export const SelectInput: React.FC<SelectInputProps> = ({ name, value, options, changeHandler, ...otherProps }) => {
   return (
     <select
       className="block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
       name={name}
       value={value}
-      onChange={e => changeHandler(e)}
+      onChange={(event: React.ChangeEvent<HTMLSelectElement>) => changeHandler(event)}
       {...otherProps}
     >
       <option className="text-sm" value="">
@@ -37,7 +61,7 @@ export const SelectInput = ({ name, value, options, changeHandler, ...otherProps
   );
 };
 
-const Select = ({ label, changeHandler, value, name, options, slideOver, ...otherProps }) => {
+const Select: React.FC<SelectProps> = ({ label, changeHandler, value, name, options, slideOver, ...otherProps }) => {
   return (
     <Row name={name} label={label} slideOver={slideOver}>
       <SelectInput name={name} value={value} options={options} changeHandler={changeHandler} {...otherProps} />

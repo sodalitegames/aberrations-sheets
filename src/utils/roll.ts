@@ -1,15 +1,30 @@
-export const rollOne = () => {
+import { Stat } from '../models/enums';
+
+interface RollData {
+  rolls: number[];
+  advantageRolls: number[];
+  successes: number;
+  injured: number;
+  disturbed: number;
+  experience: number;
+  crit: boolean;
+  advantage: number;
+  dice: number;
+  stat: Stat;
+}
+
+export const rollOne = (): number => {
   const roll = Math.floor(Math.random() * 6) + 1;
   return roll;
 };
 
-export const rollDice = (dice, advantage, stat) => {
-  let newRolls = [];
-  let advantageRolls = [];
+export const rollDice = (dice: number, advantage: number, stat: Stat): RollData => {
+  let newRolls: number[] = [];
+  let advantageRolls: number[] = [];
 
   // create the array of rolls
   for (let i = 0; i < dice + Math.abs(advantage); i++) {
-    newRolls.push(rollOne(dice));
+    newRolls.push(rollOne());
   }
 
   if (advantage > 0) {
@@ -75,11 +90,11 @@ export const rollDice = (dice, advantage, stat) => {
   if (ones >= dice / 2) {
     successes = 0;
 
-    if (stat === 'fortitude' || stat === 'agility') {
+    if (stat === Stat.Fortitude || stat === Stat.Agility) {
       injured++;
     }
 
-    if (stat === 'persona' || stat === 'aptitude') {
+    if (stat === Stat.Persona || stat === Stat.Aptitude) {
       disturbed++;
     }
   }

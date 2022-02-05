@@ -7,12 +7,12 @@ import { selectToken, selectCurrentUser } from './redux/user/user.selectors';
 
 import { fetchCurrentUserStart } from './redux/user/user.actions';
 
-import Authenticate from './pages/auth/authenticate';
+import AuthenticatePage from './pages/auth/authenticate';
 
 import SlideOver from './layouts/components/app/SlideOver';
 import Modal from './layouts/components/app/Modal';
 import Loading from './layouts/components/app/Loading';
-import Notification from './layouts/components/app/Notifications';
+import Notifications from './layouts/components/app/Notifications';
 import Alert from './layouts/components/app/Alert';
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
   }, [dispatch, token]);
 
   if (!token) {
-    return <Authenticate />;
+    return <AuthenticatePage />;
   }
 
   if (!currentUser) {
@@ -42,7 +42,7 @@ function App() {
       <Outlet />
       <SlideOver />
       <Modal />
-      <Notification notifications={notifications} />
+      <Notifications notifications={notifications} />
       {alert ? <Alert /> : null}
     </>
   );

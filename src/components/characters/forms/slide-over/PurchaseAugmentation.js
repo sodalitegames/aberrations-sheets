@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
-import { selectAugmentations } from '../../../../redux/resource/resource.selectors';
+import { selectAugmentationGroups } from '../../../../redux/resource/resource.selectors';
 
 import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { updateSheetStart, createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
@@ -17,7 +17,7 @@ import Row from '../../../shared/form/Row';
 const PurchaseAugmentation = () => {
   const dispatch = useDispatch();
 
-  const augGroups = useSelector(selectAugmentations);
+  const augGroups = useSelector(selectAugmentationGroups);
   const charSheet = useSelector(selectCurrentCharacter);
 
   const [augmentation, setAugmentation] = useState(null);
