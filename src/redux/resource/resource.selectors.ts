@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 
-const selectResources = state => state.resources;
+import { RootState } from '../root-reducer';
+
+const selectResources = (state: RootState) => state.resources;
 
 export const selectResourceError = createSelector([selectResources], resources => resources.error);
 
@@ -8,7 +10,7 @@ export const selectSpecies = createSelector([selectResources], resources => reso
 
 export const selectWeapons = createSelector([selectResources], resources => resources.weapons);
 
-export const selectAugmentations = createSelector([selectResources], resources => resources.augmentations);
+export const selectAugmentationGroups = createSelector([selectResources], resources => resources.augmentationGroups);
 
 export const selectConsumableCategories = createSelector([selectResources], resources => resources.consumableCategories);
 

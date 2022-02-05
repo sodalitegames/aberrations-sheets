@@ -17,7 +17,7 @@ import { formatValidationErrors } from '../../../utils/validationErrors';
 
 import { NestedModal } from './Modal';
 
-import Notice from '../../../components/shared/Notice';
+import Notice, { NoticeStatus } from '../../../components/shared/Notice';
 
 import NewCharacter from '../../../components/home/forms/slide-over/NewCharacter';
 import NewCampaign from '../../../components/home/forms/slide-over/NewCampaign';
@@ -49,7 +49,22 @@ import ConsumableForm from '../../../components/sheets/forms/slide-over/Consumab
 import UsableForm from '../../../components/sheets/forms/slide-over/UsableForm';
 import NewTransactionForm from '../../../components/sheets/forms/slide-over/NewTransactionForm';
 
-export const SlideOverForm = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
+interface SlideOverFormProps {
+  title: string;
+  description: string;
+  submitText?: string;
+  cancelText?: string;
+  submitDisabled?: boolean;
+  submitHandler: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
+}
+
+interface SlideOverContainerProps {
+  title: string;
+  description: string;
+  cancelText?: string;
+}
+
+export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
   const dispatch = useDispatch();
 
   const characterError = useSelector(selectCharacterError);
@@ -85,7 +100,7 @@ export const SlideOverForm = ({ title, description, submitText, cancelText, subm
 
       {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
       {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
-      {resourceError ? <Notice status="error" heading={resourceError.statusText} message="An error occured fetching additional resource data. Please try again later." /> : null}
+      {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
       {/* Action buttons */}
       <div className="shrink-0 px-4 border-t border-gray-200 py-5 sm:px-6">
@@ -113,7 +128,7 @@ export const SlideOverForm = ({ title, description, submitText, cancelText, subm
   );
 };
 
-export const SlideOverContainer = ({ title, description, cancelText, children }) => {
+export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, description, cancelText, children }) => {
   const dispatch = useDispatch();
 
   return (
@@ -159,7 +174,7 @@ export const SlideOverContainer = ({ title, description, cancelText, children })
   );
 };
 
-const SlideOver = () => {
+const SlideOver: React.FC = () => {
   const dispatch = useDispatch();
   const slideOver = useSelector(selectSlideOver);
 
@@ -194,10 +209,10 @@ const SlideOver = () => {
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.newSessionForm ? <NewSessionForm data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.newSessionForm ? <NewSessionForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm id={slideOver.id} /> : null}
                 {/* Shared */}
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeaponForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm id={slideOver.id} data={slideOver.data} /> : null}
