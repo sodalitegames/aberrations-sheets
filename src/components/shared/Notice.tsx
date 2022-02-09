@@ -192,6 +192,7 @@ const NoticeCloseButton: React.FC<{ status: NoticeStatus; setShowNotice: (bool: 
   return (
     <button
       type="button"
+      data-testid="close-notice-button"
       onClick={() => setShowNotice(false)}
       className={classNames(
         status === 'success'
