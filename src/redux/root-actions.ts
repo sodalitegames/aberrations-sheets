@@ -1,2 +1,2 @@
-export * as appActions from './app/app.actions';
-export * as resourceActions from './resource/resource.actions';
+export * from './app/app.actions';
+export * from './resource/resource.actions';
