@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCreatureTypes } from '../../../../redux/resource/resource.selectors';
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 
-import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+
+import { useResource } from '../../../../hooks/useResource';
+
+import { ResourceType } from '../../../../models/enums';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -21,7 +23,7 @@ const CreatureForm = ({ id }) => {
 
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const fetchedTypes = useSelector(selectCreatureTypes);
+  const creatureTypes = useResource(ResourceType.CreatureTypes);
 
   const [typesList, setTypesList] = useState([]);
 
@@ -41,14 +43,8 @@ const CreatureForm = ({ id }) => {
   // conditions
 
   useEffect(() => {
-    if (!fetchedTypes) {
-      dispatch(fetchResourceStart('creatureTypes'));
-    }
-  }, [dispatch, fetchedTypes]);
-
-  useEffect(() => {
-    if (fetchedTypes) {
-      const newTypesList = fetchedTypes.map(type => {
+    if (creatureTypes) {
+      const newTypesList = creatureTypes.map(type => {
         return {
           universalId: type._id,
           name: type.name,
@@ -58,7 +54,7 @@ const CreatureForm = ({ id }) => {
 
       setTypesList(newTypesList);
     }
-  }, [fetchedTypes]);
+  }, [creatureTypes]);
 
   useEffect(() => {
     if (id && campSheet) {
@@ -149,7 +145,7 @@ const CreatureForm = ({ id }) => {
       <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} required />
       <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} required />
 
-      {fetchedTypes && typesList ? (
+      {creatureTypes && typesList ? (
         <CheckboxGroup slideOver label="Types">
           {typesList.map(type => (
             <Checkbox

@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
-import { selectAugmentationGroups } from '../../../../redux/resource/resource.selectors';
 
-import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { updateSheetStart, createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+
+import { ResourceType } from '../../../../models/enums';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -13,25 +13,20 @@ import Select from '../../../shared/form/Select';
 import Detail from '../../../shared/form/Detail';
 import { LoadingSpinner } from '../../../shared/form/SubmitButton';
 import Row from '../../../shared/form/Row';
+import { useResource } from '../../../../hooks/useResource';
 
 const PurchaseAugmentation = () => {
   const dispatch = useDispatch();
 
-  const augGroups = useSelector(selectAugmentationGroups);
   const charSheet = useSelector(selectCurrentCharacter);
+  const augmentationGroups = useResource(ResourceType.AugmentationGroups);
 
   const [augmentation, setAugmentation] = useState(null);
   const [augsList, setAugsList] = useState([]);
 
   useEffect(() => {
-    if (!augGroups) {
-      dispatch(fetchResourceStart('augmentations'));
-    }
-  }, [dispatch, augGroups]);
-
-  useEffect(() => {
-    if (charSheet && augGroups) {
-      const newAugsList = augGroups.map(group => {
+    if (charSheet && augmentationGroups) {
+      const newAugsList = augmentationGroups.map(group => {
         const children = [group.augmentation1, group.augmentation2, group.augmentation3, group.augmentation4, group.augmentation5].map(aug => {
           let purchased = false;
 
@@ -60,7 +55,7 @@ const PurchaseAugmentation = () => {
 
       setAugsList(newAugsList);
     }
-  }, [charSheet, augGroups]);
+  }, [charSheet, augmentationGroups]);
 
   const selectAugmentation = e => {
     if (!e.target.value) setAugmentation(null);
@@ -106,7 +101,7 @@ const PurchaseAugmentation = () => {
       submitHandler={submitHandler}
     >
       <Detail slideOver label="Upgrade Points Available" detail={charSheet.upgradePoints} />
-      {augGroups && augsList ? (
+      {augmentationGroups && augsList ? (
         <>
           <Select slideOver label="Choose an Augmentation" name="augmentations" options={augsList} changeHandler={selectAugmentation} />
 

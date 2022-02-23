@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectConsumableCategories } from '../../../../redux/resource/resource.selectors';
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 
-import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+
+import { useResource } from '../../../../hooks/useResource';
+
+import { ResourceType } from '../../../../models/enums';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -23,7 +25,7 @@ const ConsumableForm = ({ id, data }) => {
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const fetchedCategories = useSelector(selectConsumableCategories);
+  const fetchedCategories = useResource(ResourceType.ConsumableCategories);
 
   const [categoriesList, setCategoriesList] = useState([]);
 
@@ -34,12 +36,6 @@ const ConsumableForm = ({ id, data }) => {
   const [associatedStat, setAssociatedStat] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [description, setDescription] = useState('');
-
-  useEffect(() => {
-    if (!fetchedCategories) {
-      dispatch(fetchResourceStart('consumableCategories'));
-    }
-  }, [dispatch, fetchedCategories]);
 
   useEffect(() => {
     if (fetchedCategories) {

@@ -130,7 +130,7 @@ const TakeARest = () => {
             conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured - 1, disturbed: charSheet.conditions.disturbed - 1 },
             fortitude: { ...charSheet.fortitude, advantage: 0 },
             agility: { ...charSheet.agility, advantage: 0 },
-            persona: { ...charSheet.agility, advantage: 0 },
+            persona: { ...charSheet.persona, advantage: 0 },
             aptitude: { ...charSheet.aptitude, advantage: 0 },
           },
           { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }

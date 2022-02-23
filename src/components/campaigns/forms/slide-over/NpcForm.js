@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
-import { selectSpecies, selectNpcTypes } from '../../../../redux/resource/resource.selectors';
 
-import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+
+import { useResource } from '../../../../hooks/useResource';
+
+import { ResourceType } from '../../../../models/enums';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -23,8 +25,9 @@ const NpcForm = ({ id }) => {
   const dispatch = useDispatch();
 
   const campSheet = useSelector(selectCurrentCampaign);
-  const fetchedSpecies = useSelector(selectSpecies);
-  const fetchedTypes = useSelector(selectNpcTypes);
+
+  const fetchedSpecies = useResource(ResourceType.Species);
+  const fetchedTypes = useResource(ResourceType.CreatureTypes);
 
   const [speciesList, setSpeciesList] = useState(null);
   const [typesList, setTypesList] = useState(null);
@@ -46,16 +49,6 @@ const NpcForm = ({ id }) => {
 
   const [species, setSpecies] = useState('');
   const [type, setType] = useState('');
-
-  useEffect(() => {
-    if (!fetchedSpecies) {
-      dispatch(fetchResourceStart('species'));
-    }
-
-    if (!fetchedTypes) {
-      dispatch(fetchResourceStart('npcTypes'));
-    }
-  }, [dispatch, fetchedSpecies, fetchedTypes]);
 
   useEffect(() => {
     if (fetchedSpecies) {
@@ -144,6 +137,9 @@ const NpcForm = ({ id }) => {
     // Get level data based on the type and the saved id
     const levelData = type.level.find(lev => lev.id === levelId);
 
+    // Get the current npc data
+    const currentNpc = campSheet.npcs.find(npc => npc._id === id);
+
     let body = {
       name,
       diplomacy,
@@ -152,10 +148,10 @@ const NpcForm = ({ id }) => {
       background,
       // calculate currentHp and stats based on the type and level
       currentHp: (species.stats.fortitude + levelData.fortitude) * 5,
-      fortitude: { points: species.stats.fortitude + levelData.fortitude },
-      agility: { points: species.stats.agility + levelData.agility },
-      persona: { points: species.stats.persona + levelData.persona },
-      aptitude: { points: species.stats.aptitude + levelData.aptitude },
+      fortitude: { ...currentNpc.fortitude, points: species.stats.fortitude + levelData.fortitude },
+      agility: { ...currentNpc.agility, points: species.stats.agility + levelData.agility },
+      persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
+      aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
     };
 
     if (id) {

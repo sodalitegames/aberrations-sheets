@@ -3,12 +3,13 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
-import { selectWeapons } from '../../../../redux/resource/resource.selectors';
 
-import { fetchResourceStart } from '../../../../redux/resource/resource.actions';
 import { createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
+import { useResource } from '../../../../hooks/useResource';
+
 import { capitalize } from '../../../../utils/strings';
+import { ResourceType } from '../../../../models/enums';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -23,9 +24,10 @@ import { getWeaponRangeString } from '../../../../utils/displayBelongings';
 const NewWeaponForm = ({ data }) => {
   const dispatch = useDispatch();
 
-  const fetchedWeapons = useSelector(selectWeapons);
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
+
+  const fetchedWeapons = useResource(ResourceType.Weapons);
 
   const [weapon, setWeapon] = useState(null);
   const [weaponsList, setWeaponsList] = useState([]);
@@ -40,12 +42,6 @@ const NewWeaponForm = ({ data }) => {
   const [associatedStat, setAssociatedStat] = useState('');
   const [range, setRange] = useState('');
   const [ability, setAbility] = useState('');
-
-  useEffect(() => {
-    if (!fetchedWeapons) {
-      dispatch(fetchResourceStart('weapons'));
-    }
-  }, [dispatch, fetchedWeapons]);
 
   useEffect(() => {
     if (fetchedWeapons) {

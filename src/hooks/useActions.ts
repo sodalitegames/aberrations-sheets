@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -8,5 +9,7 @@ console.log('Resource Actions', resourceActions);
 export const useActions = () => {
   const dispatch = useDispatch();
 
-  return bindActionCreators(resourceActions, dispatch);
+  return useMemo(() => {
+    return bindActionCreators(resourceActions, dispatch);
+  }, [dispatch]);
 };

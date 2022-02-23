@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentUser } from '../../../../redux/user/user.selectors';
-import { selectSpecies } from '../../../../redux/resource/resource.selectors';
 
 import { createSheetForUserStart } from '../../../../redux/user/user.actions';
-import { useActions } from '../../../../hooks/useActions';
+
+import { useResource } from '../../../../hooks/useResource';
 
 import { ResourceType } from '../../../../models/enums/ResourceType';
+import { Species } from '../../../../models/interfaces/data';
 
 import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
 
@@ -19,15 +20,13 @@ import { LoadingSpinner } from '../../../shared/form/SubmitButton';
 import Detail from '../../../shared/form/Detail';
 
 import DisplaySpecies from '../../../sheets/display/DisplaySpecies';
-import { Species } from '../../../../models/interfaces/data';
 
 const NewCharacter: React.FC = () => {
   const dispatch = useDispatch();
 
   const currentUser = useSelector(selectCurrentUser);
-  const fetchedSpecies = useSelector(selectSpecies);
 
-  const { fetchResourceStart } = useActions();
+  const fetchedSpecies = useResource(ResourceType.Species) as Species[];
 
   const [speciesList, setSpeciesList] = useState<SelectOption[]>([]);
 
@@ -36,12 +35,6 @@ const NewCharacter: React.FC = () => {
   const [charDescription, setCharDescription] = useState('');
   const [charBackground, setCharBackground] = useState('');
   const [species, setSpecies] = useState<Species | null>(null);
-
-  useEffect(() => {
-    if (!fetchedSpecies) {
-      fetchResourceStart(ResourceType.Species);
-    }
-  }, [fetchResourceStart, fetchedSpecies]);
 
   useEffect(() => {
     if (fetchedSpecies) {
