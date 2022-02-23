@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { XIcon } from '@heroicons/react/outline';
 
@@ -9,7 +9,7 @@ import { selectResourceError } from '../../../redux/resource/resource.selectors'
 import { selectCharacterError } from '../../../redux/character/character.selectors';
 import { selectCampaignError } from '../../../redux/campaign/campaign.selectors';
 
-import { setSlideOver } from '../../../redux/app/app.actions';
+import { useAppActions } from '../../../hooks/useAppActions';
 
 import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
@@ -65,14 +65,14 @@ interface SlideOverContainerProps {
 }
 
 export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
-  const dispatch = useDispatch();
+  const { closeSlideOver } = useAppActions();
 
   const characterError = useSelector(selectCharacterError);
   const campaignError = useSelector(selectCampaignError);
   const resourceError = useSelector(selectResourceError);
 
   return (
-    <form onSubmit={submitHandler} className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
+    <form onSubmit={submitHandler} className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
       <div className="flex-1">
         {/* Header */}
         <div className="px-4 py-6 bg-gray-50 sm:px-6">
@@ -82,10 +82,10 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
               <p className="text-sm text-gray-500">{description}</p>
             </div>
             {/* Close button */}
-            <div className="h-7 flex items-center">
-              <button type="button" className="text-gray-400 hover:text-gray-500" onClick={() => dispatch(setSlideOver(null))}>
+            <div className="flex items-center h-7">
+              <button type="button" className="text-gray-400 hover:text-gray-500" onClick={() => closeSlideOver()}>
                 <span className="sr-only">Close panel</span>
-                <XIcon className="h-6 w-6" aria-hidden="true" />
+                <XIcon className="w-6 h-6" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -103,12 +103,12 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
       {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
       {/* Action buttons */}
-      <div className="shrink-0 px-4 border-t border-gray-200 py-5 sm:px-6">
-        <div className="space-x-3 flex justify-end">
+      <div className="px-4 py-5 border-t border-gray-200 shrink-0 sm:px-6">
+        <div className="flex justify-end space-x-3">
           <button
             type="button"
-            className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
-            onClick={() => dispatch(setSlideOver(null))}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
+            onClick={() => closeSlideOver()}
           >
             {cancelText || 'Cancel'}
           </button>
@@ -129,10 +129,10 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
 };
 
 export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, description, cancelText, children }) => {
-  const dispatch = useDispatch();
+  const { closeSlideOver } = useAppActions();
 
   return (
-    <div className="h-full flex flex-col bg-white shadow-xl overflow-y-scroll">
+    <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
       <div className="flex-1">
         {/* Header */}
         <div className="px-4 py-6 bg-gray-50 sm:px-6">
@@ -142,10 +142,10 @@ export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, d
               <p className="text-sm text-gray-500">{description}</p>
             </div>
             {/* Close button */}
-            <div className="h-7 flex items-center">
-              <button type="button" className="text-gray-400 hover:text-gray-500" onClick={() => dispatch(setSlideOver(null))}>
+            <div className="flex items-center h-7">
+              <button type="button" className="text-gray-400 hover:text-gray-500" onClick={() => closeSlideOver()}>
                 <span className="sr-only">Close panel</span>
-                <XIcon className="h-6 w-6" aria-hidden="true" />
+                <XIcon className="w-6 h-6" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -159,12 +159,12 @@ export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, d
       </div>
 
       {/* Action buttons */}
-      <div className="shrink-0 px-4 border-t border-gray-200 py-5 sm:px-6">
-        <div className="space-x-3 flex justify-end">
+      <div className="px-4 py-5 border-t border-gray-200 shrink-0 sm:px-6">
+        <div className="flex justify-end space-x-3">
           <button
             type="button"
-            className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
-            onClick={() => dispatch(setSlideOver(null))}
+            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
+            onClick={() => closeSlideOver()}
           >
             {cancelText || 'Cancel'}
           </button>
@@ -175,15 +175,16 @@ export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, d
 };
 
 const SlideOver: React.FC = () => {
-  const dispatch = useDispatch();
+  const { closeSlideOver } = useAppActions();
+
   const slideOver = useSelector(selectSlideOver);
 
   return (
-    <Transition.Root show={!!slideOver} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={() => dispatch(setSlideOver(null))}>
+    <Transition.Root show={!!slideOver?.show} as={Fragment}>
+      <Dialog as="div" className="fixed inset-0 overflow-hidden" onClose={() => closeSlideOver()}>
         <div className="absolute inset-0 overflow-hidden">
           <Dialog.Overlay className="absolute inset-0" />
-          <div className="fixed inset-y-0 right-0 pl-10 max-w-full flex sm:pl-16">
+          <div className="fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"

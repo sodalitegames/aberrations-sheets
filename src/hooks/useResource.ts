@@ -3,12 +3,12 @@ import { useSelector } from 'react-redux';
 
 import { selectSpecies, selectAugmentationGroups, selectWeapons, selectConsumableCategories, selectCreatureTypes } from '../redux/resource/resource.selectors';
 
-import { useActions } from './useActions';
+import { useResourceActions } from './useResourceActions';
 
 import { ResourceType } from '../models/enums';
 
 export const useResource = (resource: ResourceType) => {
-  const { fetchResourceStart } = useActions();
+  const { fetchResourceStart } = useResourceActions();
 
   const species = useSelector(selectSpecies);
   const augmentationGroups = useSelector(selectAugmentationGroups);

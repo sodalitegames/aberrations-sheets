@@ -6,7 +6,7 @@ import * as resourceActions from '../redux/resource/resource.actions';
 
 console.log('Resource Actions', resourceActions);
 
-export const useActions = () => {
+export const useResourceActions = () => {
   const dispatch = useDispatch();
 
   return useMemo(() => {

@@ -1,5 +1,5 @@
 import SheetActionTypes from '../sheet/sheet.types';
-import AppActionTypes from '../app/app.types';
+import { AppActionTypes } from '../app/app.types';
 
 import { replaceItemById, removeItemById } from '../../utils/arrays';
 

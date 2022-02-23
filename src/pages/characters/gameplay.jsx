@@ -26,6 +26,8 @@ import DisplayWearable from '../../components/sheets/display/DisplayWearable';
 import DisplayConsumable from '../../components/sheets/display/DisplayConsumable';
 import DisplayUsable from '../../components/sheets/display/DisplayUsable';
 
+import NewlineText from '../../components/utility/NewlineText';
+
 const CharacterGameplayPage = () => {
   const dispatch = useDispatch();
 
@@ -42,16 +44,16 @@ const CharacterGameplayPage = () => {
       <div className="grid grid-cols-2 gap-4 md:col-span-4 lg:col-span-2">
         {/* Welcome panel */}
         <PanelSection colSpan={2}>
-          <div className="sm:flex sm:items-center sm:justify-between pb-6">
+          <div className="pb-6 sm:flex sm:items-center sm:justify-between">
             <div className="sm:flex sm:space-x-5">
               <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                 <p className="text-xl font-bold text-gray-900 sm:text-2xl">{charSheet.characterName}</p>
-                <p className="text-sm font-medium text-gray-500">
-                  {charSheet.species.name} Ability: {charSheet.species.ability}
-                </p>
+                <div className="text-sm font-medium text-gray-500">
+                  <NewlineText>{charSheet.species.name + ' Ability: ' + charSheet.species.ability}</NewlineText>
+                </div>
               </div>
             </div>
-            <div className="ml-5 mt-5 flex flex-col shrink-0 justify-center sm:mt-0 space-y-2">
+            <div className="flex flex-col justify-center mt-5 ml-5 space-y-2 shrink-0 sm:mt-0">
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.rollDice }))}>Roll Dice</Button>
             </div>
           </div>
@@ -75,7 +77,7 @@ const CharacterGameplayPage = () => {
       </div>
 
       {/* Right column */}
-      <div className="grid grid-cols-1 md:col-span-4 lg:col-span-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:col-span-4 lg:col-span-1 md:grid-cols-2 lg:grid-cols-1">
         {/* Actions */}
         <PanelSection classes="md:col-span-2 lg:col-span-1">
           <Button onClick={() => dispatch(setModal({ type: ModalTypes.takeARest }))}>Take a Rest</Button>
@@ -87,11 +89,11 @@ const CharacterGameplayPage = () => {
         {/* Health */}
         <PanelSection>
           <div className="flex flex-col items-center justify-between text-5xl font-semibold text-gray-900">
-            <h5 className="font-normal text-xl">Current Health</h5>
+            <h5 className="text-xl font-normal">Current Health</h5>
             <span className={classNames(charSheet.currentHp >= charSheet.maxHp / 2 ? 'text-green-800' : '', charSheet.currentHp >= charSheet.maxHp / 4 ? 'text-yellow-800' : 'text-red-800')}>
               {charSheet.currentHp} / {charSheet.maxHp}
             </span>
-            <span className="text-sm font-medium text-gray-500 text-center uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
+            <span className="text-sm font-medium text-center text-gray-500 uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
           </div>
           <div className="mt-6">
             <Button onClick={() => dispatch(setModal({ type: ModalTypes.takeDamage }))}>Take Damage</Button>
@@ -104,7 +106,7 @@ const CharacterGameplayPage = () => {
         {/* Wallet */}
         <PanelSection>
           <div className="flex flex-col items-center justify-between text-5xl font-semibold">
-            <h5 className="font-normal text-xl">Wallet</h5>
+            <h5 className="text-xl font-normal">Wallet</h5>
             <span>{charSheet.wallet}</span>
             <span className="text-sm font-medium text-gray-500 uppercase">{getWalletMessage(charSheet.wallet)}</span>
           </div>
@@ -199,7 +201,7 @@ const CharacterGameplayPage = () => {
 
       {/* Augmentations */}
       <PanelSection>
-        <div className="flex justify-between flex-wrap md:space-y-2 lg:space-y-0">
+        <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
           <Chip editable={{ type: ModalTypes.editSpentUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
             {charSheet.upgradePoints} Upgrade {charSheet.upgradePoints === 1 ? 'Point' : 'Points'}
