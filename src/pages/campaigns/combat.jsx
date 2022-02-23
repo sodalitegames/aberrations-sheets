@@ -14,8 +14,12 @@ const CampaignCombatPage = () => {
   return (
     <SheetPageContent title="Stats Tracker" columns={1}>
       {/* Stats Tracker */}
-      <PanelSection>
-        <StatsTracker list={[...campSheet.players, ...campSheet.npcs]} />
+      <PanelSection title="Players">
+        <StatsTracker list={campSheet.players} />
+      </PanelSection>
+
+      <PanelSection title="Npcs">
+        <StatsTracker list={campSheet.npcs} />
       </PanelSection>
     </SheetPageContent>
   );

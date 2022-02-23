@@ -4,15 +4,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
-import { selectSpecies } from '../../../redux/resource/resource.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
-import { fetchResourceStart } from '../../../redux/resource/resource.actions';
+
+import { useResource } from '../../../hooks/useResource';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 import classNames from '../../../utils/classNames';
+import { ResourceType } from '../../../models/enums';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -27,7 +28,8 @@ const CampaignNpcsPage = () => {
   const dispatch = useDispatch();
 
   const campSheet = useSelector(selectCurrentCampaign);
-  const speciesList = useSelector(selectSpecies);
+
+  const species = useResource(ResourceType.Species);
 
   const [npc, setNpc] = useState(null);
   const [id, setId] = useState(null);
@@ -41,12 +43,6 @@ const CampaignNpcsPage = () => {
     setNpc(campSheet.npcs[0]);
     setId(campSheet.npcs[0]?._id);
   }, [id, campSheet]);
-
-  useEffect(() => {
-    if (!speciesList) {
-      dispatch(fetchResourceStart('species'));
-    }
-  }, [dispatch, speciesList]);
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
@@ -66,8 +62,8 @@ const CampaignNpcsPage = () => {
               <div key={npc._id} className={classNames('flex justify-between items-center px-2 cursor-pointer', id === npc._id ? 'bg-gray-100' : 'hover:bg-gray-50')} onClick={() => setId(npc._id)}>
                 <DisplayNpc key={npc._id} npc={npc} condensed listItem />
                 {npc.active ? (
-                  <div className="shrink-0 ml-2" title="Active">
-                    <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
+                  <div className="ml-2 shrink-0" title="Active">
+                    <CheckCircleIcon className="w-6 h-6 text-green-600" aria-hidden="true" />
                   </div>
                 ) : null}
               </div>
@@ -79,12 +75,12 @@ const CampaignNpcsPage = () => {
       {/* Selected Npc */}
       <PanelSection title="Selected Npc" colSpan={3}>
         {npc ? (
-          <div className="grid gap-8 grid-cols-3 divide-x divide-gray-200">
+          <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
             <div className="col-span-2">
-              <DisplayNpc npc={npc} species={speciesList} />
+              <DisplayNpc npc={npc} species={species} />
             </div>
 
-            <div className="col-span-1 space-y-4 pl-8">
+            <div className="col-span-1 pl-8 space-y-4">
               <Button
                 dark={npc.active}
                 onClick={() =>
