@@ -3,17 +3,10 @@ import { Outlet } from 'react-router-dom';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
-<<<<<<< HEAD:src/pages/campaigns/interactables.jsx
-import PanelSection from '../../components/sheets/PanelSection';
-import TabsNavigation from '../../components/sheets/TabsNavigation';
-
-import SelectButton from '../../components/shared/SelectButton';
-=======
 import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
 import TabsNavigation from '../../../components/TabsNavigation';
 
 import SelectButton from '../../../components/SelectButton';
->>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/pages/sheets/campaigns/interactables.jsx
 
 const tabs = [
   { name: 'Npcs', href: 'npcs' },
@@ -40,7 +33,7 @@ const CampaignInteractablesPage = () => {
       <SheetPageContent title="Interactables">
         {/* Tabs */}
         <SheetPagePanel>
-          <div className="flex justify-between items-center flex-wrap">
+          <div className="flex flex-wrap items-center justify-between">
             <TabsNavigation tabs={tabs} sheetType="campaigns" />
             <SelectButton value={selected} onChange={setSelected} options={interactableStates} />
           </div>
