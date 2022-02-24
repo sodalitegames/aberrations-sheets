@@ -17,11 +17,17 @@ export const selectWeapons = createSelector([selectCurrentCampaign], current => 
 export const selectWearables = createSelector([selectCurrentCampaign], current => (current ? current.wearables.filter(wearable => !wearable.archived) : []));
 export const selectConsumables = createSelector([selectCurrentCampaign], current => (current ? current.consumables.filter(consumable => !consumable.archived) : []));
 export const selectUsables = createSelector([selectCurrentCampaign], current => (current ? current.usables.filter(usable => !usable.archived) : []));
+export const selectCreatures = createSelector([selectCurrentCampaign], current => (current ? current.creatures.filter(creature => !creature.archived) : []));
+export const selectNpcs = createSelector([selectCurrentCampaign], current => (current ? current.npcs.filter(npc => !npc.archived) : []));
+export const selectEnvironments = createSelector([selectCurrentCampaign], current => (current ? current.environments.filter(environment => !environment.archived) : []));
 
 export const selectArchivedWeapons = createSelector([selectCurrentCampaign], current => (current ? current.weapons.filter(weapon => weapon.archived) : []));
 export const selectArchivedWearables = createSelector([selectCurrentCampaign], current => (current ? current.wearables.filter(wearable => wearable.archived) : []));
 export const selectArchivedConsumables = createSelector([selectCurrentCampaign], current => (current ? current.consumables.filter(consumable => consumable.archived) : []));
 export const selectArchivedUsables = createSelector([selectCurrentCampaign], current => (current ? current.usables.filter(usable => usable.archived) : []));
+export const selectArchivedCreatures = createSelector([selectCurrentCampaign], current => (current ? current.creatures.filter(creature => creature.archived) : []));
+export const selectArchivedNpcs = createSelector([selectCurrentCampaign], current => (current ? current.npcs.filter(npc => npc.archived) : []));
+export const selectArchivedEnvironments = createSelector([selectCurrentCampaign], current => (current ? current.environments.filter(environment => environment.archived) : []));
 
 export const selectPendingTransactions = createSelector([selectCurrentCampaign], current =>
   current

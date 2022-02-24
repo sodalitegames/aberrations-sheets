@@ -15,7 +15,7 @@ import SheetPageContent from '../../../../layouts/components/sheet/SheetPageCont
 
 import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
 import BelongingActions from '../../../../components/sections/BelongingActions';
-import ListBelongings, { ListBelongingsMessage } from '../../../../components/sections/ListBelongings';
+import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
 
 import DisplayWearable from '../../../../components/display/DisplayWearable';
 
@@ -38,6 +38,10 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
   const [wearablesList, setWearablesList] = useState([]);
 
   useEffect(() => {
+    // First, clear out currently selected
+    setWearable(null);
+    setId(null);
+
     if (sheetType === 'characters') {
       switch (searchParams.get('show')) {
         case 'archived':
@@ -86,12 +90,12 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
   return (
     <SheetPageContent title="Wearables" columns={4}>
       {/* Showing Archived Wearables Notice */}
-      <ListBelongingsMessage show={searchParams.get('show')} belongingType="wearables" />
+      <ListInteractablesMessage show={searchParams.get('show')} interactableType="wearables" />
 
       {/* Wearables List */}
       <SheetPagePanel title="Manage Wearables">
         <div className="flow-root mt-2">
-          <ListBelongings sheetType={sheetType} belongingType="wearables" belongingKind="Wearable" id={id} setId={setId} belongingsList={wearablesList} show={searchParams.get('show')} />
+          <ListInteractables sheetType={sheetType} interactableType="wearables" id={id} setId={setId} interactablesList={wearablesList} label="Wearable" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 

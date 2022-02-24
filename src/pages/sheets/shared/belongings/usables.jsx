@@ -9,7 +9,7 @@ import SheetPageContent from '../../../../layouts/components/sheet/SheetPageCont
 
 import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
 import BelongingActions from '../../../../components/sections/BelongingActions';
-import ListBelongings, { ListBelongingsMessage } from '../../../../components/sections/ListBelongings';
+import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
 
 import DisplayUsable from '../../../../components/display/DisplayUsable';
 
@@ -31,6 +31,10 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
   const [usablesList, setUsablesList] = useState([]);
 
   useEffect(() => {
+    // First, clear out currently selected
+    setUsable(null);
+    setId(null);
+
     if (sheetType === 'characters') {
       switch (searchParams.get('show')) {
         case 'archived':
@@ -65,24 +69,26 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
   }, [sheetType, searchParams, charArchivedUsables, campArchivedUsables, charUsables, campUsables]);
 
   useEffect(() => {
-    if (id) {
-      setUsable(sheetType === 'characters' ? charUsables.find(usab => usab._id === id) : campUsables.find(usab => usab._id === id));
-      return;
-    }
+    if (usablesList.length) {
+      if (id) {
+        setUsable(usablesList.find(usab => usab._id === id));
+        return;
+      }
 
-    setUsable(sheetType === 'characters' ? charUsables[0] : campUsables[0]);
-    setId(sheetType === 'characters' ? charUsables[0]?._id : campUsables[0]?._id);
-  }, [sheetType, id, charUsables, campUsables]);
+      setUsable(usablesList[0]);
+      setId(usablesList[0]._id);
+    }
+  }, [sheetType, id, usablesList]);
 
   return (
     <SheetPageContent title="Usables" columns={4}>
       {/* Showing Archived Usables Notice */}
-      <ListBelongingsMessage show={searchParams.get('show')} belongingType="usables" />
+      <ListInteractablesMessage show={searchParams.get('show')} interactableType="usables" />
 
       {/* Usables List */}
       <SheetPagePanel title="Manage Usables">
         <div className="flow-root mt-2">
-          <ListBelongings sheetType={sheetType} belongingType="usables" belongingKind="Usable" id={id} setId={setId} belongingsList={usablesList} show={searchParams.get('show')} />
+          <ListInteractables sheetType={sheetType} interactableType="usables" id={id} setId={setId} interactablesList={usablesList} label="Usable" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 

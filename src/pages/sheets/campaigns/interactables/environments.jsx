@@ -1,21 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
-import { CheckCircleIcon } from '@heroicons/react/outline';
-
-import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectEnvironments, selectArchivedEnvironments } from '../../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import SlideOverTypes from '../../../../utils/SlideOverTypes';
 import ModalTypes from '../../../../utils/ModalTypes';
-import classNames from '../../../../utils/classNames';
 
 import SheetPageContent from '../../../../layouts/components/sheet/SheetPageContent';
 
 import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
-import ListContainer from '../../../../components/data/ListContainer';
+import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
 
 import Button from '../../../../components/Button';
 
@@ -23,50 +21,63 @@ import DisplayEnvironment from '../../../../components/display/DisplayEnvironmen
 
 const CampaignEnvironmentsPage = () => {
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+
   const campSheet = useSelector(selectCurrentCampaign);
+
+  const environments = useSelector(selectEnvironments);
+  const archivedEnvironments = useSelector(selectArchivedEnvironments);
 
   const [environment, setEnvironment] = useState(null);
   const [id, setId] = useState(null);
 
-  useEffect(() => {
-    if (id) {
-      setEnvironment(campSheet.environments.find(envir => envir._id === id));
-      return;
-    }
+  const [environmentsList, setEnvironmentsList] = useState([]);
 
-    setEnvironment(campSheet.environments[0]);
-    setId(campSheet.environments[0]?._id);
-  }, [id, campSheet]);
+  useEffect(() => {
+    // First, clear out currently selected
+    setEnvironment(null);
+    setId(null);
+
+    switch (searchParams.get('show')) {
+      case 'archived':
+        setEnvironmentsList(archivedEnvironments);
+        return;
+
+      case 'active':
+        setEnvironmentsList(environments.filter(envir => envir.active));
+        return;
+
+      case 'inactive':
+        setEnvironmentsList(environments.filter(envir => !envir.active));
+        return;
+
+      default:
+        setEnvironmentsList(environments);
+        return;
+    }
+  }, [searchParams, archivedEnvironments, environments]);
+
+  useEffect(() => {
+    if (environmentsList.length) {
+      if (id) {
+        setEnvironment(environmentsList.find(envir => envir._id === id));
+        return;
+      }
+
+      setEnvironment(environmentsList[0]);
+      setId(environmentsList[0]._id);
+    }
+  }, [id, environmentsList]);
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
-      {/* All Environments */}
+      {/* Showing Archived Weapons Notice */}
+      <ListInteractablesMessage show={searchParams.get('show')} interactableType="environments" />
+
+      {/* Environments List */}
       <SheetPagePanel title="Manage Environments">
         <div className="flow-root mt-2">
-          <ListContainer
-            list={campSheet.environments}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.environmentForm })), text: 'Add a new Environment' }}
-            empty={{
-              heading: 'No Environments',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.environmentForm })), text: 'New Environment' },
-            }}
-          >
-            {campSheet.environments.map(environment => (
-              <div
-                key={environment._id}
-                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === environment._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
-                onClick={() => setId(environment._id)}
-              >
-                <DisplayEnvironment key={environment._id} environment={environment} condensed listItem />
-                {environment.active ? (
-                  <div className="ml-2 shrink-0" title="Active">
-                    <CheckCircleIcon className="w-6 h-6 text-green-600" aria-hidden="true" />
-                  </div>
-                ) : null}
-              </div>
-            ))}
-          </ListContainer>
+          <ListInteractables sheetType="campaigns" interactableType="environments" id={id} setId={setId} interactablesList={environmentsList} label="Environment" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 
@@ -79,6 +90,7 @@ const CampaignEnvironmentsPage = () => {
             </div>
 
             <div className="col-span-1 pl-8 space-y-4">
+              {/* Activate or Deactivate */}
               <Button
                 dark={environment.active}
                 onClick={() =>
@@ -102,27 +114,57 @@ const CampaignEnvironmentsPage = () => {
               >
                 {environment.active ? 'Deactivate' : 'Activate'}
               </Button>
+
+              {/* Edit */}
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.environmentForm, id: environment._id }))}>Edit</Button>
+
+              {/* Archive or Restore */}
               <Button
-                alert
                 onClick={() =>
                   dispatch(
-                    setModal({
-                      type: ModalTypes.deleteResource,
-                      id: environment._id,
-                      data: {
-                        sheetType: 'campaigns',
-                        resourceType: 'environments',
-                        title: `Are you sure you want to delete ${environment.name}?`,
-                        submitText: `Yes, delete ${environment.name}`,
-                        notification: { heading: 'Environment Deleted', message: `You have successfully deleted ${environment.name}.` },
-                      },
-                    })
+                    updateSheetResourceStart(
+                      'campaigns',
+                      campSheet._id,
+                      'environments',
+                      environment._id,
+                      { archived: !environment.archived, active: false },
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `Environment ${environment.archived ? 'Restored' : 'Archived'}`,
+                          message: `You have successfully ${environment.archived ? 'restored' : 'archived'} ${environment.name}.`,
+                        },
+                      }
+                    )
                   )
                 }
               >
-                Delete
+                {environment.archived ? 'Restore' : 'Archive'}
               </Button>
+
+              {/* Delete */}
+              {environment.archived ? (
+                <Button
+                  alert
+                  onClick={() =>
+                    dispatch(
+                      setModal({
+                        type: ModalTypes.deleteResource,
+                        id: environment._id,
+                        data: {
+                          sheetType: 'campaigns',
+                          resourceType: 'environments',
+                          title: `Are you sure you want to delete ${environment.name}?`,
+                          submitText: `Yes, delete ${environment.name}`,
+                          notification: { heading: 'Environment Deleted', message: `You have successfully deleted ${environment.name}.` },
+                        },
+                      })
+                    )
+                  }
+                >
+                  Delete
+                </Button>
+              ) : null}
             </div>
           </div>
         ) : (

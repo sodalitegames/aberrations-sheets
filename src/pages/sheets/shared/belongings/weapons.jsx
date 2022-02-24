@@ -9,7 +9,7 @@ import SheetPageContent from '../../../../layouts/components/sheet/SheetPageCont
 
 import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
 import BelongingActions from '../../../../components/sections/BelongingActions';
-import ListBelongings, { ListBelongingsMessage } from '../../../../components/sections/ListBelongings';
+import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
 
 import DisplayWeapon from '../../../../components/display/DisplayWeapon';
 
@@ -31,6 +31,10 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
   const [weaponsList, setWeaponsList] = useState([]);
 
   useEffect(() => {
+    // First, clear out currently selected
+    setWeapon(null);
+    setId(null);
+
     if (sheetType === 'characters') {
       switch (searchParams.get('show')) {
         case 'archived':
@@ -79,12 +83,12 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
   return (
     <SheetPageContent title="Weapons" columns={4}>
       {/* Showing Archived Weapons Notice */}
-      <ListBelongingsMessage show={searchParams.get('show')} belongingType="weapons" />
+      <ListInteractablesMessage show={searchParams.get('show')} interactableType="weapons" />
 
       {/* Weapons List */}
       <SheetPagePanel title="Manage Weapons">
         <div className="flow-root mt-2">
-          <ListBelongings sheetType={sheetType} belongingType="weapons" belongingKind="Weapon" id={id} setId={setId} belongingsList={weaponsList} show={searchParams.get('show')} />
+          <ListInteractables sheetType={sheetType} interactableType="weapons" id={id} setId={setId} interactablesList={weaponsList} label="Weapon" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 

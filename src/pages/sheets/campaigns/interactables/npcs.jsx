@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
-import { CheckCircleIcon } from '@heroicons/react/outline';
-
-import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectNpcs, selectArchivedNpcs } from '../../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
@@ -12,13 +11,12 @@ import { useResource } from '../../../../hooks/useResource';
 
 import SlideOverTypes from '../../../../utils/SlideOverTypes';
 import ModalTypes from '../../../../utils/ModalTypes';
-import classNames from '../../../../utils/classNames';
 import { ResourceType } from '../../../../models/enums';
 
 import SheetPageContent from '../../../../layouts/components/sheet/SheetPageContent';
 
 import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
-import ListContainer from '../../../../components/data/ListContainer';
+import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
 
 import Button from '../../../../components/Button';
 
@@ -26,49 +24,65 @@ import DisplayNpc from '../../../../components/display/DisplayNpc';
 
 const CampaignNpcsPage = () => {
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
   const campSheet = useSelector(selectCurrentCampaign);
+
+  const npcs = useSelector(selectNpcs);
+  const archivedNpcs = useSelector(selectArchivedNpcs);
 
   const species = useResource(ResourceType.Species);
 
   const [npc, setNpc] = useState(null);
   const [id, setId] = useState(null);
 
-  useEffect(() => {
-    if (id) {
-      setNpc(campSheet.npcs.find(npc => npc._id === id));
-      return;
-    }
+  const [npcsList, setNpcsList] = useState([]);
 
-    setNpc(campSheet.npcs[0]);
-    setId(campSheet.npcs[0]?._id);
-  }, [id, campSheet]);
+  useEffect(() => {
+    // First, clear out currently selected
+    setNpc(null);
+    setId(null);
+
+    switch (searchParams.get('show')) {
+      case 'archived':
+        setNpcsList(archivedNpcs);
+        return;
+
+      case 'active':
+        setNpcsList(npcs.filter(envir => envir.active));
+        return;
+
+      case 'inactive':
+        setNpcsList(npcs.filter(envir => !envir.active));
+        return;
+
+      default:
+        setNpcsList(npcs);
+        return;
+    }
+  }, [searchParams, archivedNpcs, npcs]);
+
+  useEffect(() => {
+    if (npcsList.length) {
+      if (id) {
+        setNpc(npcsList.find(npc => npc._id === id));
+        return;
+      }
+
+      setNpc(npcsList[0]);
+      setId(npcsList[0]._id);
+    }
+  }, [id, npcsList]);
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
-      {/* All Npcs */}
+      {/* Showing Archived Weapons Notice */}
+      <ListInteractablesMessage show={searchParams.get('show')} interactableType="npcs" />
+
+      {/* Npcs List */}
       <SheetPagePanel title="Manage Npcs">
         <div className="flow-root mt-2">
-          <ListContainer
-            list={campSheet.npcs}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.npcForm })), text: 'Add a new Npc' }}
-            empty={{
-              heading: 'No Npcs',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.npcForm })), text: 'New Npc' },
-            }}
-          >
-            {campSheet.npcs.map(npc => (
-              <div key={npc._id} className={classNames('flex justify-between items-center px-2 cursor-pointer', id === npc._id ? 'bg-gray-100' : 'hover:bg-gray-50')} onClick={() => setId(npc._id)}>
-                <DisplayNpc key={npc._id} npc={npc} condensed listItem />
-                {npc.active ? (
-                  <div className="ml-2 shrink-0" title="Active">
-                    <CheckCircleIcon className="w-6 h-6 text-green-600" aria-hidden="true" />
-                  </div>
-                ) : null}
-              </div>
-            ))}
-          </ListContainer>
+          <ListInteractables sheetType="campaigns" interactableType="npcs" id={id} setId={setId} interactablesList={npcsList} label="Npc" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 
@@ -81,6 +95,7 @@ const CampaignNpcsPage = () => {
             </div>
 
             <div className="col-span-1 pl-8 space-y-4">
+              {/* Activate or Deactivate */}
               <Button
                 dark={npc.active}
                 onClick={() =>
@@ -104,27 +119,57 @@ const CampaignNpcsPage = () => {
               >
                 {npc.active ? 'Deactivate' : 'Activate'}
               </Button>
+
+              {/* Edit */}
               <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id }))}>Edit</Button>
+
+              {/* Archive or Restore */}
               <Button
-                alert
                 onClick={() =>
                   dispatch(
-                    setModal({
-                      type: ModalTypes.deleteResource,
-                      id: npc._id,
-                      data: {
-                        sheetType: 'campaigns',
-                        resourceType: 'npcs',
-                        title: `Are you sure you want to delete ${npc.name}?`,
-                        submitText: `Yes, delete ${npc.name}`,
-                        notification: { heading: 'Npc Deleted', message: `You have successfully deleted ${npc.name}.` },
-                      },
-                    })
+                    updateSheetResourceStart(
+                      'campaigns',
+                      campSheet._id,
+                      'npcs',
+                      npc._id,
+                      { archived: !npc.archived, active: false },
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `Npc ${npc.archived ? 'Restored' : 'Archived'}`,
+                          message: `You have successfully ${npc.archived ? 'restored' : 'archived'} ${npc.name}.`,
+                        },
+                      }
+                    )
                   )
                 }
               >
-                Delete
+                {npc.archived ? 'Restore' : 'Archive'}
               </Button>
+
+              {/* Delete */}
+              {npc.archived ? (
+                <Button
+                  alert
+                  onClick={() =>
+                    dispatch(
+                      setModal({
+                        type: ModalTypes.deleteResource,
+                        id: npc._id,
+                        data: {
+                          sheetType: 'campaigns',
+                          resourceType: 'npcs',
+                          title: `Are you sure you want to delete ${npc.name}?`,
+                          submitText: `Yes, delete ${npc.name}`,
+                          notification: { heading: 'Npc Deleted', message: `You have successfully deleted ${npc.name}.` },
+                        },
+                      })
+                    )
+                  }
+                >
+                  Delete
+                </Button>
+              ) : null}
             </div>
           </div>
         ) : (

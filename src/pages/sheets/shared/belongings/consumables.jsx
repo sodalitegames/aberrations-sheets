@@ -14,7 +14,7 @@ import SheetPageContent from '../../../../layouts/components/sheet/SheetPageCont
 
 import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
 import BelongingActions from '../../../../components/sections/BelongingActions';
-import ListBelongings, { ListBelongingsMessage } from '../../../../components/sections/ListBelongings';
+import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
 
 import DisplayConsumable from '../../../../components/display/DisplayConsumable';
 
@@ -36,6 +36,10 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
   const [consumablesList, setConsumablesList] = useState([]);
 
   useEffect(() => {
+    // First, clear out currently selected
+    setConsumable(null);
+    setId(null);
+
     if (sheetType === 'characters') {
       switch (searchParams.get('show')) {
         case 'archived':
@@ -70,24 +74,26 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
   }, [sheetType, searchParams, charArchivedConsumables, campArchivedConsumables, charConsumables, campConsumables]);
 
   useEffect(() => {
-    if (id) {
-      setConsumable(sheetType === 'characters' ? charConsumables.find(cons => cons._id === id) : campConsumables.find(cons => cons._id === id));
-      return;
-    }
+    if (consumablesList.length) {
+      if (id) {
+        setConsumable(consumablesList.find(cons => cons._id === id));
+        return;
+      }
 
-    setConsumable(sheetType === 'characters' ? charConsumables[0] : campConsumables[0]);
-    setId(sheetType === 'characters' ? charConsumables[0]?._id : campConsumables[0]?._id);
-  }, [sheetType, id, charConsumables, campConsumables]);
+      setConsumable(consumablesList[0]);
+      setId(consumablesList[0]._id);
+    }
+  }, [sheetType, id, consumablesList]);
 
   return (
     <SheetPageContent title="Consumables" columns={4}>
       {/* Showing Archived Consumables Notice */}
-      <ListBelongingsMessage show={searchParams.get('show')} belongingType="consumables" />
+      <ListInteractablesMessage show={searchParams.get('show')} interactableType="consumables" />
 
       {/* Consumables List */}
       <SheetPagePanel title="Manage Consumables">
         <div className="flow-root mt-2">
-          <ListBelongings sheetType={sheetType} belongingType="consumables" belongingKind="Consumable" id={id} setId={setId} belongingsList={consumablesList} show={searchParams.get('show')} />
+          <ListInteractables sheetType={sheetType} interactableType="consumables" id={id} setId={setId} interactablesList={consumablesList} label="Consumable" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 

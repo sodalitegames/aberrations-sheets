@@ -34,7 +34,7 @@ export default function RadioGroup() {
                 name="plan"
                 type="radio"
                 defaultChecked={plan.id === 'small'}
-                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300"
+                className="w-4 h-4 text-gray-900 border-gray-300 focus:ring-gray-900"
               />
             </div>
             <div className="ml-3 text-sm">
