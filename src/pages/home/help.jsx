@@ -1,6 +1,6 @@
 import PageContent from '../../layouts/components/home/PageContent';
 
-import Notice from '../../components/shared/Notice';
+import Notice from '../../components/Notice';
 
 const HelpPage = () => {
   return (

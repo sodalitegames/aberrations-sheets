@@ -9,7 +9,7 @@ import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 // import charSocket from '../sockets/character';
 import campSocket from '../sockets/campaign';
 
-import Loading from './components/app/Loading';
+import Loading from '../components/Loading';
 
 import SheetPageHeader from './components/sheet/SheetPageHeader';
 import SheetPageError from './components/sheet/SheetPageError';

@@ -7,7 +7,7 @@ import { fetchSheetsForUserStart } from '../../redux/user/user.actions';
 
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
-import Loading from '../../layouts/components/app/Loading';
+import Loading from '../../components/Loading';
 import PageContent from '../../layouts/components/home/PageContent';
 
 import CharSheetCard from '../../components/home/CharSheetCard';

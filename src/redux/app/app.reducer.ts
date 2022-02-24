@@ -2,7 +2,7 @@ import { AppActionTypes, AppAction } from './app.types';
 
 import { Modal, SlideOver, Notification, Alert } from '../../models/interfaces/app';
 
-import { replaceItemById } from '../../utils/arrays';
+import { replaceItemById } from '../../utils/helpers/arrays';
 import { store } from '../store';
 import { dismissNotification } from './app.actions';
 

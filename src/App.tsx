@@ -9,11 +9,13 @@ import { fetchCurrentUserStart } from './redux/user/user.actions';
 
 import AuthenticatePage from './pages/auth/authenticate';
 
-import SlideOver from './layouts/components/app/SlideOver';
-import Modal from './layouts/components/app/Modal';
-import Loading from './layouts/components/app/Loading';
-import Notifications from './layouts/components/app/Notifications';
-import Alert from './layouts/components/app/Alert';
+import Notifications from './layouts/components/shared/Notifications';
+import Alert from './layouts/components/shared/Alert';
+
+import SlideOver from './components/forms/SlideOver';
+import Modal from './components/forms/Modal';
+
+import Loading from './components/Loading';
 
 function App() {
   const dispatch = useDispatch();
