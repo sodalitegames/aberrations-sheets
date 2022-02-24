@@ -40,7 +40,7 @@ const CampaignInteractablesPage = () => {
       <SheetPageContent title="Interactables">
         {/* Tabs */}
         <SheetPagePanel>
-          <div className="flex justify-between items-center flex-wrap">
+          <div className="flex flex-wrap items-center justify-between">
             <TabsNavigation tabs={tabs} sheetType="campaigns" />
             <SelectButton value={selected} onChange={setSelected} options={interactableStates} />
           </div>
