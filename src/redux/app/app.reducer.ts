@@ -1,4 +1,9 @@
 import { AppActionTypes, AppAction } from './app.types';
+<<<<<<< HEAD
+
+import { Modal, SlideOver, Notification, Alert } from '../../models/interfaces/app';
+=======
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21
 
 import { Modal, SlideOver, Notification, Alert } from '../../models/interfaces/app';
 

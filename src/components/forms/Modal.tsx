@@ -9,15 +9,25 @@ import { selectResourceError } from '../../redux/resource/resource.selectors';
 import { selectCharacterError } from '../../redux/character/character.selectors';
 import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
 
+<<<<<<< HEAD:src/layouts/components/app/Modal.tsx
+import { useAppActions } from '../../../hooks/useAppActions';
+=======
 import { useAppActions } from '../../hooks/useAppActions';
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/forms/Modal.tsx
 
 import classNames from '../../utils/classNames';
 import ModalTypes from '../../utils/ModalTypes';
 import { formatValidationErrors } from '../../utils/helpers/errors';
 
+<<<<<<< HEAD:src/layouts/components/app/Modal.tsx
+import { Modal as IModal } from '../../../models/interfaces/app';
+
+import Notice, { NoticeStatus } from '../../../components/shared/Notice';
+=======
 import { Modal as IModal } from '../../models/interfaces/app';
 
 import Notice, { NoticeStatus } from '../Notice';
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/forms/Modal.tsx
 
 // Character Sheet
 import TakeARest from './modal/TakeARest';

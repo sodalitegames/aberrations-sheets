@@ -1,4 +1,8 @@
+<<<<<<< HEAD:src/components/shared/Button.tsx
+import classNames from '../../utils/classNames';
+=======
 import classNames from '../utils/classNames';
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/Button.tsx
 
 interface ButtonProps {
   onClick?: () => void;
@@ -16,7 +20,11 @@ const Button: React.FC<ButtonProps> = ({ children, classes, text, rounded, alert
   if (text) {
     return (
       <button
+<<<<<<< HEAD:src/components/shared/Button.tsx
+        className={classNames('w-full flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-600', classes)}
+=======
         className={classNames('w-full flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-600', classes ? classes : '')}
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/Button.tsx
         onClick={onClick}
         {...props}
       >
@@ -38,7 +46,11 @@ const Button: React.FC<ButtonProps> = ({ children, classes, text, rounded, alert
             ? 'text-white bg-dark hover:bg-dark-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-200'
             : 'text-gray-700 bg-white hover:bg-gray-50',
           small ? 'text-xs' : 'text-sm',
+<<<<<<< HEAD:src/components/shared/Button.tsx
+          classes
+=======
           classes ? classes : ''
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/Button.tsx
         )}
         onClick={onClick}
         disabled={disabled}

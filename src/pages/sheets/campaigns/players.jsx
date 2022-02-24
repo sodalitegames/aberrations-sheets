@@ -5,11 +5,24 @@ import { CheckCircleIcon } from '@heroicons/react/outline';
 
 import { ExternalLinkIcon } from '@heroicons/react/outline';
 
+<<<<<<< HEAD:src/pages/campaigns/players.jsx
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+
+import { setModal, setSlideOver } from '../../redux/app/app.actions';
+
+import { useResource } from '../../hooks/useResource';
+
+import ModalTypes from '../../utils/ModalTypes';
+import SlideOverTypes from '../../utils/SlideOverTypes';
+import classNames from '../../utils/classNames';
+import { ResourceType } from '../../models/enums';
+=======
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 
 import { useResource } from '../../../hooks/useResource';
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/pages/sheets/campaigns/players.jsx
 
 import ModalTypes from '../../../utils/ModalTypes';
 import SlideOverTypes from '../../../utils/SlideOverTypes';

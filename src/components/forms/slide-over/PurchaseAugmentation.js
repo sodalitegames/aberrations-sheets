@@ -1,6 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+<<<<<<< HEAD:src/components/characters/forms/slide-over/PurchaseAugmentation.js
+import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
+
+import { updateSheetStart, createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+
+import { ResourceType } from '../../../../models/enums';
+
+import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
+
+import Select from '../../../shared/form/Select';
+import Detail from '../../../shared/form/Detail';
+import { LoadingSpinner } from '../../../shared/form/SubmitButton';
+import Row from '../../../shared/form/Row';
+import { useResource } from '../../../../hooks/useResource';
+=======
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 
 import { updateSheetStart, createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
@@ -14,6 +29,7 @@ import Detail from '../elements/Detail';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 import { useResource } from '../../../hooks/useResource';
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/forms/slide-over/PurchaseAugmentation.js
 
 const PurchaseAugmentation = () => {
   const dispatch = useDispatch();

@@ -28,6 +28,8 @@ import DisplayUsable from '../../../components/display/DisplayUsable';
 
 import NewlineText from '../../../components/NewlineText';
 
+import NewlineText from '../../components/utility/NewlineText';
+
 const CharacterGameplayPage = () => {
   const dispatch = useDispatch();
 
@@ -43,7 +45,11 @@ const CharacterGameplayPage = () => {
       {/* Left column */}
       <div className="grid grid-cols-2 gap-4 md:col-span-4 lg:col-span-2">
         {/* Welcome panel */}
+<<<<<<< HEAD:src/pages/characters/gameplay.jsx
+        <PanelSection colSpan={2}>
+=======
         <SheetPagePanel colSpan={2}>
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/pages/sheets/characters/gameplay.jsx
           <div className="pb-6 sm:flex sm:items-center sm:justify-between">
             <div className="sm:flex sm:space-x-5">
               <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
@@ -200,7 +206,11 @@ const CharacterGameplayPage = () => {
       </div>
 
       {/* Augmentations */}
+<<<<<<< HEAD:src/pages/characters/gameplay.jsx
+      <PanelSection>
+=======
       <SheetPagePanel>
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/pages/sheets/characters/gameplay.jsx
         <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
           <Chip editable={{ type: ModalTypes.editSpentUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>

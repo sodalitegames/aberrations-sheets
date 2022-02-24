@@ -1,17 +1,31 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
+<<<<<<< HEAD:src/components/home/forms/slide-over/NewCharacter.tsx
+import { selectCurrentUser } from '../../../../redux/user/user.selectors';
+
+import { createSheetForUserStart } from '../../../../redux/user/user.actions';
+
+import { useResource } from '../../../../hooks/useResource';
+
+import { ResourceType } from '../../../../models/enums/ResourceType';
+import { Species } from '../../../../models/interfaces/data';
+=======
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
 
 import { createSheetForUserStart } from '../../../redux/user/user.actions';
 
 import { useResource } from '../../../hooks/useResource';
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/forms/slide-over/NewCharacter.tsx
 
 import { ResourceType } from '../../../models/enums/ResourceType';
 import { Species } from '../../../models/interfaces/data';
 
 import { SlideOverForm } from '../SlideOver';
 
+<<<<<<< HEAD:src/components/home/forms/slide-over/NewCharacter.tsx
+import DisplaySpecies from '../../../sheets/display/DisplaySpecies';
+=======
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Row from '../elements/Row';
@@ -20,6 +34,7 @@ import { LoadingSpinner } from '../elements/SubmitButton';
 import Detail from '../elements/Detail';
 
 import DisplaySpecies from '../../display/DisplaySpecies';
+>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/forms/slide-over/NewCharacter.tsx
 
 const NewCharacter: React.FC = () => {
   const dispatch = useDispatch();
