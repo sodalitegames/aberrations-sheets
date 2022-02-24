@@ -1,23 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-<<<<<<< HEAD:src/components/campaigns/forms/slide-over/CreatureForm.js
-import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
-
-import { createSheetResourceStart, updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
-
-import { useResource } from '../../../../hooks/useResource';
-
-import { ResourceType } from '../../../../models/enums';
-
-import { SlideOverForm } from '../../../../layouts/components/app/SlideOver';
-=======
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { useResource } from '../../../hooks/useResource';
->>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/forms/slide-over/CreatureForm.js
 
 import { ResourceType } from '../../../models/enums';
 

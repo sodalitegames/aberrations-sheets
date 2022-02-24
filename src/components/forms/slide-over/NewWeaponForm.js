@@ -1,24 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-<<<<<<< HEAD:src/components/sheets/forms/slide-over/NewWeaponForm.js
-import { selectCurrentCharacter } from '../../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../../redux/campaign/campaign.selectors';
-
-import { createSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
-
-import { useResource } from '../../../../hooks/useResource';
-
-import { capitalize } from '../../../../utils/strings';
-import { ResourceType } from '../../../../models/enums';
-=======
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { useResource } from '../../../hooks/useResource';
->>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/forms/slide-over/NewWeaponForm.js
 
 import { capitalize } from '../../../utils/helpers/strings';
 import { ResourceType } from '../../../models/enums';

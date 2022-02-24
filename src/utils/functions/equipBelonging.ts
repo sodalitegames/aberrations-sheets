@@ -5,13 +5,8 @@ import { setModal, setNestedModal } from '../../redux/app/app.actions';
 
 import ModalTypes from '../ModalTypes';
 import { calculateNewCurrentHp } from './updateHealth';
-<<<<<<<< HEAD:src/utils/equipBelonging.ts
-import { getBelongingTypeCapitalized } from './displayBelongings';
-import { BelongingType, SheetType } from '../models/enums';
-========
 import { getBelongingTypeCapitalized } from '../helpers/belongings';
 import { BelongingType, SheetType } from '../../models/enums';
->>>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/utils/functions/equipBelonging.ts
 
 interface Data {
   sheetType: SheetType;

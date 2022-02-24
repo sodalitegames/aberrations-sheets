@@ -9,11 +9,7 @@ import { selectResourceError } from '../../redux/resource/resource.selectors';
 import { selectCharacterError } from '../../redux/character/character.selectors';
 import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
 
-<<<<<<< HEAD:src/layouts/components/app/SlideOver.tsx
-import { useAppActions } from '../../../hooks/useAppActions';
-=======
 import { useAppActions } from '../../hooks/useAppActions';
->>>>>>> fd2f7d014a840121eb82b04bda492f4333af6e21:src/components/forms/SlideOver.tsx
 
 import classNames from '../../utils/classNames';
 import SlideOverTypes from '../../utils/SlideOverTypes';
