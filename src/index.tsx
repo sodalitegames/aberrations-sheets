@@ -15,7 +15,7 @@ import Page from './layouts/Page';
 import CharacterSheet from './layouts/CharacterSheet';
 import CampaignSheet from './layouts/CampaignSheet';
 
-import Loading from './layouts/components/app/Loading';
+import Loading from './components/Loading';
 
 // Home Pages
 import HomePage from './pages/home/home';
@@ -28,31 +28,31 @@ import HelpPage from './pages/home/help';
 import PrivacyPage from './pages/home/privacy';
 
 // Character Pages
-import CharacterGameplayPage from './pages/characters/gameplay';
-import CharacterInventoryPage from './pages/characters/inventory';
-import CharacterCharacterPage from './pages/characters/character';
+import CharacterGameplayPage from './pages/sheets/characters/gameplay';
+import CharacterInventoryPage from './pages/sheets/characters/inventory';
+import CharacterCharacterPage from './pages/sheets/characters/character';
 
 // Campaign Pages
-import CampaignGameplayPage from './pages/campaigns/gameplay';
-import CampaignCombatPage from './pages/campaigns/combat';
-import CampaignCampaignPage from './pages/campaigns/campaign';
-import CampaignPlayersPage from './pages/campaigns/players';
-import CampaignInteractablesPage from './pages/campaigns/interactables';
+import CampaignGameplayPage from './pages/sheets/campaigns/gameplay';
+import CampaignCombatPage from './pages/sheets/campaigns/combat';
+import CampaignCampaignPage from './pages/sheets/campaigns/campaign';
+import CampaignPlayersPage from './pages/sheets/campaigns/players';
+import CampaignInteractablesPage from './pages/sheets/campaigns/interactables';
 
 // Nested Campaign Interactables Pages
-import CampaignNpcsPage from './pages/campaigns/interactables/npcs';
-import CampaignEnvironmentsPage from './pages/campaigns/interactables/environments';
-import CampaignCreaturesPage from './pages/campaigns/interactables/creatures';
+import CampaignNpcsPage from './pages/sheets/campaigns/interactables/npcs';
+import CampaignEnvironmentsPage from './pages/sheets/campaigns/interactables/environments';
+import CampaignCreaturesPage from './pages/sheets/campaigns/interactables/creatures';
 
 // Shared Sheet Pages
-import SheetNotesPage from './pages/sheets/notes';
-import SheetResourcesPage from './pages/sheets/resources';
+import SheetNotesPage from './pages/sheets/shared/notes';
+import SheetResourcesPage from './pages/sheets/shared/resources';
 
 // Nested Shared Belongings Pages
-import SheetBelongingsWeaponsPage from './pages/sheets/belongings/weapons';
-import SheetBelongingsWearablesPage from './pages/sheets/belongings/wearables';
-import SheetBelongingsConsumablesPage from './pages/sheets/belongings/consumables';
-import SheetBelongingsUsablesPage from './pages/sheets/belongings/usables';
+import SheetBelongingsWeaponsPage from './pages/sheets/shared/belongings/weapons';
+import SheetBelongingsWearablesPage from './pages/sheets/shared/belongings/wearables';
+import SheetBelongingsConsumablesPage from './pages/sheets/shared/belongings/consumables';
+import SheetBelongingsUsablesPage from './pages/sheets/shared/belongings/usables';
 
 import './index.css';
 

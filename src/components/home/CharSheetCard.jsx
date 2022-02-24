@@ -1,6 +1,6 @@
 import PagePanel from '../../layouts/components/home/PagePanel';
 
-import DescriptionList from '../shared/data/DescriptionList';
+import DescriptionList from '../data/DescriptionList';
 
 export default function CharSheetCard({ charSheet }) {
   return (

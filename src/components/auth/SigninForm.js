@@ -5,8 +5,8 @@ import { signInStart } from '../../redux/user/user.actions';
 
 import { selectUserError } from '../../redux/user/user.selectors';
 
-import Notice from '../shared/Notice';
-import SubmitButton from '../shared/form/SubmitButton';
+import Notice from '../Notice';
+import SubmitButton from '../forms/elements/SubmitButton';
 
 export default function SigninForm() {
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ export default function SigninForm() {
 
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div className="bg-white dark:bg-dark-200 py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div className="px-4 py-8 bg-white shadow dark:bg-dark-200 sm:rounded-lg sm:px-10">
         <form className="space-y-6" onSubmit={submitHandler}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium">
@@ -55,7 +55,7 @@ export default function SigninForm() {
                 type="email"
                 value={email}
                 autoComplete="email"
-                className="input-primary w-full border border-gray-300 dark:border-gray-800 rounded-md"
+                className="w-full border border-gray-300 rounded-md input-primary dark:border-gray-800"
                 onChange={e => setEmail(e.target.value)}
               />
             </div>
@@ -72,7 +72,7 @@ export default function SigninForm() {
                 type="password"
                 value={password}
                 autoComplete="current-password"
-                className="input-primary w-full border border-gray-300 dark:border-gray-800 rounded-md"
+                className="w-full border border-gray-300 rounded-md input-primary dark:border-gray-800"
                 onChange={e => setPassword(e.target.value)}
               />
             </div>
@@ -84,10 +84,10 @@ export default function SigninForm() {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-primary focus:ring-primary dark:focus:ring-primary-fade dark:bg-dark-400 border-gray-300 dark:border-gray-800 rounded"
+                className="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary dark:focus:ring-primary-fade dark:bg-dark-400 dark:border-gray-800"
                 checked
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm">
+              <label htmlFor="remember-me" className="block ml-2 text-sm">
                 Remember me
               </label>
             </div>

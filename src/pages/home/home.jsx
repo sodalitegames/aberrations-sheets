@@ -5,7 +5,7 @@ import { selectCurrentUser } from '../../redux/user/user.selectors';
 import PageContent from '../../layouts/components/home/PageContent';
 import PagePanel from '../../layouts/components/home/PagePanel';
 
-import Notice from '../../components/shared/Notice';
+import Notice from '../../components/Notice';
 
 const HomePage = () => {
   const currentUser = useSelector(selectCurrentUser);

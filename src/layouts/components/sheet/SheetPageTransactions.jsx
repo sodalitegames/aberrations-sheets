@@ -5,11 +5,11 @@ import { ChatAltIcon } from '@heroicons/react/outline';
 
 import classNames from '../../../utils/classNames';
 
-import DisplayTransaction from '../../../components/sheets/display/DisplayTransaction';
+import DisplayTransaction from '../../../components/display/DisplayTransaction';
 
 const TabPanelFooter = ({ showButton, buttonText, showMessage, messageText, buttonClick }) => {
   return showButton ? (
-    <div className="mt-4 flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 text-gray-400 hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+    <div className="flow-root px-2 py-2 mt-4 text-gray-400 transition duration-150 ease-in-out rounded-md hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
       <span className="flex items-center justify-center">
         <button className="text-sm font-medium cursor-pointer" onClick={buttonClick}>
           {buttonText}
@@ -17,7 +17,7 @@ const TabPanelFooter = ({ showButton, buttonText, showMessage, messageText, butt
       </span>
     </div>
   ) : showMessage ? (
-    <div className="mt-4 flow-root px-2 py-2 transition duration-150 ease-in-out rounded-md text-gray-400">
+    <div className="flow-root px-2 py-2 mt-4 text-gray-400 transition duration-150 ease-in-out rounded-md">
       <span className="flex items-center justify-center">
         <span className="text-sm font-medium">{messageText}</span>
       </span>
@@ -92,9 +92,9 @@ const SheetPageTransactions = ({ pending, resolved, type }) => {
         )}
       >
         <span className="sr-only">View transactions</span>
-        <ChatAltIcon className="h-6 w-6" aria-hidden="true" />
+        <ChatAltIcon className="w-6 h-6" aria-hidden="true" />
         {/* Show notification if there are pending transactions the player has received, but not if there are pending transactions they have sent, because they can't do anything about those */}
-        {pending.received.length ? <span className="absolute top-1 right-0 rounded-full bg-red-600/95 text-white flex justify-center items-center w-3 h-3 leading-none"></span> : null}
+        {pending.received.length ? <span className="absolute right-0 flex items-center justify-center w-3 h-3 leading-none text-white rounded-full top-1 bg-red-600/95"></span> : null}
       </Popover.Button>
 
       <Transition
@@ -106,8 +106,8 @@ const SheetPageTransactions = ({ pending, resolved, type }) => {
         leaveFrom="opacity-100 translate-y-0"
         leaveTo="opacity-0 translate-y-1"
       >
-        <Popover.Panel className="absolute z-10 w-72 px-4 mt-3 transform -translate-x-1/2 left-1/2 sm:px-0 lg:max-w-3xl">
-          <div className="overflow-y-scroll hide-scrollbar max-h-screen rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+        <Popover.Panel className="absolute z-10 px-4 mt-3 transform -translate-x-1/2 w-72 left-1/2 sm:px-0 lg:max-w-3xl">
+          <div className="max-h-screen overflow-y-scroll rounded-lg shadow-lg hide-scrollbar ring-1 ring-black ring-opacity-5">
             <div className="relative flex flex-col bg-white">
               <div className="w-full max-w-md px-2 sm:px-0">
                 <Tab.Group>
