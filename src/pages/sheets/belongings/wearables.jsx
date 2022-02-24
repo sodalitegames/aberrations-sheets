@@ -1,30 +1,26 @@
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
-import { CheckCircleIcon } from '@heroicons/react/outline';
-
-import { selectCurrentCharacter, selectEquippedWearables, selectEquipmentMods, selectWearables as selectCharWearables } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign, selectWearables as selectCampWearables } from '../../../redux/campaign/campaign.selectors';
-
-import { setModal, setSlideOver } from '../../../redux/app/app.actions';
-import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
-
-import SlideOverTypes from '../../../utils/SlideOverTypes';
-import ModalTypes from '../../../utils/ModalTypes';
-import classNames from '../../../utils/classNames';
-import equipBelonging from '../../../utils/equipBelonging';
+import {
+  selectCurrentCharacter,
+  selectEquippedWearables,
+  selectWearables as selectCharWearables,
+  selectArchivedWearables as selectCharArchivedWearables,
+  selectEquipmentMods,
+} from '../../../redux/character/character.selectors';
+import { selectCurrentCampaign, selectWearables as selectCampWearables, selectArchivedWearables as selectCampArchivedWearables } from '../../../redux/campaign/campaign.selectors';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
 import PanelSection from '../../../components/sheets/PanelSection';
-import ListContainer from '../../../components/shared/data/ListContainer';
-
-import Button from '../../../components/shared/Button';
+import BelongingActions from '../../../components/sheets/BelongingActions';
+import ListBelongings, { ListBelongingsMessage } from '../../../components/sheets/ListBelongings';
 
 import DisplayWearable from '../../../components/sheets/display/DisplayWearable';
 
 const SheetBelongingsWearablesPage = ({ sheetType }) => {
-  const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
@@ -33,157 +29,90 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
 
   const charWearables = useSelector(selectCharWearables);
   const campWearables = useSelector(selectCampWearables);
+  const charArchivedWearables = useSelector(selectCharArchivedWearables);
+  const campArchivedWearables = useSelector(selectCampArchivedWearables);
 
   const [wearable, setWearable] = useState(null);
   const [id, setId] = useState(null);
 
+  const [wearablesList, setWearablesList] = useState([]);
+
   useEffect(() => {
-    if (id) {
-      setWearable(sheetType === 'characters' ? charWearables.find(wear => wear._id === id) : campWearables.find(wear => wear._id === id));
-      return;
+    if (sheetType === 'characters') {
+      switch (searchParams.get('show')) {
+        case 'archived':
+          setWearablesList(charArchivedWearables);
+          return;
+
+        default:
+          setWearablesList(charWearables);
+          return;
+      }
     }
 
-    setWearable(sheetType === 'characters' ? charWearables[0] : campWearables[0]);
-    setId(sheetType === 'characters' ? charWearables[0]?._id : campWearables[0]?._id);
-  }, [sheetType, id, charWearables, campWearables]);
+    if (sheetType === 'campaigns') {
+      switch (searchParams.get('show')) {
+        case 'archived':
+          setWearablesList(campArchivedWearables);
+          return;
+
+        case 'active':
+          setWearablesList(campWearables.filter(weap => weap.active));
+          return;
+
+        case 'inactive':
+          setWearablesList(campWearables.filter(weap => !weap.active));
+          return;
+
+        default:
+          setWearablesList(campWearables);
+          return;
+      }
+    }
+  }, [sheetType, searchParams, charArchivedWearables, campArchivedWearables, charWearables, campWearables]);
+
+  useEffect(() => {
+    if (wearablesList.length) {
+      if (id) {
+        setWearable(wearablesList.find(wear => wear._id === id));
+        return;
+      }
+
+      setWearable(wearablesList[0]);
+      setId(wearablesList[0]._id);
+    }
+  }, [sheetType, id, wearablesList]);
 
   return (
     <SheetPageContent title="Wearables" columns={4}>
-      {/* All Wearables */}
+      {/* Showing Archived Wearables Notice */}
+      <ListBelongingsMessage show={searchParams.get('show')} belongingType="wearables" />
+
+      {/* Wearables List */}
       <PanelSection title="Manage Wearables">
         <div className="flow-root mt-2">
-          <ListContainer
-            list={sheetType === 'characters' ? charWearables : campWearables}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, data: { sheetType: sheetType } })), text: 'Add a new Wearable' }}
-            empty={{
-              heading: 'No Wearables',
-              message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, data: { sheetType: sheetType } })), text: 'New Wearable' },
-            }}
-          >
-            {(sheetType === 'characters' ? charWearables : campWearables).map(wearable => (
-              <div
-                key={wearable._id}
-                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === wearable._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
-                onClick={() => setId(wearable._id)}
-              >
-                <DisplayWearable key={wearable._id} wearable={wearable} sheetType={sheetType} condensed listItem />
-
-                {/* Display if it's a character sheet wearable is equipped */}
-                {sheetType === 'characters' && wearable.equipped ? (
-                  <div className="shrink-0 ml-2" title="Equipped">
-                    <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                  </div>
-                ) : null}
-
-                {/* Display if it's a campaign sheet and wearable is active */}
-                {sheetType === 'campaigns' && wearable.active ? (
-                  <div className="shrink-0 ml-2" title="Active">
-                    <CheckCircleIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                  </div>
-                ) : null}
-              </div>
-            ))}
-          </ListContainer>
+          <ListBelongings sheetType={sheetType} belongingType="wearables" belongingKind="Wearable" id={id} setId={setId} belongingsList={wearablesList} show={searchParams.get('show')} />
         </div>
       </PanelSection>
 
       {/* Selected Wearable */}
       <PanelSection title="Selected Wearable" colSpan={3}>
         {wearable ? (
-          <div className="grid gap-8 grid-cols-3 divide-x divide-gray-200">
+          <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
             <div className="col-span-2">
               <DisplayWearable wearable={wearable} sheetType={sheetType} />
             </div>
 
-            <div className="col-span-1 space-y-4 pl-8">
-              {sheetType === 'characters' ? (
-                <Button
-                  dark={wearable.equipped}
-                  onClick={() => equipBelonging({ sheetType, sheet: charSheet, belongingType: 'wearables', belonging: wearable, equippedList: equippedWearables, equipmentMods })}
-                >
-                  {wearable.equipped ? 'Unequip' : 'Equip'}
-                </Button>
-              ) : null}
-              {sheetType === 'campaigns' ? (
-                wearable.npcId ? (
-                  <Button
-                    dark
-                    onClick={() =>
-                      dispatch(
-                        updateSheetResourceStart(
-                          sheetType,
-                          campSheet._id,
-                          'wearables',
-                          wearable._id,
-                          { npcId: null },
-                          { notification: { status: 'success', heading: 'Wearable Unassigned', message: `You have successfully unassigned ${wearable.name}.` } }
-                        )
-                      )
-                    }
-                  >
-                    Unassign
-                  </Button>
-                ) : (
-                  <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: wearable._id, data: { type: 'wearables', name: wearable.name } }))}>Assign</Button>
-                )
-              ) : null}
-              {sheetType === 'campaigns' ? (
-                <Button
-                  dark={wearable.active}
-                  onClick={() =>
-                    dispatch(
-                      updateSheetResourceStart(
-                        sheetType,
-                        campSheet._id,
-                        'wearables',
-                        wearable._id,
-                        { active: !wearable.active },
-                        {
-                          notification: {
-                            status: 'success',
-                            heading: `Wearable ${wearable.active ? 'Deactivated' : 'Activated'}`,
-                            message: `You have successfully ${wearable.active ? 'deactivated' : 'activated'} ${wearable.name}.`,
-                          },
-                        }
-                      )
-                    )
-                  }
-                >
-                  {wearable.active ? 'Deactivate' : 'Activate'}
-                </Button>
-              ) : null}
-              <Button
-                disabled={wearable.equipped}
-                onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: 'wearables', document: wearable } }))}
-              >
-                Give or Sell
-              </Button>
-              {wearable.equipped ? <p className="text-sm italic text-gray-400">You must unequip this wearable before you can give or sell it.</p> : null}
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.wearableForm, id: wearable._id, data: { sheetType: sheetType } }))}>Edit</Button>
-              <Button
-                alert
-                disabled={wearable.equipped}
-                onClick={() =>
-                  dispatch(
-                    setModal({
-                      type: ModalTypes.deleteResource,
-                      id: wearable._id,
-                      data: {
-                        sheetType: sheetType,
-                        resourceType: 'wearables',
-                        title: `Are you sure you want to delete ${wearable.name}?`,
-                        submitText: `Yes, delete ${wearable.name}`,
-                        equipped: wearable.equipped,
-                        notification: { heading: 'Wearable Deleted', message: `You have successfully deleted ${wearable.name}.` },
-                      },
-                    })
-                  )
-                }
-              >
-                Delete
-              </Button>
-              {wearable.equipped ? <p className="text-sm italic text-gray-400">You must unequip this wearable before you can delete it.</p> : null}
+            <div className="col-span-1 pl-8 space-y-4">
+              <BelongingActions
+                sheetType={sheetType}
+                sheet={sheetType === 'characters' ? charSheet : campSheet}
+                belongingType="wearables"
+                belonging={wearable}
+                belongingKind="Wearable"
+                equippedBelongings={equippedWearables}
+                equipmentMods={equipmentMods}
+              />
             </div>
           </div>
         ) : (

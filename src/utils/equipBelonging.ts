@@ -6,8 +6,24 @@ import { setModal, setNestedModal } from '../redux/app/app.actions';
 import ModalTypes from './ModalTypes';
 import { calculateNewCurrentHp } from './updateHealth';
 import { getBelongingTypeCapitalized } from './displayBelongings';
+import { BelongingType, SheetType } from '../models/enums';
 
-export const correctStatMod = mod => {
+interface Data {
+  sheetType: SheetType;
+  sheet: any;
+  belongingType: BelongingType;
+  belonging: any;
+  equippedList: any[];
+  equipmentMods?: {
+    fortitude: number;
+    agility: number;
+    persona: number;
+    aptitude: number;
+  };
+  nested?: boolean;
+}
+
+export const correctStatMod = (mod: number) => {
   // Maximum modifier amount is five
   if (mod > 5) return 5;
 
@@ -17,7 +33,7 @@ export const correctStatMod = mod => {
   return mod;
 };
 
-const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedList, nested, equipmentMods }, config) => {
+const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedList, nested, equipmentMods = { fortitude: 0, agility: 0, persona: 0, aptitude: 0 } }: Data, config?: Object): void => {
   if (sheetType !== 'characters') return;
 
   if (belonging.unequippable) return alert('This belonging is unequippable');

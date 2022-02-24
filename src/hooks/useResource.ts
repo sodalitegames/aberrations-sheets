@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import { selectSpecies, selectAugmentationGroups, selectWeapons, selectConsumableCategories, selectCreatureTypes } from '../redux/resource/resource.selectors';
+import { selectSpecies, selectAugmentationGroups, selectWeapons, selectConsumableCategories, selectCreatureTypes, selectNpcTypes } from '../redux/resource/resource.selectors';
 
 import { useResourceActions } from './useResourceActions';
 
@@ -15,6 +15,7 @@ export const useResource = (resource: ResourceType) => {
   const weapons = useSelector(selectWeapons);
   const consumableCategories = useSelector(selectConsumableCategories);
   const creatureTypes = useSelector(selectCreatureTypes);
+  const npcTypes = useSelector(selectNpcTypes);
 
   useEffect(() => {
     switch (resource) {
@@ -33,10 +34,13 @@ export const useResource = (resource: ResourceType) => {
       case ResourceType.CreatureTypes:
         if (!creatureTypes) fetchResourceStart(ResourceType.CreatureTypes);
         return;
+      case ResourceType.NpcTypes:
+        if (!npcTypes) fetchResourceStart(ResourceType.NpcTypes);
+        return;
       default:
         return;
     }
-  }, [fetchResourceStart, resource, species, augmentationGroups, weapons, consumableCategories, creatureTypes]);
+  }, [fetchResourceStart, resource, species, augmentationGroups, weapons, consumableCategories, creatureTypes, npcTypes]);
 
   const getRequestedResource = (resource: ResourceType) => {
     switch (resource) {
@@ -50,6 +54,8 @@ export const useResource = (resource: ResourceType) => {
         return consumableCategories;
       case ResourceType.CreatureTypes:
         return creatureTypes;
+      case ResourceType.NpcTypes:
+        return npcTypes;
       default:
         return null;
     }

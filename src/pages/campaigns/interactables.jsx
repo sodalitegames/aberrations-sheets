@@ -4,9 +4,9 @@ import { Outlet } from 'react-router-dom';
 import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
 
 import PanelSection from '../../components/sheets/PanelSection';
+import TabsNavigation from '../../components/sheets/TabsNavigation';
 
 import SelectButton from '../../components/shared/SelectButton';
-import TabsNavigation from '../../components/sheets/TabsNavigation';
 
 const tabs = [
   { name: 'Npcs', href: 'npcs' },
@@ -22,7 +22,7 @@ const interactableStates = [
   { title: 'All', href: 'all', description: 'View and edit both active and inactive Interactables. You will not see your archived interactables here.', current: false },
   { title: 'Active', href: 'active', description: 'Active Interactables show up on the gameplay tab, and if an Npc or Creature, the combat table. ', current: true },
   { title: 'Inactive', href: 'inactive', description: 'Inactive Interactables are hidden elsewhere, but can be viewed and edited here.', current: false },
-  { title: 'Archived', href: 'archive', description: 'The interactables that you have previously had, but gave away, sold, or deleted.', current: false },
+  { title: 'Archived', href: 'archived', description: 'The interactables that you have previously had, but gave away, sold, or deleted.', current: false },
 ];
 
 const CampaignInteractablesPage = () => {
