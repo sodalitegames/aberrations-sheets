@@ -23,7 +23,7 @@ const INITIAL_STATE = {
   error: null,
 };
 
-const resourceReducer = (state: ResourceState = INITIAL_STATE, action: ResourceAction) => {
+const resourceReducer = (state: ResourceState = INITIAL_STATE, action: ResourceAction): ResourceState => {
   switch (action.type) {
     case ResourceActionTypes.FETCH_RESOURCE_SUCCESS:
       return {

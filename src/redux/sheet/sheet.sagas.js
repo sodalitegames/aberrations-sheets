@@ -4,7 +4,7 @@ import SheetActionTypes from './sheet.types';
 
 import ChangesTypes from '../../utils/ChangesTypes';
 
-import { addNotification, setSlideOver, setModal, setNestedModal } from '../app/app.actions';
+import { addNotification, closeSlideOver, closeModal, closeNestedModal } from '../app/app.actions';
 import {
   fetchCurrentSheetSuccess,
   fetchCurrentSheetFailure,
@@ -87,9 +87,9 @@ export function* updateSheet({ payload: { sheetType, sheetId, body, config } }) 
     if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
-    if (config?.slideOver) yield put(setSlideOver(null));
-    if (config?.modal) yield put(setModal(null));
-    if (config?.nestedModal) yield put(setNestedModal(null));
+    if (config?.slideOver) yield put(closeSlideOver());
+    if (config?.modal) yield put(closeModal());
+    if (config?.nestedModal) yield put(closeNestedModal());
   } catch (err) {
     yield put(updateSheetFailure(sheetType, err.response.data));
   }
@@ -116,9 +116,9 @@ export function* deleteSheet({ payload: { sheetType, sheetId, config } }) {
     if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
-    if (config?.slideOver) yield put(setSlideOver(null));
-    if (config?.modal) yield put(setModal(null));
-    if (config?.nestedModal) yield put(setNestedModal(null));
+    if (config?.slideOver) yield put(closeSlideOver());
+    if (config?.modal) yield put(closeModal());
+    if (config?.nestedModal) yield put(closeNestedModal());
   } catch (err) {
     yield put(deleteSheetFailure(sheetType, err.response.data));
   }
@@ -178,9 +178,9 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
     if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
-    if (config?.slideOver) yield put(setSlideOver(null));
-    if (config?.modal) yield put(setModal(null));
-    if (config?.nestedModal) yield put(setNestedModal(null));
+    if (config?.slideOver) yield put(closeSlideOver());
+    if (config?.modal) yield put(closeModal());
+    if (config?.nestedModal) yield put(closeNestedModal());
   } catch (err) {
     yield put(createSheetResourceFailure(sheetType, err.response.data));
   }
@@ -311,9 +311,9 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
     if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
-    if (config?.slideOver) yield put(setSlideOver(null));
-    if (config?.modal) yield put(setModal(null));
-    if (config?.nestedModal) yield put(setNestedModal(null));
+    if (config?.slideOver) yield put(closeSlideOver());
+    if (config?.modal) yield put(closeModal());
+    if (config?.nestedModal) yield put(closeNestedModal());
   } catch (err) {
     yield put(updateSheetResourceFailure(sheetType, err.response.data));
   }
@@ -361,9 +361,9 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
     if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
-    if (config?.slideOver) yield put(setSlideOver(null));
-    if (config?.modal) yield put(setModal(null));
-    if (config?.nestedModal) yield put(setNestedModal(null));
+    if (config?.slideOver) yield put(closeSlideOver());
+    if (config?.modal) yield put(closeModal());
+    if (config?.nestedModal) yield put(closeNestedModal());
   } catch (err) {
     yield put(deleteSheetResourceFailure(sheetType, err.response.data));
   }
@@ -392,9 +392,9 @@ export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, bo
       if (config?.notification) yield put(addNotification(config?.notification));
 
       // Close out the modal, nestedModal, or slideover if it is open
-      if (config?.slideOver) yield put(setSlideOver(null));
-      if (config?.modal) yield put(setModal(null));
-      if (config?.nestedModal) yield put(setNestedModal(null));
+      if (config?.slideOver) yield put(closeSlideOver());
+      if (config?.modal) yield put(closeModal());
+      if (config?.nestedModal) yield put(closeNestedModal());
     } catch (err) {
       yield put(removeCharacterFromCampaignFailure(sheetType, err.response.data));
     }
@@ -417,9 +417,9 @@ export function* removeCharacterFromCampaign({ payload: { sheetType, sheetId, bo
       if (config?.notification) yield put(addNotification(config?.notification));
 
       // Close out the modal, nestedModal, or slideover if it is open
-      if (config?.slideOver) yield put(setSlideOver(null));
-      if (config?.modal) yield put(setModal(null));
-      if (config?.nestedModal) yield put(setNestedModal(null));
+      if (config?.slideOver) yield put(closeSlideOver());
+      if (config?.modal) yield put(closeModal());
+      if (config?.nestedModal) yield put(closeNestedModal());
     } catch (err) {
       yield put(removeCharacterFromCampaignFailure(sheetType, err.response.data));
     }

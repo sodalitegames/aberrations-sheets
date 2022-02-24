@@ -2,14 +2,14 @@ import { Link } from 'react-router-dom';
 
 import SheetPageContent from './SheetPageContent';
 
-import PanelSection from '../../../components/sheets/PanelSection';
+import SheetPagePanel from './SheetPagePanel';
 import classNames from '../../../utils/classNames';
 
 const SheetPageError = ({ type, error }) => {
   return (
     <SheetPageContent title="Error">
       {/* Error Panel */}
-      <PanelSection>
+      <SheetPagePanel>
         <div className="sm:flex p-16 justify-between items-center">
           <div className="sm:flex items-center sm:ml-6">
             <p className={classNames('text-4xl font-extrabold sm:text-5xl', type === 'characters' ? 'text-accent2-deep' : type === 'campaigns' ? 'text-accent1-deep' : 'text-gray-900')}>
@@ -43,7 +43,7 @@ const SheetPageError = ({ type, error }) => {
             </Link> */}
           </div>
         </div>
-      </PanelSection>
+      </SheetPagePanel>
     </SheetPageContent>
   );
 };

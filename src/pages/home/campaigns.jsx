@@ -5,7 +5,7 @@ import { selectUsersCampaigns, selectUsersCampaignsFetched } from '../../redux/u
 
 import { fetchSheetsForUserStart } from '../../redux/user/user.actions';
 
-import Loading from '../../layouts/components/app/Loading';
+import Loading from '../../components/Loading';
 import PageContent from '../../layouts/components/home/PageContent';
 
 import CampSheetCard from '../../components/home/CampSheetCard';

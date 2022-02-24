@@ -6,7 +6,7 @@ import classNames from '../../utils/classNames';
 import PageContent from '../../layouts/components/home/PageContent';
 import PagePanel from '../../layouts/components/home/PagePanel';
 
-import Notice from '../../components/shared/Notice';
+import Notice from '../../components/Notice';
 
 const colors = [
   { name: 'Pink', bgColor: 'bg-pink-500', selectedColor: 'ring-pink-500' },
