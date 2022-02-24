@@ -27,7 +27,7 @@ const NpcForm = ({ id }) => {
   const campSheet = useSelector(selectCurrentCampaign);
 
   const fetchedSpecies = useResource(ResourceType.Species);
-  const fetchedTypes = useResource(ResourceType.CreatureTypes);
+  const fetchedTypes = useResource(ResourceType.NpcTypes);
 
   const [speciesList, setSpeciesList] = useState(null);
   const [typesList, setTypesList] = useState(null);
@@ -137,9 +137,6 @@ const NpcForm = ({ id }) => {
     // Get level data based on the type and the saved id
     const levelData = type.level.find(lev => lev.id === levelId);
 
-    // Get the current npc data
-    const currentNpc = campSheet.npcs.find(npc => npc._id === id);
-
     let body = {
       name,
       diplomacy,
@@ -148,20 +145,22 @@ const NpcForm = ({ id }) => {
       background,
       // calculate currentHp and stats based on the type and level
       currentHp: (species.stats.fortitude + levelData.fortitude) * 5,
-      fortitude: { ...currentNpc.fortitude, points: species.stats.fortitude + levelData.fortitude },
-      agility: { ...currentNpc.agility, points: species.stats.agility + levelData.agility },
-      persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
-      aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
     };
 
     if (id) {
       // Check for properties that are only there when editing an npc
       if (!wallet) return alert('Must provide a wallet amount');
 
+      // Get the current npc data
+      const currentNpc = campSheet.npcs.find(npc => npc._id === id);
+
       body = {
         ...body,
         wallet,
-        // update the stats, possibly?
+        fortitude: { ...currentNpc.fortitude, points: species.stats.fortitude + levelData.fortitude },
+        agility: { ...currentNpc.agility, points: species.stats.agility + levelData.agility },
+        persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
+        aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
       };
 
       dispatch(
@@ -179,6 +178,10 @@ const NpcForm = ({ id }) => {
       speciesId: species.id,
       speciesName: species.name,
       levelId,
+      fortitude: { points: species.stats.fortitude + levelData.fortitude },
+      agility: { points: species.stats.agility + levelData.agility },
+      persona: { points: species.stats.persona + levelData.persona },
+      aptitude: { points: species.stats.aptitude + levelData.aptitude },
     };
 
     dispatch(
