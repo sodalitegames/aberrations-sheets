@@ -1,12 +1,15 @@
+import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import * as resourceActions from '../redux/resource/resource.actions';
+import * as rootActions from '../redux/root-actions';
 
-console.log('Resource Actions', resourceActions);
+console.log('Root Actions', rootActions);
 
 export const useActions = () => {
   const dispatch = useDispatch();
 
-  return bindActionCreators(resourceActions, dispatch);
+  return useMemo(() => {
+    return bindActionCreators(rootActions, dispatch);
+  }, [dispatch]);
 };

@@ -1,7 +1,7 @@
 export enum WeaponType {
-  Standard = 'standard',
-  Custom = 'custom',
-  Improvised = 'improvised',
+  standard = 'standard',
+  custom = 'custom',
+  improvised = 'improvised',
 }
 
 export enum AssociatedStat {

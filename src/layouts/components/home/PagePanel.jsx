@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import Button from '../../../components/shared/Button';
+import Button from '../../../components/Button';
 
 const PagePanel = ({ heading, subheading, children, link, footer }) => {
   return (

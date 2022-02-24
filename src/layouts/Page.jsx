@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
-import Loading from './components/app/Loading';
+import Loading from '../components/Loading';
 import PageNavigation from './components/home/PageNavigation';
 import PageHeader from './components/home/PageHeader';
 import Footer from './components/shared/Footer';

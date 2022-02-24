@@ -16,7 +16,7 @@ import {
   createSheetForUserSuccess,
   createSheetForUserFailure,
 } from './user.actions';
-import { setModal, setSlideOver, addNotification } from '../app/app.actions';
+import { closeModal, closeSlideOver, addNotification } from '../app/app.actions';
 
 import authApi, { signUserIn, signUserUp, getUser } from '../../apis/auth.api';
 import sheetsApi, { getSheetsForPlayer, createSheetForPlayer } from '../../apis/sheets.api';
@@ -173,9 +173,9 @@ export function* createSheetForUser({ payload: { sheetType, body, config } }) {
     if (config?.notification) yield put(addNotification(config?.notification));
 
     // Close out the modal, nestedModal, or slideover if it is open
-    if (config?.slideOver) yield put(setSlideOver(null));
-    if (config?.modal) yield put(setModal(null));
-    if (config?.nestedModal) yield put(setModal(null));
+    if (config?.slideOver) yield put(closeSlideOver());
+    if (config?.modal) yield put(closeModal());
+    if (config?.nestedModal) yield put(closeModal());
   } catch (err) {
     yield put(createSheetForUserFailure(err.response.data));
   }
