@@ -1,4 +1,6 @@
 import { getSpeciesAbility } from '../../utils/helpers/species';
+import ModalTypes from '../../utils/ModalTypes';
+import SlideOverTypes from '../../utils/SlideOverTypes';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -9,6 +11,9 @@ import DisplayWeapon from './DisplayWeapon';
 import DisplayWearable from './DisplayWearable';
 import DisplayConsumable from './DisplayConsumable';
 import DisplayUsable from './DisplayUsable';
+
+import Heading from '../Heading';
+import { useActions } from '../../hooks/useActions';
 
 const NpcDetails = ({ npc, species }) => {
   return (
@@ -31,6 +36,8 @@ const NpcDetails = ({ npc, species }) => {
 };
 
 const DisplayNpc = ({ npc, species, condensed, listItem }) => {
+  const { setModal, setSlideOver } = useActions();
+
   if (listItem) {
     if (condensed) {
       return (
@@ -48,12 +55,22 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
   }
 
   return (
-    <div className="py-3">
-      <h3 className="mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">{npc.name}</h3>
+    <div className="py-3 -mt-10">
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id }) }}>{npc.name}</Heading>
       <NpcDetails npc={npc} species={species} />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Active Stats</h3>
-      {/* Do I want to show stat experience and advantage as well? */}
+      <Heading
+        edit={{
+          menu: [
+            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude' }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility' }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona' }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude' }) },
+          ],
+        }}
+      >
+        Active Stats
+      </Heading>
       <DescriptionList
         list={[
           { name: 'Fortitude', values: [npc.fortitude.points + npc.fortitude.modifier], half: true },
@@ -64,7 +81,18 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Passive Stats</h3>
+      <Heading>Stat Advantage</Heading>
+      <DescriptionList
+        list={[
+          { name: 'Fortitude', values: [npc.fortitude.advantage], half: true },
+          { name: 'Agility', values: [npc.agility.advantage], half: true },
+          { name: 'Persona', values: [npc.persona.advantage], half: true },
+          { name: 'Aptitude', values: [npc.aptitude.advantage], half: true },
+        ]}
+        classes="my-2"
+      />
+
+      <Heading>Passive Stats</Heading>
       <DescriptionList
         list={[
           { name: 'Health', values: [`${npc.currentHp} / ${npc.maxHp}`], half: true },
@@ -75,7 +103,18 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Conditions</h3>
+      <Heading
+        edit={{
+          menu: [
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed' }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony' }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured' }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed' }) },
+          ],
+        }}
+      >
+        Conditions
+      </Heading>
       <DescriptionList
         list={[
           { name: 'Slowed', values: [npc.conditions.slowed], half: true },
@@ -86,10 +125,10 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Description</h3>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.charDescriptionForm }) }}>Description</Heading>
       <InfoList list={[npc.description]} />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Background</h3>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.charBackgroundForm }) }}>Background</Heading>
       <InfoList list={[npc.background]} />
 
       <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Augmentations</h3>

@@ -1,3 +1,5 @@
+import { useActions } from '../../hooks/useActions';
+
 import SlideOverTypes from '../../utils/SlideOverTypes';
 import ModalTypes from '../../utils/ModalTypes';
 import { capitalize } from '../../utils/helpers/strings';
@@ -5,6 +7,8 @@ import { capitalize } from '../../utils/helpers/strings';
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
+
+import Heading from '../Heading';
 
 const CreatureDetails = ({ creature, showStats }) => {
   return (
@@ -27,6 +31,8 @@ const CreatureDetails = ({ creature, showStats }) => {
 };
 
 const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
+  const { setModal, setSlideOver } = useActions();
+
   if (listItem) {
     if (condensed) {
       return (
@@ -60,12 +66,22 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
   }
 
   return (
-    <div className="py-3">
-      <h3 className="text-lg border-b border-gray-200 mb-4 font-semibold text-gray-800">{creature.name}</h3>
+    <div className="py-3 -mt-10">
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id }) }}>{creature.name}</Heading>
       <CreatureDetails creature={creature} />
 
-      <h3 className="text-lg border-b border-gray-200 mt-8 mb-4 font-semibold text-gray-800">Active Stats</h3>
-      {/* Do I want to show stat advantage as well? */}
+      <Heading
+        edit={{
+          menu: [
+            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude' }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility' }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona' }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude' }) },
+          ],
+        }}
+      >
+        Active Stats
+      </Heading>
       <DescriptionList
         list={[
           { name: 'Fortitude', values: [creature.fortitude.points], half: true },
@@ -76,7 +92,18 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="text-lg border-b border-gray-200 mt-8 mb-4 font-semibold text-gray-800">Passive Stats</h3>
+      <Heading>Stat Advantage</Heading>
+      <DescriptionList
+        list={[
+          { name: 'Fortitude', values: [creature.fortitude.advantage], half: true },
+          { name: 'Agility', values: [creature.agility.advantage], half: true },
+          { name: 'Persona', values: [creature.persona.advantage], half: true },
+          { name: 'Aptitude', values: [creature.aptitude.advantage], half: true },
+        ]}
+        classes="my-2"
+      />
+
+      <Heading>Passive Stats</Heading>
       <DescriptionList
         list={[
           { name: 'Health', values: [`${creature.currentHp} / ${creature.maxHp}`], half: true },
@@ -87,7 +114,18 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="text-lg border-b border-gray-200 mt-8 mb-4 font-semibold text-gray-800">Conditions</h3>
+      <Heading
+        edit={{
+          menu: [
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed' }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony' }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured' }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed' }) },
+          ],
+        }}
+      >
+        Conditions
+      </Heading>
       <DescriptionList
         list={[
           { name: 'Slowed', values: [creature.conditions.slowed], half: true },

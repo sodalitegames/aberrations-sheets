@@ -7,6 +7,8 @@ import { ExternalLinkIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
+import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
+
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 
 import { useResource } from '../../../hooks/useResource';
@@ -32,8 +34,8 @@ const CampaignPlayersPage = () => {
 
   const species = useResource(ResourceType.Species);
 
-  const [player, setPlayer] = useState(campSheet.players[0]);
-  const [id, setId] = useState(null);
+  const [player, setPlayer] = useState(campSheet.players.length ? campSheet.players[0] : null);
+  const [id, setId] = useState(campSheet.players.length ? campSheet.players[0]._id : null);
 
   useEffect(() => {
     if (id) {
@@ -59,7 +61,11 @@ const CampaignPlayersPage = () => {
             }}
           >
             {campSheet.players.map(player => (
-              <div key={player._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(player._id)}>
+              <div
+                key={player._id}
+                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === player._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+                onClick={() => setId(player._id)}
+              >
                 <DisplayPlayer key={player._id} player={player} condensed listItem />
                 {player.active ? (
                   <div className="ml-2 shrink-0" title="Equipped">
@@ -96,7 +102,31 @@ const CampaignPlayersPage = () => {
               </div>
 
               {/* Player Actions */}
-              <Button>{player.active ? 'Deactivate' : 'Activate'}</Button>
+
+              {/* Activate or Deactivate */}
+              <Button
+                dark={player.active}
+                onClick={() =>
+                  dispatch(
+                    updateSheetStart(
+                      'characters',
+                      player._id,
+                      { active: !player.active },
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `Player ${player.active ? 'Deactivated' : 'Activated'}`,
+                          message: `You have successfully ${player.active ? 'deactivated' : 'activated'} ${player.characterName}.`,
+                        },
+                      }
+                    )
+                  )
+                }
+              >
+                {player.active ? 'Deactivate' : 'Activate'}
+              </Button>
+
+              {/* Remove from Campaign */}
               <Button
                 onClick={() =>
                   dispatch(

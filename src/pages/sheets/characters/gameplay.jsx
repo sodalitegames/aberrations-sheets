@@ -25,7 +25,6 @@ import DisplayWeapon from '../../../components/display/DisplayWeapon';
 import DisplayWearable from '../../../components/display/DisplayWearable';
 import DisplayConsumable from '../../../components/display/DisplayConsumable';
 import DisplayUsable from '../../../components/display/DisplayUsable';
-
 import NewlineText from '../../../components/NewlineText';
 
 const CharacterGameplayPage = () => {

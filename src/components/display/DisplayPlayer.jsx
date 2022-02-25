@@ -1,4 +1,7 @@
+import { useActions } from '../../hooks/useActions';
+
 import { getSpeciesAbility } from '../../utils/helpers/species';
+import ModalTypes from '../../utils/ModalTypes';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -9,6 +12,8 @@ import DisplayWeapon from './DisplayWeapon';
 import DisplayWearable from './DisplayWearable';
 import DisplayConsumable from './DisplayConsumable';
 import DisplayUsable from './DisplayUsable';
+
+import Heading from '../Heading';
 
 const PlayerDetails = ({ player, species }) => {
   return (
@@ -29,6 +34,8 @@ const PlayerDetails = ({ player, species }) => {
 };
 
 const DisplayPlayer = ({ player, species, condensed, listItem }) => {
+  const { setModal } = useActions();
+
   if (listItem) {
     if (condensed) {
       return (
@@ -46,12 +53,23 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
   }
 
   return (
-    <div className="py-3">
-      <h3 className="mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">{player.characterName}</h3>
+    <div className="py-3 -mt-10">
+      <Heading>{player.characterName}</Heading>
       <PlayerDetails player={player} species={species} />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Active Stats</h3>
-      {/* Do I want to show stat experience and advantage as well? */}
+      <Heading
+        edit={{
+          menu: [
+            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude' }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility' }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona' }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude' }) },
+          ],
+        }}
+      >
+        Active Stats
+      </Heading>
+      {/* Do I want to show stat experience as well? */}
       <DescriptionList
         list={[
           { name: 'Fortitude', values: [player.fortitude.points + player.fortitude.modifier], half: true },
@@ -62,7 +80,18 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Passive Stats</h3>
+      <Heading>Stat Advantage</Heading>
+      <DescriptionList
+        list={[
+          { name: 'Fortitude', values: [player.fortitude.advantage], half: true },
+          { name: 'Agility', values: [player.agility.advantage], half: true },
+          { name: 'Persona', values: [player.persona.advantage], half: true },
+          { name: 'Aptitude', values: [player.aptitude.advantage], half: true },
+        ]}
+        classes="my-2"
+      />
+
+      <Heading>Passive Stats</Heading>
       <DescriptionList
         list={[
           { name: 'Health', values: [`${player.currentHp} / ${player.maxHp}`], half: true },
@@ -73,7 +102,18 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Conditions</h3>
+      <Heading
+        edit={{
+          menu: [
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed' }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony' }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured' }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed' }) },
+          ],
+        }}
+      >
+        Conditions
+      </Heading>
       <DescriptionList
         list={[
           { name: 'Slowed', values: [player.conditions.slowed], half: true },
@@ -84,10 +124,10 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Character Description</h3>
+      <Heading>Character Description</Heading>
       <InfoList list={[player.charDescription]} />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Character Background</h3>
+      <Heading>Character Background</Heading>
       <InfoList list={[player.charBackground]} />
 
       <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Augmentations</h3>
@@ -96,7 +136,6 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           <DisplayAugmentation key={aug._id} aug={aug} noButtonPanel />
         ))}
       </ul>
-
       <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Equipped Weapons</h3>
       <ul className="grid grid-cols-2">
         {player.weapons
@@ -105,7 +144,6 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
             <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed />
           ))}
       </ul>
-
       <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Equipped Wearables</h3>
       <ul className="grid grid-cols-2">
         {player.wearables
@@ -114,7 +152,6 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
             <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed />
           ))}
       </ul>
-
       <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Equipped Consumables</h3>
       <ul className="grid grid-cols-2">
         {player.consumables

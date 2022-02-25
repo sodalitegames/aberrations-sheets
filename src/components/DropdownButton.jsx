@@ -7,15 +7,15 @@ import classNames from '../utils/classNames';
 
 const DropdownButton = ({ actions }) => {
   return (
-    <span className="relative inline-flex rounded-md shadow-sm">
+    <span className="relative z-50 inline-flex rounded-md shadow-sm">
       <button
         type="button"
-        className="relative z-10 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+        className="relative z-50 inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-red-200 border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-50 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
       >
         Actions
       </button>
       <Menu as="span" className="relative block -ml-px">
-        <Menu.Button className="relative z-10 inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-red-200 border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+        <Menu.Button className="relative z-50 inline-flex items-center px-2 py-2 text-sm font-medium text-gray-500 bg-red-200 border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-50 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
           <span className="sr-only">Open options</span>
           <ChevronDownIcon className="w-5 h-5" aria-hidden="true" />
         </Menu.Button>
