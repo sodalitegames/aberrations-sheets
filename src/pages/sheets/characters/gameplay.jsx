@@ -1,6 +1,13 @@
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCharacter, selectEquippedWeapons, selectEquippedWearables, selectEquippedConsumables, selectEquippedUsables } from '../../../redux/character/character.selectors';
+import {
+  selectCurrentCharacter,
+  selectEquippedWeapons,
+  selectEquippedWearables,
+  selectEquippedConsumables,
+  selectEquippedUsables,
+  selectEquipmentMods,
+} from '../../../redux/character/character.selectors';
 
 import { setModal, setSlideOver } from '../../../redux/app/app.actions';
 
@@ -36,6 +43,7 @@ const CharacterGameplayPage = () => {
   const equippedWearables = useSelector(selectEquippedWearables);
   const equippedConsumables = useSelector(selectEquippedConsumables);
   const equippedUsables = useSelector(selectEquippedUsables);
+  const equipmentMods = useSelector(selectEquipmentMods);
 
   return (
     <SheetPageContent title="Gameplay" columns={3}>
@@ -124,11 +132,19 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedWeapons}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons' } })), text: 'Manage equipped Weapons' }}
+              button={{
+                click: () =>
+                  dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons', sheet: charSheet, sheetType: 'characters', equippedList: equippedWeapons } })),
+                text: 'Manage equipped Weapons',
+              }}
               empty={{
                 heading: 'No Equipped Weapons',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons' } })), text: 'Equip Weapon' },
+                button: {
+                  click: () =>
+                    dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons', sheet: charSheet, sheetType: 'characters', equippedList: equippedWeapons } })),
+                  text: 'Equip Weapon',
+                },
               }}
             >
               {equippedWeapons.map(weapon => (
@@ -143,11 +159,29 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedWearables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'wearables' } })), text: 'Manage equipped Wearables' }}
+              button={{
+                click: () =>
+                  dispatch(
+                    setSlideOver({
+                      type: SlideOverTypes.manageEquippedBelongings,
+                      data: { type: 'wearables', sheet: charSheet, sheetType: 'characters', equippedList: equippedWearables, equipmentMods },
+                    })
+                  ),
+                text: 'Manage equipped Wearables',
+              }}
               empty={{
                 heading: 'No Equipped Wearables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'wearables' } })), text: 'Equip Wearable' },
+                button: {
+                  click: () =>
+                    dispatch(
+                      setSlideOver({
+                        type: SlideOverTypes.manageEquippedBelongings,
+                        data: { type: 'wearables', sheet: charSheet, sheetType: 'characters', equippedList: equippedWearables, equipmentMods },
+                      })
+                    ),
+                  text: 'Equip Wearable',
+                },
               }}
             >
               {equippedWearables.map(wearable => (
@@ -164,11 +198,23 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedConsumables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables' } })), text: 'Manage equipped Consumables' }}
+              button={{
+                click: () =>
+                  dispatch(
+                    setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables', sheet: charSheet, sheetType: 'characters', equippedList: equippedConsumables } })
+                  ),
+                text: 'Manage equipped Consumables',
+              }}
               empty={{
                 heading: 'No Equipped Consumables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables' } })), text: 'Equip Consumable' },
+                button: {
+                  click: () =>
+                    dispatch(
+                      setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables', sheet: charSheet, sheetType: 'characters', equippedList: equippedConsumables } })
+                    ),
+                  text: 'Equip Consumable',
+                },
               }}
             >
               {equippedConsumables.map(consumable => (
@@ -183,11 +229,19 @@ const CharacterGameplayPage = () => {
           <div className="flow-root mt-2">
             <ListContainer
               list={equippedUsables}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables' } })), text: 'Manage equipped Usables' }}
+              button={{
+                click: () =>
+                  dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables', sheet: charSheet, sheetType: 'characters', equippedList: equippedUsables } })),
+                text: 'Manage equipped Usables',
+              }}
               empty={{
                 heading: 'No Equipped Usables',
                 message: 'Get started by equipping your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables' } })), text: 'Equip Usable' },
+                button: {
+                  click: () =>
+                    dispatch(setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables', sheet: charSheet, sheetType: 'characters', equippedList: equippedUsables } })),
+                  text: 'Equip Usable',
+                },
               }}
             >
               {equippedUsables.map(usable => (
@@ -202,18 +256,24 @@ const CharacterGameplayPage = () => {
       <SheetPagePanel>
         <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
-          <Chip editable={{ type: ModalTypes.editSpentUpgradePoints }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
+          <Chip editable={{ type: ModalTypes.editSpentUpgradePoints, data: { type: 'character', entity: charSheet } }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
             {charSheet.upgradePoints} Upgrade {charSheet.upgradePoints === 1 ? 'Point' : 'Points'}
           </Chip>
         </div>
         <div className="flow-root mt-6">
           <ListContainer
             list={charSheet.augmentations}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.purchaseAugmentation })), text: 'Purchase a new Augmentation' }}
+            button={{
+              click: () => dispatch(setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: charSheet._id, entity: charSheet } })),
+              text: 'Purchase a new Augmentation',
+            }}
             empty={{
               heading: 'No Augmentations',
               message: 'Get started by purchasing your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.purchaseAugmentation })), text: 'Purchase Augmentation' },
+              button: {
+                click: () => dispatch(setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: charSheet._id, entity: charSheet } })),
+                text: 'Purchase Augmentation',
+              },
             }}
           >
             {charSheet.augmentations.map(aug => (

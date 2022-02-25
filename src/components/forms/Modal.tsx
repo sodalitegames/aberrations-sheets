@@ -42,6 +42,7 @@ import DeleteResource from './modal/DeleteResource';
 import UpdateInviteStatus from './modal/UpdateInviteStatus';
 import ManageTransaction from './modal/ManageTransaction';
 import RemoveCharacterFromCampaign from './modal/RemoveCharacterFromCampaign';
+import { Stat, Condition } from '../../models/enums';
 
 interface ModalFormProps {
   title: string;
@@ -68,10 +69,10 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
       {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney /> : null}
       {modal && modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
-      {modal && modal.type === ModalTypes.editSpentUpgradePoints ? <SpentUpgradePoints /> : null}
+      {modal && modal.type === ModalTypes.editSpentUpgradePoints ? <SpentUpgradePoints data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editMortality ? <Mortality /> : null}
-      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id} /> : null}
-      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id} /> : null}
+      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id as Stat} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as Condition} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.errorEquippingBelonging ? <ErrorEquippingBelonging data={modal.data} nested={nested} /> : null}
       {/* Campaign Sheet */}
       {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}

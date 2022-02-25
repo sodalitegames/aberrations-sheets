@@ -8,8 +8,6 @@ enum SlideOverTypes {
   rollDice = 'ROLL_DICE',
   manageEquippedBelongings = 'MANAGE_EQUIPPED_BELONGINGS',
   purchaseAugmentation = 'PURCHASE_AUGMENTATION',
-  charDescriptionForm = 'CHARACTER_DESCRIPTION_FORM',
-  charBackgroundForm = 'CHARACTER_BACKGROUND_FORM',
 
   // Campaign Forms
   manageCampaign = 'MANAGE_CAMPAIGN',
@@ -20,6 +18,7 @@ enum SlideOverTypes {
   npcForm = 'NPC_FORM',
   creatureForm = 'CREATURE_FORM',
   environmentForm = 'ENVIRONMENT_FORM',
+  manageAssignedBelongings = 'MANAGE_ASSIGNED_BELONGINGS',
 
   // Shared Forms
   newWeaponForm = 'NEW_WEAPON_FORM',
@@ -29,6 +28,8 @@ enum SlideOverTypes {
   usableForm = 'USABLE_FORM',
   logForm = 'LOG_FORM',
   newTransactionForm = 'NEW_TRANSACTION_FORM',
+  editDescriptionForm = 'EDIT_DESCRIPTION_FORM',
+  editBackgroundForm = 'EDIT_BACKGROUND_FORM',
 }
 
 export default SlideOverTypes;

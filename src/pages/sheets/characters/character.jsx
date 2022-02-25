@@ -45,7 +45,7 @@ const CharacterCharacterPage = () => {
         <SheetPagePanel title="Character Description">
           <div className="flow-root">
             <InfoList list={[charSheet.charDescription]} />
-            <ButtonPanel editable={{ type: SlideOverTypes.charDescriptionForm }} />
+            <ButtonPanel editable={{ type: SlideOverTypes.editDescriptionForm, data: { type: 'character', description: charSheet.charDescription } }} />
           </div>
         </SheetPagePanel>
 
@@ -53,7 +53,7 @@ const CharacterCharacterPage = () => {
         <SheetPagePanel title="Character Background">
           <div className="flow-root">
             <InfoList list={[charSheet.charBackground]} />
-            <ButtonPanel editable={{ type: SlideOverTypes.charBackgroundForm }} />
+            <ButtonPanel editable={{ type: SlideOverTypes.editBackgroundForm, data: { type: 'character', background: charSheet.charBackground } }} />
           </div>
         </SheetPagePanel>
       </div>

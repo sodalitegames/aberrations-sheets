@@ -123,7 +123,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
               sheet._id,
               belongingType,
               belonging._id,
-              { archived: !belonging.archived, equipped: false, active: false },
+              { archived: !belonging.archived, equipped: false, active: false, npcId: null },
               {
                 notification: {
                   status: 'success',

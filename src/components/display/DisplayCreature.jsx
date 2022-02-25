@@ -31,7 +31,7 @@ const CreatureDetails = ({ creature, showStats }) => {
 };
 
 const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
-  const { setModal, setSlideOver } = useActions();
+  const { setModal } = useActions();
 
   if (listItem) {
     if (condensed) {
@@ -67,16 +67,31 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
 
   return (
     <div className="py-3 -mt-10">
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id }) }}>{creature.name}</Heading>
+      <Heading
+        edit={{
+          menu: [
+            {
+              text: 'Mortality',
+              click: () => setModal({ type: ModalTypes.editMortality, id: creature._id }),
+            },
+            {
+              text: 'Health',
+              click: () => setModal({ type: ModalTypes.takeDamage, id: creature._id }),
+            },
+          ],
+        }}
+      >
+        {creature.name}
+      </Heading>
       <CreatureDetails creature={creature} />
 
       <Heading
         edit={{
           menu: [
-            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude' }) },
-            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility' }) },
-            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona' }) },
-            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude' }) },
+            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude', data: { type: 'creature', resource: creature } }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'creature', resource: creature } }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'creature', resource: creature } }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'creature', resource: creature } }) },
           ],
         }}
       >
@@ -117,10 +132,10 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed' }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony' }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured' }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed' }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'creature', resource: creature } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'creature', resource: creature } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'creature', resource: creature } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'creature', resource: creature } }) },
           ],
         }}
       >

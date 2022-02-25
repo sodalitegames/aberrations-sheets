@@ -98,11 +98,11 @@ export const rollDice = (dice: number, advantage: number, stat: Stat): RollData 
   if (ones >= dice / 2) {
     successes = 0;
 
-    if (stat === Stat.Fortitude || stat === Stat.Agility) {
+    if (stat === Stat.fortitude || stat === Stat.agility) {
       injured++;
     }
 
-    if (stat === Stat.Persona || stat === Stat.Aptitude) {
+    if (stat === Stat.persona || stat === Stat.aptitude) {
       disturbed++;
     }
   }
@@ -193,11 +193,11 @@ export const calcRollData = (rollResults: RollResults): RollData => {
   if (ones >= dice / 2) {
     successes = 0;
 
-    if (stat === Stat.Fortitude || stat === Stat.Agility) {
+    if (stat === Stat.fortitude || stat === Stat.agility) {
       injured++;
     }
 
-    if (stat === Stat.Persona || stat === Stat.Aptitude) {
+    if (stat === Stat.persona || stat === Stat.aptitude) {
       disturbed++;
     }
   }

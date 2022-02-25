@@ -56,16 +56,39 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
 
   return (
     <div className="py-3 -mt-10">
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id }) }}>{npc.name}</Heading>
+      <Heading
+        edit={{
+          menu: [
+            {
+              text: 'Wallet',
+              click: () => setModal({ type: ModalTypes.payMoney, id: npc._id }),
+            },
+            {
+              text: 'Mortality',
+              click: () => setModal({ type: ModalTypes.editMortality, id: npc._id }),
+            },
+            {
+              text: 'Upgrade Points',
+              click: () => setModal({ type: ModalTypes.editSpentUpgradePoints, data: { type: 'npc', entity: npc } }),
+            },
+            {
+              text: 'Health',
+              click: () => setModal({ type: ModalTypes.takeDamage, id: npc._id }),
+            },
+          ],
+        }}
+      >
+        {npc.name}
+      </Heading>
       <NpcDetails npc={npc} species={species} />
 
       <Heading
         edit={{
           menu: [
-            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude' }) },
-            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility' }) },
-            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona' }) },
-            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude' }) },
+            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude', data: { type: 'npc', resource: npc } }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'npc', resource: npc } }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'npc', resource: npc } }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'npc', resource: npc } }) },
           ],
         }}
       >
@@ -106,10 +129,10 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed' }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony' }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured' }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed' }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'npc', resource: npc } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'npc', resource: npc } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'npc', resource: npc } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'npc', resource: npc } }) },
           ],
         }}
       >
@@ -125,41 +148,71 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.charDescriptionForm }) }}>Description</Heading>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { type: 'npc', description: npc.description, resourceId: npc._id } }) }}>Description</Heading>
       <InfoList list={[npc.description]} />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.charBackgroundForm }) }}>Background</Heading>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { type: 'npc', background: npc.background, resourceId: npc._id } }) }}>Background</Heading>
       <InfoList list={[npc.background]} />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Augmentations</h3>
+      <Heading edit={{ text: 'Purchase', click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entity: npc } }) }}>
+        Augmentations
+      </Heading>
       <ul className="grid">
         {npc.augmentations?.map(aug => (
           <DisplayAugmentation key={aug._id} aug={aug} noButtonPanel />
         ))}
       </ul>
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Weapons</h3>
+      <Heading
+        edit={{
+          text: 'Manage',
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'weapons', npc: npc } }),
+        }}
+      >
+        Weapons
+      </Heading>
       <ul className="grid grid-cols-2">
         {npc.weapons?.map(weapon => (
           <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed />
         ))}
       </ul>
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Wearables</h3>
+      <Heading
+        edit={{
+          text: 'Manage',
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'wearables', npc: npc } }),
+        }}
+      >
+        Wearables
+      </Heading>
       <ul className="grid grid-cols-2">
         {npc.wearables?.map(wearable => (
           <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed />
         ))}
       </ul>
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Consumables</h3>
+      <Heading
+        edit={{
+          text: 'Manage',
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'consumables', npc: npc } }),
+        }}
+      >
+        Consumables
+      </Heading>
       <ul className="grid grid-cols-2">
         {npc.consumables?.map(consumable => (
           <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="campaigns" listItem condensed />
         ))}
       </ul>
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Usables</h3>
+      <Heading
+        edit={{
+          text: 'Manage',
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'usables', npc: npc } }),
+        }}
+      >
+        Usables
+      </Heading>
       <ul className="grid grid-cols-2">
         {npc.usables?.map(usable => (
           <DisplayUsable key={usable._id} usable={usable} sheetType="campaigns" listItem condensed />

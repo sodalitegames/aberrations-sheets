@@ -3,7 +3,7 @@ import NewlineText from '../../NewlineText';
 
 interface DetailProps {
   label: string;
-  detail: string;
+  detail: string | number;
   status?: 'error' | 'success';
   slideOver?: boolean;
 }
@@ -11,7 +11,7 @@ interface DetailProps {
 const Detail: React.FC<DetailProps> = ({ label, detail, status, slideOver }) => {
   if (slideOver) {
     return (
-      <div className="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+      <div className="px-4 space-y-1 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
         <div>
           <h4 className={classNames(status === 'error' ? 'text-red-700' : 'text-gray-900', 'block text-sm font-medium sm:mt-px')}>{label}</h4>
         </div>

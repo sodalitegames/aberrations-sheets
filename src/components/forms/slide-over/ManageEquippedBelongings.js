@@ -1,14 +1,5 @@
 import { Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import {
-  selectCurrentCharacter,
-  selectEquippedWeapons,
-  selectEquippedWearables,
-  selectEquippedConsumables,
-  selectEquippedUsables,
-  selectEquipmentMods,
-} from '../../../redux/character/character.selectors';
+import { useDispatch } from 'react-redux';
 
 import { setNestedModal } from '../../../redux/app/app.actions';
 
@@ -28,19 +19,12 @@ import DisplayUsable from '../../display/DisplayUsable';
 const ManageEquippedBelongings = ({ data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const equippedWeapons = useSelector(selectEquippedWeapons);
-  const equippedWearables = useSelector(selectEquippedWearables);
-  const equippedConsumables = useSelector(selectEquippedConsumables);
-  const equippedUsables = useSelector(selectEquippedUsables);
-  const equipmentMods = useSelector(selectEquipmentMods);
-
   return (
-    <SlideOverContainer title={`Manage equipped ${capitalize(data.type)}`} description={`Manage your equipped ${capitalize(data.type)} below.`} cancelText="Done">
+    <SlideOverContainer title={`Manage equipped ${capitalize(data.type)}`} description={`Manage equipped ${capitalize(data.type)} below.`} cancelText="Done">
       <div className="px-6">
-        {charSheet[data.type].length ? (
+        {data.sheet[data.type].length ? (
           <ListContainer>
-            {charSheet[data.type].map(belonging => {
+            {data.sheet[data.type].map(belonging => {
               if (data.type === 'weapons') {
                 return (
                   <Fragment key={belonging._id}>
@@ -55,16 +39,17 @@ const ManageEquippedBelongings = ({ data }) => {
                           click: () =>
                             equipBelonging({
                               sheetType: 'characters',
-                              sheet: charSheet,
+                              sheet: data.sheet,
                               belongingType: 'weapons',
                               belonging: belonging,
-                              equippedList: equippedWeapons,
+                              equippedList: data.equippedList,
                               nested: true,
                             }),
                         },
                         {
                           text: 'View',
-                          click: () => dispatch(setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'characters', resourceType: 'weapons' } })),
+                          click: () =>
+                            dispatch(setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'weapons' } })),
                         },
                       ]}
                     />
@@ -86,17 +71,20 @@ const ManageEquippedBelongings = ({ data }) => {
                           click: () =>
                             equipBelonging({
                               sheetType: 'characters',
-                              sheet: charSheet,
+                              sheet: data.sheet,
                               belongingType: 'wearables',
                               belonging: belonging,
-                              equippedList: equippedWearables,
-                              equipmentMods,
+                              equippedList: data.equippedList,
+                              equipmentMods: data.equipmentMods,
                               nested: true,
                             }),
                         },
                         {
                           text: 'View',
-                          click: () => dispatch(setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'characters', resourceType: 'wearables' } })),
+                          click: () =>
+                            dispatch(
+                              setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'wearables' } })
+                            ),
                         },
                       ]}
                     />
@@ -118,16 +106,19 @@ const ManageEquippedBelongings = ({ data }) => {
                           click: () =>
                             equipBelonging({
                               sheetType: 'characters',
-                              sheet: charSheet,
+                              sheet: data.sheet,
                               belongingType: 'consumables',
                               belonging: belonging,
-                              equippedList: equippedConsumables,
+                              equippedList: data.equippedList,
                               nested: true,
                             }),
                         },
                         {
                           text: 'View',
-                          click: () => dispatch(setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'characters', resourceType: 'consumables' } })),
+                          click: () =>
+                            dispatch(
+                              setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'consumables' } })
+                            ),
                         },
                       ]}
                     />
@@ -149,16 +140,17 @@ const ManageEquippedBelongings = ({ data }) => {
                           click: () =>
                             equipBelonging({
                               sheetType: 'characters',
-                              sheet: charSheet,
+                              sheet: data.sheet,
                               belongingType: 'usables',
                               belonging: belonging,
-                              equippedList: equippedUsables,
+                              equippedList: data.equippedList,
                               nested: true,
                             }),
                         },
                         {
                           text: 'View',
-                          click: () => dispatch(setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'characters', resourceType: 'usables' } })),
+                          click: () =>
+                            dispatch(setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'usables' } })),
                         },
                       ]}
                     />

@@ -33,6 +33,15 @@ const ShowBelonging = ({ id, data, nested }) => {
         setBelonging(currentBelonging);
       }
     }
+
+    if (data.sheetType === 'players') {
+      if (campSheet && id && data) {
+        // set current belonging to view
+        const player = campSheet.players.find(player => player._id === data.playerId);
+        const currentBelonging = player[data.resourceType].find(bel => bel._id === id);
+        setBelonging(currentBelonging);
+      }
+    }
   }, [charSheet, campSheet, id, data]);
 
   return (
