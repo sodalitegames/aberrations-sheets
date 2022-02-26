@@ -9,7 +9,7 @@ import { selectResourceError } from '../../redux/resource/resource.selectors';
 import { selectCharacterError } from '../../redux/character/character.selectors';
 import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
 
-import { useAppActions } from '../../hooks/useAppActions';
+import { useActions } from '../../hooks/useActions';
 
 import classNames from '../../utils/classNames';
 import SlideOverTypes from '../../utils/SlideOverTypes';
@@ -66,7 +66,7 @@ interface SlideOverContainerProps {
 }
 
 export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
-  const { closeSlideOver } = useAppActions();
+  const { closeSlideOver } = useActions();
 
   const characterError = useSelector(selectCharacterError);
   const campaignError = useSelector(selectCampaignError);
@@ -130,7 +130,7 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
 };
 
 export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, description, cancelText, children }) => {
-  const { closeSlideOver } = useAppActions();
+  const { closeSlideOver } = useActions();
 
   return (
     <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
@@ -176,7 +176,7 @@ export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, d
 };
 
 const SlideOver: React.FC = () => {
-  const { closeSlideOver } = useAppActions();
+  const { closeSlideOver } = useActions();
 
   const slideOver = useSelector(selectSlideOver);
 

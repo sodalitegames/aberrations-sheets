@@ -1,6 +1,4 @@
-import { useDispatch } from 'react-redux';
-
-import { setModal, setNestedModal } from '../../redux/app/app.actions';
+import { useActions } from '../../hooks/useActions';
 
 import ModalTypes from '../../utils/ModalTypes';
 import { formatDate } from '../../utils/helpers/dates';
@@ -10,7 +8,7 @@ import DescriptionList from '../data/DescriptionList';
 import Button from '../Button';
 
 const DisplayInvite = ({ invite, noActions, sheetType }) => {
-  const dispatch = useDispatch();
+  const { setModal, setNestedModal } = useActions();
 
   return (
     <ListItem heading={`${invite.campaignName} by ${invite.ccName}`}>
@@ -26,43 +24,18 @@ const DisplayInvite = ({ invite, noActions, sheetType }) => {
       {!noActions && invite.status === 'Pending' ? (
         sheetType === 'characters' ? (
           <div className="mt-4">
-            <Button onClick={() => dispatch(setModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Accepted' } }))}>Accept Invite</Button>
-            <Button text classes="mt-2" onClick={() => dispatch(setModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Declined' } }))}>
+            <Button onClick={() => setModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Accepted' } })}>Accept Invite</Button>
+            <Button text classes="mt-2" onClick={() => setModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Declined' } })}>
               Decline Invite
             </Button>
           </div>
         ) : (
           <div className="mt-4">
-            <Button onClick={() => dispatch(setNestedModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Revoked' } }))}>Revoke Invite</Button>
+            <Button onClick={() => setNestedModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Revoked' } })}>Revoke Invite</Button>
             <Button
               text
               classes="mt-2"
               onClick={() =>
-                dispatch(
-                  setNestedModal({
-                    type: ModalTypes.deleteResource,
-                    id: invite._id,
-                    data: {
-                      sheetType: sheetType,
-                      resourceType: 'invites',
-                      title: 'Are you sure you want to delete this invite?',
-                      submitText: 'Yes, delete this invite',
-                      notification: { heading: 'Invite Deleted', message: `You have successfully deleted invite to Character #${invite.charSheetId}.` },
-                    },
-                  })
-                )
-              }
-            >
-              Delete Invite
-            </Button>
-          </div>
-        )
-      ) : !noActions ? (
-        <div className="mt-4">
-          <Button
-            text
-            onClick={() =>
-              dispatch(
                 setNestedModal({
                   type: ModalTypes.deleteResource,
                   id: invite._id,
@@ -74,7 +47,28 @@ const DisplayInvite = ({ invite, noActions, sheetType }) => {
                     notification: { heading: 'Invite Deleted', message: `You have successfully deleted invite to Character #${invite.charSheetId}.` },
                   },
                 })
-              )
+              }
+            >
+              Delete Invite
+            </Button>
+          </div>
+        )
+      ) : !noActions ? (
+        <div className="mt-4">
+          <Button
+            text
+            onClick={() =>
+              setNestedModal({
+                type: ModalTypes.deleteResource,
+                id: invite._id,
+                data: {
+                  sheetType: sheetType,
+                  resourceType: 'invites',
+                  title: 'Are you sure you want to delete this invite?',
+                  submitText: 'Yes, delete this invite',
+                  notification: { heading: 'Invite Deleted', message: `You have successfully deleted invite to Character #${invite.charSheetId}.` },
+                },
+              })
             }
           >
             Delete Invite

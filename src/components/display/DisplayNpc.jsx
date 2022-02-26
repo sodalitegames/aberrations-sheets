@@ -61,11 +61,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
           menu: [
             {
               text: 'Wallet',
-              click: () => setModal({ type: ModalTypes.payMoney, id: npc._id }),
+              click: () => setModal({ type: ModalTypes.editWallet, data: { type: 'npc', entity: npc } }),
             },
             {
               text: 'Mortality',
-              click: () => setModal({ type: ModalTypes.editMortality, id: npc._id }),
+              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'npc', entity: npc } }),
             },
             {
               text: 'Upgrade Points',
@@ -73,7 +73,7 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
             },
             {
               text: 'Health',
-              click: () => setModal({ type: ModalTypes.takeDamage, id: npc._id }),
+              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'npc', entity: npc } }),
             },
           ],
         }}

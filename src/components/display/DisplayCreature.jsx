@@ -72,11 +72,11 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
           menu: [
             {
               text: 'Mortality',
-              click: () => setModal({ type: ModalTypes.editMortality, id: creature._id }),
+              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'creature', entity: creature } }),
             },
             {
               text: 'Health',
-              click: () => setModal({ type: ModalTypes.takeDamage, id: creature._id }),
+              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'creature', entity: creature } }),
             },
           ],
         }}

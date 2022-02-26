@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCharacter, selectPermissions } from '../../../redux/character/character.selectors';
 
-import { setSlideOver } from '../../../redux/app/app.actions';
+import { useActions } from '../../../hooks/useActions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
@@ -24,7 +24,7 @@ import DisplayInvite from '../../../components/display/DisplayInvite';
 import DisplayCampaign from '../../../components/display/DisplayCampaign';
 
 const CharacterCharacterPage = () => {
-  const dispatch = useDispatch();
+  const { setSlideOver } = useActions();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const permissions = useSelector(selectPermissions);
@@ -66,11 +66,11 @@ const CharacterCharacterPage = () => {
           ) : (
             <ListContainer
               list={charSheet.characterLogs}
-              button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'Add a new Character Log' }}
+              button={{ click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } }), text: 'Add a new Character Log' }}
               empty={{
                 heading: 'No Character Logs',
                 message: 'Get started by creating your first one now',
-                button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } })), text: 'New Character Log' },
+                button: { click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } }), text: 'New Character Log' },
               }}
             >
               {charSheet.characterLogs.map(log => (

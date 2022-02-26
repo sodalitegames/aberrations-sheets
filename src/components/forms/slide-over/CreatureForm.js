@@ -32,15 +32,12 @@ const CreatureForm = ({ id }) => {
   const [damageLevel, setDamageLevel] = useState(1);
   const [types, setTypes] = useState([]);
   const [attackingStat, setAttackingStat] = useState('');
+
+  // Only needed if creating
   const [fortitude, setFortitude] = useState(3);
   const [agility, setAgility] = useState(3);
   const [persona, setPersona] = useState(3);
   const [aptitude, setAptitude] = useState(3);
-
-  // Only needed if editing
-  // mortality
-  // currentHp
-  // conditions
 
   useEffect(() => {
     if (creatureTypes) {
@@ -65,15 +62,6 @@ const CreatureForm = ({ id }) => {
       setDamageLevel(currentCreature.damageLevel);
       setTypes(currentCreature.types);
       setAttackingStat(currentCreature.attackingStat);
-      setFortitude(currentCreature.fortitude.points);
-      setAgility(currentCreature.agility.points);
-      setPersona(currentCreature.persona.points);
-      setAptitude(currentCreature.aptitude.points);
-
-      // Only needed if editing
-      // mortality
-      // currentHp
-      // conditions
     }
   }, [id, campSheet]);
 
@@ -99,10 +87,6 @@ const CreatureForm = ({ id }) => {
     if (!description) return alert('Must provide a description');
     if (!damageLevel) return alert('Must provide a damageLevel');
     if (!attackingStat) return alert('Must provide an attackingStat');
-    if (!fortitude) return alert('Must provide a fortitude value');
-    if (!agility) return alert('Must provide an agility value');
-    if (!persona) return alert('Must provide a persona value');
-    if (!aptitude) return alert('Must provide a aptitude value');
 
     let body = {
       name,
@@ -110,11 +94,6 @@ const CreatureForm = ({ id }) => {
       damageLevel,
       attackingStat,
       types,
-      fortitude: { points: fortitude },
-      agility: { points: agility },
-      persona: { points: persona },
-      aptitude: { points: aptitude },
-      currentHp: parseInt(fortitude) * 5,
     };
 
     if (id) {
@@ -126,6 +105,20 @@ const CreatureForm = ({ id }) => {
       );
       return;
     }
+
+    if (!fortitude) return alert('Must provide a fortitude value');
+    if (!agility) return alert('Must provide an agility value');
+    if (!persona) return alert('Must provide a persona value');
+    if (!aptitude) return alert('Must provide a aptitude value');
+
+    body = {
+      ...body,
+      fortitude: { points: fortitude },
+      agility: { points: agility },
+      persona: { points: persona },
+      aptitude: { points: aptitude },
+      currentHp: +fortitude * 5,
+    };
 
     dispatch(
       createSheetResourceStart('campaigns', campSheet._id, 'creatures', body, {
@@ -163,8 +156,6 @@ const CreatureForm = ({ id }) => {
         </Row>
       )}
 
-      <Input slideOver label="Damage Level" name="damageLevel" type="number" min="1" max="10" value={damageLevel} changeHandler={setDamageLevel} required />
-
       <Select
         slideOver
         label="Attacking Stat"
@@ -180,10 +171,16 @@ const CreatureForm = ({ id }) => {
         required
       />
 
-      <Input slideOver label="Fortitude" name="fortitude" type="number" value={fortitude} changeHandler={setFortitude} required />
-      <Input slideOver label="Agility" name="agility" type="number" value={agility} changeHandler={setAgility} required />
-      <Input slideOver label="Persona" name="persona" type="number" value={persona} changeHandler={setPersona} required />
-      <Input slideOver label="Aptitude" name="aptitude" type="number" value={aptitude} changeHandler={setAptitude} required />
+      <Input slideOver label="Damage Level" name="damageLevel" type="number" min="1" max="10" value={damageLevel} changeHandler={setDamageLevel} required />
+
+      {!id && (
+        <>
+          <Input slideOver label="Fortitude" name="fortitude" type="number" value={fortitude} changeHandler={setFortitude} required />
+          <Input slideOver label="Agility" name="agility" type="number" value={agility} changeHandler={setAgility} required />
+          <Input slideOver label="Persona" name="persona" type="number" value={persona} changeHandler={setPersona} required />
+          <Input slideOver label="Aptitude" name="aptitude" type="number" value={aptitude} changeHandler={setAptitude} required />
+        </>
+      )}
     </SlideOverForm>
   );
 };

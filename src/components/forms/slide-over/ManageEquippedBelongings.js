@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { setNestedModal } from '../../../redux/app/app.actions';
+import { useActions } from '../../../hooks/useActions';
 
 import { capitalize } from '../../../utils/helpers/strings';
 import equipBelonging from '../../../utils/functions/equipBelonging';
@@ -17,7 +16,7 @@ import DisplayConsumable from '../../display/DisplayConsumable';
 import DisplayUsable from '../../display/DisplayUsable';
 
 const ManageEquippedBelongings = ({ data }) => {
-  const dispatch = useDispatch();
+  const { setNestedModal } = useActions();
 
   return (
     <SlideOverContainer title={`Manage equipped ${capitalize(data.type)}`} description={`Manage equipped ${capitalize(data.type)} below.`} cancelText="Done">
@@ -48,8 +47,7 @@ const ManageEquippedBelongings = ({ data }) => {
                         },
                         {
                           text: 'View',
-                          click: () =>
-                            dispatch(setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'weapons' } })),
+                          click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'weapons' } }),
                         },
                       ]}
                     />
@@ -82,9 +80,7 @@ const ManageEquippedBelongings = ({ data }) => {
                         {
                           text: 'View',
                           click: () =>
-                            dispatch(
-                              setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'wearables' } })
-                            ),
+                            setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'wearables' } }),
                         },
                       ]}
                     />
@@ -116,9 +112,7 @@ const ManageEquippedBelongings = ({ data }) => {
                         {
                           text: 'View',
                           click: () =>
-                            dispatch(
-                              setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'consumables' } })
-                            ),
+                            setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'consumables' } }),
                         },
                       ]}
                     />
@@ -149,8 +143,7 @@ const ManageEquippedBelongings = ({ data }) => {
                         },
                         {
                           text: 'View',
-                          click: () =>
-                            dispatch(setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'usables' } })),
+                          click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'usables' } }),
                         },
                       ]}
                     />

@@ -4,8 +4,9 @@ import { useSearchParams } from 'react-router-dom';
 
 import { selectCurrentCampaign, selectCreatures, selectArchivedCreatures } from '../../../../redux/campaign/campaign.selectors';
 
-import { setModal, setSlideOver } from '../../../../redux/app/app.actions';
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+
+import { useActions } from '../../../../hooks/useActions';
 
 import SlideOverTypes from '../../../../utils/SlideOverTypes';
 import ModalTypes from '../../../../utils/ModalTypes';
@@ -22,6 +23,7 @@ import DisplayCreature from '../../../../components/display/DisplayCreature';
 const CampaignCreaturesPage = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
+  const { setModal, setSlideOver } = useActions();
 
   const campSheet = useSelector(selectCurrentCampaign);
 
@@ -116,7 +118,7 @@ const CampaignCreaturesPage = () => {
               </Button>
 
               {/* Edit */}
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id }))}>Edit</Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id })}>Edit</Button>
 
               {/* Archive or Restore */}
               <Button
@@ -147,19 +149,17 @@ const CampaignCreaturesPage = () => {
                 <Button
                   alert
                   onClick={() =>
-                    dispatch(
-                      setModal({
-                        type: ModalTypes.deleteResource,
-                        id: creature._id,
-                        data: {
-                          sheetType: 'campaigns',
-                          resourceType: 'creatures',
-                          title: `Are you sure you want to delete ${creature.name}?`,
-                          submitText: `Yes, delete ${creature.name}`,
-                          notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
-                        },
-                      })
-                    )
+                    setModal({
+                      type: ModalTypes.deleteResource,
+                      id: creature._id,
+                      data: {
+                        sheetType: 'campaigns',
+                        resourceType: 'creatures',
+                        title: `Are you sure you want to delete ${creature.name}?`,
+                        submitText: `Yes, delete ${creature.name}`,
+                        notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
+                      },
+                    })
                   }
                 >
                   Delete

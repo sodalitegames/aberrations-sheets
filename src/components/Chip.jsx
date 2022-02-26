@@ -1,13 +1,11 @@
-import { useDispatch } from 'react-redux';
-
 import { PencilIcon } from '@heroicons/react/solid';
 
-import { setModal } from '../redux/app/app.actions';
+import { useActions } from '../hooks/useActions';
 
 import classNames from '../utils/classNames';
 
 const Chip = ({ color, children, classes, editable }) => {
-  const dispatch = useDispatch();
+  const { setModal } = useActions();
 
   return (
     <div
@@ -24,7 +22,7 @@ const Chip = ({ color, children, classes, editable }) => {
       {children}
 
       {editable ? (
-        <span title="Edit manually" onClick={() => dispatch(setModal(editable))}>
+        <span title="Edit manually" onClick={() => setModal(editable)}>
           <PencilIcon
             className={classNames(
               color === 'red' ? 'text-red-800 border-red-800' : '',

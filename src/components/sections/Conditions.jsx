@@ -1,15 +1,14 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { PencilIcon } from '@heroicons/react/solid';
 
 import { selectCurrentCharacter } from '../../redux/character/character.selectors';
 
-import { setModal } from '../../redux/app/app.actions';
-
 import ModalTypes from '../../utils/ModalTypes';
+import { useActions } from '../../hooks/useActions';
 
 const Conditions = ({ conditions }) => {
-  const dispatch = useDispatch();
+  const { setModal } = useActions();
 
   const charSheet = useSelector(selectCurrentCharacter);
 
@@ -25,7 +24,7 @@ const Conditions = ({ conditions }) => {
           <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
             <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and dodge value by this amount">
               Slowed
-              <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'character', resource: charSheet } }))}>
+              <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'character', resource: charSheet } })}>
                 <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
               </span>
             </h4>
@@ -38,7 +37,7 @@ const Conditions = ({ conditions }) => {
           <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
             <h4 className="flex items-center uppercase text-md" title="Take this much damage at the start of each of your turns">
               Agony
-              <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'character', resource: charSheet } }))}>
+              <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'character', resource: charSheet } })}>
                 <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
               </span>
             </h4>
@@ -51,7 +50,7 @@ const Conditions = ({ conditions }) => {
           <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
             <h4 className="flex items-center uppercase text-md" title="Take this much disadvantage on all Fortitude and Agility tests">
               Injured
-              <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'character', resource: charSheet } }))}>
+              <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'character', resource: charSheet } })}>
                 <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
               </span>
             </h4>
@@ -64,7 +63,7 @@ const Conditions = ({ conditions }) => {
           <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
             <h4 className="flex items-center uppercase text-md" title="Take this much disadvantage on all Persona and Aptitude tests">
               Disturbed
-              <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'character', resource: charSheet } }))}>
+              <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'character', resource: charSheet } })}>
                 <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
               </span>
             </h4>

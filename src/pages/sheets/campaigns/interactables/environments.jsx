@@ -4,7 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 
 import { selectCurrentCampaign, selectEnvironments, selectArchivedEnvironments } from '../../../../redux/campaign/campaign.selectors';
 
-import { setModal, setSlideOver } from '../../../../redux/app/app.actions';
+import { useActions } from '../../../../hooks/useActions';
+
 import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
 
 import SlideOverTypes from '../../../../utils/SlideOverTypes';
@@ -22,6 +23,7 @@ import DisplayEnvironment from '../../../../components/display/DisplayEnvironmen
 const CampaignEnvironmentsPage = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
+  const { setModal, setSlideOver } = useActions();
 
   const campSheet = useSelector(selectCurrentCampaign);
 
@@ -116,7 +118,7 @@ const CampaignEnvironmentsPage = () => {
               </Button>
 
               {/* Edit */}
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.environmentForm, id: environment._id }))}>Edit</Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.environmentForm, id: environment._id })}>Edit</Button>
 
               {/* Archive or Restore */}
               <Button
@@ -147,19 +149,17 @@ const CampaignEnvironmentsPage = () => {
                 <Button
                   alert
                   onClick={() =>
-                    dispatch(
-                      setModal({
-                        type: ModalTypes.deleteResource,
-                        id: environment._id,
-                        data: {
-                          sheetType: 'campaigns',
-                          resourceType: 'environments',
-                          title: `Are you sure you want to delete ${environment.name}?`,
-                          submitText: `Yes, delete ${environment.name}`,
-                          notification: { heading: 'Environment Deleted', message: `You have successfully deleted ${environment.name}.` },
-                        },
-                      })
-                    )
+                    setModal({
+                      type: ModalTypes.deleteResource,
+                      id: environment._id,
+                      data: {
+                        sheetType: 'campaigns',
+                        resourceType: 'environments',
+                        title: `Are you sure you want to delete ${environment.name}?`,
+                        submitText: `Yes, delete ${environment.name}`,
+                        notification: { heading: 'Environment Deleted', message: `You have successfully deleted ${environment.name}.` },
+                      },
+                    })
                   }
                 >
                   Delete

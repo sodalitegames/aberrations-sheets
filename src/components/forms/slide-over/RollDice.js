@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 
-import { addNotification } from '../../../redux/app/app.actions';
+import { useActions } from '../../../hooks/useActions';
+
 import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { rollDice } from '../../../utils/functions/roll';
@@ -21,6 +22,7 @@ import RollResults, { ResultsMessages } from '../../sections/RollResults';
 
 const RollDice = () => {
   const dispatch = useDispatch();
+  const { addNotification } = useActions();
 
   const charSheet = useSelector(selectCurrentCharacter);
 
@@ -83,7 +85,7 @@ const RollDice = () => {
       const data = rollDice(parseInt(dice), parseInt(advantage));
 
       // Add a notification with a message about your results
-      dispatch(addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) }));
+      addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) });
 
       setRollData(data);
       return;
@@ -92,7 +94,7 @@ const RollDice = () => {
     const data = rollDice(calcDice() + parseInt(additionalDice), calcAdvantage(), statKey);
 
     // Add a notification with a message about your results
-    dispatch(addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) }));
+    addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) });
 
     setRollData(data);
 

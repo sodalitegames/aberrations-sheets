@@ -9,13 +9,14 @@ import { selectResourceError } from '../../redux/resource/resource.selectors';
 import { selectCharacterError } from '../../redux/character/character.selectors';
 import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
 
-import { useAppActions } from '../../hooks/useAppActions';
+import { useActions } from '../../hooks/useActions';
 
 import classNames from '../../utils/classNames';
 import ModalTypes from '../../utils/ModalTypes';
 import { formatValidationErrors } from '../../utils/helpers/errors';
 
 import { Modal as IModal } from '../../models/interfaces/app';
+import { Stat, Condition } from '../../models/enums';
 
 import Notice, { NoticeStatus } from '../Notice';
 
@@ -25,10 +26,6 @@ import TakeDamage from './modal/TakeDamage';
 import HealDamage from './modal/HealDamage';
 import ReceiveMoney from './modal/ReceiveMoney';
 import PayMoney from './modal/PayMoney';
-import SpentUpgradePoints from './modal/SpentUpgradePoints';
-import Mortality from './modal/Mortality';
-import EditStat from './modal/EditStat';
-import EditCondition from './modal/EditCondition';
 import ErrorEquippingBelonging from './modal/ErrorEquippingBelonging';
 
 // Campaign Sheet
@@ -42,7 +39,12 @@ import DeleteResource from './modal/DeleteResource';
 import UpdateInviteStatus from './modal/UpdateInviteStatus';
 import ManageTransaction from './modal/ManageTransaction';
 import RemoveCharacterFromCampaign from './modal/RemoveCharacterFromCampaign';
-import { Stat, Condition } from '../../models/enums';
+import EditSpentUpgradePoints from './modal/EditSpentUpgradePoints';
+import EditMortality from './modal/EditMortality';
+import EditStat from './modal/EditStat';
+import EditCondition from './modal/EditCondition';
+import EditHealth from './modal/EditHealth';
+import EditWallet from './modal/EditWallet';
 
 interface ModalFormProps {
   title: string;
@@ -69,10 +71,6 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
       {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney /> : null}
       {modal && modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
-      {modal && modal.type === ModalTypes.editSpentUpgradePoints ? <SpentUpgradePoints data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editMortality ? <Mortality /> : null}
-      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id as Stat} data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as Condition} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.errorEquippingBelonging ? <ErrorEquippingBelonging data={modal.data} nested={nested} /> : null}
       {/* Campaign Sheet */}
       {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
@@ -84,12 +82,18 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.manageTransaction ? <ManageTransaction id={modal.id} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editSpentUpgradePoints ? <EditSpentUpgradePoints data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editMortality ? <EditMortality data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id as Stat} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as Condition} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editHealth ? <EditHealth data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editWallet ? <EditWallet data={modal.data} /> : null}
     </Fragment>
   );
 };
 
 export const ModalForm: React.FC<ModalFormProps> = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children, nested }) => {
-  const { closeModal, closeNestedModal } = useAppActions();
+  const { closeModal, closeNestedModal } = useActions();
 
   const characterError = useSelector(selectCharacterError);
   const campaignError = useSelector(selectCampaignError);
@@ -143,7 +147,7 @@ export const ModalForm: React.FC<ModalFormProps> = ({ type, title, submitText, c
 };
 
 export const ModalContainer: React.FC<ModalContainerProps> = ({ title, buttonText, children, nested }) => {
-  const { closeModal, closeNestedModal } = useAppActions();
+  const { closeModal, closeNestedModal } = useActions();
 
   return (
     <div>
@@ -173,7 +177,7 @@ export const ModalContainer: React.FC<ModalContainerProps> = ({ title, buttonTex
 };
 
 const Modal: React.VFC = () => {
-  const { closeModal } = useAppActions();
+  const { closeModal } = useActions();
 
   const modal = useSelector(selectModal);
 
@@ -222,7 +226,7 @@ const Modal: React.VFC = () => {
 export default Modal;
 
 export const NestedModal: React.VFC = () => {
-  const { closeNestedModal } = useAppActions();
+  const { closeNestedModal } = useActions();
 
   const nestedModal = useSelector(selectNestedModal);
 

@@ -8,7 +8,7 @@ import { ModalForm } from '../Modal';
 import Input from '../elements/Input';
 import Notice from '../../Notice';
 
-const SpentUpgradePoints = ({ data }) => {
+const EditSpentUpgradePoints = ({ data }) => {
   const dispatch = useDispatch();
 
   const [spentUpgradePoints, setSpentUpgradePoints] = useState(data.entity.spentUpgradePoints);
@@ -65,4 +65,4 @@ const SpentUpgradePoints = ({ data }) => {
   );
 };
 
-export default SpentUpgradePoints;
+export default EditSpentUpgradePoints;

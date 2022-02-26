@@ -60,11 +60,11 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           menu: [
             {
               text: 'Wallet',
-              click: () => setModal({ type: ModalTypes.payMoney, id: player._id }),
+              click: () => setModal({ type: ModalTypes.editWallet, data: { type: 'player', entity: player } }),
             },
             {
               text: 'Mortality',
-              click: () => setModal({ type: ModalTypes.editMortality, id: player._id }),
+              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'player', entity: player } }),
             },
             {
               text: 'Upgrade Points',
@@ -72,7 +72,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
             },
             {
               text: 'Health',
-              click: () => setModal({ type: ModalTypes.takeDamage, id: player._id }),
+              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'player', entity: player } }),
             },
           ],
         }}

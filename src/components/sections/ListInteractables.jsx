@@ -1,9 +1,8 @@
 import { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
-import { setSlideOver } from '../../redux/root-actions';
+import { useActions } from '../../hooks/useActions';
 
 import ListContainer from '../data/ListContainer';
 import Notice from '../Notice';
@@ -44,12 +43,12 @@ export const ListInteractablesMessage = ({ show, interactableType }) => {
 };
 
 const ListInteractables = ({ sheetType, id, setId, interactablesList, show, interactableType, label }) => {
-  const dispatch = useDispatch();
+  const { setSlideOver } = useActions();
 
   return (
     <ListContainer
       list={interactablesList}
-      button={show !== 'archived' ? { click: () => dispatch(setSlideOver({ type: createForm[interactableType], data: { sheetType: sheetType } })), text: `Add a new ${label}` } : null}
+      button={show !== 'archived' ? { click: () => setSlideOver({ type: createForm[interactableType], data: { sheetType: sheetType } }), text: `Add a new ${label}` } : null}
       empty={{
         heading: `No ${label}s`,
         message:
@@ -60,7 +59,7 @@ const ListInteractables = ({ sheetType, id, setId, interactablesList, show, inte
             : show === 'inactive'
             ? `You have no inactive ${interactableType}`
             : 'Get started by creating your first one now',
-        button: show !== 'archived' ? { click: () => dispatch(setSlideOver({ type: createForm[interactableType], data: { sheetType: sheetType } })), text: `New ${label}` } : null,
+        button: show !== 'archived' ? { click: () => setSlideOver({ type: createForm[interactableType], data: { sheetType: sheetType } }), text: `New ${label}` } : null,
       }}
     >
       {interactablesList.map(interactable => (

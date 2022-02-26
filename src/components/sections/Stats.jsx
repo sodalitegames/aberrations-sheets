@@ -1,18 +1,17 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { PencilIcon } from '@heroicons/react/solid';
 
-import { selectCurrentCharacter } from '../../redux/character/character.selectors';
+import { useActions } from '../../hooks/useActions';
 
-import { setModal } from '../../redux/app/app.actions';
+import { selectCurrentCharacter } from '../../redux/character/character.selectors';
 
 import ModalTypes from '../../utils/ModalTypes';
 
 import Chip from '../Chip';
 
 const Stats = ({ stats, power, mortality, slowed }) => {
-  const dispatch = useDispatch();
-
+  const { setModal } = useActions();
   const charSheet = useSelector(selectCurrentCharacter);
   return (
     <div>
@@ -39,7 +38,7 @@ const Stats = ({ stats, power, mortality, slowed }) => {
                 <div className="flex flex-col items-center text-5xl font-semibold text-gray-900 shrink-0">
                   <h5 className="flex items-center text-xl font-normal">
                     {stat.name}
-                    <span title="Edit manually" onClick={() => dispatch(setModal({ type: ModalTypes.editStat, id: stat.name.toLowerCase(), data: { type: 'character', resource: charSheet } }))}>
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editStat, id: stat.name.toLowerCase(), data: { type: 'character', resource: charSheet } })}>
                       <PencilIcon
                         className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"
