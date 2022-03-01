@@ -4,10 +4,9 @@ interface RollData {
   rolls: number[];
   advantageRolls: number[];
   successes: number;
-  injured: number;
-  disturbed: number;
   experience: number;
-  crit: boolean;
+  critSuccess: boolean;
+  critFail: boolean;
   advantage: number;
   dice: number;
   stat: Stat;
@@ -70,10 +69,9 @@ export const rollDice = (dice: number, advantage: number, stat: Stat): RollData 
   let successes = 0;
   let sixes = 0;
   let ones = 0;
-  let injured = 0;
-  let disturbed = 0;
   let experience = 0;
-  let crit = false;
+  let critSuccess = false;
+  let critFail = false;
 
   // set successes, sixes, and ones by looping through the rolls array
   newRolls.forEach(roll => {
@@ -91,20 +89,16 @@ export const rollDice = (dice: number, advantage: number, stat: Stat): RollData 
   // set experience, crit, and conditions based on the rolls
   if (sixes >= dice / 2) {
     successes = dice;
-    experience++;
-    crit = true;
+    critSuccess = true;
+
+    // High risk, high reward - grant an additional experience point - experience++;
   }
 
   if (ones >= dice / 2) {
     successes = 0;
+    critFail = true;
 
-    if (stat === Stat.Fortitude || stat === Stat.Agility) {
-      injured++;
-    }
-
-    if (stat === Stat.Persona || stat === Stat.Aptitude) {
-      disturbed++;
-    }
+    // High risk, high reward - lose an additional experience point - experience--;
   }
 
   if (successes >= dice / 2) {
@@ -112,7 +106,7 @@ export const rollDice = (dice: number, advantage: number, stat: Stat): RollData 
   }
 
   // save the roll data
-  return { rolls: newRolls, advantageRolls, successes, injured, disturbed, experience, crit, advantage, dice, stat };
+  return { rolls: newRolls, advantageRolls, successes, experience, critSuccess, critFail, advantage, dice, stat };
 };
 
 export const rollTheDice = (dice: number, advantage: number, stat: Stat): RollResults => {
@@ -165,10 +159,9 @@ export const calcRollData = (rollResults: RollResults): RollData => {
   let successes = 0;
   let sixes = 0;
   let ones = 0;
-  let injured = 0;
-  let disturbed = 0;
   let experience = 0;
-  let crit = false;
+  let critSuccess = false;
+  let critFail = false;
 
   // set successes, sixes, and ones by looping through the rolls array
   rolls.forEach(roll => {
@@ -186,20 +179,16 @@ export const calcRollData = (rollResults: RollResults): RollData => {
   // set experience, crit, and conditions based on the rolls
   if (sixes >= dice / 2) {
     successes = dice;
-    experience++;
-    crit = true;
+    critSuccess = true;
+
+    // High risk, high reward - grant an additional experience point - experience++;
   }
 
   if (ones >= dice / 2) {
     successes = 0;
+    critFail = true;
 
-    if (stat === Stat.Fortitude || stat === Stat.Agility) {
-      injured++;
-    }
-
-    if (stat === Stat.Persona || stat === Stat.Aptitude) {
-      disturbed++;
-    }
+    // High risk, high reward - lose an additional experience point - experience--;
   }
 
   if (successes >= dice / 2) {
@@ -207,5 +196,5 @@ export const calcRollData = (rollResults: RollResults): RollData => {
   }
 
   // save the roll data
-  return { rolls, advantageRolls, successes, injured, disturbed, experience, crit, advantage, dice, stat };
+  return { rolls, advantageRolls, successes, experience, critSuccess, critFail, advantage, dice, stat };
 };

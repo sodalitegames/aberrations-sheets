@@ -1,13 +1,11 @@
-import { useDispatch } from 'react-redux';
-
-import { setModal } from '../../redux/app/app.actions';
+import { useActions } from '../../hooks/useActions';
 
 import DescriptionList from '../data/DescriptionList';
 import Button from '../Button';
 import ModalTypes from '../../utils/ModalTypes';
 
 const DisplayCampaign = ({ campaign }) => {
-  const dispatch = useDispatch();
+  const { setModal } = useActions();
 
   return (
     <div>
@@ -24,7 +22,7 @@ const DisplayCampaign = ({ campaign }) => {
         ]}
       />
       <div className="mt-6">
-        <Button text onClick={() => dispatch(setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'characters' } }))}>
+        <Button text onClick={() => setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'characters' } })}>
           Leave Campaign
         </Button>
       </div>

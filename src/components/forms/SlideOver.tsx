@@ -9,7 +9,7 @@ import { selectResourceError } from '../../redux/resource/resource.selectors';
 import { selectCharacterError } from '../../redux/character/character.selectors';
 import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
 
-import { useAppActions } from '../../hooks/useAppActions';
+import { useActions } from '../../hooks/useActions';
 
 import classNames from '../../utils/classNames';
 import SlideOverTypes from '../../utils/SlideOverTypes';
@@ -27,8 +27,6 @@ import ManageCharacter from './slide-over/ManageCharacter';
 import RollDice from './slide-over/RollDice';
 import ManageEquippedBelongings from './slide-over/ManageEquippedBelongings';
 import PurchaseAugmentation from './slide-over/PurchaseAugmentation';
-import CharDescription from './slide-over/CharDescription';
-import CharBackground from './slide-over/CharBackground';
 
 // Campaign Sheet
 import ManageCampaign from './slide-over/ManageCampaign';
@@ -39,6 +37,7 @@ import NewSessionForm from './slide-over/NewSessionForm';
 import NpcForm from './slide-over/NpcForm';
 import CreatureForm from './slide-over/CreatureForm';
 import EnvironmentForm from './slide-over/EnvironmentForm';
+import ManageAssignedBelongings from './slide-over/ManageAssignedBelongings';
 
 // Shared
 import LogForm from './slide-over/LogForm';
@@ -48,6 +47,8 @@ import WearableForm from './slide-over/WearableForm';
 import ConsumableForm from './slide-over/ConsumableForm';
 import UsableForm from './slide-over/UsableForm';
 import NewTransactionForm from './slide-over/NewTransactionForm';
+import EditDescription from './slide-over/EditDescription';
+import EditBackground from './slide-over/EditBackground';
 
 interface SlideOverFormProps {
   title: string;
@@ -65,7 +66,7 @@ interface SlideOverContainerProps {
 }
 
 export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
-  const { closeSlideOver } = useAppActions();
+  const { closeSlideOver } = useActions();
 
   const characterError = useSelector(selectCharacterError);
   const campaignError = useSelector(selectCampaignError);
@@ -129,7 +130,7 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
 };
 
 export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, description, cancelText, children }) => {
-  const { closeSlideOver } = useAppActions();
+  const { closeSlideOver } = useActions();
 
   return (
     <div className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
@@ -175,7 +176,7 @@ export const SlideOverContainer: React.FC<SlideOverContainerProps> = ({ title, d
 };
 
 const SlideOver: React.FC = () => {
-  const { closeSlideOver } = useAppActions();
+  const { closeSlideOver } = useActions();
 
   const slideOver = useSelector(selectSlideOver);
 
@@ -202,9 +203,9 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <ManageEquippedBelongings data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.charDescriptionForm ? <CharDescription /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.charBackgroundForm ? <CharBackground /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.editDescriptionForm ? <EditDescription data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.editBackgroundForm ? <EditBackground data={slideOver.data} /> : null}
                 {/* Campaign Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCampaign ? <ManageCampaign /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
@@ -214,6 +215,7 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageAssignedBelongings ? <ManageAssignedBelongings data={slideOver.data} /> : null}
                 {/* Shared */}
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeaponForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm id={slideOver.id} data={slideOver.data} /> : null}

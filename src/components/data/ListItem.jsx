@@ -1,19 +1,17 @@
-import { useDispatch } from 'react-redux';
-
-import { setModal, setSlideOver } from '../../redux/app/app.actions';
+import { useActions } from '../../hooks/useActions';
 
 import Button from '../Button';
 
 export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
-  const dispatch = useDispatch();
+  const { setModal, setSlideOver } = useActions();
 
   return (
-    <div className="flex justify-end space-x-1 mt-2">
+    <div className="flex justify-end mt-2 space-x-1">
       {editable ? (
         <button
           type="button"
           className="inline-flex items-center px-1.5 py-1.5 text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={() => dispatch(setSlideOver(editable))}
+          onClick={() => setSlideOver(editable)}
         >
           {editText || 'Edit'}
         </button>
@@ -22,7 +20,7 @@ export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
         <button
           type="button"
           className="inline-flex items-center px-1.5 py-1.5 text-xs font-medium rounded text-gray-500 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          onClick={() => dispatch(setModal(deletable))}
+          onClick={() => setModal(deletable)}
         >
           {deleteText || 'Delete'}
         </button>
@@ -32,7 +30,7 @@ export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
 };
 
 const ListItem = ({ heading, editable, deletable, editText, deleteText, actions, view, noButtonPanel, children }) => {
-  const dispatch = useDispatch();
+  const { setModal } = useActions();
 
   if (view) {
     return (
@@ -44,7 +42,7 @@ const ListItem = ({ heading, editable, deletable, editText, deleteText, actions,
           </div>
 
           <div>
-            <Button rounded onClick={() => dispatch(setModal(view))}>
+            <Button rounded onClick={() => setModal(view)}>
               View
             </Button>
           </div>

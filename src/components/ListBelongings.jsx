@@ -1,9 +1,8 @@
 import { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
 
 import { CheckCircleIcon } from '@heroicons/react/outline';
 
-import { setSlideOver } from '../../redux/root-actions';
+import { useActions } from '../hooks/useActions';
 
 import ListContainer from '../shared/data/ListContainer';
 import Notice from '../shared/Notice';
@@ -38,12 +37,12 @@ export const ListBelongingsMessage = ({ show, belongingType }) => {
 };
 
 const ListBelongings = ({ sheetType, id, setId, belongingsList, show, belongingType, belongingKind }) => {
-  const dispatch = useDispatch();
+  const { setSlideOver } = useActions();
 
   return (
     <ListContainer
       list={belongingsList}
-      button={show !== 'archived' ? { click: () => dispatch(setSlideOver({ type: createForm[belongingType], data: { sheetType: sheetType } })), text: `Add a new ${belongingKind}` } : null}
+      button={show !== 'archived' ? { click: () => setSlideOver({ type: createForm[belongingType], data: { sheetType: sheetType } }), text: `Add a new ${belongingKind}` } : null}
       empty={{
         heading: `No ${belongingKind}`,
         message:
@@ -54,7 +53,7 @@ const ListBelongings = ({ sheetType, id, setId, belongingsList, show, belongingT
             : show === 'inactive'
             ? `You have no inactive ${belongingType}`
             : 'Get started by creating your first one now',
-        button: show !== 'archived' ? { click: () => dispatch(setSlideOver({ type: createForm[belongingType], data: { sheetType: sheetType } })), text: `New ${belongingKind}` } : null,
+        button: show !== 'archived' ? { click: () => setSlideOver({ type: createForm[belongingType], data: { sheetType: sheetType } }), text: `New ${belongingKind}` } : null,
       }}
     >
       {belongingsList.map(belonging => (

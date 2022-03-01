@@ -1,8 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { selectCurrentCampaign, selectActiveSession } from '../../../redux/campaign/campaign.selectors';
 
-import { setSlideOver } from '../../../redux/app/app.actions';
+import { useActions } from '../../../hooks/useActions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 
@@ -13,7 +13,7 @@ import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
 import Button from '../../../components/Button';
 
 const CampaignGameplayPage = () => {
-  const dispatch = useDispatch();
+  const { setSlideOver } = useActions();
 
   const campSheet = useSelector(selectCurrentCampaign);
   const activeSession = useSelector(selectActiveSession);
@@ -33,7 +33,7 @@ const CampaignGameplayPage = () => {
 
         {/* Actions */}
         <SheetPagePanel classes="md:col-span-2 lg:col-span-1">
-          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageCampaign }))} classes="mt-2">
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
             Manage Campaign
           </Button>
         </SheetPagePanel>

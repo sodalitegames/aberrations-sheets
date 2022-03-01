@@ -1,9 +1,8 @@
-import { useDispatch } from 'react-redux';
-
-import { setSlideOver } from '../../../redux/app/app.actions';
+import { useActions } from '../../../hooks/useActions';
 
 const ContentHeader = ({ heading, primary, secondary }) => {
-  const dispatch = useDispatch();
+  const { setSlideOver } = useActions();
+
   return (
     <div className="bg-white shadow">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -16,11 +15,11 @@ const ContentHeader = ({ heading, primary, secondary }) => {
           </div>
 
           {/* Buttons */}
-          <div className="mt-6 flex space-x-3 md:mt-0 md:ml-4">
+          <div className="flex mt-6 space-x-3 md:mt-0 md:ml-4">
             {secondary ? (
               <button
                 type="button"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
               >
                 Secondary button
               </button>
@@ -28,8 +27,8 @@ const ContentHeader = ({ heading, primary, secondary }) => {
             {primary ? (
               <button
                 type="button"
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                onClick={() => dispatch(setSlideOver(primary.slideOver))}
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-cyan-600 hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                onClick={() => setSlideOver(primary.slideOver)}
               >
                 {primary.text}
               </button>

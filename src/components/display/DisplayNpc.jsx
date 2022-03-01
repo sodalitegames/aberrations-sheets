@@ -1,4 +1,6 @@
 import { getSpeciesAbility } from '../../utils/helpers/species';
+import ModalTypes from '../../utils/ModalTypes';
+import SlideOverTypes from '../../utils/SlideOverTypes';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -9,6 +11,9 @@ import DisplayWeapon from './DisplayWeapon';
 import DisplayWearable from './DisplayWearable';
 import DisplayConsumable from './DisplayConsumable';
 import DisplayUsable from './DisplayUsable';
+
+import Heading from '../Heading';
+import { useActions } from '../../hooks/useActions';
 
 const NpcDetails = ({ npc, species }) => {
   return (
@@ -31,6 +36,8 @@ const NpcDetails = ({ npc, species }) => {
 };
 
 const DisplayNpc = ({ npc, species, condensed, listItem }) => {
+  const { setModal, setSlideOver } = useActions();
+
   if (listItem) {
     if (condensed) {
       return (
@@ -48,12 +55,45 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
   }
 
   return (
-    <div className="py-3">
-      <h3 className="mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">{npc.name}</h3>
+    <div className="py-3 -mt-10">
+      <Heading
+        edit={{
+          menu: [
+            {
+              text: 'Wallet',
+              click: () => setModal({ type: ModalTypes.editWallet, data: { type: 'npc', entity: npc } }),
+            },
+            {
+              text: 'Mortality',
+              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'npc', entity: npc } }),
+            },
+            {
+              text: 'Upgrade Points',
+              click: () => setModal({ type: ModalTypes.editSpentUpgradePoints, data: { type: 'npc', entity: npc } }),
+            },
+            {
+              text: 'Health',
+              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'npc', entity: npc } }),
+            },
+          ],
+        }}
+      >
+        {npc.name}
+      </Heading>
       <NpcDetails npc={npc} species={species} />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Active Stats</h3>
-      {/* Do I want to show stat experience and advantage as well? */}
+      <Heading
+        edit={{
+          menu: [
+            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude', data: { type: 'npc', resource: npc } }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'npc', resource: npc } }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'npc', resource: npc } }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'npc', resource: npc } }) },
+          ],
+        }}
+      >
+        Active Stats
+      </Heading>
       <DescriptionList
         list={[
           { name: 'Fortitude', values: [npc.fortitude.points + npc.fortitude.modifier], half: true },
@@ -64,18 +104,40 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Passive Stats</h3>
+      <Heading>Stat Advantage</Heading>
+      <DescriptionList
+        list={[
+          { name: 'Fortitude', values: [npc.fortitude.advantage], half: true },
+          { name: 'Agility', values: [npc.agility.advantage], half: true },
+          { name: 'Persona', values: [npc.persona.advantage], half: true },
+          { name: 'Aptitude', values: [npc.aptitude.advantage], half: true },
+        ]}
+        classes="my-2"
+      />
+
+      <Heading>Passive Stats</Heading>
       <DescriptionList
         list={[
           { name: 'Health', values: [`${npc.currentHp} / ${npc.maxHp}`], half: true },
-          { name: 'Dodge Value', values: [npc.dodgeValue], half: true },
+          { name: 'Shield Value', values: [npc.shieldValue], half: true },
           { name: 'Initiative', values: [npc.initiative], half: true },
           { name: 'Assist', values: [npc.assist], half: true },
         ]}
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Conditions</h3>
+      <Heading
+        edit={{
+          menu: [
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'npc', resource: npc } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'npc', resource: npc } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'npc', resource: npc } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'npc', resource: npc } }) },
+          ],
+        }}
+      >
+        Conditions
+      </Heading>
       <DescriptionList
         list={[
           { name: 'Slowed', values: [npc.conditions.slowed], half: true },
@@ -86,41 +148,71 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         classes="my-2"
       />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Description</h3>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { type: 'npc', description: npc.description, resourceId: npc._id } }) }}>Description</Heading>
       <InfoList list={[npc.description]} />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Background</h3>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { type: 'npc', background: npc.background, resourceId: npc._id } }) }}>Background</Heading>
       <InfoList list={[npc.background]} />
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Augmentations</h3>
+      <Heading edit={{ text: 'Purchase', click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entity: npc } }) }}>
+        Augmentations
+      </Heading>
       <ul className="grid">
         {npc.augmentations?.map(aug => (
           <DisplayAugmentation key={aug._id} aug={aug} noButtonPanel />
         ))}
       </ul>
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Weapons</h3>
+      <Heading
+        edit={{
+          text: 'Manage',
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'weapons', npc: npc } }),
+        }}
+      >
+        Weapons
+      </Heading>
       <ul className="grid grid-cols-2">
         {npc.weapons?.map(weapon => (
           <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed />
         ))}
       </ul>
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Wearables</h3>
+      <Heading
+        edit={{
+          text: 'Manage',
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'wearables', npc: npc } }),
+        }}
+      >
+        Wearables
+      </Heading>
       <ul className="grid grid-cols-2">
         {npc.wearables?.map(wearable => (
           <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed />
         ))}
       </ul>
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Consumables</h3>
+      <Heading
+        edit={{
+          text: 'Manage',
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'consumables', npc: npc } }),
+        }}
+      >
+        Consumables
+      </Heading>
       <ul className="grid grid-cols-2">
         {npc.consumables?.map(consumable => (
           <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="campaigns" listItem condensed />
         ))}
       </ul>
 
-      <h3 className="mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">Usables</h3>
+      <Heading
+        edit={{
+          text: 'Manage',
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'usables', npc: npc } }),
+        }}
+      >
+        Usables
+      </Heading>
       <ul className="grid grid-cols-2">
         {npc.usables?.map(usable => (
           <DisplayUsable key={usable._id} usable={usable} sheetType="campaigns" listItem condensed />

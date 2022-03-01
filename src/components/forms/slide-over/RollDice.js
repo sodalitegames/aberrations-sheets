@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 
-import { addNotification } from '../../../redux/app/app.actions';
+import { useActions } from '../../../hooks/useActions';
+
 import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { rollDice } from '../../../utils/functions/roll';
@@ -21,6 +22,7 @@ import RollResults, { ResultsMessages } from '../../sections/RollResults';
 
 const RollDice = () => {
   const dispatch = useDispatch();
+  const { addNotification } = useActions();
 
   const charSheet = useSelector(selectCurrentCharacter);
 
@@ -83,7 +85,7 @@ const RollDice = () => {
       const data = rollDice(parseInt(dice), parseInt(advantage));
 
       // Add a notification with a message about your results
-      dispatch(addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) }));
+      addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) });
 
       setRollData(data);
       return;
@@ -92,32 +94,11 @@ const RollDice = () => {
     const data = rollDice(calcDice() + parseInt(additionalDice), calcAdvantage(), statKey);
 
     // Add a notification with a message about your results
-    dispatch(addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) }));
+    addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) });
 
     setRollData(data);
 
-    // If any injured, disturbed, or experience was gained, save that to the database
-    if (data.injured) {
-      dispatch(
-        updateSheetStart(
-          'characters',
-          charSheet._id,
-          { conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured + data.injured } },
-          { notification: { status: 'success', heading: 'Gained Injured', message: `You have gained ${data.injured} injured.` } }
-        )
-      );
-    }
-    if (data.disturbed) {
-      dispatch(
-        updateSheetStart(
-          'characters',
-          charSheet._id,
-          { conditions: { ...charSheet.conditions, disturbed: charSheet.conditions.disturbed + data.disturbed } },
-          { notification: { status: 'success', heading: 'Gained Disturbed', message: `You have gained ${data.disturbed} disturbed.` } }
-        )
-      );
-    }
-    if (data.experience) {
+    if (data.experience !== 0) {
       dispatch(
         updateSheetStart(
           'characters',

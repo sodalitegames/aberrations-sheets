@@ -1,7 +1,6 @@
 import { Fragment } from 'react';
-import { useDispatch } from 'react-redux';
 
-import { setModal } from '../../redux/app/app.actions';
+import { useActions } from '../../hooks/useActions';
 
 import ModalTypes from '../../utils/ModalTypes';
 import { getTransactionHeading } from '../../utils/helpers/messages';
@@ -33,7 +32,7 @@ export const DisplayTransactionDocument = ({ document, documentType, sheetType }
 };
 
 const DisplayTransaction = ({ transaction, sheetType, sent, resolved }) => {
-  const dispatch = useDispatch();
+  const { setModal } = useActions();
 
   return (
     <div className="w-full overflow-hidden bg-white rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5">
@@ -51,19 +50,17 @@ const DisplayTransaction = ({ transaction, sheetType, sent, resolved }) => {
                       type="button"
                       className="text-sm font-medium text-gray-500 bg-white rounded-md hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600"
                       onClick={() =>
-                        dispatch(
-                          setModal({
-                            type: ModalTypes.deleteResource,
-                            id: transaction._id,
-                            data: {
-                              sheetType: sheetType,
-                              resourceType: 'transactions',
-                              title: `Are you sure you want to delete this resolved transaction with ${transaction.recipientName}?`,
-                              submitText: `Yes, delete resolved transaction with ${transaction.recipientName}`,
-                              notification: { heading: 'Resolved Transaction Deleted', message: `You have successfully deleted your resolved transaction with ${transaction.recipientName}.` },
-                            },
-                          })
-                        )
+                        setModal({
+                          type: ModalTypes.deleteResource,
+                          id: transaction._id,
+                          data: {
+                            sheetType: sheetType,
+                            resourceType: 'transactions',
+                            title: `Are you sure you want to delete this resolved transaction with ${transaction.recipientName}?`,
+                            submitText: `Yes, delete resolved transaction with ${transaction.recipientName}`,
+                            notification: { heading: 'Resolved Transaction Deleted', message: `You have successfully deleted your resolved transaction with ${transaction.recipientName}.` },
+                          },
+                        })
                       }
                     >
                       Delete
@@ -78,7 +75,7 @@ const DisplayTransaction = ({ transaction, sheetType, sent, resolved }) => {
                     <button
                       type="button"
                       className="text-sm font-medium text-gray-700 bg-white rounded-md hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                      onClick={() => dispatch(setModal({ type: ModalTypes.manageTransaction, id: transaction._id, data: { transaction, sent, sheetType, status: 'Revoked' } }))}
+                      onClick={() => setModal({ type: ModalTypes.manageTransaction, id: transaction._id, data: { transaction, sent, sheetType, status: 'Revoked' } })}
                     >
                       Revoke
                     </button>
@@ -86,19 +83,17 @@ const DisplayTransaction = ({ transaction, sheetType, sent, resolved }) => {
                       type="button"
                       className="text-sm font-medium text-red-600 bg-white rounded-md hover:text-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                       onClick={() =>
-                        dispatch(
-                          setModal({
-                            type: ModalTypes.deleteResource,
-                            id: transaction._id,
-                            data: {
-                              sheetType: sheetType,
-                              resourceType: 'transactions',
-                              title: `Are you sure you want to delete this transaction with ${transaction.recipientName}?`,
-                              submitText: `Yes, delete transaction with ${transaction.recipientName}`,
-                              notification: { heading: 'Transaction Deleted', message: `You have successfully deleted your transaction with ${transaction.recipientName}.` },
-                            },
-                          })
-                        )
+                        setModal({
+                          type: ModalTypes.deleteResource,
+                          id: transaction._id,
+                          data: {
+                            sheetType: sheetType,
+                            resourceType: 'transactions',
+                            title: `Are you sure you want to delete this transaction with ${transaction.recipientName}?`,
+                            submitText: `Yes, delete transaction with ${transaction.recipientName}`,
+                            notification: { heading: 'Transaction Deleted', message: `You have successfully deleted your transaction with ${transaction.recipientName}.` },
+                          },
+                        })
                       }
                     >
                       Delete
@@ -109,14 +104,14 @@ const DisplayTransaction = ({ transaction, sheetType, sent, resolved }) => {
                     <button
                       type="button"
                       className="text-sm font-medium text-green-600 bg-white rounded-md hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-                      onClick={() => dispatch(setModal({ type: ModalTypes.manageTransaction, id: transaction._id, data: { transaction, sent, sheetType, status: 'Accepted' } }))}
+                      onClick={() => setModal({ type: ModalTypes.manageTransaction, id: transaction._id, data: { transaction, sent, sheetType, status: 'Accepted' } })}
                     >
                       Accept
                     </button>
                     <button
                       type="button"
                       className="text-sm font-medium text-gray-700 bg-white rounded-md hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                      onClick={() => dispatch(setModal({ type: ModalTypes.manageTransaction, id: transaction._id, data: { transaction, sent, sheetType, status: 'Declined' } }))}
+                      onClick={() => setModal({ type: ModalTypes.manageTransaction, id: transaction._id, data: { transaction, sent, sheetType, status: 'Declined' } })}
                     >
                       Decline
                     </button>

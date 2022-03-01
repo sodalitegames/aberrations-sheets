@@ -26,34 +26,26 @@ const TakeARest = () => {
     setRest(e.target.value);
 
     if (e.target.value === 'slumber') {
-      let actionsArr = [
-        `You'll Recover ${charSheet.fortitude.points + charSheet.fortitude.modifier} health points`,
-        `All points in Injured and Disturbed will be removed`,
-        `All temporary stat advantages will be reset to 0`,
-      ];
+      let actionsArr = [`You'll Recover all your health points`, `All points in Injured and Disturbed will be removed`, `All temporary stat advantages will be reset to 0`];
 
       if (charSheet.fortitude.experience >= charSheet.fortitude.points) {
-        actionsArr.push(`Foritude stat leveled up (and experience will be reset)`);
+        actionsArr.push(`Foritude stat leveled up (and extra experience will be added to your pool)`);
       }
       if (charSheet.agility.experience >= charSheet.agility.points) {
-        actionsArr.push(`Agility stat leveled up (and experience will be reset)`);
+        actionsArr.push(`Agility stat leveled up (and extra experience will be added to your pool)`);
       }
       if (charSheet.persona.experience >= charSheet.persona.points) {
-        actionsArr.push(`Persona stat leveled up (and experience will be reset)`);
+        actionsArr.push(`Persona stat leveled up (and extra experience will be added to your pool)`);
       }
       if (charSheet.aptitude.experience >= charSheet.aptitude.points) {
-        actionsArr.push(`Aptitude stat leveled up (and experience will be reset)`);
+        actionsArr.push(`Aptitude stat leveled up (and extra experience will be added to your pool)`);
       }
 
       setActions(actionsArr);
     }
 
     if (e.target.value === 'nap') {
-      setActions([
-        `You will recover ${Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2)} health`,
-        `1 point in Injured and 1 point in Disturbed will be removed`,
-        `All temporary stat advantages will be reset to 0`,
-      ]);
+      setActions([`You will recover ${Math.floor(charSheet.maxHp / 2)} health`, `1 point in Injured and 1 point in Disturbed will be removed`, `All temporary stat advantages will be reset to 0`]);
     }
   };
 
@@ -74,6 +66,7 @@ const TakeARest = () => {
           ...fortitude,
           points: fortitude.points + 1,
           experience: 0,
+          pool: fortitude.pool + (fortitude.experience - fortitude.points),
         };
       }
 
@@ -82,6 +75,7 @@ const TakeARest = () => {
           ...agility,
           points: agility.points + 1,
           experience: 0,
+          pool: agility.pool + (agility.experience - agility.points),
         };
       }
 
@@ -90,6 +84,7 @@ const TakeARest = () => {
           ...persona,
           points: persona.points + 1,
           experience: 0,
+          pool: persona.pool + (persona.experience - persona.points),
         };
       }
 
@@ -98,15 +93,18 @@ const TakeARest = () => {
           ...aptitude,
           points: aptitude.points + 1,
           experience: 0,
+          pool: aptitude.pool + (aptitude.experience - aptitude.points),
         };
       }
+
+      // Hardcore mode: correctCurrentHp(charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 10 : 0), charSheet.maxHp + (upgradedFortitude ? 10 : 0))
 
       dispatch(
         updateSheetStart(
           'characters',
           charSheet._id,
           {
-            currentHp: correctCurrentHp(charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 5 : 0), charSheet.maxHp + (upgradedFortitude ? 5 : 0)),
+            currentHp: charSheet.maxHp + (upgradedFortitude ? 10 : 0),
             conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
             fortitude: { ...fortitude, advantage: 0 },
             agility: { ...agility, advantage: 0 },
@@ -121,13 +119,18 @@ const TakeARest = () => {
     }
 
     if (rest === 'nap') {
+      let newInjured = charSheet.conditions.injured - 1;
+      let newDisturbed = charSheet.conditions.disturbed - 1;
+
+      // Hardcore mode: correctCurrentHp(charSheet.currentHp + Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2), charSheet.maxHp)
+
       dispatch(
         updateSheetStart(
           'characters',
           charSheet._id,
           {
-            currentHp: correctCurrentHp(charSheet.currentHp + Math.floor((charSheet.fortitude.points + charSheet.fortitude.modifier) / 2), charSheet.maxHp),
-            conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured - 1, disturbed: charSheet.conditions.disturbed - 1 },
+            currentHp: correctCurrentHp(charSheet.currentHp + Math.floor(charSheet.maxHp / 2), charSheet.maxHp),
+            conditions: { ...charSheet.conditions, injured: newInjured < 0 ? 0 : newInjured, disturbed: newDisturbed < 0 ? 0 : newDisturbed },
             fortitude: { ...charSheet.fortitude, advantage: 0 },
             agility: { ...charSheet.agility, advantage: 0 },
             persona: { ...charSheet.persona, advantage: 0 },

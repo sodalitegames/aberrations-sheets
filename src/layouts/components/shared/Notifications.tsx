@@ -4,7 +4,7 @@ import { Transition } from '@headlessui/react';
 import { CheckCircleIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
 
-import { useAppActions } from '../../../hooks/useAppActions';
+import { useActions } from '../../../hooks/useActions';
 
 import { Notification } from '../../../models/interfaces/app';
 
@@ -13,7 +13,7 @@ interface NotificationsProps {
 }
 
 const Notifications: React.VFC<NotificationsProps> = ({ notifications }) => {
-  const { dismissNotification } = useAppActions();
+  const { dismissNotification } = useActions();
 
   return (
     <>

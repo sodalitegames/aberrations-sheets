@@ -1,11 +1,11 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Disclosure } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCampaign, selectActiveSession, selectFutureSessions, selectCompletedSessions } from '../../../redux/campaign/campaign.selectors';
 
-import { setSlideOver } from '../../../redux/app/app.actions';
+import { useActions } from '../../../hooks/useActions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import classNames from '../../../utils/classNames';
@@ -22,7 +22,7 @@ import DisplayLog from '../../../components/display/DisplayLog';
 import EditSession from '../../../components/sections/EditSession';
 
 const CampaignCampaignPage = () => {
-  const dispatch = useDispatch();
+  const { setSlideOver } = useActions();
 
   const campSheet = useSelector(selectCurrentCampaign);
   const activeSession = useSelector(selectActiveSession);
@@ -59,7 +59,7 @@ const CampaignCampaignPage = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center mt-5 ml-5 space-y-2 shrink-0 sm:mt-0">
-              <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newSessionForm }))} disabled>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.newSessionForm })} disabled>
                 Create New Session
               </Button>
             </div>
@@ -153,11 +153,11 @@ const CampaignCampaignPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.captainsLogs}
-            button={{ click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } })), text: `Add a new Captain's Log` }}
+            button={{ click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } }), text: `Add a new Captain's Log` }}
             empty={{
               heading: `No Captain's Logs`,
               message: 'Get started by creating your first one now',
-              button: { click: () => dispatch(setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } })), text: `New Captain's Log` },
+              button: { click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } }), text: `New Captain's Log` },
             }}
           >
             {campSheet.captainsLogs.map(log => (

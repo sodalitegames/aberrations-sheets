@@ -21,6 +21,18 @@ export const selectCreatures = createSelector([selectCurrentCampaign], current =
 export const selectNpcs = createSelector([selectCurrentCampaign], current => (current ? current.npcs.filter(npc => !npc.archived) : []));
 export const selectEnvironments = createSelector([selectCurrentCampaign], current => (current ? current.environments.filter(environment => !environment.archived) : []));
 
+export const selectCombatants = createSelector([selectCurrentCampaign], current =>
+  current
+    ? [
+        ...current.players.map(player => ({ ...player, type: 'Player' })),
+        ...current.npcs.map(npc => ({ ...npc, type: 'Npc' })),
+        ...current.creatures.map(creature => ({ ...creature, type: 'Creature' })),
+      ]
+        .filter(combatant => !combatant.archived)
+        .sort((prev, curr) => (prev.initiative < curr.initiative ? 1 : -1))
+    : []
+);
+
 export const selectArchivedWeapons = createSelector([selectCurrentCampaign], current => (current ? current.weapons.filter(weapon => weapon.archived) : []));
 export const selectArchivedWearables = createSelector([selectCurrentCampaign], current => (current ? current.wearables.filter(wearable => wearable.archived) : []));
 export const selectArchivedConsumables = createSelector([selectCurrentCampaign], current => (current ? current.consumables.filter(consumable => consumable.archived) : []));

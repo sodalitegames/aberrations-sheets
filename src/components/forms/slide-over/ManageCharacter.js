@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 
-import { setNestedModal } from '../../../redux/app/app.actions';
 import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
+
+import { useActions } from '../../../hooks/useActions';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -20,6 +21,7 @@ import ModalTypes from '../../../utils/ModalTypes';
 
 const ManageCharacter = () => {
   const dispatch = useDispatch();
+  const { setNestedModal } = useActions();
 
   const currentUser = useSelector(selectCurrentUser);
   const charSheet = useSelector(selectCurrentCharacter);
@@ -71,7 +73,7 @@ const ManageCharacter = () => {
       {/* <TextArea slideOver label="Character Description" name="charDescription" rows={6} value={charDescription} changeHandler={setCharDescription} />
       <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} /> */}
       <Row slideOver name="deleteCharacter" label="Delete Character">
-        <Button alert type="button" onClick={() => dispatch(setNestedModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'characters' } }, { nestedModal: true, slideOver: true }))}>
+        <Button alert type="button" onClick={() => setNestedModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'characters' } }, { nestedModal: true, slideOver: true })}>
           Permanently Delete {charSheet?.characterName}
         </Button>
       </Row>

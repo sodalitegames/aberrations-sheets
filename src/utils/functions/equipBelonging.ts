@@ -46,7 +46,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
 
       if (FOR || AGL || PER || APT) {
         // Get the new maxHp
-        const newMaxHp = (correctStatMod(equipmentMods.fortitude - FOR) + sheet.fortitude.points) * 5;
+        const newMaxHp = (correctStatMod(equipmentMods.fortitude - FOR) + sheet.fortitude.points) * 10;
 
         // Update the character sheet in the database
         store.dispatch(
@@ -111,7 +111,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
 
       if (FOR || AGL || PER || APT) {
         // Get the new maxHp
-        const newMaxHp = (correctStatMod(equipmentMods.fortitude + FOR) + sheet.fortitude.points) * 5;
+        const newMaxHp = (correctStatMod(equipmentMods.fortitude + FOR) + sheet.fortitude.points) * 10;
 
         // Update the character sheet in the database
         store.dispatch(

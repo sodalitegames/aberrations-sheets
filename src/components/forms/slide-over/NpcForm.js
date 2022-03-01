@@ -20,6 +20,7 @@ import Detail from '../elements/Detail';
 import Select from '../elements/Select';
 
 import DisplaySpecies from '../../display/DisplaySpecies';
+import Notice from '../../Notice';
 
 const NpcForm = ({ id }) => {
   const dispatch = useDispatch();
@@ -33,17 +34,12 @@ const NpcForm = ({ id }) => {
   const [typesList, setTypesList] = useState(null);
 
   const [name, setName] = useState('');
-  const [diplomacy, setDiplomacy] = useState('Ally');
-  const [temperament, setTemperament] = useState('Earth');
+  const [diplomacy, setDiplomacy] = useState('');
+  const [temperament, setTemperament] = useState('');
+
+  // Only needed if creating
   const [description, setDescription] = useState('');
   const [background, setBackground] = useState('');
-
-  // Only needed if editing
-  const [wallet, setWallet] = useState('');
-  // mortality
-  // spentUpgradePoints
-  // currentHp
-  // conditions
 
   const [levelId, setLevelId] = useState(null);
 
@@ -83,19 +79,9 @@ const NpcForm = ({ id }) => {
       setName(currentNpc.name);
       setDiplomacy(currentNpc.diplomacy);
       setTemperament(currentNpc.temperament);
-      setDescription(currentNpc.description);
-      setBackground(currentNpc.background);
-
       setSpecies(fetchedSpecies ? fetchedSpecies.find(spec => spec.id === currentNpc.speciesId) : '');
       setType(fetchedTypes ? fetchedTypes.npcTable.find(type => type.npcType === currentNpc.type) : '');
       setLevelId(currentNpc.levelId);
-
-      // Only needed if editing
-      setWallet(currentNpc.wallet);
-      // mortality
-      // spentUpgradePoints
-      // currentHp
-      // conditions
     }
   }, [id, campSheet, fetchedTypes, fetchedSpecies]);
 
@@ -120,14 +106,22 @@ const NpcForm = ({ id }) => {
     setLevelId(e.target.value);
   };
 
+  const selectDiplomacy = e => {
+    if (!e.target.value) return setDiplomacy(null);
+    setDiplomacy(e.target.value);
+  };
+
+  const selectTemperament = e => {
+    if (!e.target.value) return setTemperament(null);
+    setTemperament(e.target.value);
+  };
+
   const submitHandler = async e => {
     e.preventDefault();
 
     if (!name) return alert('Must provide a name');
     if (!diplomacy) return alert('Must provide a diplomacy');
     if (!temperament) return alert('Must provide a temperament');
-    if (!description) return alert('Must select a description');
-    if (!background) return alert('Must provide a background');
 
     // Check for species, type, and level
     if (!species) return alert('Must select a species');
@@ -141,27 +135,23 @@ const NpcForm = ({ id }) => {
       name,
       diplomacy,
       temperament,
-      description,
-      background,
-      // calculate currentHp and stats based on the type and level
-      currentHp: (species.stats.fortitude + levelData.fortitude) * 5,
     };
 
     if (id) {
-      // Check for properties that are only there when editing an npc
-      if (!wallet) return alert('Must provide a wallet amount');
-
       // Get the current npc data
       const currentNpc = campSheet.npcs.find(npc => npc._id === id);
 
-      body = {
-        ...body,
-        wallet,
-        fortitude: { ...currentNpc.fortitude, points: species.stats.fortitude + levelData.fortitude },
-        agility: { ...currentNpc.agility, points: species.stats.agility + levelData.agility },
-        persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
-        aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
-      };
+      if (levelId !== currentNpc.levelId) {
+        body = {
+          ...body,
+          fortitude: { ...currentNpc.fortitude, points: species.stats.fortitude + levelData.fortitude },
+          agility: { ...currentNpc.agility, points: species.stats.agility + levelData.agility },
+          persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
+          aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
+          // calculate currentHp and stats based on the type and level
+          currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
+        };
+      }
 
       dispatch(
         updateSheetResourceStart('campaigns', campSheet._id, 'npcs', id, body, {
@@ -172,16 +162,23 @@ const NpcForm = ({ id }) => {
       return;
     }
 
+    if (!description) return alert('Must select a description');
+    if (!background) return alert('Must provide a background');
+
     body = {
       ...body,
       type: type.npcType,
       speciesId: species.id,
       speciesName: species.name,
       levelId,
+      description,
+      background,
       fortitude: { points: species.stats.fortitude + levelData.fortitude },
       agility: { points: species.stats.agility + levelData.agility },
       persona: { points: species.stats.persona + levelData.persona },
       aptitude: { points: species.stats.aptitude + levelData.aptitude },
+      // calculate currentHp and stats based on the type and level
+      currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
     };
 
     dispatch(
@@ -201,10 +198,34 @@ const NpcForm = ({ id }) => {
     >
       <Input slideOver label="Name" type="text" name="name" value={name} changeHandler={setName} />
 
-      {id ? <Input slideOver label="Wallet" type="text" name="wallet" value={wallet} changeHandler={setWallet} /> : null}
+      <Select
+        slideOver
+        label="Diplomacy"
+        name="diplomacy"
+        value={diplomacy}
+        options={[
+          { name: 'Ally', id: 'Ally' },
+          { name: 'Neutral', id: 'Neutral' },
+          { name: 'Enemy', id: 'Enemy' },
+        ]}
+        changeHandler={selectDiplomacy}
+        required
+      />
 
-      {/* Temperament - Radio Group */}
-      {/* Diplomacy - Radio Group */}
+      <Select
+        slideOver
+        label="Temperament"
+        name="temperament"
+        value={temperament}
+        options={[
+          { name: 'Earth', id: 'Earth' },
+          { name: 'Fire', id: 'Fire' },
+          { name: 'Water', id: 'Water' },
+          { name: 'Air', id: 'Air' },
+        ]}
+        changeHandler={selectTemperament}
+        required
+      />
 
       {id ? (
         <Row slideOver name="species" label="Species">
@@ -255,8 +276,14 @@ const NpcForm = ({ id }) => {
         required
       />
 
-      <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} />
-      <TextArea slideOver label="Background" name="background" rows={8} value={background} changeHandler={setBackground} />
+      {id && <Notice status="warn" message="Note: Changing your npc's level &amp; power will reset their stats" />}
+
+      {!id && (
+        <>
+          <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} />
+          <TextArea slideOver label="Background" name="background" rows={8} value={background} changeHandler={setBackground} />
+        </>
+      )}
     </SlideOverForm>
   );
 };

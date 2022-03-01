@@ -4,10 +4,6 @@ enum ModalTypes {
   healDamage = 'HEAL_DAMAGE',
   receiveMoney = 'RECEIVE_MONEY',
   payMoney = 'PAY_MONEY',
-  editSpentUpgradePoints = 'EDIT_SPENT_UPGRADE_POINTS',
-  editMortality = 'EDIT_MORTALITY',
-  editStat = 'EDIT_STAT',
-  editCondition = 'EDIT_CONDITION',
   takeARest = 'TAKE_A_REST',
   errorEquippingBelonging = 'ERROR_EQUIPPING_BELONGING',
 
@@ -22,6 +18,12 @@ enum ModalTypes {
   updateInviteStatus = 'UPDATE_INVITE_STATUS',
   manageTransaction = 'MANAGE_TRANSACTION',
   removeCharacterFromCampaign = 'REMOVE_CHARACTER_FROM_CAMPAIGN',
+  editSpentUpgradePoints = 'EDIT_SPENT_UPGRADE_POINTS',
+  editMortality = 'EDIT_MORTALITY',
+  editStat = 'EDIT_STAT',
+  editCondition = 'EDIT_CONDITION',
+  editHealth = 'EDIT_HEALTH',
+  editWallet = 'EDIT_WALLET',
 }
 
 export default ModalTypes;

@@ -80,7 +80,7 @@ const NewCharacter: React.FC = () => {
           charBackground,
           speciesId: species.id,
           speciesName: species.name,
-          currentHp: species.stats.fortitude * 5,
+          currentHp: species.stats.fortitude * 10,
           fortitude: { points: species.stats.fortitude },
           agility: { points: species.stats.agility },
           persona: { points: species.stats.persona },

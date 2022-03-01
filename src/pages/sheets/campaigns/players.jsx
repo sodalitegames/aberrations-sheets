@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { CheckCircleIcon } from '@heroicons/react/outline';
-
-import { ExternalLinkIcon } from '@heroicons/react/outline';
+import { ExternalLinkIcon, CheckCircleIcon } from '@heroicons/react/outline';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
-import { setModal, setSlideOver } from '../../../redux/app/app.actions';
+import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
+import { useActions } from '../../../hooks/useActions';
 import { useResource } from '../../../hooks/useResource';
 
 import ModalTypes from '../../../utils/ModalTypes';
@@ -28,12 +27,14 @@ import DisplayPlayer from '../../../components/display/DisplayPlayer';
 const CampaignPlayersPage = () => {
   const dispatch = useDispatch();
 
+  const { setModal, setSlideOver } = useActions();
+
   const campSheet = useSelector(selectCurrentCampaign);
 
   const species = useResource(ResourceType.Species);
 
-  const [player, setPlayer] = useState(campSheet.players[0]);
-  const [id, setId] = useState(null);
+  const [player, setPlayer] = useState(campSheet.players.length ? campSheet.players[0] : null);
+  const [id, setId] = useState(campSheet.players.length ? campSheet.players[0]._id : null);
 
   useEffect(() => {
     if (id) {
@@ -51,15 +52,19 @@ const CampaignPlayersPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.players}
-            button={{ click: () => dispatch(setModal({ type: ModalTypes.sendInvite })), text: 'Invite a new Player' }}
+            button={{ click: () => setModal({ type: ModalTypes.sendInvite }), text: 'Invite a new Player' }}
             empty={{
               heading: 'No Players Assigned',
               message: 'Get started by inviting your first one now',
-              button: { click: () => dispatch(setModal({ type: ModalTypes.sendInvite })), text: 'Invite a Player' },
+              button: { click: () => setModal({ type: ModalTypes.sendInvite }), text: 'Invite a Player' },
             }}
           >
             {campSheet.players.map(player => (
-              <div key={player._id} className={classNames('flex justify-between items-center hover:bg-gray-50 px-2 cursor-pointer')} onClick={() => setId(player._id)}>
+              <div
+                key={player._id}
+                className={classNames('flex justify-between items-center px-2 cursor-pointer', id === player._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+                onClick={() => setId(player._id)}
+              >
                 <DisplayPlayer key={player._id} player={player} condensed listItem />
                 {player.active ? (
                   <div className="ml-2 shrink-0" title="Equipped">
@@ -71,7 +76,7 @@ const CampaignPlayersPage = () => {
           </ListContainer>
 
           <p className="pt-4 mt-6 mb-2 text-sm italic text-center text-gray-600 border-t border-gray-100">Want to manage invites you have already sent?</p>
-          <Button onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.manageSentInvites }))} small classes="mt-4">
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageSentInvites })} small classes="mt-4">
             Manage Sent Invites
           </Button>
         </div>
@@ -96,12 +101,34 @@ const CampaignPlayersPage = () => {
               </div>
 
               {/* Player Actions */}
-              <Button>{player.active ? 'Deactivate' : 'Activate'}</Button>
+
+              {/* Activate or Deactivate */}
               <Button
+                dark={player.active}
                 onClick={() =>
                   dispatch(
-                    setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'campaigns', playerName: player.playerNickname || player.playerName, body: { charId: player._id } } })
+                    updateSheetStart(
+                      'characters',
+                      player._id,
+                      { active: !player.active },
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `Player ${player.active ? 'Deactivated' : 'Activated'}`,
+                          message: `You have successfully ${player.active ? 'deactivated' : 'activated'} ${player.characterName}.`,
+                        },
+                      }
+                    )
                   )
+                }
+              >
+                {player.active ? 'Deactivate' : 'Activate'}
+              </Button>
+
+              {/* Remove from Campaign */}
+              <Button
+                onClick={() =>
+                  setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'campaigns', playerName: player.playerNickname || player.playerName, body: { charId: player._id } } })
                 }
               >
                 Remove From Campaign

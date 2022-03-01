@@ -1,8 +1,9 @@
 import { Fragment } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setModal, setSlideOver } from '../../redux/root-actions';
 import { updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
+
+import { useActions } from '../../hooks/useActions';
 
 import { BelongingKind, BelongingType, SheetType } from '../../models/enums';
 
@@ -31,6 +32,7 @@ const editForm = {
 
 const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, belongingType, belonging, equippedBelongings, equipmentMods, belongingKind }) => {
   const dispatch = useDispatch();
+  const { setModal, setSlideOver } = useActions();
 
   return (
     <Fragment>
@@ -67,7 +69,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                 Unassign
               </Button>
             ) : (
-              <Button onClick={() => dispatch(setModal({ type: ModalTypes.assignBelonging, id: belonging._id, data: { type: belongingType, name: belonging.name } }))}>Assign</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.assignBelonging, id: belonging._id, data: { type: belongingType, name: belonging.name } })}>Assign</Button>
             )
           ) : null}
 
@@ -102,7 +104,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
           <Button
             disabled={belongingType === 'wearables' && (belonging.npcId || belonging.equipped) ? true : false}
             disabledMessage={belongingType === 'wearables' ? `You must unequip/unassign this wearable before you can give or sell it to anybody.` : ''}
-            onClick={() => dispatch(setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: belongingType, document: belonging } }))}
+            onClick={() => setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: belongingType, document: belonging } })}
           >
             Give or Sell
           </Button>
@@ -110,7 +112,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
       ) : null}
 
       {/* Edit */}
-      <Button onClick={() => dispatch(setSlideOver({ type: editForm[belongingType], id: belonging._id, data: { sheetType: sheetType } }))}>Edit</Button>
+      <Button onClick={() => setSlideOver({ type: editForm[belongingType], id: belonging._id, data: { sheetType: sheetType } })}>Edit</Button>
 
       {/* Archive or Restore */}
       <Button
@@ -123,7 +125,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
               sheet._id,
               belongingType,
               belonging._id,
-              { archived: !belonging.archived, equipped: false, active: false },
+              { archived: !belonging.archived, equipped: false, active: false, npcId: null },
               {
                 notification: {
                   status: 'success',
@@ -145,20 +147,18 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
           disabled={belongingType === 'wearables' && (belonging.equipped || belonging.npcId) ? true : false}
           disabledMessage={belongingType === 'wearables' ? 'You must unequip/unassign this wearable before you can delete it.' : ''}
           onClick={() =>
-            dispatch(
-              setModal({
-                type: ModalTypes.deleteResource,
-                id: belonging._id,
-                data: {
-                  sheetType: sheetType,
-                  resourceType: belongingType,
-                  title: `Are you sure you want to delete ${belonging.nickname || belonging.name}?`,
-                  submitText: `Yes, delete ${belonging.nickname || belonging.name}`,
-                  equipped: belonging.equipped,
-                  notification: { heading: `${belongingKind} Deleted`, message: `You have successfully deleted ${belonging.name}.` },
-                },
-              })
-            )
+            setModal({
+              type: ModalTypes.deleteResource,
+              id: belonging._id,
+              data: {
+                sheetType: sheetType,
+                resourceType: belongingType,
+                title: `Are you sure you want to delete ${belonging.nickname || belonging.name}?`,
+                submitText: `Yes, delete ${belonging.nickname || belonging.name}`,
+                equipped: belonging.equipped,
+                notification: { heading: `${belongingKind} Deleted`, message: `You have successfully deleted ${belonging.name}.` },
+              },
+            })
           }
         >
           Delete
