@@ -23,136 +23,140 @@ const ManageEquippedBelongings = ({ data }) => {
       <div className="px-6">
         {data.sheet[data.type].length ? (
           <ListContainer>
-            {data.sheet[data.type].map(belonging => {
-              if (data.type === 'weapons') {
-                return (
-                  <Fragment key={belonging._id}>
-                    <DisplayWeapon
-                      weapon={belonging}
-                      listItem
-                      condensed
-                      actions={[
-                        {
-                          text: belonging.equipped ? 'Unequip' : 'Equip',
-                          dark: belonging.equipped,
-                          click: () =>
-                            equipBelonging({
-                              sheetType: 'characters',
-                              sheet: data.sheet,
-                              belongingType: 'weapons',
-                              belonging: belonging,
-                              equippedList: data.equippedList,
-                              nested: true,
-                            }),
-                        },
-                        {
-                          text: 'View',
-                          click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'weapons' } }),
-                        },
-                      ]}
-                    />
-                  </Fragment>
-                );
-              }
+            {data.sheet[data.type]
+              .filter(belonging => !belonging.archived)
+              .map(belonging => {
+                if (data.type === 'weapons') {
+                  return (
+                    <Fragment key={belonging._id}>
+                      <DisplayWeapon
+                        weapon={belonging}
+                        listItem
+                        condensed
+                        actions={[
+                          {
+                            text: belonging.equipped ? 'Unequip' : 'Equip',
+                            dark: belonging.equipped,
+                            click: () =>
+                              equipBelonging({
+                                sheetType: 'characters',
+                                sheet: data.sheet,
+                                belongingType: 'weapons',
+                                belonging: belonging,
+                                equippedList: data.equippedList,
+                                nested: true,
+                              }),
+                          },
+                          {
+                            text: 'View',
+                            click: () =>
+                              setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'weapons' } }),
+                          },
+                        ]}
+                      />
+                    </Fragment>
+                  );
+                }
 
-              if (data.type === 'wearables') {
-                return (
-                  <Fragment key={belonging._id}>
-                    <DisplayWearable
-                      wearable={belonging}
-                      listItem
-                      condensed
-                      actions={[
-                        {
-                          text: belonging.equipped ? 'Unequip' : 'Equip',
-                          dark: belonging.equipped,
-                          click: () =>
-                            equipBelonging({
-                              sheetType: 'characters',
-                              sheet: data.sheet,
-                              belongingType: 'wearables',
-                              belonging: belonging,
-                              equippedList: data.equippedList,
-                              equipmentMods: data.equipmentMods,
-                              nested: true,
-                            }),
-                        },
-                        {
-                          text: 'View',
-                          click: () =>
-                            setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'wearables' } }),
-                        },
-                      ]}
-                    />
-                  </Fragment>
-                );
-              }
+                if (data.type === 'wearables') {
+                  return (
+                    <Fragment key={belonging._id}>
+                      <DisplayWearable
+                        wearable={belonging}
+                        listItem
+                        condensed
+                        actions={[
+                          {
+                            text: belonging.equipped ? 'Unequip' : 'Equip',
+                            dark: belonging.equipped,
+                            click: () =>
+                              equipBelonging({
+                                sheetType: 'characters',
+                                sheet: data.sheet,
+                                belongingType: 'wearables',
+                                belonging: belonging,
+                                equippedList: data.equippedList,
+                                equipmentMods: data.equipmentMods,
+                                nested: true,
+                              }),
+                          },
+                          {
+                            text: 'View',
+                            click: () =>
+                              setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'wearables' } }),
+                          },
+                        ]}
+                      />
+                    </Fragment>
+                  );
+                }
 
-              if (data.type === 'consumables') {
-                return (
-                  <Fragment key={belonging._id}>
-                    <DisplayConsumable
-                      consumable={belonging}
-                      listItem
-                      condensed
-                      actions={[
-                        {
-                          text: belonging.equipped ? 'Unequip' : 'Equip',
-                          dark: belonging.equipped,
-                          click: () =>
-                            equipBelonging({
-                              sheetType: 'characters',
-                              sheet: data.sheet,
-                              belongingType: 'consumables',
-                              belonging: belonging,
-                              equippedList: data.equippedList,
-                              nested: true,
-                            }),
-                        },
-                        {
-                          text: 'View',
-                          click: () =>
-                            setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'consumables' } }),
-                        },
-                      ]}
-                    />
-                  </Fragment>
-                );
-              }
+                if (data.type === 'consumables') {
+                  return (
+                    <Fragment key={belonging._id}>
+                      <DisplayConsumable
+                        consumable={belonging}
+                        listItem
+                        condensed
+                        actions={[
+                          {
+                            text: belonging.equipped ? 'Unequip' : 'Equip',
+                            dark: belonging.equipped,
+                            click: () =>
+                              equipBelonging({
+                                sheetType: 'characters',
+                                sheet: data.sheet,
+                                belongingType: 'consumables',
+                                belonging: belonging,
+                                equippedList: data.equippedList,
+                                nested: true,
+                              }),
+                          },
+                          {
+                            text: 'View',
+                            click: () =>
+                              setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'consumables' } }),
+                          },
+                        ]}
+                      />
+                    </Fragment>
+                  );
+                }
 
-              if (data.type === 'usables') {
-                return (
-                  <Fragment key={belonging._id}>
-                    <DisplayUsable
-                      usable={belonging}
-                      listItem
-                      condensed
-                      actions={[
-                        {
-                          text: belonging.equipped ? 'Unequip' : 'Equip',
-                          dark: belonging.equipped,
-                          click: () =>
-                            equipBelonging({
-                              sheetType: 'characters',
-                              sheet: data.sheet,
-                              belongingType: 'usables',
-                              belonging: belonging,
-                              equippedList: data.equippedList,
-                              nested: true,
-                            }),
-                        },
-                        {
-                          text: 'View',
-                          click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'usables' } }),
-                        },
-                      ]}
-                    />
-                  </Fragment>
-                );
-              }
+                if (data.type === 'usables') {
+                  return (
+                    <Fragment key={belonging._id}>
+                      <DisplayUsable
+                        usable={belonging}
+                        listItem
+                        condensed
+                        actions={[
+                          {
+                            text: belonging.equipped ? 'Unequip' : 'Equip',
+                            dark: belonging.equipped,
+                            click: () =>
+                              equipBelonging({
+                                sheetType: 'characters',
+                                sheet: data.sheet,
+                                belongingType: 'usables',
+                                belonging: belonging,
+                                equippedList: data.equippedList,
+                                nested: true,
+                              }),
+                          },
+                          {
+                            text: 'View',
+                            click: () =>
+                              setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: data.sheetType, playerId: belonging.sheetId, resourceType: 'usables' } }),
+                          },
+                        ]}
+                      />
+                    </Fragment>
+                  );
+                }
 
-              return <p key={belonging._id}>Something went wrong loading belonging data.</p>;
-            })}
+                return <p key={belonging._id}>Something went wrong loading belonging data.</p>;
+              })}
           </ListContainer>
         ) : (
           'You do not have any {belongingType}, create one now.'

@@ -122,7 +122,7 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
       <DescriptionList
         list={[
           { name: 'Health', values: [`${creature.currentHp} / ${creature.maxHp}`], half: true },
-          { name: 'Dodge Value', values: [creature.dodgeValue], half: true },
+          { name: 'Shield Value', values: [creature.shieldValue], half: true },
           { name: 'Initiative', values: [creature.initiative], half: true },
           { name: 'Assist', values: [creature.assist], half: true },
         ]}

@@ -117,7 +117,7 @@ const CreatureForm = ({ id }) => {
       agility: { points: agility },
       persona: { points: persona },
       aptitude: { points: aptitude },
-      currentHp: +fortitude * 5,
+      currentHp: +fortitude * 10,
     };
 
     dispatch(

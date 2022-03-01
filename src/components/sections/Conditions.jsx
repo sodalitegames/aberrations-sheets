@@ -22,7 +22,7 @@ const Conditions = ({ conditions }) => {
         {/* Slowed */}
         <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
           <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-            <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and dodge value by this amount">
+            <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
               Slowed
               <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'character', resource: charSheet } })}>
                 <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />

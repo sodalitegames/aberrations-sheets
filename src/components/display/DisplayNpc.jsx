@@ -119,7 +119,7 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       <DescriptionList
         list={[
           { name: 'Health', values: [`${npc.currentHp} / ${npc.maxHp}`], half: true },
-          { name: 'Dodge Value', values: [npc.dodgeValue], half: true },
+          { name: 'Shield Value', values: [npc.shieldValue], half: true },
           { name: 'Initiative', values: [npc.initiative], half: true },
           { name: 'Assist', values: [npc.assist], half: true },
         ]}

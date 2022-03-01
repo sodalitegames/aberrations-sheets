@@ -112,7 +112,9 @@ const CampaignCombatPage = () => {
               <Button disabled>Attack</Button>
 
               {/* Roll */}
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>Roll</Button>
+              <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>
+                Roll
+              </Button>
 
               {/* Leave Combat */}
               <div className="pt-4 mt-4 border-t border-gray-200">

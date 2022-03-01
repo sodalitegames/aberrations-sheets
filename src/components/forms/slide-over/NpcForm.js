@@ -149,7 +149,7 @@ const NpcForm = ({ id }) => {
           persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
           aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
           // calculate currentHp and stats based on the type and level
-          currentHp: (species.stats.fortitude + levelData.fortitude) * 5,
+          currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
         };
       }
 
@@ -178,7 +178,7 @@ const NpcForm = ({ id }) => {
       persona: { points: species.stats.persona + levelData.persona },
       aptitude: { points: species.stats.aptitude + levelData.aptitude },
       // calculate currentHp and stats based on the type and level
-      currentHp: (species.stats.fortitude + levelData.fortitude) * 5,
+      currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
     };
 
     dispatch(

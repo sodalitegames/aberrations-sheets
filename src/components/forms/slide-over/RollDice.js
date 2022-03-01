@@ -98,28 +98,7 @@ const RollDice = () => {
 
     setRollData(data);
 
-    // If any injured, disturbed, or experience was gained, save that to the database
-    if (data.injured) {
-      dispatch(
-        updateSheetStart(
-          'characters',
-          charSheet._id,
-          { conditions: { ...charSheet.conditions, injured: charSheet.conditions.injured + data.injured } },
-          { notification: { status: 'success', heading: 'Gained Injured', message: `You have gained ${data.injured} injured.` } }
-        )
-      );
-    }
-    if (data.disturbed) {
-      dispatch(
-        updateSheetStart(
-          'characters',
-          charSheet._id,
-          { conditions: { ...charSheet.conditions, disturbed: charSheet.conditions.disturbed + data.disturbed } },
-          { notification: { status: 'success', heading: 'Gained Disturbed', message: `You have gained ${data.disturbed} disturbed.` } }
-        )
-      );
-    }
-    if (data.experience) {
+    if (data.experience !== 0) {
       dispatch(
         updateSheetStart(
           'characters',

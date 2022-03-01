@@ -119,7 +119,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       <DescriptionList
         list={[
           { name: 'Health', values: [`${player.currentHp} / ${player.maxHp}`], half: true },
-          { name: 'Dodge Value', values: [player.dodgeValue], half: true },
+          { name: 'Shield Value', values: [player.shieldValue], half: true },
           { name: 'Initiative', values: [player.initiative], half: true },
           { name: 'Assist', values: [player.assist], half: true },
         ]}

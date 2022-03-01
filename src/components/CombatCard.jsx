@@ -125,7 +125,7 @@ const CombatCard = ({ entity, active, index, inCombat }) => {
           <div className="flex flex-1 w-0">
             <div className="relative inline-flex items-center justify-center flex-1 w-0 py-3 -mr-px text-sm font-medium text-gray-700 border border-transparent rounded-bl-lg hover:text-gray-500">
               <ShieldCheckIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
-              <span className="ml-3">DV: {entity.dodgeValue}</span>
+              <span className="ml-3">SV: {entity.shieldValue}</span>
             </div>
           </div>
           <div className="flex flex-1 w-0 -ml-px">

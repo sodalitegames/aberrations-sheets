@@ -19,10 +19,17 @@ const Stats = ({ stats, power, mortality, slowed }) => {
         <h3 className="text-lg font-medium text-gray-900">Stats</h3>
         {/* Chips */}
         <div className="space-x-2">
+          {/* Advantage Pool */}
+          <Chip color="green">Advantage Pool: {stats.reduce((prev, curr) => prev || 0 + curr.pool || 0, 0)}</Chip>
+
           {/* Mortality */}
-          <Chip color={mortality >= stats[0].points ? 'red' : mortality >= stats[0].points / 2 ? 'yellow' : 'green'} editable={{ type: ModalTypes.editMortality }}>
+          <Chip
+            color={mortality >= stats[0].points ? 'red' : mortality >= stats[0].points / 2 ? 'yellow' : 'green'}
+            editable={{ type: ModalTypes.editMortality, data: { type: 'character', entity: charSheet } }}
+          >
             {mortality} Mortality
           </Chip>
+
           {/* Power */}
           <Chip color="green">{power} Power</Chip>
         </div>
@@ -72,8 +79,8 @@ const Stats = ({ stats, power, mortality, slowed }) => {
                 <>
                   <h4 className="text-sm uppercase">{stat.passive.name}</h4>
                   <p className="text-lg font-bold">
-                    {/* Subtract Slowed from total if current passive stat is Dodge Value */}
-                    {stat.passive.name === 'Dodge Value' && slowed ? (
+                    {/* Subtract Slowed from total if current passive stat is Shield Value */}
+                    {stat.passive.name === 'Shield Value' && slowed ? (
                       <span className="relative">
                         <span className="absolute text-red-900 line-through -left-4">{stat.passive.value}</span>
                         {stat.passive.value - slowed}

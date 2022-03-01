@@ -96,7 +96,7 @@ const WearableForm = ({ id, data }) => {
         };
 
         // Calculate the new maxHp
-        const newMaxHp = (newFortitudeModifier + charSheet.fortitude.points) * 5;
+        const newMaxHp = (newFortitudeModifier + charSheet.fortitude.points) * 10;
 
         body.currentHp = calculateNewCurrentHp(charSheet.currentHp, charSheet.maxHp, newMaxHp);
       }

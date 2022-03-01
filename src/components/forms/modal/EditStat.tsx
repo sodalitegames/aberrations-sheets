@@ -28,24 +28,28 @@ interface EditStatProps {
         modifier: number;
         experience: number;
         advantage: number;
+        pool: number;
       };
       agility: {
         points: number;
         modifier: number;
         experience: number;
         advantage: number;
+        pool: number;
       };
       persona: {
         points: number;
         modifier: number;
         experience: number;
         advantage: number;
+        pool: number;
       };
       aptitude: {
         points: number;
         modifier: number;
         experience: number;
         advantage: number;
+        pool: number;
       };
     };
   };
@@ -61,18 +65,19 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
   const [modifier] = useState(data.resource[id].modifier);
   const [experience, setExperience] = useState(data.resource[id].experience);
   const [advantage, setAdvantage] = useState(data.resource[id].advantage);
+  const [pool, setPool] = useState(data.resource[id].pool);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let body = {
-      [id]: { points, modifier, experience, advantage },
+      [id]: { points, modifier, experience, advantage, pool },
     };
 
     if (id === 'fortitude') {
       if (data.resource[id].points + (data.resource[id].modifier || 0) !== +body[id].points + +(body[id].modifier || 0)) {
         // Get the new maxHp
-        const newMaxHp = (+body[id].points + +(body[id].modifier || 0)) * 5;
+        const newMaxHp = (+body[id].points + +(body[id].modifier || 0)) * 10;
 
         body.currentHp = calculateNewCurrentHp(data.resource.currentHp, data.resource.maxHp, newMaxHp);
       }
@@ -121,7 +126,8 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
       <Input label="Natural" name="points" type="number" value={points} changeHandler={setPoints} />
       {data.type !== 'creature' ? <Detail label="Modifier" detail={modifier} /> : null}
       {data.type !== 'creature' ? <Input label="Experience" name="experience" type="number" value={experience} changeHandler={setExperience} /> : null}
-      <Input label="Stat Advantage (Opt.)" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
+      <Input label="Stat Advantage" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
+      {data.type !== 'creature' ? <Input label="Advantage Pool Contribution" name="pool" type="number" value={pool} changeHandler={setPool} /> : null}
     </ModalForm>
   );
 };
