@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Popover, Transition } from '@headlessui/react';
 import { BellIcon, CheckCircleIcon } from '@heroicons/react/outline';
@@ -11,7 +11,6 @@ import { useActions } from '../../../hooks/useActions';
 import classNames from '../../../utils/classNames';
 
 const SheetPageNotifications = ({ type }) => {
-  const dispatch = useDispatch();
   const { dismissNotification, clearAllNotifications } = useActions();
 
   const allNotifications = useSelector(selectAllNotifications);
