@@ -96,10 +96,59 @@ const CampaignNpcsPage = () => {
             </div>
 
             <div className="col-span-1 pl-8 space-y-4">
+              {/* Edit */}
+              <div className="pb-4 mb-4 border-b border-gray-200">
+                <Button onClick={() => setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id })}>Edit</Button>
+              </div>
+
+              {/* Npc Actions */}
+
+              <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>
+                Roll Dice
+              </Button>
+
+              <Button disabled>Take Damage</Button>
+
+              <Button disabled>Heal Damage</Button>
+
+              <Button disabled>Pay Money</Button>
+
+              <Button disabled>Recieve Money</Button>
+
+              <Button disabled>Take A Rest</Button>
+
               {/* Activate or Deactivate */}
               {!npc.archived && (
+                <div className="pt-4 mt-4 border-t border-gray-200">
+                  <Button
+                    dark={npc.active}
+                    onClick={() =>
+                      dispatch(
+                        updateSheetResourceStart(
+                          'campaigns',
+                          campSheet._id,
+                          'npcs',
+                          npc._id,
+                          { active: !npc.active },
+                          {
+                            notification: {
+                              status: 'success',
+                              heading: `Npc ${npc.active ? 'Deactivated' : 'Activated'}`,
+                              message: `You have successfully ${npc.active ? 'deactivated' : 'activated'} ${npc.name}.`,
+                            },
+                          }
+                        )
+                      )
+                    }
+                  >
+                    {npc.active ? 'Deactivate' : 'Activate'}
+                  </Button>
+                </div>
+              )}
+
+              {/* Archive or Restore */}
+              <div className="pt-4 mt-4 border-t border-gray-200">
                 <Button
-                  dark={npc.active}
                   onClick={() =>
                     dispatch(
                       updateSheetResourceStart(
@@ -107,70 +156,43 @@ const CampaignNpcsPage = () => {
                         campSheet._id,
                         'npcs',
                         npc._id,
-                        { active: !npc.active },
+                        { archived: !npc.archived, active: false },
                         {
                           notification: {
                             status: 'success',
-                            heading: `Npc ${npc.active ? 'Deactivated' : 'Activated'}`,
-                            message: `You have successfully ${npc.active ? 'deactivated' : 'activated'} ${npc.name}.`,
+                            heading: `Npc ${npc.archived ? 'Restored' : 'Archived'}`,
+                            message: `You have successfully ${npc.archived ? 'restored' : 'archived'} ${npc.name}.`,
                           },
                         }
                       )
                     )
                   }
                 >
-                  {npc.active ? 'Deactivate' : 'Activate'}
+                  {npc.archived ? 'Restore' : 'Archive'}
                 </Button>
-              )}
 
-              {/* Edit */}
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id })}>Edit</Button>
-
-              {/* Archive or Restore */}
-              <Button
-                onClick={() =>
-                  dispatch(
-                    updateSheetResourceStart(
-                      'campaigns',
-                      campSheet._id,
-                      'npcs',
-                      npc._id,
-                      { archived: !npc.archived, active: false },
-                      {
-                        notification: {
-                          status: 'success',
-                          heading: `Npc ${npc.archived ? 'Restored' : 'Archived'}`,
-                          message: `You have successfully ${npc.archived ? 'restored' : 'archived'} ${npc.name}.`,
+                {/* Delete */}
+                {npc.archived ? (
+                  <Button
+                    alert
+                    onClick={() =>
+                      setModal({
+                        type: ModalTypes.deleteResource,
+                        id: npc._id,
+                        data: {
+                          sheetType: 'campaigns',
+                          resourceType: 'npcs',
+                          title: `Are you sure you want to delete ${npc.name}?`,
+                          submitText: `Yes, delete ${npc.name}`,
+                          notification: { heading: 'Npc Deleted', message: `You have successfully deleted ${npc.name}.` },
                         },
-                      }
-                    )
-                  )
-                }
-              >
-                {npc.archived ? 'Restore' : 'Archive'}
-              </Button>
-
-              {/* Delete */}
-              {npc.archived ? (
-                <Button
-                  alert
-                  onClick={() =>
-                    setModal({
-                      type: ModalTypes.deleteResource,
-                      id: npc._id,
-                      data: {
-                        sheetType: 'campaigns',
-                        resourceType: 'npcs',
-                        title: `Are you sure you want to delete ${npc.name}?`,
-                        submitText: `Yes, delete ${npc.name}`,
-                        notification: { heading: 'Npc Deleted', message: `You have successfully deleted ${npc.name}.` },
-                      },
-                    })
-                  }
-                >
-                  Delete
-                </Button>
-              ) : null}
+                      })
+                    }
+                  >
+                    Delete
+                  </Button>
+                ) : null}
+              </div>
             </div>
           </div>
         ) : (

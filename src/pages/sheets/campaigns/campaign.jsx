@@ -34,13 +34,13 @@ const CampaignCampaignPage = () => {
       <div className="space-y-4">
         {/* Actions */}
         <SheetPagePanel title="Actions">
-          <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
+          <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
             Roll Dice
           </Button>
           <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
             Manage Campaign
           </Button>
-          <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
+          <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
             Start Combat
           </Button>
         </SheetPagePanel>

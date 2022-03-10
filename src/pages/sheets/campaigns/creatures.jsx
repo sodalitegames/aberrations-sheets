@@ -91,10 +91,53 @@ const CampaignCreaturesPage = () => {
             </div>
 
             <div className="col-span-1 pl-8 space-y-4">
+              {/* Edit */}
+              <div className="pb-4 mb-4 border-b border-gray-200">
+                <Button onClick={() => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id })}>Edit</Button>
+              </div>
+
+              {/* Creature Actions */}
+
+              <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>
+                Roll Dice
+              </Button>
+
+              <Button disabled>Take Damage</Button>
+
+              <Button disabled>Heal Damage</Button>
+
               {/* Activate or Deactivate */}
               {!creature.archived && (
+                <div className="pt-4 mt-4 border-t border-gray-200">
+                  <Button
+                    dark={creature.active}
+                    onClick={() =>
+                      dispatch(
+                        updateSheetResourceStart(
+                          'campaigns',
+                          campSheet._id,
+                          'creatures',
+                          creature._id,
+                          { active: !creature.active },
+                          {
+                            notification: {
+                              status: 'success',
+                              heading: `Creature ${creature.active ? 'Deactivated' : 'Activated'}`,
+                              message: `You have successfully ${creature.active ? 'deactivated' : 'activated'} ${creature.name}.`,
+                            },
+                          }
+                        )
+                      )
+                    }
+                  >
+                    {creature.active ? 'Deactivate' : 'Activate'}
+                  </Button>
+                </div>
+              )}
+
+              {/* Archive or Restore */}
+              <div className="pt-4 mt-4 border-t border-gray-200">
                 <Button
-                  dark={creature.active}
                   onClick={() =>
                     dispatch(
                       updateSheetResourceStart(
@@ -102,70 +145,43 @@ const CampaignCreaturesPage = () => {
                         campSheet._id,
                         'creatures',
                         creature._id,
-                        { active: !creature.active },
+                        { archived: !creature.archived, active: false },
                         {
                           notification: {
                             status: 'success',
-                            heading: `Creature ${creature.active ? 'Deactivated' : 'Activated'}`,
-                            message: `You have successfully ${creature.active ? 'deactivated' : 'activated'} ${creature.name}.`,
+                            heading: `Creature ${creature.archived ? 'Restored' : 'Archived'}`,
+                            message: `You have successfully ${creature.archived ? 'restored' : 'archived'} ${creature.name}.`,
                           },
                         }
                       )
                     )
                   }
                 >
-                  {creature.active ? 'Deactivate' : 'Activate'}
+                  {creature.archived ? 'Restore' : 'Archive'}
                 </Button>
-              )}
 
-              {/* Edit */}
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id })}>Edit</Button>
-
-              {/* Archive or Restore */}
-              <Button
-                onClick={() =>
-                  dispatch(
-                    updateSheetResourceStart(
-                      'campaigns',
-                      campSheet._id,
-                      'creatures',
-                      creature._id,
-                      { archived: !creature.archived, active: false },
-                      {
-                        notification: {
-                          status: 'success',
-                          heading: `Creature ${creature.archived ? 'Restored' : 'Archived'}`,
-                          message: `You have successfully ${creature.archived ? 'restored' : 'archived'} ${creature.name}.`,
+                {/* Delete */}
+                {creature.archived ? (
+                  <Button
+                    alert
+                    onClick={() =>
+                      setModal({
+                        type: ModalTypes.deleteResource,
+                        id: creature._id,
+                        data: {
+                          sheetType: 'campaigns',
+                          resourceType: 'creatures',
+                          title: `Are you sure you want to delete ${creature.name}?`,
+                          submitText: `Yes, delete ${creature.name}`,
+                          notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
                         },
-                      }
-                    )
-                  )
-                }
-              >
-                {creature.archived ? 'Restore' : 'Archive'}
-              </Button>
-
-              {/* Delete */}
-              {creature.archived ? (
-                <Button
-                  alert
-                  onClick={() =>
-                    setModal({
-                      type: ModalTypes.deleteResource,
-                      id: creature._id,
-                      data: {
-                        sheetType: 'campaigns',
-                        resourceType: 'creatures',
-                        title: `Are you sure you want to delete ${creature.name}?`,
-                        submitText: `Yes, delete ${creature.name}`,
-                        notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
-                      },
-                    })
-                  }
-                >
-                  Delete
-                </Button>
-              ) : null}
+                      })
+                    }
+                  >
+                    Delete
+                  </Button>
+                ) : null}
+              </div>
             </div>
           </div>
         ) : (
