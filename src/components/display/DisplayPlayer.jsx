@@ -173,7 +173,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'weapons', sheet: player, sheetType: 'players', equippedList: player.weapons.filter(weapon => weapon.equipped) },
+              data: { type: 'player', belongingType: 'weapons' },
             }),
         }}
       >
@@ -193,23 +193,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: {
-                type: 'wearables',
-                sheet: player,
-                sheetType: 'players',
-                equippedList: player.wearables.filter(wearable => wearable.equipped),
-                equipmentMods: player.wearables
-                  .filter(wearable => wearable.equipped)
-                  .reduce(
-                    (mods, wearable) => ({
-                      fortitude: mods.fortitude + wearable.statMods.fortitude,
-                      agility: mods.agility + wearable.statMods.agility,
-                      persona: mods.persona + wearable.statMods.persona,
-                      aptitude: mods.aptitude + wearable.statMods.aptitude,
-                    }),
-                    { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
-                  ),
-              },
+              data: { type: 'player', belongingType: 'wearables' },
             }),
         }}
       >
@@ -229,7 +213,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'consumables', sheet: player, sheetType: 'players', equippedList: player.consumables.filter(consumable => consumable.equipped) },
+              data: { type: 'player', belongingType: 'consumables' },
             }),
         }}
       >
@@ -249,7 +233,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'usables', sheet: player, sheetType: 'players', equippedList: player.usables.filter(usable => usable.equipped) },
+              data: { type: 'player', belongingType: 'usables' },
             }),
         }}
       >

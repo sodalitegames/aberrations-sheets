@@ -21,7 +21,7 @@ const ShowBelonging = ({ id, data, nested }) => {
     if (data.sheetType === 'characters') {
       if (charSheet && id && data) {
         // set current belonging to view
-        const currentBelonging = charSheet[data.resourceType].find(bel => bel._id === id);
+        const currentBelonging = charSheet[data.belongingType].find(bel => bel._id === id);
         setBelonging(currentBelonging);
       }
     }
@@ -29,7 +29,7 @@ const ShowBelonging = ({ id, data, nested }) => {
     if (data.sheetType === 'campaigns') {
       if (campSheet && id && data) {
         // set current belonging to view
-        const currentBelonging = campSheet[data.resourceType].find(bel => bel._id === id);
+        const currentBelonging = campSheet[data.belongingType].find(bel => bel._id === id);
         setBelonging(currentBelonging);
       }
     }
@@ -38,7 +38,7 @@ const ShowBelonging = ({ id, data, nested }) => {
       if (campSheet && id && data) {
         // set current belonging to view
         const player = campSheet.players.find(player => player._id === data.playerId);
-        const currentBelonging = player[data.resourceType].find(bel => bel._id === id);
+        const currentBelonging = player[data.belongingType].find(bel => bel._id === id);
         setBelonging(currentBelonging);
       }
     }
@@ -48,13 +48,13 @@ const ShowBelonging = ({ id, data, nested }) => {
     <ModalContainer nested={nested}>
       {belonging ? (
         <>
-          {data.resourceType === 'weapons' ? (
+          {data.belongingType === 'weapons' ? (
             <DisplayWeapon weapon={belonging} />
-          ) : data.resourceType === 'wearables' ? (
+          ) : data.belongingType === 'wearables' ? (
             <DisplayWearable wearable={belonging} />
-          ) : data.resourceType === 'consumables' ? (
+          ) : data.belongingType === 'consumables' ? (
             <DisplayConsumable consumable={belonging} />
-          ) : data.resourceType === 'usables' ? (
+          ) : data.belongingType === 'usables' ? (
             <DisplayUsable usable={belonging} />
           ) : null}
         </>
