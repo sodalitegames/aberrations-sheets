@@ -15,23 +15,23 @@ const tabs = [
   { name: 'Usables', href: 'usables' },
 ];
 
-const inventoryStates = [
+const belongingStates = [
   { title: 'Current', href: 'current', description: 'The belongings that you currently have in your SURONIS or equipped.', current: true },
   { title: 'Archived', href: 'archived', description: 'The belongings that you have previously had, but used, gave away, sold, or deleted.', current: false },
-  // { title: 'Group Inventory - Coming Soon', href: 'group', description: 'The belongings that you and your campaign group collectively have, until a player claims it as their own.', current: false },
+  // { title: 'Group Belongings - Coming Soon', href: 'group', description: 'The belongings that you and your campaign group collectively have, until a player claims it as their own.', current: false },
 ];
 
-const CharacterInventoryPage = () => {
-  const [selected, setSelected] = useState(inventoryStates[0]);
+const CharacterBelongingsPage = () => {
+  const [selected, setSelected] = useState(belongingStates[0]);
 
   return (
     <div className="space-y-6">
-      <SheetPageContent title="Inventory">
+      <SheetPageContent title="Belongings">
         {/* Tabs */}
         <SheetPagePanel>
-          <div className="flex justify-between items-center flex-wrap">
+          <div className="flex flex-wrap items-center justify-between">
             <TabsNavigation tabs={tabs} sheetType="characters" />
-            <SelectButton value={selected} onChange={setSelected} options={inventoryStates} />
+            <SelectButton value={selected} onChange={setSelected} options={belongingStates} />
           </div>
         </SheetPagePanel>
       </SheetPageContent>
@@ -43,4 +43,4 @@ const CharacterInventoryPage = () => {
   );
 };
 
-export default CharacterInventoryPage;
+export default CharacterBelongingsPage;

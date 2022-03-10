@@ -2,23 +2,23 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { selectCurrentCampaign, selectCreatures, selectArchivedCreatures } from '../../../../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectCreatures, selectArchivedCreatures } from '../../../redux/campaign/campaign.selectors';
 
-import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
-import { useActions } from '../../../../hooks/useActions';
+import { useActions } from '../../../hooks/useActions';
 
-import SlideOverTypes from '../../../../utils/SlideOverTypes';
-import ModalTypes from '../../../../utils/ModalTypes';
+import SlideOverTypes from '../../../utils/SlideOverTypes';
+import ModalTypes from '../../../utils/ModalTypes';
 
-import SheetPageContent from '../../../../layouts/components/sheet/SheetPageContent';
+import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
-import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
-import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
+import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
+import ListInteractables, { ListInteractablesMessage } from '../../../components/sections/ListInteractables';
 
-import Button from '../../../../components/Button';
+import Button from '../../../components/Button';
 
-import DisplayCreature from '../../../../components/display/DisplayCreature';
+import DisplayCreature from '../../../components/display/DisplayCreature';
 
 const CampaignCreaturesPage = () => {
   const dispatch = useDispatch();
@@ -72,15 +72,14 @@ const CampaignCreaturesPage = () => {
   }, [id, creaturesList]);
 
   return (
-    <SheetPageContent title="Npcs" columns={4}>
-      {/* Showing Archived Weapons Notice */}
-      <ListInteractablesMessage show={searchParams.get('show')} interactableType="creatures" />
-
+    <SheetPageContent title="Creatures" columns={4}>
       {/* Creatures List */}
       <SheetPagePanel title="Manage Creatures">
         <div className="flow-root mt-2">
           <ListInteractables sheetType="campaigns" interactableType="creatures" id={id} setId={setId} interactablesList={creaturesList} label="Creature" show={searchParams.get('show')} />
         </div>
+        {/* Showing Archived Creatures Notice */}
+        <ListInteractablesMessage show={searchParams.get('show')} interactableType="creatures" />
       </SheetPagePanel>
 
       {/* Selected Creature */}
@@ -93,29 +92,31 @@ const CampaignCreaturesPage = () => {
 
             <div className="col-span-1 pl-8 space-y-4">
               {/* Activate or Deactivate */}
-              <Button
-                dark={creature.active}
-                onClick={() =>
-                  dispatch(
-                    updateSheetResourceStart(
-                      'campaigns',
-                      campSheet._id,
-                      'creatures',
-                      creature._id,
-                      { active: !creature.active },
-                      {
-                        notification: {
-                          status: 'success',
-                          heading: `Creature ${creature.active ? 'Deactivated' : 'Activated'}`,
-                          message: `You have successfully ${creature.active ? 'deactivated' : 'activated'} ${creature.name}.`,
-                        },
-                      }
+              {!creature.archived && (
+                <Button
+                  dark={creature.active}
+                  onClick={() =>
+                    dispatch(
+                      updateSheetResourceStart(
+                        'campaigns',
+                        campSheet._id,
+                        'creatures',
+                        creature._id,
+                        { active: !creature.active },
+                        {
+                          notification: {
+                            status: 'success',
+                            heading: `Creature ${creature.active ? 'Deactivated' : 'Activated'}`,
+                            message: `You have successfully ${creature.active ? 'deactivated' : 'activated'} ${creature.name}.`,
+                          },
+                        }
+                      )
                     )
-                  )
-                }
-              >
-                {creature.active ? 'Deactivate' : 'Activate'}
-              </Button>
+                  }
+                >
+                  {creature.active ? 'Deactivate' : 'Activate'}
+                </Button>
+              )}
 
               {/* Edit */}
               <Button onClick={() => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id })}>Edit</Button>

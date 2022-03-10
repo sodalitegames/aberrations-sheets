@@ -1,13 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import {
-  selectCurrentCharacter,
-  selectEquippedWeapons,
-  selectEquippedWearables,
-  selectEquippedConsumables,
-  selectEquippedUsables,
-  selectEquipmentMods,
-} from '../../../redux/character/character.selectors';
+import { selectCurrentCharacter, selectEquippedWeapons, selectEquippedWearables, selectEquippedConsumables, selectEquippedUsables } from '../../../redux/character/character.selectors';
 
 import { useActions } from '../../../hooks/useActions';
 
@@ -43,7 +36,6 @@ const CharacterGameplayPage = () => {
   const equippedWearables = useSelector(selectEquippedWearables);
   const equippedConsumables = useSelector(selectEquippedConsumables);
   const equippedUsables = useSelector(selectEquippedUsables);
-  const equipmentMods = useSelector(selectEquipmentMods);
 
   return (
     <SheetPageContent title="Gameplay" columns={3}>
@@ -133,14 +125,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedWeapons}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons', sheet: charSheet, sheetType: 'characters', equippedList: equippedWeapons } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'weapons' } }),
                 text: 'Manage equipped Weapons',
               }}
               empty={{
                 heading: 'No Equipped Weapons',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'weapons', sheet: charSheet, sheetType: 'characters', equippedList: equippedWeapons } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'weapons' } }),
                   text: 'Equip Weapon',
                 },
               }}
@@ -161,7 +153,7 @@ const CharacterGameplayPage = () => {
                 click: () =>
                   setSlideOver({
                     type: SlideOverTypes.manageEquippedBelongings,
-                    data: { type: 'wearables', sheet: charSheet, sheetType: 'characters', equippedList: equippedWearables, equipmentMods },
+                    data: { type: 'character', belongingType: 'wearables' },
                   }),
                 text: 'Manage equipped Wearables',
               }}
@@ -172,7 +164,7 @@ const CharacterGameplayPage = () => {
                   click: () =>
                     setSlideOver({
                       type: SlideOverTypes.manageEquippedBelongings,
-                      data: { type: 'wearables', sheet: charSheet, sheetType: 'characters', equippedList: equippedWearables, equipmentMods },
+                      data: { type: 'character', belongingType: 'wearables' },
                     }),
                   text: 'Equip Wearable',
                 },
@@ -193,16 +185,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedConsumables}
               button={{
-                click: () =>
-                  setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables', sheet: charSheet, sheetType: 'characters', equippedList: equippedConsumables } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'consumables' } }),
                 text: 'Manage equipped Consumables',
               }}
               empty={{
                 heading: 'No Equipped Consumables',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () =>
-                    setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'consumables', sheet: charSheet, sheetType: 'characters', equippedList: equippedConsumables } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'consumables' } }),
                   text: 'Equip Consumable',
                 },
               }}
@@ -220,14 +210,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedUsables}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables', sheet: charSheet, sheetType: 'characters', equippedList: equippedUsables } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'usables' } }),
                 text: 'Manage equipped Usables',
               }}
               empty={{
                 heading: 'No Equipped Usables',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'usables', sheet: charSheet, sheetType: 'characters', equippedList: equippedUsables } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'usables' } }),
                   text: 'Equip Usable',
                 },
               }}

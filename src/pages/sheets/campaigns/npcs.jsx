@@ -2,26 +2,26 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { selectCurrentCampaign, selectNpcs, selectArchivedNpcs } from '../../../../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectNpcs, selectArchivedNpcs } from '../../../redux/campaign/campaign.selectors';
 
-import { useActions } from '../../../../hooks/useActions';
+import { useActions } from '../../../hooks/useActions';
 
-import { updateSheetResourceStart } from '../../../../redux/sheet/sheet.actions';
+import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
-import { useResource } from '../../../../hooks/useResource';
+import { useResource } from '../../../hooks/useResource';
 
-import SlideOverTypes from '../../../../utils/SlideOverTypes';
-import ModalTypes from '../../../../utils/ModalTypes';
-import { ResourceType } from '../../../../models/enums';
+import SlideOverTypes from '../../../utils/SlideOverTypes';
+import ModalTypes from '../../../utils/ModalTypes';
+import { ResourceType } from '../../../models/enums';
 
-import SheetPageContent from '../../../../layouts/components/sheet/SheetPageContent';
+import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
-import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
-import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
+import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
+import ListInteractables, { ListInteractablesMessage } from '../../../components/sections/ListInteractables';
 
-import Button from '../../../../components/Button';
+import Button from '../../../components/Button';
 
-import DisplayNpc from '../../../../components/display/DisplayNpc';
+import DisplayNpc from '../../../components/display/DisplayNpc';
 
 const CampaignNpcsPage = () => {
   const dispatch = useDispatch();
@@ -78,14 +78,13 @@ const CampaignNpcsPage = () => {
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
-      {/* Showing Archived Weapons Notice */}
-      <ListInteractablesMessage show={searchParams.get('show')} interactableType="npcs" />
-
       {/* Npcs List */}
       <SheetPagePanel title="Manage Npcs">
         <div className="flow-root mt-2">
           <ListInteractables sheetType="campaigns" interactableType="npcs" id={id} setId={setId} interactablesList={npcsList} label="Npc" show={searchParams.get('show')} />
         </div>
+        {/* Showing Archived Npcs Notice */}
+        <ListInteractablesMessage show={searchParams.get('show')} interactableType="npcs" />
       </SheetPagePanel>
 
       {/* Selected Npc */}
@@ -98,29 +97,31 @@ const CampaignNpcsPage = () => {
 
             <div className="col-span-1 pl-8 space-y-4">
               {/* Activate or Deactivate */}
-              <Button
-                dark={npc.active}
-                onClick={() =>
-                  dispatch(
-                    updateSheetResourceStart(
-                      'campaigns',
-                      campSheet._id,
-                      'npcs',
-                      npc._id,
-                      { active: !npc.active },
-                      {
-                        notification: {
-                          status: 'success',
-                          heading: `Npc ${npc.active ? 'Deactivated' : 'Activated'}`,
-                          message: `You have successfully ${npc.active ? 'deactivated' : 'activated'} ${npc.name}.`,
-                        },
-                      }
+              {!npc.archived && (
+                <Button
+                  dark={npc.active}
+                  onClick={() =>
+                    dispatch(
+                      updateSheetResourceStart(
+                        'campaigns',
+                        campSheet._id,
+                        'npcs',
+                        npc._id,
+                        { active: !npc.active },
+                        {
+                          notification: {
+                            status: 'success',
+                            heading: `Npc ${npc.active ? 'Deactivated' : 'Activated'}`,
+                            message: `You have successfully ${npc.active ? 'deactivated' : 'activated'} ${npc.name}.`,
+                          },
+                        }
+                      )
                     )
-                  )
-                }
-              >
-                {npc.active ? 'Deactivate' : 'Activate'}
-              </Button>
+                  }
+                >
+                  {npc.active ? 'Deactivate' : 'Activate'}
+                </Button>
+              )}
 
               {/* Edit */}
               <Button onClick={() => setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id })}>Edit</Button>
