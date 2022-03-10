@@ -133,3 +133,24 @@ export const removeCharacterFromCampaignFailure = (sheetType, error) => ({
   type: SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_FAILURE,
   payload: { sheetType, error },
 });
+
+// Update Player and Player Resources
+export const updatePlayerSuccess = (sheetType, updatedPlayer) => ({
+  type: SheetActionTypes.UPDATE_PLAYER_SUCCESS,
+  payload: { sheetType, updatedPlayer },
+});
+
+export const createPlayerResourceSuccess = (sheetType, playerId, resourceType, newResource) => ({
+  type: SheetActionTypes.CREATE_PLAYER_RESOURCE_SUCCESS,
+  payload: { sheetType, playerId, resourceType, newResource },
+});
+
+export const updatePlayerResourceSuccess = (sheetType, playerId, resourceType, updatedResource) => ({
+  type: SheetActionTypes.UPDATE_PLAYER_RESOURCE_SUCCESS,
+  payload: { sheetType, playerId, resourceType, updatedResource },
+});
+
+export const deletePlayerResourceSuccess = (sheetType, playerId, resourceType, resourceId, message) => ({
+  type: SheetActionTypes.DELETE_PLAYER_RESOURCE_SUCCESS,
+  payload: { sheetType, playerId, resourceType, resourceId, message },
+});

@@ -32,7 +32,7 @@ const EditMortality = ({ data }) => {
             'characters',
             data.entity._id,
             { mortality: +mortality },
-            { modal: true, notification: { status: 'success', heading: 'Mortality Updated', message: `You have successfully updated your player's mortality to ${mortality}.` } }
+            { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Mortality Updated', message: `You have successfully updated your player's mortality to ${mortality}.` } }
           )
         );
         return;

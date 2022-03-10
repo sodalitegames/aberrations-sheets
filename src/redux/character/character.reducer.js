@@ -177,6 +177,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
         error: action.payload.error,
       };
     case AppActionTypes.SET_MODAL:
+    case AppActionTypes.SET_NESTED_MODAL:
     case AppActionTypes.SET_SLIDE_OVER:
       return {
         ...state,

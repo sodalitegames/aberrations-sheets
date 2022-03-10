@@ -34,6 +34,7 @@ const EditSpentUpgradePoints = ({ data }) => {
             data.entity._id,
             { spentUpgradePoints },
             {
+              forPlayer: true,
               modal: true,
               notification: { status: 'success', heading: 'Upgrade Points Updated', message: `You have successfully updated your player's spent upgrade points to ${spentUpgradePoints}.` },
             }

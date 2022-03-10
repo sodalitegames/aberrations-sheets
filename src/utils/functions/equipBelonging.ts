@@ -21,6 +21,7 @@ interface Data {
     aptitude: number;
   };
   nested?: boolean;
+  forPlayer?: boolean;
 }
 
 export const correctStatMod = (mod: number) => {
@@ -33,7 +34,10 @@ export const correctStatMod = (mod: number) => {
   return mod;
 };
 
-const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedList, nested, equipmentMods = { fortitude: 0, agility: 0, persona: 0, aptitude: 0 } }: Data, config?: Object): void => {
+const equipBelonging = (
+  { sheetType, sheet, belongingType, belonging, equippedList, nested, forPlayer, equipmentMods = { fortitude: 0, agility: 0, persona: 0, aptitude: 0 } }: Data,
+  config?: Object
+): void => {
   if (sheetType !== 'characters') return;
 
   if (belonging.unequippable) return alert('This belonging is unequippable');
@@ -50,13 +54,18 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
 
         // Update the character sheet in the database
         store.dispatch(
-          updateSheetStart('characters', sheet._id, {
-            fortitude: { ...sheet.fortitude, modifier: correctStatMod(equipmentMods.fortitude - FOR) },
-            agility: { ...sheet.agility, modifier: correctStatMod(equipmentMods.agility - AGL) },
-            persona: { ...sheet.persona, modifier: correctStatMod(equipmentMods.persona - PER) },
-            aptitude: { ...sheet.aptitude, modifier: correctStatMod(equipmentMods.aptitude - APT) },
-            currentHp: calculateNewCurrentHp(sheet.currentHp, sheet.maxHp, newMaxHp),
-          })
+          updateSheetStart(
+            'characters',
+            sheet._id,
+            {
+              fortitude: { ...sheet.fortitude, modifier: correctStatMod(equipmentMods.fortitude - FOR) },
+              agility: { ...sheet.agility, modifier: correctStatMod(equipmentMods.agility - AGL) },
+              persona: { ...sheet.persona, modifier: correctStatMod(equipmentMods.persona - PER) },
+              aptitude: { ...sheet.aptitude, modifier: correctStatMod(equipmentMods.aptitude - APT) },
+              currentHp: calculateNewCurrentHp(sheet.currentHp, sheet.maxHp, newMaxHp),
+            },
+            { forPlayer }
+          )
         );
       }
     }
@@ -69,6 +78,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
         belonging._id,
         { equipped: false },
         {
+          forPlayer,
           notification: {
             status: 'success',
             heading: `${getBelongingTypeCapitalized(belongingType)} Unequipped`,
@@ -115,13 +125,18 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
 
         // Update the character sheet in the database
         store.dispatch(
-          updateSheetStart('characters', sheet._id, {
-            fortitude: { ...sheet.fortitude, modifier: correctStatMod(equipmentMods.fortitude + FOR) },
-            agility: { ...sheet.agility, modifier: correctStatMod(equipmentMods.agility + AGL) },
-            persona: { ...sheet.persona, modifier: correctStatMod(equipmentMods.persona + PER) },
-            aptitude: { ...sheet.aptitude, modifier: correctStatMod(equipmentMods.aptitude + APT) },
-            currentHp: calculateNewCurrentHp(sheet.currentHp, sheet.maxHp, newMaxHp),
-          })
+          updateSheetStart(
+            'characters',
+            sheet._id,
+            {
+              fortitude: { ...sheet.fortitude, modifier: correctStatMod(equipmentMods.fortitude + FOR) },
+              agility: { ...sheet.agility, modifier: correctStatMod(equipmentMods.agility + AGL) },
+              persona: { ...sheet.persona, modifier: correctStatMod(equipmentMods.persona + PER) },
+              aptitude: { ...sheet.aptitude, modifier: correctStatMod(equipmentMods.aptitude + APT) },
+              currentHp: calculateNewCurrentHp(sheet.currentHp, sheet.maxHp, newMaxHp),
+            },
+            { forPlayer }
+          )
         );
       }
 
@@ -153,6 +168,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
       { equipped: true },
       {
         ...config,
+        forPlayer,
         notification: {
           status: 'success',
           heading: `${getBelongingTypeCapitalized(belongingType)} Equipped`,

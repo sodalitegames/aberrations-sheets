@@ -32,7 +32,7 @@ const EditHealth = ({ data }) => {
             'characters',
             data.entity._id,
             { currentHp: +currentHp },
-            { modal: true, notification: { status: 'success', heading: 'currentHp Updated', message: `You have successfully updated your player's currentHp to ${currentHp}.` } }
+            { forPlayer: true, modal: true, notification: { status: 'success', heading: 'currentHp Updated', message: `You have successfully updated your player's currentHp to ${currentHp}.` } }
           )
         );
         return;

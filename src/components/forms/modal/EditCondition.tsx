@@ -57,7 +57,7 @@ const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
             'characters',
             data.resource._id,
             { conditions: { ...data.resource.conditions, [id]: points } },
-            { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your player's ${id.toLowerCase()} condition.` } }
+            { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your player's ${id.toLowerCase()} condition.` } }
           )
         );
         return;

@@ -70,6 +70,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
+                                forPlayer: type === 'player' ? true : false,
                               }),
                           },
                           {
@@ -112,6 +113,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                                     { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
                                   ),
                                 nested: true,
+                                forPlayer: type === 'player' ? true : false,
                               }),
                           },
                           {
@@ -143,6 +145,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
+                                forPlayer: type === 'player' ? true : false,
                               }),
                           },
                           {
@@ -174,6 +177,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
+                                forPlayer: type === 'player' ? true : false,
                               }),
                           },
                           {
