@@ -23,6 +23,10 @@ import {
   removeCharacterFromCampaignSuccess,
   removeCharacterFromCampaignFailure,
   addCampaignToCharacterSuccess,
+  updatePlayerSuccess,
+  createPlayerResourceSuccess,
+  updatePlayerResourceSuccess,
+  deletePlayerResourceSuccess,
 } from './sheet.actions';
 
 import {
@@ -78,10 +82,14 @@ export function* updateSheet({ payload: { sheetType, sheetId, body, config } }) 
   try {
     const response = yield updateSheetCall(sheetType, sheetId, body);
 
-    // Emit changes to connected clients
-    socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.updateSheet, room: sheetId, args: [sheetType, response.data.data.sheet] });
+    if (config.forPlayer) {
+      yield put(updatePlayerSuccess('campaigns', response.data.data.sheet));
+    } else {
+      // Emit changes to connected clients
+      socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.updateSheet, room: sheetId, args: [sheetType, response.data.data.sheet] });
 
-    yield put(updateSheetSuccess(sheetType, response.data.data.sheet));
+      yield put(updateSheetSuccess(sheetType, response.data.data.sheet));
+    }
 
     // Add a notification, if configured to do so
     if (config?.notification) yield put(addNotification(config?.notification));
@@ -169,10 +177,14 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
       });
     }
 
-    // Emit changes to connected clients
-    socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.createSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
+    if (config.forPlayer) {
+      yield put(createPlayerResourceSuccess('campaigns', sheetId, resourceType, response.data.data.doc));
+    } else {
+      // Emit changes to connected clients
+      socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.createSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
 
-    yield put(createSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
+      yield put(createSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
+    }
 
     // Add a notification, if configured to do so
     if (config?.notification) yield put(addNotification(config?.notification));
@@ -302,10 +314,14 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
       }
     }
 
-    // Emit changes to connected clients
-    socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.updateSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
+    if (config.forPlayer) {
+      yield put(updatePlayerResourceSuccess('campaigns', sheetId, resourceType, response.data.data.doc));
+    } else {
+      // Emit changes to connected clients
+      socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.updateSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
 
-    yield put(updateSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
+      yield put(updateSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
+    }
 
     // Add a notification, if configured to do so
     if (config?.notification) yield put(addNotification(config?.notification));
@@ -352,10 +368,14 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
       });
     }
 
-    // Emit changes to connected clients
-    socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.deleteSheetResource, room: sheetId, args: [sheetType, resourceType, resourceId, response.data.data] });
+    if (config.forPlayer) {
+      yield put(deletePlayerResourceSuccess('campaigns', sheetId, resourceType, resourceId, response.data.data));
+    } else {
+      // Emit changes to connected clients
+      socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.deleteSheetResource, room: sheetId, args: [sheetType, resourceType, resourceId, response.data.data] });
 
-    yield put(deleteSheetResourceSuccess(sheetType, resourceType, resourceId, response.data.data));
+      yield put(deleteSheetResourceSuccess(sheetType, resourceType, resourceId, response.data.data));
+    }
 
     // Add a notification, if configured to do so
     if (config?.notification) yield put(addNotification(config?.notification));

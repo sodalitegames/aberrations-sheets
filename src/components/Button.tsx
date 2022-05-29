@@ -36,7 +36,7 @@ const Button: React.FC<ButtonProps> = ({ children, classes, text, rounded, alert
             ? 'text-white bg-red-900/80 hover:bg-red-800/80'
             : dark
             ? 'text-white bg-dark hover:bg-dark-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-200'
-            : 'text-gray-700 bg-white hover:bg-gray-50',
+            : 'text-gray-700 bg-white hover:bg-gray-50 disabled:bg-gray-50 disabled:border-gray-200 disabled:text-gray-400',
           small ? 'text-xs' : 'text-sm',
           classes ? classes : ''
         )}

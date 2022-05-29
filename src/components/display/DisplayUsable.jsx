@@ -24,11 +24,11 @@ const UsableDetails = ({ usable, sheetType }) => {
   );
 };
 
-const DisplayUsable = ({ usable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
+const DisplayUsable = ({ usable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.showBelonging, id: usable._id, data: { sheetType: sheetType, resourceType: 'usables' } }}>
+        <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.showBelonging, id: usable._id, data: { sheetType: sheetType, playerId, belongingType: 'usables' } }}>
           <InfoList list={[{ title: usable.description, value: usable.description }]} />
         </ListItem>
       );

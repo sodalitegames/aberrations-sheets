@@ -68,7 +68,7 @@ const ManageAssignedBelongings = ({ data }) => {
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', resourceType: 'weapons' } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', belongingType: 'weapons' } }),
                           },
                         ]}
                       />
@@ -107,7 +107,7 @@ const ManageAssignedBelongings = ({ data }) => {
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', resourceType: 'wearables' } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', belongingType: 'wearables' } }),
                           },
                         ]}
                       />
@@ -146,7 +146,7 @@ const ManageAssignedBelongings = ({ data }) => {
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', resourceType: 'consumables' } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', belongingType: 'consumables' } }),
                           },
                         ]}
                       />
@@ -185,7 +185,7 @@ const ManageAssignedBelongings = ({ data }) => {
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', resourceType: 'usables' } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', belongingType: 'usables' } }),
                           },
                         ]}
                       />

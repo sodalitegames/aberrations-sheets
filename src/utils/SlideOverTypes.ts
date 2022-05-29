@@ -14,7 +14,7 @@ enum SlideOverTypes {
   campOverviewForm = 'CAMPAIGN_OVERVIEW_FORM',
   campDetailsForm = 'CAMPAIGN_DETAILS_FORM',
   manageSentInvites = 'MANAGE_SENT_INVITES',
-  newSessionForm = 'NEW_SESSION_FORM',
+  sessionForm = 'NEW_SESSION_FORM',
   npcForm = 'NPC_FORM',
   creatureForm = 'CREATURE_FORM',
   environmentForm = 'ENVIRONMENT_FORM',

@@ -11,7 +11,7 @@ export const selectReload = createSelector([selectCampaign], campaign => campaig
 
 export const selectCompletedSessions = createSelector([selectCurrentCampaign], current => current.sessions.filter(session => session.completed));
 export const selectFutureSessions = createSelector([selectCurrentCampaign], current => current.sessions.filter(session => !session.completed && !session.active));
-export const selectActiveSession = createSelector([selectCurrentCampaign], current => current.sessions.find(session => session.active));
+export const selectActiveSessions = createSelector([selectCurrentCampaign], current => current.sessions.filter(session => session.active));
 
 export const selectWeapons = createSelector([selectCurrentCampaign], current => (current ? current.weapons.filter(weapon => !weapon.archived) : []));
 export const selectWearables = createSelector([selectCurrentCampaign], current => (current ? current.wearables.filter(wearable => !wearable.archived) : []));

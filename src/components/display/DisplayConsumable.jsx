@@ -27,11 +27,14 @@ const ConsumableDetails = ({ consumable, sheetType }) => {
   );
 };
 
-const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
+const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem heading={`${consumable.name} (Level ${consumable.level})`} view={{ type: ModalTypes.showBelonging, id: consumable._id, data: { sheetType: sheetType, resourceType: 'consumables' } }}>
+        <ListItem
+          heading={`${consumable.name} (Level ${consumable.level})`}
+          view={{ type: ModalTypes.showBelonging, id: consumable._id, data: { sheetType: sheetType, playerId, belongingType: 'consumables' } }}
+        >
           <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
         </ListItem>
       );

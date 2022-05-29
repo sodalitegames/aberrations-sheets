@@ -102,37 +102,57 @@ const CampaignPlayersPage = () => {
 
               {/* Player Actions */}
 
-              {/* Activate or Deactivate */}
-              <Button
-                dark={player.active}
-                onClick={() =>
-                  dispatch(
-                    updateSheetStart(
-                      'characters',
-                      player._id,
-                      { active: !player.active },
-                      {
-                        notification: {
-                          status: 'success',
-                          heading: `Player ${player.active ? 'Deactivated' : 'Activated'}`,
-                          message: `You have successfully ${player.active ? 'deactivated' : 'activated'} ${player.characterName}.`,
-                        },
-                      }
-                    )
-                  )
-                }
-              >
-                {player.active ? 'Deactivate' : 'Activate'}
+              <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>
+                Roll Dice
               </Button>
 
+              <Button disabled>Take Damage</Button>
+
+              <Button disabled>Heal Damage</Button>
+
+              <Button disabled>Pay Money</Button>
+
+              <Button disabled>Recieve Money</Button>
+
+              <Button disabled>Take A Rest</Button>
+
+              {/* Activate or Deactivate */}
+              <div className="pt-4 mt-4 border-t border-gray-200">
+                <Button
+                  dark={player.active}
+                  onClick={() =>
+                    dispatch(
+                      updateSheetStart(
+                        'characters',
+                        player._id,
+                        { active: !player.active },
+                        {
+                          forPlayer: true,
+                          notification: {
+                            status: 'success',
+                            heading: `Player ${player.active ? 'Deactivated' : 'Activated'}`,
+                            message: `You have successfully ${player.active ? 'deactivated' : 'activated'} ${player.characterName}.`,
+                          },
+                        }
+                      )
+                    )
+                  }
+                >
+                  {player.active ? 'Deactivate' : 'Activate'}
+                </Button>
+              </div>
+
               {/* Remove from Campaign */}
-              <Button
-                onClick={() =>
-                  setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'campaigns', playerName: player.playerNickname || player.playerName, body: { charId: player._id } } })
-                }
-              >
-                Remove From Campaign
-              </Button>
+              <div className="pt-4 mt-4 border-t border-gray-200">
+                <Button
+                  alert
+                  onClick={() =>
+                    setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'campaigns', playerName: player.playerNickname || player.playerName, body: { charId: player._id } } })
+                  }
+                >
+                  Remove From Campaign
+                </Button>
+              </div>
             </div>
           </div>
         ) : (

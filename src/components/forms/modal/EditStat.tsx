@@ -95,6 +95,7 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
       case 'player':
         dispatch(
           updateSheetStart('characters', data.resource._id, body, {
+            forPlayer: true,
             modal: true,
             notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your player's ${id.toLowerCase()} stat.` },
           })

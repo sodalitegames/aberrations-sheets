@@ -29,20 +29,15 @@ import PrivacyPage from './pages/home/privacy';
 
 // Character Pages
 import CharacterGameplayPage from './pages/sheets/characters/gameplay';
-import CharacterInventoryPage from './pages/sheets/characters/inventory';
+import CharacterBelongingsPage from './pages/sheets/characters/belongings';
 import CharacterCharacterPage from './pages/sheets/characters/character';
 
 // Campaign Pages
-import CampaignGameplayPage from './pages/sheets/campaigns/gameplay';
-import CampaignCombatPage from './pages/sheets/campaigns/combat';
 import CampaignCampaignPage from './pages/sheets/campaigns/campaign';
 import CampaignPlayersPage from './pages/sheets/campaigns/players';
-import CampaignInteractablesPage from './pages/sheets/campaigns/interactables';
-
-// Nested Campaign Interactables Pages
-import CampaignNpcsPage from './pages/sheets/campaigns/interactables/npcs';
-import CampaignEnvironmentsPage from './pages/sheets/campaigns/interactables/environments';
-import CampaignCreaturesPage from './pages/sheets/campaigns/interactables/creatures';
+import CampaignNpcsPage from './pages/sheets/campaigns/npcs';
+import CampaignCreaturesPage from './pages/sheets/campaigns/creatures';
+import CampaignBelongingsPage from './pages/sheets/campaigns/belongings';
 
 // Shared Sheet Pages
 import SheetNotesPage from './pages/sheets/shared/notes';
@@ -78,7 +73,7 @@ ReactDOM.render(
                   <Route index element={<Navigate to="gameplay" />} />
                   <Route path="gameplay" element={<CharacterGameplayPage />} />
                   <Route path="character" element={<CharacterCharacterPage />} />
-                  <Route path="inventory" element={<CharacterInventoryPage />}>
+                  <Route path="belongings" element={<CharacterBelongingsPage />}>
                     <Route index element={<Navigate to="weapons" />} />
                     <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType="characters" />} />
                     <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType="characters" />} />
@@ -89,16 +84,13 @@ ReactDOM.render(
                   <Route path="resources" element={<SheetResourcesPage sheetType="characters" />} />
                 </Route>
                 <Route path="campaigns/:campId" element={<CampaignSheet />}>
-                  <Route index element={<Navigate to="gameplay" />} />
-                  <Route path="gameplay" element={<CampaignGameplayPage />} />
-                  <Route path="combat" element={<CampaignCombatPage />} />
+                  <Route index element={<Navigate to="campaign" />} />
                   <Route path="campaign" element={<CampaignCampaignPage />} />
                   <Route path="players" element={<CampaignPlayersPage />} />
-                  <Route path="interactables" element={<CampaignInteractablesPage />}>
-                    <Route index element={<Navigate to="npcs" />} />
-                    <Route path="npcs" element={<CampaignNpcsPage />} />
-                    <Route path="creatures" element={<CampaignCreaturesPage />} />
-                    <Route path="environments" element={<CampaignEnvironmentsPage />} />
+                  <Route path="npcs" element={<CampaignNpcsPage />} />
+                  <Route path="creatures" element={<CampaignCreaturesPage />} />
+                  <Route path="belongings" element={<CampaignBelongingsPage />}>
+                    <Route index element={<Navigate to="weapons" />} />
                     <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType="campaigns" />} />
                     <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType="campaigns" />} />
                     <Route path="consumables" element={<SheetBelongingsConsumablesPage sheetType="campaigns" />} />

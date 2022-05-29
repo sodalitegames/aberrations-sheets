@@ -33,7 +33,7 @@ import ManageCampaign from './slide-over/ManageCampaign';
 import CampOverview from './slide-over/CampOverview';
 import CampDetails from './slide-over/CampDetails';
 import ManageInvites from './slide-over/ManageInvites';
-import NewSessionForm from './slide-over/NewSessionForm';
+import SessionForm from './slide-over/SessionForm';
 import NpcForm from './slide-over/NpcForm';
 import CreatureForm from './slide-over/CreatureForm';
 import EnvironmentForm from './slide-over/EnvironmentForm';
@@ -211,7 +211,7 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.newSessionForm ? <NewSessionForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.sessionForm ? <SessionForm id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm id={slideOver.id} /> : null}

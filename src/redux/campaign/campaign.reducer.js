@@ -154,6 +154,57 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
           players: removeItemById(state.current.players, action.payload.data.metadata.charId),
         },
       };
+    case SheetActionTypes.UPDATE_PLAYER_SUCCESS:
+      const { updatedPlayer } = action.payload;
+
+      const oldPlayer = state.current.players.find(player => player._id === action.payload.updatedPlayer._id);
+
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: replaceItemById(state.current.players, updatedPlayer._id, { ...oldPlayer, ...updatedPlayer }),
+        },
+      };
+    case SheetActionTypes.CREATE_PLAYER_RESOURCE_SUCCESS:
+      const oldPlayerCreate = state.current.players.find(player => player._id === action.payload.playerId);
+
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: replaceItemById(state.current.players, action.payload.playerId, {
+            ...oldPlayerCreate,
+            [action.payload.resourceType]: [action.payload.newResource, ...oldPlayerCreate[action.payload.resourceType]],
+          }),
+        },
+      };
+    case SheetActionTypes.UPDATE_PLAYER_RESOURCE_SUCCESS:
+      const oldPlayerUpdate = state.current.players.find(player => player._id === action.payload.playerId);
+
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: replaceItemById(state.current.players, action.payload.playerId, {
+            ...oldPlayerUpdate,
+            [action.payload.resourceType]: replaceItemById(oldPlayerUpdate[action.payload.resourceType], action.payload.updatedResource._id, action.payload.updatedResource),
+          }),
+        },
+      };
+    case SheetActionTypes.DELETE_PLAYER_RESOURCE_SUCCESS:
+      const oldPlayerDelete = state.current.players.find(player => player._id === action.payload.playerId);
+
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: replaceItemById(state.current.players, action.payload.playerId, {
+            ...oldPlayerDelete,
+            [action.payload.resourceType]: removeItemById(oldPlayerDelete[action.payload.resourceType], action.payload.resourceId),
+          }),
+        },
+      };
     case SheetActionTypes.FETCH_CURRENT_SHEET_FAILURE:
       return {
         ...state,
@@ -172,6 +223,7 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
         error: action.payload.error,
       };
     case AppActionTypes.SET_MODAL:
+    case AppActionTypes.SET_NESTED_MODAL:
     case AppActionTypes.SET_SLIDE_OVER:
       return {
         ...state,

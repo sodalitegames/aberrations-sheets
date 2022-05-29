@@ -1,14 +1,10 @@
 import { useSelector } from 'react-redux';
 
-import { Disclosure } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/outline';
-
-import { selectCurrentCampaign, selectActiveSession, selectFutureSessions, selectCompletedSessions } from '../../../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectActiveSessions, selectFutureSessions, selectCompletedSessions } from '../../../redux/campaign/campaign.selectors';
 
 import { useActions } from '../../../hooks/useActions';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
-import classNames from '../../../utils/classNames';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -19,19 +15,32 @@ import ListContainer from '../../../components/data/ListContainer';
 import Button from '../../../components/Button';
 
 import DisplayLog from '../../../components/display/DisplayLog';
-import EditSession from '../../../components/sections/EditSession';
+import ListSessions from '../../../components/sections/ListSessions';
 
 const CampaignCampaignPage = () => {
   const { setSlideOver } = useActions();
 
   const campSheet = useSelector(selectCurrentCampaign);
-  const activeSession = useSelector(selectActiveSession);
+  const activeSessions = useSelector(selectActiveSessions);
   const futureSessions = useSelector(selectFutureSessions);
   const completedSessions = useSelector(selectCompletedSessions);
 
   return (
     <SheetPageContent title="Campaign" columns={4}>
       <div className="space-y-4">
+        {/* Actions */}
+        <SheetPagePanel title="Actions">
+          <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
+            Roll Dice
+          </Button>
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
+            Manage Campaign
+          </Button>
+          <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
+            Start Combat
+          </Button>
+        </SheetPagePanel>
+
         {/* Campaign Overview */}
         <SheetPagePanel title="Campaign Overview">
           <div className="flow-root">
@@ -59,91 +68,29 @@ const CampaignCampaignPage = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center mt-5 ml-5 space-y-2 shrink-0 sm:mt-0">
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.newSessionForm })} disabled>
-                Create New Session
-              </Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.sessionForm })}>Create New Session</Button>
             </div>
           </div>
         </SheetPagePanel>
 
         {/* Active Session */}
-        <SheetPagePanel title="Active Session">
+        <SheetPagePanel title="Active Sessions">
           <div className="flow-root">
-            {activeSession ? (
-              <dl className="space-y-6 divide-y divide-gray-200">
-                <Disclosure as="div" key={activeSession.name} className="pt-6">
-                  {({ open }) => (
-                    <>
-                      <dt className="text-lg">
-                        <Disclosure.Button className="flex items-start justify-between w-full text-left text-gray-400">
-                          <span className="font-medium text-gray-900">{activeSession.name}</span>
-                          <span className="flex items-center ml-6 h-7">
-                            <ChevronDownIcon className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform')} aria-hidden="true" />
-                          </span>
-                        </Disclosure.Button>
-                      </dt>
-                      <Disclosure.Panel as="dd" className="pr-12 mt-2">
-                        <EditSession session={activeSession} />
-                      </Disclosure.Panel>
-                    </>
-                  )}
-                </Disclosure>
-              </dl>
-            ) : null}
+            <ListSessions sessions={activeSessions} status="active" />
           </div>
         </SheetPagePanel>
 
         {/* Future Sessions */}
         <SheetPagePanel title="Future Sessions">
           <div className="flow-root">
-            <dl className="space-y-6 divide-y divide-gray-200">
-              {futureSessions.map(session => (
-                <Disclosure as="div" key={session.name} className="pt-6">
-                  {({ open }) => (
-                    <>
-                      <dt className="text-lg">
-                        <Disclosure.Button className="flex items-start justify-between w-full text-left text-gray-400">
-                          <span className="font-medium text-gray-900">{session.name}</span>
-                          <span className="flex items-center ml-6 h-7">
-                            <ChevronDownIcon className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform')} aria-hidden="true" />
-                          </span>
-                        </Disclosure.Button>
-                      </dt>
-                      <Disclosure.Panel as="dd" className="pr-12 mt-2">
-                        <EditSession session={session} />
-                      </Disclosure.Panel>
-                    </>
-                  )}
-                </Disclosure>
-              ))}
-            </dl>
+            <ListSessions sessions={futureSessions} status="future" />
           </div>
         </SheetPagePanel>
 
         {/* Completed Sessions */}
         <SheetPagePanel title="Completed Sessions">
           <div className="flow-root">
-            <dl className="space-y-6 divide-y divide-gray-200">
-              {completedSessions.map(session => (
-                <Disclosure as="div" key={session.name} className="pt-6">
-                  {({ open }) => (
-                    <>
-                      <dt className="text-lg">
-                        <Disclosure.Button className="flex items-start justify-between w-full text-left text-gray-400">
-                          <span className="font-medium text-gray-900">{session.name}</span>
-                          <span className="flex items-center ml-6 h-7">
-                            <ChevronDownIcon className={classNames(open ? '-rotate-180' : 'rotate-0', 'h-6 w-6 transform')} aria-hidden="true" />
-                          </span>
-                        </Disclosure.Button>
-                      </dt>
-                      <Disclosure.Panel as="dd" className="pr-12 mt-2">
-                        <EditSession session={session} />
-                      </Disclosure.Panel>
-                    </>
-                  )}
-                </Disclosure>
-              ))}
-            </dl>
+            <ListSessions sessions={completedSessions} status="completed" />
           </div>
         </SheetPagePanel>
       </div>

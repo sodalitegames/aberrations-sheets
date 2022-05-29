@@ -32,7 +32,7 @@ const EditWallet = ({ data }) => {
             'characters',
             data.entity._id,
             { wallet: +wallet },
-            { modal: true, notification: { status: 'success', heading: 'Wallet Updated', message: `You have successfully updated your player's wallet to ${wallet}.` } }
+            { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Wallet Updated', message: `You have successfully updated your player's wallet to ${wallet}.` } }
           )
         );
         return;

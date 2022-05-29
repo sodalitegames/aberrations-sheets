@@ -33,9 +33,9 @@ const Heading = ({ edit, children }) => {
                 <div className="py-1">
                   {edit.menu.map((item, index) => {
                     return (
-                      <Menu.Item>
+                      <Menu.Item key={index}>
                         {({ active }) => (
-                          <button key={index} onClick={item.click} className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm w-full text-left')}>
+                          <button onClick={item.click} className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm w-full text-left')}>
                             {item.text}
                           </button>
                         )}

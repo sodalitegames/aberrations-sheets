@@ -1,3 +1,7 @@
+import { useSelector } from 'react-redux';
+
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+
 import { getSpeciesAbility } from '../../utils/helpers/species';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
@@ -37,6 +41,8 @@ const NpcDetails = ({ npc, species }) => {
 
 const DisplayNpc = ({ npc, species, condensed, listItem }) => {
   const { setModal, setSlideOver } = useActions();
+
+  const campSheet = useSelector(selectCurrentCampaign);
 
   if (listItem) {
     if (condensed) {
@@ -158,9 +164,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         Augmentations
       </Heading>
       <ul className="grid">
-        {npc.augmentations?.map(aug => (
-          <DisplayAugmentation key={aug._id} aug={aug} noButtonPanel />
-        ))}
+        {campSheet.augmentations
+          .filter(aug => aug.npcId === npc._id)
+          .map(aug => (
+            <DisplayAugmentation key={aug._id} aug={aug} noButtonPanel />
+          ))}
       </ul>
 
       <Heading
@@ -172,9 +180,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         Weapons
       </Heading>
       <ul className="grid grid-cols-2">
-        {npc.weapons?.map(weapon => (
-          <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed />
-        ))}
+        {campSheet.weapons
+          .filter(weap => weap.npcId === npc._id)
+          .map(weapon => (
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed />
+          ))}
       </ul>
 
       <Heading
@@ -186,9 +196,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         Wearables
       </Heading>
       <ul className="grid grid-cols-2">
-        {npc.wearables?.map(wearable => (
-          <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed />
-        ))}
+        {campSheet.wearables
+          .filter(wear => wear.npcId === npc._id)
+          .map(wearable => (
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed />
+          ))}
       </ul>
 
       <Heading
@@ -200,9 +212,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         Consumables
       </Heading>
       <ul className="grid grid-cols-2">
-        {npc.consumables?.map(consumable => (
-          <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="campaigns" listItem condensed />
-        ))}
+        {campSheet.consumables
+          .filter(cons => cons.npcId === npc._id)
+          .map(consumable => (
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="campaigns" listItem condensed />
+          ))}
       </ul>
 
       <Heading
@@ -214,9 +228,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         Usables
       </Heading>
       <ul className="grid grid-cols-2">
-        {npc.usables?.map(usable => (
-          <DisplayUsable key={usable._id} usable={usable} sheetType="campaigns" listItem condensed />
-        ))}
+        {campSheet.usables
+          .filter(usab => usab.npcId === npc._id)
+          .map(usable => (
+            <DisplayUsable key={usable._id} usable={usable} sheetType="campaigns" listItem condensed />
+          ))}
       </ul>
     </div>
   );

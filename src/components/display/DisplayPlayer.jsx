@@ -173,7 +173,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'weapons', sheet: player, sheetType: 'players', equippedList: player.weapons.filter(weapon => weapon.equipped) },
+              data: { type: 'players', playerId: player._id, belongingType: 'weapons' },
             }),
         }}
       >
@@ -183,7 +183,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
         {player.weapons
           .filter(weapon => weapon.equipped)
           .map(weapon => (
-            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed />
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="players" playerId={player._id} listItem condensed />
           ))}
       </ul>
 
@@ -193,23 +193,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: {
-                type: 'wearables',
-                sheet: player,
-                sheetType: 'players',
-                equippedList: player.wearables.filter(wearable => wearable.equipped),
-                equipmentMods: player.wearables
-                  .filter(wearable => wearable.equipped)
-                  .reduce(
-                    (mods, wearable) => ({
-                      fortitude: mods.fortitude + wearable.statMods.fortitude,
-                      agility: mods.agility + wearable.statMods.agility,
-                      persona: mods.persona + wearable.statMods.persona,
-                      aptitude: mods.aptitude + wearable.statMods.aptitude,
-                    }),
-                    { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
-                  ),
-              },
+              data: { type: 'players', playerId: player._id, belongingType: 'wearables' },
             }),
         }}
       >
@@ -219,7 +203,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
         {player.wearables
           .filter(wearable => wearable.equipped)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType="players" playerId={player._id} listItem condensed />
           ))}
       </ul>
 
@@ -229,7 +213,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'consumables', sheet: player, sheetType: 'players', equippedList: player.consumables.filter(consumable => consumable.equipped) },
+              data: { type: 'players', playerId: player._id, belongingType: 'consumables' },
             }),
         }}
       >
@@ -239,7 +223,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
         {player.consumables
           .filter(consumable => consumable.equipped)
           .map(consumable => (
-            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="campaigns" listItem condensed />
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="players" playerId={player._id} listItem condensed />
           ))}
       </ul>
 
@@ -249,7 +233,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'usables', sheet: player, sheetType: 'players', equippedList: player.usables.filter(usable => usable.equipped) },
+              data: { type: 'players', playerId: player._id, belongingType: 'usables' },
             }),
         }}
       >
@@ -259,7 +243,7 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
         {player.usables
           .filter(usable => usable.equipped)
           .map(usable => (
-            <DisplayUsable key={usable._id} usable={usable} sheetType="campaigns" listItem condensed />
+            <DisplayUsable key={usable._id} usable={usable} sheetType="players" playerId={player._id} listItem condensed />
           ))}
       </ul>
     </div>
