@@ -65,7 +65,7 @@ const CharacterGameplayPage = () => {
             slowed={charSheet.conditions.slowed}
             power={charSheet.power}
             stats={[
-              { name: 'Fortitude', passive: { name: 'Max Hp', calc: 'Fortitude * 10', value: charSheet.maxHp }, ...charSheet.fortitude },
+              { name: 'Fortitude', passive: { name: 'Max Hp', calc: 'Fortitude * 5', value: charSheet.maxHp }, ...charSheet.fortitude },
               { name: 'Agility', passive: { name: 'Shield Value', calc: 'Equal to Agility', value: charSheet.shieldValue }, ...charSheet.agility },
               { name: 'Persona', passive: { name: 'Initiative', calc: 'Equal to Persona', value: charSheet.initiative }, ...charSheet.persona },
               { name: 'Aptitude', passive: { name: 'Assist', calc: 'Aptitude / 2 (Rd. Down)', value: charSheet.assist }, ...charSheet.aptitude },
@@ -125,14 +125,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedWeapons}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'weapons' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'weapons' } }),
                 text: 'Manage equipped Weapons',
               }}
               empty={{
                 heading: 'No Equipped Weapons',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'weapons' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'weapons' } }),
                   text: 'Equip Weapon',
                 },
               }}
@@ -153,7 +153,7 @@ const CharacterGameplayPage = () => {
                 click: () =>
                   setSlideOver({
                     type: SlideOverTypes.manageEquippedBelongings,
-                    data: { type: 'character', belongingType: 'wearables' },
+                    data: { type: 'characters', belongingType: 'wearables' },
                   }),
                 text: 'Manage equipped Wearables',
               }}
@@ -164,7 +164,7 @@ const CharacterGameplayPage = () => {
                   click: () =>
                     setSlideOver({
                       type: SlideOverTypes.manageEquippedBelongings,
-                      data: { type: 'character', belongingType: 'wearables' },
+                      data: { type: 'characters', belongingType: 'wearables' },
                     }),
                   text: 'Equip Wearable',
                 },
@@ -185,14 +185,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedConsumables}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'consumables' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'consumables' } }),
                 text: 'Manage equipped Consumables',
               }}
               empty={{
                 heading: 'No Equipped Consumables',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'consumables' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'consumables' } }),
                   text: 'Equip Consumable',
                 },
               }}
@@ -210,14 +210,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedUsables}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'usables' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'usables' } }),
                 text: 'Manage equipped Usables',
               }}
               empty={{
                 heading: 'No Equipped Usables',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'character', belongingType: 'usables' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'usables' } }),
                   text: 'Equip Usable',
                 },
               }}
