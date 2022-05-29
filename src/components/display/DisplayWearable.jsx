@@ -54,13 +54,13 @@ const WearableDetails = ({ wearable, sheetType }) => {
   );
 };
 
-const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
+const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
         <ListItem
           heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`}
-          view={{ type: ModalTypes.showBelonging, id: wearable._id, data: { sheetType: sheetType, resourceType: 'wearables' } }}
+          view={{ type: ModalTypes.showBelonging, id: wearable._id, data: { sheetType: sheetType, playerId, belongingType: 'wearables' } }}
         >
           <InfoList list={[getWearableMods(wearable.statMods.fortitude, wearable.statMods.agility, wearable.statMods.persona, wearable.statMods.aptitude)]} />
         </ListItem>

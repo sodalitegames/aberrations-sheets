@@ -30,12 +30,12 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
 
   useEffect(() => {
     switch (type) {
-      case 'player':
-        const player = campSheet.players.find(player => player.id === playerId);
+      case 'players':
+        const player = campSheet.players.find(player => player._id === playerId);
         setPlayer(player);
         setBelongings(player[belongingType].filter(bel => !bel.archived));
         return;
-      case 'character':
+      case 'characters':
         setBelongings(charSheet[belongingType].filter(bel => !bel.archived));
         return;
       default:
@@ -65,17 +65,17 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                             click: () =>
                               equipBelonging({
                                 sheetType: 'characters',
-                                sheet: type === 'character' ? charSheet : player,
+                                sheet: type === 'characters' ? charSheet : player,
                                 belongingType: 'weapons',
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
-                                forPlayer: type === 'player' ? true : false,
+                                forPlayer: type === 'players' ? true : false,
                               }),
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { type, playerId, belongingType } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: type, playerId, belongingType } }),
                           },
                         ]}
                       />
@@ -97,7 +97,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                             click: () =>
                               equipBelonging({
                                 sheetType: 'characters',
-                                sheet: type === 'character' ? charSheet : player,
+                                sheet: type === 'characters' ? charSheet : player,
                                 belongingType: 'wearables',
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
@@ -113,12 +113,12 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                                     { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
                                   ),
                                 nested: true,
-                                forPlayer: type === 'player' ? true : false,
+                                forPlayer: type === 'players' ? true : false,
                               }),
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { type, playerId, belongingType } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: type, playerId, belongingType } }),
                           },
                         ]}
                       />
@@ -140,17 +140,17 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                             click: () =>
                               equipBelonging({
                                 sheetType: 'characters',
-                                sheet: type === 'character' ? charSheet : player,
+                                sheet: type === 'characters' ? charSheet : player,
                                 belongingType: 'consumables',
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
-                                forPlayer: type === 'player' ? true : false,
+                                forPlayer: type === 'players' ? true : false,
                               }),
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { type, playerId, belongingType } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: type, playerId, belongingType } }),
                           },
                         ]}
                       />
@@ -172,17 +172,17 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                             click: () =>
                               equipBelonging({
                                 sheetType: 'characters',
-                                sheet: type === 'character' ? charSheet : player,
+                                sheet: type === 'characters' ? charSheet : player,
                                 belongingType: 'usables',
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
-                                forPlayer: type === 'player' ? true : false,
+                                forPlayer: type === 'players' ? true : false,
                               }),
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { type, playerId, belongingType } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: type, playerId, belongingType } }),
                           },
                         ]}
                       />

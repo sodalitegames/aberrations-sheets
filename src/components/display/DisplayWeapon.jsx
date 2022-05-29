@@ -35,11 +35,14 @@ const WeaponDetails = ({ weapon, sheetType }) => {
   );
 };
 
-const DisplayWeapon = ({ weapon, condensed, actions, noButtonPanel, listItem, sheetType }) => {
+const DisplayWeapon = ({ weapon, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem heading={`${weapon.name} (Level ${weapon.levelDamage})`} view={{ type: ModalTypes.showBelonging, id: weapon._id, data: { sheetType: sheetType, resourceType: 'weapons' } }}>
+        <ListItem
+          heading={`${weapon.name} (Level ${weapon.levelDamage})`}
+          view={{ type: ModalTypes.showBelonging, id: weapon._id, data: { sheetType: sheetType, playerId, belongingType: 'weapons' } }}
+        >
           <InfoList list={createWeaponList(weapon.associatedStat, weapon.range, weapon.ability)} />
         </ListItem>
       );
