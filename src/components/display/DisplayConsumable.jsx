@@ -35,7 +35,12 @@ const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, list
           heading={`${consumable.name} (Level ${consumable.level})`}
           view={{ type: ModalTypes.showBelonging, id: consumable._id, data: { sheetType: sheetType, playerId, belongingType: 'consumables' } }}
         >
-          <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
+          <InfoList
+            list={[
+              { tooltip: consumable.categories.map(cat => `${cat.name} - ${cat.description}`), value: `Categories: ${consumable.categories.map(cat => cat.name).join(', ')}` },
+              `Uses left: ${consumable.uses}`,
+            ]}
+          />
         </ListItem>
       );
     }

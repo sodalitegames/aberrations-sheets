@@ -9,7 +9,7 @@ import InfoList from '../data/InfoList';
 
 const createWeaponList = (stat, range, ability) => {
   const weapon = [`${capitalize(stat)} | ${range} Range`];
-  if (ability) weapon.push({ title: ability, value: ability.replace('"', '') });
+  if (ability) weapon.push({ tooltip: ability, value: ability.replace('"', '') });
   return weapon;
 };
 
