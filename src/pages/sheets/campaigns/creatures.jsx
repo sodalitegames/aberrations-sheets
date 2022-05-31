@@ -98,13 +98,11 @@ const CampaignCreaturesPage = () => {
 
               {/* Creature Actions */}
 
-              <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>
-                Roll Dice
-              </Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'creature', creatureId: creature._id } })}>Roll Dice</Button>
 
-              <Button disabled>Take Damage</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'creature', creatureId: creature._id } })}>Take Damage</Button>
 
-              <Button disabled>Heal Damage</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'creature', creatureId: creature._id } })}>Heal Damage</Button>
 
               {/* Activate or Deactivate */}
               {!creature.archived && (

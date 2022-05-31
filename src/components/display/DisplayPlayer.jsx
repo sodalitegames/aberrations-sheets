@@ -27,6 +27,7 @@ const PlayerDetails = ({ player, species }) => {
         { name: 'Upgrade Points', values: [player.upgradePoints], half: true },
         { name: 'Wallet', values: [player.wallet], half: true },
         { name: 'Active', values: [player.active ? 'Yes' : 'No'], half: true },
+        { name: 'Advantage Pool', values: [player.fortitude.pool + player.agility.pool + player.persona.pool + player.aptitude.pool], half: true },
         { name: 'Species Ability', values: [getSpeciesAbility(player.speciesId, species)] },
       ]}
       classes="my-2"
@@ -96,10 +97,21 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       {/* Do I want to show stat experience as well? */}
       <DescriptionList
         list={[
-          { name: 'Fortitude', values: [player.fortitude.points + player.fortitude.modifier], half: true },
-          { name: 'Agility', values: [player.agility.points + player.agility.modifier], half: true },
-          { name: 'Persona', values: [player.persona.points + player.persona.modifier], half: true },
-          { name: 'Aptitude', values: [player.aptitude.points + player.aptitude.modifier], half: true },
+          { name: 'Fortitude', values: [`${player.fortitude.points + player.fortitude.modifier} (${player.fortitude.points} + ${player.fortitude.modifier})`], half: true },
+          { name: 'Agility', values: [`${player.agility.points + player.agility.modifier} (${player.agility.points} + ${player.agility.modifier})`], half: true },
+          { name: 'Persona', values: [`${player.persona.points + player.persona.modifier} (${player.persona.points} + ${player.persona.modifier})`], half: true },
+          { name: 'Aptitude', values: [`${player.aptitude.points + player.aptitude.modifier} (${player.aptitude.points} + ${player.aptitude.modifier})`], half: true },
+        ]}
+        classes="my-2"
+      />
+
+      <Heading>Stat Experience</Heading>
+      <DescriptionList
+        list={[
+          { name: 'Fortitude', values: [player.fortitude.experience], half: true },
+          { name: 'Agility', values: [player.agility.experience], half: true },
+          { name: 'Persona', values: [player.persona.experience], half: true },
+          { name: 'Aptitude', values: [player.aptitude.experience], half: true },
         ]}
         classes="my-2"
       />
