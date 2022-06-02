@@ -32,6 +32,7 @@ const NpcDetails = ({ npc, species }) => {
         { name: 'Upgrade Points', values: [npc.upgradePoints], half: true },
         { name: 'Wallet', values: [npc.wallet], half: true },
         { name: 'Active', values: [npc.active ? 'Yes' : 'No'], half: true },
+        { name: 'Advantage Pool', values: [npc.fortitude.pool + npc.agility.pool + npc.persona.pool + npc.aptitude.pool], half: true },
         { name: 'Species Ability', values: [getSpeciesAbility(npc.speciesId, species)] },
       ]}
       classes="mt-2"
@@ -102,10 +103,21 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       </Heading>
       <DescriptionList
         list={[
-          { name: 'Fortitude', values: [npc.fortitude.points + npc.fortitude.modifier], half: true },
-          { name: 'Agility', values: [npc.agility.points + npc.agility.modifier], half: true },
-          { name: 'Persona', values: [npc.persona.points + npc.persona.modifier], half: true },
-          { name: 'Aptitude', values: [npc.aptitude.points + npc.aptitude.modifier], half: true },
+          { name: 'Fortitude', values: [`${npc.fortitude.points + npc.fortitude.modifier} (${npc.fortitude.points} + ${npc.fortitude.modifier})`], half: true },
+          { name: 'Agility', values: [`${npc.agility.points + npc.agility.modifier} (${npc.agility.points} + ${npc.agility.modifier})`], half: true },
+          { name: 'Persona', values: [`${npc.persona.points + npc.persona.modifier} (${npc.persona.points} + ${npc.persona.modifier})`], half: true },
+          { name: 'Aptitude', values: [`${npc.aptitude.points + npc.aptitude.modifier} (${npc.aptitude.points} + ${npc.aptitude.modifier})`], half: true },
+        ]}
+        classes="my-2"
+      />
+
+      <Heading>Stat Experience</Heading>
+      <DescriptionList
+        list={[
+          { name: 'Fortitude', values: [npc.fortitude.experience], half: true },
+          { name: 'Agility', values: [npc.agility.experience], half: true },
+          { name: 'Persona', values: [npc.persona.experience], half: true },
+          { name: 'Aptitude', values: [npc.aptitude.experience], half: true },
         ]}
         classes="my-2"
       />

@@ -103,19 +103,17 @@ const CampaignNpcsPage = () => {
 
               {/* Npc Actions */}
 
-              <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>
-                Roll Dice
-              </Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'npc', npcId: npc._id } })}>Roll Dice</Button>
 
-              <Button disabled>Take Damage</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'npc', npcId: npc._id } })}>Take Damage</Button>
 
-              <Button disabled>Heal Damage</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'npc', npcId: npc._id } })}>Heal Damage</Button>
 
-              <Button disabled>Pay Money</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: 'npc', npcId: npc._id } })}>Pay Money</Button>
 
-              <Button disabled>Recieve Money</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: 'npc', npcId: npc._id } })}>Recieve Money</Button>
 
-              <Button disabled>Take A Rest</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'npc', npcId: npc._id } })}>Take A Rest</Button>
 
               {/* Activate or Deactivate */}
               {!npc.archived && (

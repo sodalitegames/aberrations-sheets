@@ -201,11 +201,6 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.newCampaign ? <NewCampaign /> : null}
                 {/* Character Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <ManageEquippedBelongings data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.editDescriptionForm ? <EditDescription data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.editBackgroundForm ? <EditBackground data={slideOver.data} /> : null}
                 {/* Campaign Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCampaign ? <ManageCampaign /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
@@ -217,6 +212,11 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageAssignedBelongings ? <ManageAssignedBelongings data={slideOver.data} /> : null}
                 {/* Shared */}
+                {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <ManageEquippedBelongings data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.editDescriptionForm ? <EditDescription data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.editBackgroundForm ? <EditBackground data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeaponForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm id={slideOver.id} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm id={slideOver.id} data={slideOver.data} /> : null}

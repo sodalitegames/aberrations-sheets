@@ -53,7 +53,7 @@ const CharacterGameplayPage = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center mt-5 ml-5 space-y-2 shrink-0 sm:mt-0">
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>Roll Dice</Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character' } })}>Roll Dice</Button>
             </div>
           </div>
         </SheetPagePanel>
@@ -79,7 +79,7 @@ const CharacterGameplayPage = () => {
       <div className="grid grid-cols-1 gap-4 md:col-span-4 lg:col-span-1 md:grid-cols-2 lg:grid-cols-1">
         {/* Actions */}
         <SheetPagePanel classes="md:col-span-2 lg:col-span-1">
-          <Button onClick={() => setModal({ type: ModalTypes.takeARest })}>Take a Rest</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'character' } })}>Take a Rest</Button>
           <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCharacter })} classes="mt-2">
             Manage Character
           </Button>
@@ -95,8 +95,8 @@ const CharacterGameplayPage = () => {
             <span className="text-sm font-medium text-center text-gray-500 uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
           </div>
           <div className="mt-6">
-            <Button onClick={() => setModal({ type: ModalTypes.takeDamage })}>Take Damage</Button>
-            <Button onClick={() => setModal({ type: ModalTypes.healDamage })} classes="mt-2">
+            <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'character' } })}>Take Damage</Button>
+            <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'character' } })} classes="mt-2">
               Heal Damage
             </Button>
           </div>
@@ -110,8 +110,8 @@ const CharacterGameplayPage = () => {
             <span className="text-sm font-medium text-gray-500 uppercase">{getWalletMessage(charSheet.wallet)}</span>
           </div>
           <div className="mt-6">
-            <Button onClick={() => setModal({ type: ModalTypes.receiveMoney })}>Receive Money</Button>
-            <Button onClick={() => setModal({ type: ModalTypes.payMoney })} classes="mt-2">
+            <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: 'character' } })}>Receive Money</Button>
+            <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: 'character' } })} classes="mt-2">
               Pay Money
             </Button>
           </div>

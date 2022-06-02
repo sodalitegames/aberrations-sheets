@@ -78,17 +78,17 @@ export const getTransactionHeading = ({ senderName, recipientName, sellPrice, do
 export const getRolledDiceNotificationMessage = (rollData, stat) => {
   // If not rolling for a stat
   if (!stat) {
-    if (rollData.crit) {
-      return `You rolled ${rollData.rolls.length} ${rollData.rolls.length > 1 ? 'dice' : 'die'} and got a critical success (${rollData.successes} successes)`;
+    if (rollData.critical.success) {
+      return `You rolled ${rollData.results.rolls.length} ${rollData.results.rolls.length > 1 ? 'dice' : 'die'} and got a critical success (${rollData.successes} successes)`;
     }
 
-    return `You rolled ${rollData.rolls.length} ${rollData.rolls.length > 1 ? 'dice' : 'die'} and got ${rollData.successes} / ${rollData.rolls.length} successess.`;
+    return `You rolled ${rollData.results.rolls.length} ${rollData.results.rolls.length > 1 ? 'dice' : 'die'} and got ${rollData.successes} / ${rollData.results.rolls.length} successess.`;
   }
 
   // If rolling for a stat
-  if (rollData.crit) {
-    return `You rolled for ${stat} (${rollData.rolls.length} ${rollData.rolls.length > 1 ? 'dice' : 'die'}) and got a critical success (${rollData.successes} successes)`;
+  if (rollData.critical.success) {
+    return `You rolled for ${stat} (${rollData.results.rolls.length} ${rollData.results.rolls.length > 1 ? 'dice' : 'die'}) and got a critical success (${rollData.successes} successes)`;
   }
 
-  return `You rolled for ${stat} (${rollData.rolls.length} ${rollData.rolls.length > 1 ? 'dice' : 'die'}) and got ${rollData.successes} / ${rollData.rolls.length} successess.`;
+  return `You rolled for ${stat} (${rollData.results.rolls.length} ${rollData.results.rolls.length > 1 ? 'dice' : 'die'}) and got ${rollData.successes} / ${rollData.results.rolls.length} successess.`;
 };
