@@ -1,41 +1,35 @@
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { roll } from '@aberrations-rpg/functions';
+// import { roll } from '@aberrations-rpg/functions';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
-import { useActions } from '../../../hooks/useActions';
-
-import { updateSheetStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
+// import { useActions } from '../../../hooks/useActions';
 
 import { capitalize } from '../../../utils/helpers/strings';
-import { getRolledDiceNotificationMessage } from '../../../utils/helpers/messages';
+// import { getRolledDiceNotificationMessage } from '../../../utils/helpers/messages';
 
 import { SlideOverForm } from '../SlideOver';
 
 import Input from '../elements/Input';
 import Select from '../elements/Select';
 import Detail from '../elements/Detail';
-import Notice from '../../Notice';
-
-import RollResults, { ResultsMessages } from '../../sections/RollResults';
 
 const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
-  const dispatch = useDispatch();
-  const { addNotification } = useActions();
+  // const dispatch = useDispatch();
+  // const { addNotification } = useActions();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
   const [statKey, setStatKey] = useState('');
   const [stat, setStat] = useState('');
-  const [dice, setDice] = useState(0);
+  const [die, setDie] = useState(0);
   const [advantage, setAdvantage] = useState(0);
-  const [additionalDice, setAdditionalDice] = useState(0);
 
-  const [rollData, setRollData] = useState(null);
+  const [results, setResults] = useState(null);
 
   const [sheet, setSheet] = useState(null);
 
@@ -64,24 +58,20 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
     }
   }, [charSheet, campSheet, type, playerId, npcId, creatureId]);
 
-  const calcDice = () => {
-    return stat.points + (stat.modifier || 0);
-  };
-
   const calcAdvantage = () => {
-    return stat.advantage + +advantage + (statKey === 'fortitude' || statKey === 'agility' ? -sheet.conditions.injured : -sheet.conditions.disturbed);
+    return +advantage + (statKey === 'strength' || statKey === 'agility' ? -sheet.conditions.injured : -sheet.conditions.disturbed);
   };
 
   const getSubmitText = () => {
     if (stat) {
-      return `Roll for ${capitalize(statKey)} (${calcDice() + parseInt(additionalDice)} ${calcDice() + parseInt(additionalDice) === 1 ? 'die' : 'dice'}) with ${calcAdvantage()} Advantage.`;
+      return `Roll for ${capitalize(statKey)} (D${stat.die}) with ${calcAdvantage()} Advantage.`;
     }
 
-    if (!dice) {
-      return `Roll Dice`;
+    if (!die) {
+      return `Roll`;
     }
 
-    return `Roll ${dice} ${dice === '1' ? 'die' : 'dice'} with ${advantage} Advantage.`;
+    return `Roll D${die} with ${advantage} Advantage.`;
   };
 
   const selectStat = e => {
@@ -102,78 +92,39 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
     setStat(sheet[e.target.value]);
 
     // Clear all other state
-    setDice(3);
-    setAdditionalDice(0);
+    setDie(2);
     setAdvantage(0);
-    setRollData(null);
   };
 
   const submitHandler = async e => {
     e.preventDefault();
 
     if (!stat) {
-      const data = roll(parseInt(dice), parseInt(advantage));
+      const roll = Math.ceil(Math.random() * die);
 
-      console.log(data);
+      setResults({ roll, advantage: calcAdvantage(), total: roll + calcAdvantage() * 2 });
+
+      console.log(results);
 
       // Add a notification with a message about your results
-      addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) });
+      // addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) });
 
-      setRollData(data);
       return;
     }
 
-    const data = roll(calcDice() + parseInt(additionalDice), calcAdvantage());
+    const roll = Math.ceil(Math.random() * stat.die);
 
-    console.log(data);
+    setResults({ roll, advantage: calcAdvantage(), total: roll + calcAdvantage() * 2 });
+
+    console.log(results);
 
     // Add a notification with a message about your results
-    addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) });
+    // addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) });
+  };
 
-    setRollData(data);
-
-    if (data.experience !== 0) {
-      switch (type) {
-        case 'player':
-          dispatch(
-            updateSheetStart(
-              'characters',
-              sheet._id,
-              { [statKey]: { ...sheet[statKey], experience: sheet[statKey].experience + data.experience } },
-              { notification: { status: 'success', heading: 'Gained Experience', message: `${sheet.characterName} has gained ${data.experience} experience.` } }
-            )
-          );
-          return;
-        case 'character':
-          dispatch(
-            updateSheetStart(
-              'characters',
-              sheet._id,
-              { [statKey]: { ...sheet[statKey], experience: sheet[statKey].experience + data.experience } },
-              { notification: { status: 'success', heading: 'Gained Experience', message: `You have gained ${data.experience} experience.` } }
-            )
-          );
-          return;
-        case 'npc':
-          dispatch(
-            updateSheetResourceStart(
-              'campaigns',
-              campSheet._id,
-              'npcs',
-              npcId,
-              { [statKey]: { ...sheet[statKey], experience: sheet[statKey].experience + data.experience } },
-              { notification: { status: 'success', heading: 'Gained Experience', message: `You have gained ${data.experience} experience.` } }
-            )
-          );
-          return;
-        case 'creature':
-          return;
-        case 'campaign':
-          return;
-        default:
-          return;
-      }
-    }
+  const selectDie = e => {
+    if (!e.target.value) return setDie('');
+    setDie(e.target.value);
   };
 
   return (
@@ -185,7 +136,7 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
           name="stat"
           value={statKey}
           options={[
-            { name: 'Fortitude', id: 'fortitude' },
+            { name: 'Strength', id: 'strength' },
             { name: 'Agility', id: 'agility' },
             { name: 'Persona', id: 'persona' },
             { name: 'Aptitude', id: 'aptitude' },
@@ -197,26 +148,49 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
 
       {stat ? (
         <>
-          <Detail slideOver label="Dice" detail={calcDice()} />
-          <Detail slideOver label="Stat Advantage" detail={stat.advantage} />
-          {statKey === 'fortitude' || statKey === 'agility' ? (
-            <Detail slideOver label="Injured Advantage" detail={-sheet.conditions.injured} />
+          <Detail slideOver label="Die" detail={'D' + stat.die} />
+          {statKey === 'strength' || statKey === 'agility' ? (
+            <Detail slideOver label="Injured Disadvantage" detail={-sheet.conditions.injured} />
           ) : statKey === 'persona' || statKey === 'aptitude' ? (
-            <Detail slideOver label="Disturbed Advantage" detail={-sheet.conditions.disturbed} />
+            <Detail slideOver label="Disturbed Disadvantage" detail={-sheet.conditions.disturbed} />
           ) : null}
           <Input slideOver label="Roll Advantage (Opt.)" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
-          <Input slideOver label="Additional Dice (Opt.)" name="additionalDice" type="number" value={additionalDice} changeHandler={setAdditionalDice} />
         </>
       ) : (
         <>
-          <Input slideOver label="Dice" name="dice" type="number" value={dice} changeHandler={setDice} />
+          <Select
+            slideOver
+            label="Die"
+            name="die"
+            value={die.toString()}
+            options={[
+              { name: 'D2', id: '2' },
+              { name: 'D4', id: '4' },
+              { name: 'D6', id: '6' },
+              { name: 'D8', id: '8' },
+              { name: 'D10', id: '10' },
+              { name: 'D12', id: '12' },
+              { name: 'D14', id: '14' },
+              { name: 'D16', id: '16' },
+              { name: 'D18', id: '18' },
+              { name: 'D20', id: '20' },
+            ]}
+            changeHandler={selectDie}
+          />
           <Input slideOver label="Advantage (Opt.)" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
         </>
       )}
-      {stat ? <Notice status="info" message="If you make a roll, any experience or conditions you may gain will be automatically added to your character sheet." /> : null}
 
-      {rollData ? <RollResults results={rollData} /> : null}
-      {rollData ? <ResultsMessages results={rollData} /> : null}
+      {results ? (
+        <div className="mt-8">
+          <div className="flex flex-col items-center mt-8 text-5xl font-semibold text-gray-900 shrink-0">
+            {results.total}
+            <p className="text-sm font-medium text-gray-500">{results.roll} NATURAL</p>
+            <p className="text-sm font-medium text-gray-500">{results.advantage * 2} ADVANTAGE (ADV * 2)</p>
+            <p className="text-sm font-medium text-gray-500">{results.total} TOTAL</p>
+          </div>
+        </div>
+      ) : null}
     </SlideOverForm>
   );
 };

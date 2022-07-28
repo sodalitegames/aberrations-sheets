@@ -7,12 +7,11 @@ import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selector
 import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../utils/helpers/strings';
-import { calculateNewCurrentHp } from '../../../utils/functions/updateHealth';
 
 import { ModalForm } from '../Modal';
 
-import Input from '../elements/Input';
-import Detail from '../elements/Detail';
+import Select from '../elements/Select';
+
 import { Stat } from '../../../models/enums';
 
 interface EditStatProps {
@@ -21,35 +20,17 @@ interface EditStatProps {
     type: 'character' | 'player' | 'npc' | 'creature';
     resource: {
       _id: string;
-      currentHp: number;
-      maxHp: number;
-      fortitude: {
-        points: number;
-        modifier: number;
-        experience: number;
-        advantage: number;
-        pool: number;
+      strength: {
+        die: number;
       };
       agility: {
-        points: number;
-        modifier: number;
-        experience: number;
-        advantage: number;
-        pool: number;
+        die: number;
       };
       persona: {
-        points: number;
-        modifier: number;
-        experience: number;
-        advantage: number;
-        pool: number;
+        die: number;
       };
       aptitude: {
-        points: number;
-        modifier: number;
-        experience: number;
-        advantage: number;
-        pool: number;
+        die: number;
       };
     };
   };
@@ -61,27 +42,14 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [points, setPoints] = useState(data.resource[id].points);
-  const [modifier] = useState(data.resource[id].modifier);
-  const [experience, setExperience] = useState(data.resource[id].experience);
-  const [advantage, setAdvantage] = useState(data.resource[id].advantage);
-  const [pool, setPool] = useState(data.resource[id].pool);
+  const [die, setDie] = useState<string | number>(data.resource[id].die);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let body = {
-      [id]: { points, modifier, experience, advantage, pool },
+      [id]: { die },
     };
-
-    if (id === 'fortitude') {
-      if (data.resource[id].points + (data.resource[id].modifier || 0) !== +body[id].points + +(body[id].modifier || 0)) {
-        // Get the new maxHp
-        const newMaxHp = (+body[id].points + +(body[id].modifier || 0)) * 10;
-
-        body.currentHp = calculateNewCurrentHp(data.resource.currentHp, data.resource.maxHp, newMaxHp);
-      }
-    }
 
     switch (data.type) {
       case 'character':
@@ -122,13 +90,31 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
     }
   };
 
+  const selectDie = (e: any) => {
+    if (!e.target.value) return setDie('');
+    setDie(e.target.value);
+  };
+
   return (
     <ModalForm title={`Edit ${capitalize(id)} Stat`} submitText={`Save changes`} submitHandler={submitHandler}>
-      <Input label="Natural" name="points" type="number" value={points} changeHandler={setPoints} />
-      {data.type !== 'creature' ? <Detail label="Modifier" detail={modifier} /> : null}
-      {data.type !== 'creature' ? <Input label="Experience" name="experience" type="number" value={experience} changeHandler={setExperience} /> : null}
-      <Input label="Stat Advantage" name="advantage" type="number" value={advantage} changeHandler={setAdvantage} />
-      {data.type !== 'creature' ? <Input label="Advantage Pool Contribution" name="pool" type="number" value={pool} changeHandler={setPool} /> : null}
+      <Select
+        label="Die"
+        name="die"
+        value={die.toString()}
+        options={[
+          { name: 'D2', id: '2' },
+          { name: 'D4', id: '4' },
+          { name: 'D6', id: '6' },
+          { name: 'D8', id: '8' },
+          { name: 'D10', id: '10' },
+          { name: 'D12', id: '12' },
+          { name: 'D14', id: '14' },
+          { name: 'D16', id: '16' },
+          { name: 'D18', id: '18' },
+          { name: 'D20', id: '20' },
+        ]}
+        changeHandler={selectDie}
+      />
     </ModalForm>
   );
 };

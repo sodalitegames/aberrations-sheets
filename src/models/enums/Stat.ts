@@ -1,5 +1,5 @@
 export enum Stat {
-  fortitude = 'fortitude',
+  strength = 'strength',
   agility = 'agility',
   persona = 'persona',
   aptitude = 'aptitude',

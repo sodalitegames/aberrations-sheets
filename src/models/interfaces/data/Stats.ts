@@ -1,7 +1,6 @@
 export interface StatsObject {
-  fortitude: number;
+  strength: number;
   agility: number;
   persona: number;
   aptitude: number;
-  power: number;
 }
