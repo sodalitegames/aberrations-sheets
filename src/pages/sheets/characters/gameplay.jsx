@@ -18,7 +18,6 @@ import Conditions from '../../../components/sections/Conditions';
 
 import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
 import Button from '../../../components/Button';
-import Chip from '../../../components/Chip';
 import ListContainer from '../../../components/data/ListContainer';
 
 import DisplayAugmentation from '../../../components/display/DisplayAugmentation';
