@@ -6,32 +6,6 @@ import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
-const getWearableMods = (FOR, AGL, PER, APT) => {
-  let stats = [];
-
-  if (FOR) {
-    stats.push(`${FOR > 0 ? '+' : ''}${FOR} FOR`);
-  }
-
-  if (AGL) {
-    stats.push(`${AGL > 0 ? '+' : ''}${AGL} AGL`);
-  }
-
-  if (PER) {
-    stats.push(`${PER > 0 ? '+' : ''}${PER} PER`);
-  }
-
-  if (APT) {
-    stats.push(`${APT > 0 ? '+' : ''}${APT} APT`);
-  }
-
-  if (!stats.length) {
-    return 'No Mods';
-  }
-
-  return stats.join(' / ');
-};
-
 const WearableDetails = ({ wearable, sheetType }) => {
   return (
     <DescriptionList
@@ -42,10 +16,8 @@ const WearableDetails = ({ wearable, sheetType }) => {
         sheetType === 'campaigns' ? { name: 'Active', values: [wearable.active ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [wearable.npcId ? wearable.npcId : 'Unassigned'], half: true } : null,
         { name: 'Description', values: [wearable.description] },
-        { name: 'Fortitude Mod', values: [wearable.statMods.fortitude], half: true },
-        { name: 'Agility Mod', values: [wearable.statMods.agility], half: true },
-        { name: 'Persona Mod', values: [wearable.statMods.persona], half: true },
-        { name: 'Aptitude Mod', values: [wearable.statMods.aptitude], half: true },
+        { name: 'Shield Value', values: [wearable.shieldValue], half: true },
+        { name: 'Speed Adjustment', values: [wearable.speedAdjustment], half: true },
         wearable.metadata?.givenBy ? { name: 'Received From', values: [wearable.metadata.givenBy], half: true } : null,
         wearable.metadata?.givenTo ? { name: 'Given To', values: [wearable.metadata.givenTo], half: true } : null,
       ]}
@@ -62,7 +34,7 @@ const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem
           heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`}
           view={{ type: ModalTypes.showBelonging, id: wearable._id, data: { sheetType: sheetType, playerId, belongingType: 'wearables' } }}
         >
-          <InfoList list={[getWearableMods(wearable.statMods.fortitude, wearable.statMods.agility, wearable.statMods.persona, wearable.statMods.aptitude)]} />
+          <InfoList list={[`Shield Value: ${wearable.shieldValue}`, `Speed Adjustment: ${wearable.speedAdjustment}`]} />
         </ListItem>
       );
     }
@@ -70,7 +42,7 @@ const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem
     if (condensed) {
       return (
         <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} actions={actions}>
-          <InfoList list={[getWearableMods(wearable.statMods.fortitude, wearable.statMods.agility, wearable.statMods.persona, wearable.statMods.aptitude)]} />
+          <InfoList list={[`Shield Value: ${wearable.shieldValue}`, `Speed Adjustment: ${wearable.speedAdjustment}`]} />
         </ListItem>
       );
     }

@@ -62,8 +62,8 @@ export function* fetchCurrentSheet({ payload: { sheetType, sheetId } }) {
     if (sheetType === 'characters') {
       // If it is a character sheet, fetch the species data and append it to the sheet data
       const resourceResponse = yield fetchSpecies(`?_id=${response.data.data.sheet.speciesId}`);
-      const { id, name, ability, appearance, basicInfo, stats } = resourceResponse.data[0];
-      yield put(fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, ability, appearance, basicInfo, stats } }, response.data.data.permissions));
+      const { id, name, abilities, appearance, basicInfo, stats, health } = resourceResponse.data[0];
+      yield put(fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, abilities, appearance, basicInfo, stats, health } }, response.data.data.permissions));
       return;
     }
 

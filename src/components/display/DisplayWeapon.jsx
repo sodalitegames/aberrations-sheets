@@ -19,7 +19,7 @@ const WeaponDetails = ({ weapon, sheetType }) => {
       list={[
         { name: 'Type', values: [weapon.type], half: true },
         { name: 'Associated Stat', values: [capitalize(weapon.associatedStat)], half: true },
-        { name: 'Level & Damage', values: [weapon.levelDamage], half: true },
+        { name: 'Damage Modifier', values: [`+${weapon.damageModifier}`], half: true },
         { name: 'Range', values: [getWeaponRangeString(weapon.range)], half: true },
         sheetType === 'characters' ? { name: 'Equipped', values: [weapon.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [weapon.active ? 'Yes' : 'No'], half: true } : null,
@@ -40,7 +40,7 @@ const DisplayWeapon = ({ weapon, condensed, actions, noButtonPanel, listItem, sh
     if (condensed === 'view') {
       return (
         <ListItem
-          heading={`${weapon.name} (Level ${weapon.levelDamage})`}
+          heading={`${weapon.name} (Mod +${weapon.damageModifier})`}
           view={{ type: ModalTypes.showBelonging, id: weapon._id, data: { sheetType: sheetType, playerId, belongingType: 'weapons' } }}
         >
           <InfoList list={createWeaponList(weapon.associatedStat, weapon.range, weapon.ability)} />
@@ -50,7 +50,7 @@ const DisplayWeapon = ({ weapon, condensed, actions, noButtonPanel, listItem, sh
 
     if (condensed) {
       return (
-        <ListItem heading={`${weapon.nickname || weapon.name} (Level ${weapon.levelDamage})`} actions={actions}>
+        <ListItem heading={`${weapon.nickname || weapon.name} (Mod +${weapon.damageModifier})`} actions={actions}>
           <InfoList list={[`${capitalize(weapon.associatedStat)} | ${weapon.range} Range`]} />
         </ListItem>
       );

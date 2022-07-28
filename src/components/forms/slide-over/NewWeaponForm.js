@@ -34,7 +34,7 @@ const NewWeaponForm = ({ data }) => {
   const [weaponsSelectList, setWeaponsSelectList] = useState([]);
 
   const [nickname, setNickname] = useState('');
-  const [levelDamage, setLevelDamage] = useState(1);
+  const [damageModifier, setDamageModifier] = useState(1);
   const [quantity, setQuantity] = useState(1);
   const [description, setDescription] = useState('');
 
@@ -57,15 +57,15 @@ const NewWeaponForm = ({ data }) => {
         };
       });
 
-      let FOR = [];
+      let STR = [];
       let AGL = [];
       let PER = [];
       let APT = [];
 
       mappedWeaponsList.forEach(weap => {
         switch (weap.associatedStat) {
-          case 'fortitude':
-            FOR.push(weap);
+          case 'strength':
+            STR.push(weap);
             break;
           case 'agility':
             AGL.push(weap);
@@ -91,8 +91,8 @@ const NewWeaponForm = ({ data }) => {
           id: 'Improvised',
         },
         {
-          name: 'Fortitude',
-          children: FOR,
+          name: 'Strength',
+          children: STR,
         },
         {
           name: 'Agility',
@@ -138,7 +138,7 @@ const NewWeaponForm = ({ data }) => {
 
     if (!weapon) return alert('Must provide a weapon');
 
-    if (!levelDamage) return alert('Must provide levelDamage');
+    if (!damageModifier) return alert('Must provide damageModifier');
     if (!quantity) return alert('Must provide a quantity');
 
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
@@ -153,7 +153,7 @@ const NewWeaponForm = ({ data }) => {
           data.sheetType,
           sheetId,
           'weapons',
-          { type: weapon, name, nickname, associatedStat, levelDamage, range, ability, quantity, description },
+          { type: weapon, name, nickname, associatedStat, damageModifier, range, ability, quantity, description },
           { slideOver: true, notification: { status: 'success', heading: 'Weapon Created', message: `You have successfully created ${nickname || name}.` } }
         )
       );
@@ -170,7 +170,7 @@ const NewWeaponForm = ({ data }) => {
           name: weapon.name,
           nickname,
           associatedStat: weapon.associatedStat,
-          levelDamage,
+          damageModifier,
           range: weapon.range,
           ability: weapon.ability,
           quantity,
@@ -199,7 +199,7 @@ const NewWeaponForm = ({ data }) => {
                 name="associatedStat"
                 value={associatedStat}
                 options={[
-                  { name: 'Fortitude', id: 'fortitude' },
+                  { name: 'Strength', id: 'strength' },
                   { name: 'Agility', id: 'agility' },
                   { name: 'Persona', id: 'persona' },
                   { name: 'Aptitude', id: 'aptitude' },
@@ -207,7 +207,7 @@ const NewWeaponForm = ({ data }) => {
                 changeHandler={selectStat}
                 required
               />
-              <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} required />
+              <Input slideOver label="Damage Modifier" name="damageModifier" type="number" value={damageModifier} changeHandler={setDamageModifier} required />
               <Select
                 slideOver
                 label="Range"
@@ -232,7 +232,7 @@ const NewWeaponForm = ({ data }) => {
               <Detail slideOver label="Name" detail={weapon.name} />
               <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
               <Detail slideOver label="Associated Stat" detail={capitalize(weapon.associatedStat)} />
-              <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} required />
+              <Input slideOver label="Damage Modifier" name="damageModifier" type="number" value={damageModifier} changeHandler={setDamageModifier} required />
               <Detail slideOver label="Range" detail={getWeaponRangeString(weapon.range)} />
               <Detail slideOver label="Ability" detail={weapon.ability} />
               <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />

@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux';
 
+import { PencilIcon } from '@heroicons/react/solid';
+
 import { selectCurrentCharacter, selectEquippedWeapons, selectEquippedWearables, selectEquippedConsumables, selectEquippedUsables } from '../../../redux/character/character.selectors';
 
 import { useActions } from '../../../hooks/useActions';
@@ -48,7 +50,7 @@ const CharacterGameplayPage = () => {
               <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                 <p className="text-xl font-bold text-gray-900 sm:text-2xl">{charSheet.characterName}</p>
                 <div className="text-sm font-medium text-gray-500">
-                  <NewlineText>{charSheet.species.name + ' Ability: ' + charSheet.species.ability}</NewlineText>
+                  <NewlineText>{charSheet.species.name + ' Activated Ability: ' + charSheet.species.abilities.activated}</NewlineText>
                 </div>
               </div>
             </div>
@@ -61,16 +63,72 @@ const CharacterGameplayPage = () => {
         {/* Stats */}
         <SheetPagePanel colSpan={2}>
           <Stats
-            mortality={charSheet.mortality}
-            slowed={charSheet.conditions.slowed}
-            power={charSheet.power}
             stats={[
-              { name: 'Fortitude', passive: { name: 'Max Hp', calc: 'Fortitude * 5', value: charSheet.maxHp }, ...charSheet.fortitude },
-              { name: 'Agility', passive: { name: 'Shield Value', calc: 'Equal to Agility', value: charSheet.shieldValue }, ...charSheet.agility },
-              { name: 'Persona', passive: { name: 'Initiative', calc: 'Equal to Persona', value: charSheet.initiative }, ...charSheet.persona },
-              { name: 'Aptitude', passive: { name: 'Assist', calc: 'Aptitude / 2 (Rd. Down)', value: charSheet.assist }, ...charSheet.aptitude },
+              { name: 'Strength', ...charSheet.strength },
+              { name: 'Agility', ...charSheet.agility },
+              { name: 'Persona', ...charSheet.persona },
+              { name: 'Aptitude', ...charSheet.aptitude },
             ]}
           />
+          <div className="mt-8">
+            <div className="mx-2">
+              <h3 className="text-lg font-medium text-center text-gray-900 md:text-left">Basic Info</h3>
+            </div>
+
+            <dl className="grid grid-cols-2 mt-4 md:grid-cols-4 gap-y-4">
+              {/* Shield Value */}
+              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
+                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
+                    Shield Value
+                  </h4>
+                  <p className="text-lg font-bold">{charSheet.shieldValue}</p>
+                </div>
+              </div>
+
+              {/* Movement Speed */}
+              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
+                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  <h4 className="flex items-center uppercase text-md" title="Take this much damage at the start of each of your turns">
+                    Movement Speed
+                  </h4>
+                  <p className="text-lg font-bold">{charSheet.speed}</p>
+                </div>
+              </div>
+
+              {/* Experience */}
+              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
+                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
+                    Experience
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editExperience, data: { type: 'character', entity: charSheet } })}>
+                      <PencilIcon
+                        className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </h4>
+                  <p className="text-lg font-bold">{charSheet.experience}</p>
+                </div>
+              </div>
+
+              {/* Mortality */}
+              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
+                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
+                    Mortality
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMortality, data: { type: 'character', entity: charSheet } })}>
+                      <PencilIcon
+                        className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </h4>
+                  <p className="text-lg font-bold">{charSheet.mortality}</p>
+                </div>
+              </div>
+            </dl>
+          </div>
           <Conditions conditions={charSheet.conditions} />
         </SheetPagePanel>
       </div>
@@ -79,7 +137,10 @@ const CharacterGameplayPage = () => {
       <div className="grid grid-cols-1 gap-4 md:col-span-4 lg:col-span-1 md:grid-cols-2 lg:grid-cols-1">
         {/* Actions */}
         <SheetPagePanel classes="md:col-span-2 lg:col-span-1">
-          <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'character' } })}>Take a Rest</Button>
+          <Button>Reach Milestone</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'character' } })} classes="mt-2">
+            Take a Rest
+          </Button>
           <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCharacter })} classes="mt-2">
             Manage Character
           </Button>
@@ -94,10 +155,14 @@ const CharacterGameplayPage = () => {
             </span>
             <span className="text-sm font-medium text-center text-gray-500 uppercase">{getHealthMessage(charSheet.currentHp, charSheet.maxHp)}</span>
           </div>
+
           <div className="mt-6">
             <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'character' } })}>Take Damage</Button>
             <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'character' } })} classes="mt-2">
               Heal Damage
+            </Button>
+            <Button classes="mt-2" onClick={() => setModal({ type: ModalTypes.upgradeHealth, data: { type: 'character', entity: charSheet } })}>
+              Upgrade Health
             </Button>
           </div>
         </SheetPagePanel>
@@ -234,9 +299,6 @@ const CharacterGameplayPage = () => {
       <SheetPagePanel>
         <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
-          <Chip editable={{ type: ModalTypes.editSpentUpgradePoints, data: { type: 'character', entity: charSheet } }} color={charSheet.upgradePoints ? 'green' : 'yellow'}>
-            {charSheet.upgradePoints} Upgrade {charSheet.upgradePoints === 1 ? 'Point' : 'Points'}
-          </Chip>
         </div>
         <div className="flow-root mt-6">
           <ListContainer

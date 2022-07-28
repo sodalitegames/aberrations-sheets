@@ -26,7 +26,7 @@ const EditWeaponForm = ({ id, data }) => {
   const [name, setName] = useState('');
   const [nickname, setNickname] = useState('');
   const [associatedStat, setAssociatedStat] = useState('');
-  const [levelDamage, setLevelDamage] = useState(1);
+  const [damageModifier, setDamageModifier] = useState(1);
   const [range, setRange] = useState('');
   const [ability, setAbility] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -41,7 +41,7 @@ const EditWeaponForm = ({ id, data }) => {
         setName(currentWeapon.name);
         setNickname(currentWeapon.nickname);
         setAssociatedStat(currentWeapon.associatedStat);
-        setLevelDamage(currentWeapon.levelDamage);
+        setDamageModifier(currentWeapon.damageModifier);
         setRange(currentWeapon.range);
         setAbility(currentWeapon.ability);
         setQuantity(currentWeapon.quantity);
@@ -57,7 +57,7 @@ const EditWeaponForm = ({ id, data }) => {
         setName(currentWeapon.name);
         setNickname(currentWeapon.nickname);
         setAssociatedStat(currentWeapon.associatedStat);
-        setLevelDamage(currentWeapon.levelDamage);
+        setDamageModifier(currentWeapon.damageModifier);
         setRange(currentWeapon.range);
         setAbility(currentWeapon.ability);
         setQuantity(currentWeapon.quantity);
@@ -79,7 +79,7 @@ const EditWeaponForm = ({ id, data }) => {
   const submitHandler = async e => {
     e.preventDefault();
 
-    if (!levelDamage) return alert('Must provide levelDamage');
+    if (!damageModifier) return alert('Must provide damageModifier');
     if (!quantity) return alert('Must provide a quantity');
 
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
@@ -95,7 +95,7 @@ const EditWeaponForm = ({ id, data }) => {
           sheetId,
           'weapons',
           id,
-          { name, nickname, associatedStat, levelDamage, range, ability, quantity, description },
+          { name, nickname, associatedStat, damageModifier, range, ability, quantity, description },
           { slideOver: true, notification: { status: 'success', heading: 'Weapon Updated', message: `You have successfully updated ${nickname || name}.` } }
         )
       );
@@ -110,7 +110,7 @@ const EditWeaponForm = ({ id, data }) => {
         id,
         {
           nickname,
-          levelDamage,
+          damageModifier,
           description,
           quantity,
         },
@@ -132,7 +132,7 @@ const EditWeaponForm = ({ id, data }) => {
             name="associatedStat"
             value={associatedStat}
             options={[
-              { name: 'Fortitude', id: 'fortitude' },
+              { name: 'Strength', id: 'strength' },
               { name: 'Agility', id: 'agility' },
               { name: 'Persona', id: 'persona' },
               { name: 'Aptitude', id: 'aptitude' },
@@ -140,7 +140,7 @@ const EditWeaponForm = ({ id, data }) => {
             changeHandler={selectStat}
             required
           />
-          <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} required />
+          <Input slideOver label="Level" name="damageModifier" type="number" value={damageModifier} changeHandler={setDamageModifier} required />
           <Select
             slideOver
             label="Range"
@@ -165,7 +165,7 @@ const EditWeaponForm = ({ id, data }) => {
           <Detail slideOver label="Name" detail={name} />
           <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
           <Detail slideOver label="Associated Stat" detail={capitalize(associatedStat)} />
-          <Input slideOver label="Level" name="levelDamage" type="number" value={levelDamage} changeHandler={setLevelDamage} required />
+          <Input slideOver label="Damage Modifier" name="damageModifier" type="number" value={damageModifier} changeHandler={setDamageModifier} required />
           <Detail slideOver label="Range" detail={getWeaponRangeString(range)} />
           <Detail slideOver label="Ability" detail={ability} />
           <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />

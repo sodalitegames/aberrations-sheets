@@ -5,13 +5,16 @@ const DisplaySpecies = ({ species }) => {
     <DescriptionList
       list={[
         { name: 'Species Name', values: [species.name] },
-        { name: 'Species Ability', values: [species.ability] },
-        // { name: 'Appearance', values: [species.appearance] },
+        { name: 'Health', values: [species.health] },
+        { name: 'Strength', values: [`D${species.stats.strength}`], half: true },
+        { name: 'Agility', values: [`D${species.stats.agility}`], half: true },
+        { name: 'Persona', values: [`D${species.stats.persona}`], half: true },
+        { name: 'Aptitude', values: [`D${species.stats.aptitude}`], half: true },
+        { name: 'Appearance', values: [species.appearance] },
         // { name: 'Basic Info', values: [species.basicInfo] },
-        { name: 'Fortitude Base', values: [species.stats.fortitude], half: true },
-        { name: 'Agility Base', values: [species.stats.agility], half: true },
-        { name: 'Persona Base', values: [species.stats.persona], half: true },
-        { name: 'Aptitude Base', values: [species.stats.aptitude], half: true },
+        { name: 'Activated Ability', values: [species.abilities.activated] },
+        { name: 'Passive Abilities', values: [species.abilities.passive] },
+        { name: 'Detraction', values: [species.abilities.detraction] },
       ]}
     />
   );

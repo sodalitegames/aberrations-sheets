@@ -166,7 +166,7 @@ const ConsumableForm = ({ id, data }) => {
         name="associatedStat"
         value={associatedStat}
         options={[
-          { name: 'Fortitude', id: 'fortitude' },
+          { name: 'Strength', id: 'strength' },
           { name: 'Agility', id: 'agility' },
           { name: 'Persona', id: 'persona' },
           { name: 'Aptitude', id: 'aptitude' },

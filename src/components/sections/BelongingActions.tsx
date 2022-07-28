@@ -42,7 +42,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
           {sheetType === 'characters' ? (
             <Button
               dark={belonging.equipped}
-              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings, equipmentMods: equipmentMods })}
+              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings })}
             >
               {belonging.equipped ? 'Unequip' : 'Equip'}
             </Button>
