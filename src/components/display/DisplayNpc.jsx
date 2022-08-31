@@ -23,17 +23,30 @@ const NpcDetails = ({ npc, species }) => {
   return (
     <DescriptionList
       list={[
-        { name: 'Character Power', values: [npc.power], half: true },
         { name: 'Species', values: [npc.speciesName], half: true },
+        { name: 'Shield Value', values: [npc.shieldValue], half: true },
         { name: 'Diplomacy', values: [npc.diplomacy], half: true },
         { name: 'Type', values: [npc.type], half: true },
         { name: 'Temperament', values: [npc.temperament], half: true },
+        { name: 'Experience', values: [npc.experience], half: true },
         { name: 'Mortality', values: [npc.mortality], half: true },
-        { name: 'Upgrade Points', values: [npc.upgradePoints], half: true },
+        { name: 'Milestones', values: [npc.milestones], half: true },
         { name: 'Wallet', values: [npc.wallet], half: true },
         { name: 'Active', values: [npc.active ? 'Yes' : 'No'], half: true },
-        { name: 'Advantage Pool', values: [npc.fortitude.pool + npc.agility.pool + npc.persona.pool + npc.aptitude.pool], half: true },
-        { name: 'Species Ability', values: [getSpeciesAbility(npc.speciesId, species)] },
+        { name: 'Speed', values: [npc.speed], half: true },
+        { name: 'Health', values: [`${npc.currentHp}/${npc.maxHp}`], half: true },
+        {
+          name: 'Activated Ability',
+          values: [getSpeciesAbility(npc.speciesId, species).activated],
+        },
+        {
+          name: 'Passive Abilities',
+          values: [getSpeciesAbility(npc.speciesId, species).passive],
+        },
+        {
+          name: 'Detraction',
+          values: [getSpeciesAbility(npc.speciesId, species).detraction],
+        },
       ]}
       classes="mt-2"
     />
@@ -48,8 +61,8 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
   if (listItem) {
     if (condensed) {
       return (
-        <ListItem heading={`${npc.name} (${npc.power} Power)`}>
-          <InfoList list={[`${npc.speciesName} | ${npc.type}`]} />
+        <ListItem heading={`${npc.name} (${npc.speciesName})`}>
+          <InfoList list={[`${npc.diplomacy} | ${npc.type}`]} />
         </ListItem>
       );
     }
@@ -75,8 +88,8 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
               click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'npc', entity: npc } }),
             },
             {
-              text: 'Upgrade Points',
-              click: () => setModal({ type: ModalTypes.editSpentUpgradePoints, data: { type: 'npc', entity: npc } }),
+              text: 'Experience',
+              click: () => setModal({ type: ModalTypes.editExperience, data: { type: 'npc', entity: npc } }),
             },
             {
               text: 'Health',
@@ -92,7 +105,7 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       <Heading
         edit={{
           menu: [
-            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude', data: { type: 'npc', resource: npc } }) },
+            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, id: 'strength', data: { type: 'npc', resource: npc } }) },
             { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'npc', resource: npc } }) },
             { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'npc', resource: npc } }) },
             { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'npc', resource: npc } }) },
@@ -103,43 +116,10 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       </Heading>
       <DescriptionList
         list={[
-          { name: 'Fortitude', values: [`${npc.fortitude.points + npc.fortitude.modifier} (${npc.fortitude.points} + ${npc.fortitude.modifier})`], half: true },
-          { name: 'Agility', values: [`${npc.agility.points + npc.agility.modifier} (${npc.agility.points} + ${npc.agility.modifier})`], half: true },
-          { name: 'Persona', values: [`${npc.persona.points + npc.persona.modifier} (${npc.persona.points} + ${npc.persona.modifier})`], half: true },
-          { name: 'Aptitude', values: [`${npc.aptitude.points + npc.aptitude.modifier} (${npc.aptitude.points} + ${npc.aptitude.modifier})`], half: true },
-        ]}
-        classes="my-2"
-      />
-
-      <Heading>Stat Experience</Heading>
-      <DescriptionList
-        list={[
-          { name: 'Fortitude', values: [npc.fortitude.experience], half: true },
-          { name: 'Agility', values: [npc.agility.experience], half: true },
-          { name: 'Persona', values: [npc.persona.experience], half: true },
-          { name: 'Aptitude', values: [npc.aptitude.experience], half: true },
-        ]}
-        classes="my-2"
-      />
-
-      <Heading>Stat Advantage</Heading>
-      <DescriptionList
-        list={[
-          { name: 'Fortitude', values: [npc.fortitude.advantage], half: true },
-          { name: 'Agility', values: [npc.agility.advantage], half: true },
-          { name: 'Persona', values: [npc.persona.advantage], half: true },
-          { name: 'Aptitude', values: [npc.aptitude.advantage], half: true },
-        ]}
-        classes="my-2"
-      />
-
-      <Heading>Passive Stats</Heading>
-      <DescriptionList
-        list={[
-          { name: 'Health', values: [`${npc.currentHp} / ${npc.maxHp}`], half: true },
-          { name: 'Shield Value', values: [npc.shieldValue], half: true },
-          { name: 'Initiative', values: [npc.initiative], half: true },
-          { name: 'Assist', values: [npc.assist], half: true },
+          { name: 'Strength', values: [`D${npc.strength.die}`], half: true },
+          { name: 'Agility', values: [`D${npc.agility.die}`], half: true },
+          { name: 'Persona', values: [`D${npc.persona.die}`], half: true },
+          { name: 'Aptitude', values: [`D${npc.aptitude.die}`], half: true },
         ]}
         classes="my-2"
       />

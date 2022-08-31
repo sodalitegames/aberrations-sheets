@@ -10,7 +10,7 @@ import InfoList from '../data/InfoList';
 
 import Heading from '../Heading';
 
-const CreatureDetails = ({ creature, showStats }) => {
+const CreatureDetails = ({ creature }) => {
   return (
     <DescriptionList
       list={[
@@ -18,12 +18,11 @@ const CreatureDetails = ({ creature, showStats }) => {
         { name: 'Description', values: [creature.description] },
         { name: 'Damage Level', values: [creature.damageLevel], half: true },
         { name: 'Attacking Stat', values: [capitalize(creature.attackingStat)], half: true },
+        { name: 'Shield Value', values: [creature.shieldValue], half: true },
         { name: 'Active', values: [creature.active ? 'Yes' : 'No'], half: true },
         { name: 'Mortality', values: [creature.mortality], half: true },
-        showStats ? { name: 'Fortitude', values: [creature.fortitude], half: true } : null,
-        showStats ? { name: 'Agility', values: [creature.agility], half: true } : null,
-        showStats ? { name: 'Persona', values: [creature.persona], half: true } : null,
-        showStats ? { name: 'Aptitude', values: [creature.aptitude], half: true } : null,
+        { name: 'Speed', values: [creature.speed], half: true },
+        { name: 'Health', values: [`${creature.currentHp}/${creature.maxHp}`], half: true },
       ]}
       classes="mt-2"
     />
@@ -88,7 +87,7 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
       <Heading
         edit={{
           menu: [
-            { text: 'Fortitude', click: () => setModal({ type: ModalTypes.editStat, id: 'fortitude', data: { type: 'creature', resource: creature } }) },
+            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, id: 'strength', data: { type: 'creature', resource: creature } }) },
             { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'creature', resource: creature } }) },
             { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'creature', resource: creature } }) },
             { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'creature', resource: creature } }) },
@@ -99,32 +98,10 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
       </Heading>
       <DescriptionList
         list={[
-          { name: 'Fortitude', values: [creature.fortitude.points], half: true },
-          { name: 'Agility', values: [creature.agility.points], half: true },
-          { name: 'Persona', values: [creature.persona.points], half: true },
-          { name: 'Aptitude', values: [creature.aptitude.points], half: true },
-        ]}
-        classes="my-2"
-      />
-
-      <Heading>Stat Advantage</Heading>
-      <DescriptionList
-        list={[
-          { name: 'Fortitude', values: [creature.fortitude.advantage], half: true },
-          { name: 'Agility', values: [creature.agility.advantage], half: true },
-          { name: 'Persona', values: [creature.persona.advantage], half: true },
-          { name: 'Aptitude', values: [creature.aptitude.advantage], half: true },
-        ]}
-        classes="my-2"
-      />
-
-      <Heading>Passive Stats</Heading>
-      <DescriptionList
-        list={[
-          { name: 'Health', values: [`${creature.currentHp} / ${creature.maxHp}`], half: true },
-          { name: 'Shield Value', values: [creature.shieldValue], half: true },
-          { name: 'Initiative', values: [creature.initiative], half: true },
-          { name: 'Assist', values: [creature.assist], half: true },
+          { name: 'Strength', values: [`D${creature.strength.die}`], half: true },
+          { name: 'Agility', values: [`D${creature.agility.die}`], half: true },
+          { name: 'Persona', values: [`D${creature.persona.die}`], half: true },
+          { name: 'Aptitude', values: [`D${creature.aptitude.die}`], half: true },
         ]}
         classes="my-2"
       />

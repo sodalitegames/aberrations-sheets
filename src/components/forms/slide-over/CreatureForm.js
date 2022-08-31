@@ -32,12 +32,13 @@ const CreatureForm = ({ id }) => {
   const [damageLevel, setDamageLevel] = useState(1);
   const [types, setTypes] = useState([]);
   const [attackingStat, setAttackingStat] = useState('');
+  const [health, setHealth] = useState(10);
 
   // Only needed if creating
-  const [fortitude, setFortitude] = useState(3);
-  const [agility, setAgility] = useState(3);
-  const [persona, setPersona] = useState(3);
-  const [aptitude, setAptitude] = useState(3);
+  const [strength, setStrength] = useState(2);
+  const [agility, setAgility] = useState(2);
+  const [persona, setPersona] = useState(2);
+  const [aptitude, setAptitude] = useState(2);
 
   useEffect(() => {
     if (creatureTypes) {
@@ -87,6 +88,7 @@ const CreatureForm = ({ id }) => {
     if (!description) return alert('Must provide a description');
     if (!damageLevel) return alert('Must provide a damageLevel');
     if (!attackingStat) return alert('Must provide an attackingStat');
+    if (!health) return alert('Must provide a health');
 
     let body = {
       name,
@@ -94,6 +96,7 @@ const CreatureForm = ({ id }) => {
       damageLevel,
       attackingStat,
       types,
+      maxHp: health,
     };
 
     if (id) {
@@ -106,18 +109,18 @@ const CreatureForm = ({ id }) => {
       return;
     }
 
-    if (!fortitude) return alert('Must provide a fortitude value');
+    if (!strength) return alert('Must provide a strength value');
     if (!agility) return alert('Must provide an agility value');
     if (!persona) return alert('Must provide a persona value');
     if (!aptitude) return alert('Must provide a aptitude value');
 
     body = {
       ...body,
-      fortitude: { points: fortitude },
-      agility: { points: agility },
-      persona: { points: persona },
-      aptitude: { points: aptitude },
-      currentHp: +fortitude * 10,
+      strength: { die: strength },
+      agility: { die: agility },
+      persona: { die: persona },
+      aptitude: { die: aptitude },
+      currentHp: health,
     };
 
     dispatch(
@@ -162,7 +165,7 @@ const CreatureForm = ({ id }) => {
         name="attackingStat"
         value={attackingStat}
         options={[
-          { name: 'Fortitude', id: 'fortitude' },
+          { name: 'Strength', id: 'strength' },
           { name: 'Agility', id: 'agility' },
           { name: 'Persona', id: 'persona' },
           { name: 'Aptitude', id: 'aptitude' },
@@ -172,13 +175,14 @@ const CreatureForm = ({ id }) => {
       />
 
       <Input slideOver label="Damage Level" name="damageLevel" type="number" min="1" max="10" value={damageLevel} changeHandler={setDamageLevel} required />
+      <Input slideOver label="Health (Max)" name="health" type="number" value={health} changeHandler={setHealth} required />
 
       {!id && (
         <>
-          <Input slideOver label="Fortitude" name="fortitude" type="number" value={fortitude} changeHandler={setFortitude} required />
-          <Input slideOver label="Agility" name="agility" type="number" value={agility} changeHandler={setAgility} required />
-          <Input slideOver label="Persona" name="persona" type="number" value={persona} changeHandler={setPersona} required />
-          <Input slideOver label="Aptitude" name="aptitude" type="number" value={aptitude} changeHandler={setAptitude} required />
+          <Input slideOver label="Strength" name="strength" type="number" min="2" max="20" step="2" value={strength} changeHandler={setStrength} required />
+          <Input slideOver label="Agility" name="agility" type="number" min="2" max="20" step="2" value={agility} changeHandler={setAgility} required />
+          <Input slideOver label="Persona" name="persona" type="number" min="2" max="20" step="2" value={persona} changeHandler={setPersona} required />
+          <Input slideOver label="Aptitude" name="aptitude" type="number" min="2" max="20" step="2" value={aptitude} changeHandler={setAptitude} required />
         </>
       )}
     </SlideOverForm>

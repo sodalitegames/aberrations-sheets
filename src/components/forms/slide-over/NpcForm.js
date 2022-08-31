@@ -144,12 +144,12 @@ const NpcForm = ({ id }) => {
       if (levelId !== currentNpc.levelId) {
         body = {
           ...body,
-          fortitude: { ...currentNpc.fortitude, points: species.stats.fortitude + levelData.fortitude },
-          agility: { ...currentNpc.agility, points: species.stats.agility + levelData.agility },
-          persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
-          aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
-          // calculate currentHp and stats based on the type and level
-          currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
+          // fortitude: { ...currentNpc.fortitude, points: species.stats.fortitude + levelData.fortitude },
+          // agility: { ...currentNpc.agility, points: species.stats.agility + levelData.agility },
+          // persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
+          // aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
+          // // calculate currentHp and stats based on the type and level
+          // currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
         };
       }
 
@@ -173,12 +173,18 @@ const NpcForm = ({ id }) => {
       levelId,
       description,
       background,
-      fortitude: { points: species.stats.fortitude + levelData.fortitude },
-      agility: { points: species.stats.agility + levelData.agility },
-      persona: { points: species.stats.persona + levelData.persona },
-      aptitude: { points: species.stats.aptitude + levelData.aptitude },
-      // calculate currentHp and stats based on the type and level
-      currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
+      currentHp: species.health,
+      maxHp: species.health,
+      strength: { die: species.stats.strength },
+      agility: { die: species.stats.agility },
+      persona: { die: species.stats.persona },
+      aptitude: { die: species.stats.aptitude },
+      // fortitude: { points: species.stats.fortitude + levelData.fortitude },
+      // agility: { points: species.stats.agility + levelData.agility },
+      // persona: { points: species.stats.persona + levelData.persona },
+      // aptitude: { points: species.stats.aptitude + levelData.aptitude },
+      // // calculate currentHp and stats based on the type and level
+      // currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
     };
 
     dispatch(
