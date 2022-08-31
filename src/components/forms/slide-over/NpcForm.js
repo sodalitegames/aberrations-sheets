@@ -129,7 +129,7 @@ const NpcForm = ({ id }) => {
     if (!levelId) return alert('Must select a levelId');
 
     // Get level data based on the type and the saved id
-    const levelData = type.level.find(lev => lev.id === levelId);
+    // const levelData = type.level.find(lev => lev.id === levelId);
 
     let body = {
       name,
