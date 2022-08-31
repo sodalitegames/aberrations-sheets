@@ -1,8 +1,17 @@
 import { useSelector } from 'react-redux';
 
 import { PencilIcon } from '@heroicons/react/solid';
+import { InformationCircleIcon } from '@heroicons/react/outline';
 
-import { selectCurrentCharacter, selectEquippedWeapons, selectEquippedWearables, selectEquippedConsumables, selectEquippedUsables } from '../../../redux/character/character.selectors';
+import {
+  selectCurrentCharacter,
+  selectEquippedWeapons,
+  selectEquippedWearables,
+  selectEquippedConsumables,
+  selectEquippedUsables,
+  selectShieldValue,
+  selectSpeedAdjustment,
+} from '../../../redux/character/character.selectors';
 
 import { useActions } from '../../../hooks/useActions';
 
@@ -37,6 +46,9 @@ const CharacterGameplayPage = () => {
   const equippedWearables = useSelector(selectEquippedWearables);
   const equippedConsumables = useSelector(selectEquippedConsumables);
   const equippedUsables = useSelector(selectEquippedUsables);
+
+  const speedAdjustment = useSelector(selectSpeedAdjustment);
+  const shieldValue = useSelector(selectShieldValue);
 
   return (
     <SheetPageContent title="Gameplay" columns={3}>
@@ -78,26 +90,29 @@ const CharacterGameplayPage = () => {
               {/* Shield Value */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" />
                   <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
                     Shield Value
                   </h4>
-                  <p className="text-lg font-bold">{charSheet.shieldValue}</p>
+                  <p className="text-lg font-bold">{charSheet.shieldValue + shieldValue}</p>
                 </div>
               </div>
 
               {/* Movement Speed */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" />
                   <h4 className="flex items-center uppercase text-md" title="Take this much damage at the start of each of your turns">
                     Movement Speed
                   </h4>
-                  <p className="text-lg font-bold">{charSheet.speed}</p>
+                  <p className="text-lg font-bold">{charSheet.speed + speedAdjustment}</p>
                 </div>
               </div>
 
               {/* Experience */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" />
                   <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
                     Experience
                     <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editExperience, data: { type: 'character', entity: charSheet } })}>
@@ -114,6 +129,7 @@ const CharacterGameplayPage = () => {
               {/* Mortality */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" />
                   <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
                     Mortality
                     <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMortality, data: { type: 'character', entity: charSheet } })}>
@@ -136,7 +152,7 @@ const CharacterGameplayPage = () => {
       <div className="grid grid-cols-1 gap-4 md:col-span-4 lg:col-span-1 md:grid-cols-2 lg:grid-cols-1">
         {/* Actions */}
         <SheetPagePanel classes="md:col-span-2 lg:col-span-1">
-          <Button>Reach Milestone</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.reachMilestone, data: { type: 'character', entity: charSheet } })}>Reach Milestone</Button>
           <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'character' } })} classes="mt-2">
             Take a Rest
           </Button>

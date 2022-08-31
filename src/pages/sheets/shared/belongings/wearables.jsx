@@ -7,7 +7,6 @@ import {
   selectEquippedWearables,
   selectWearables as selectCharWearables,
   selectArchivedWearables as selectCharArchivedWearables,
-  selectEquipmentMods,
 } from '../../../../redux/character/character.selectors';
 import { selectCurrentCampaign, selectWearables as selectCampWearables, selectArchivedWearables as selectCampArchivedWearables } from '../../../../redux/campaign/campaign.selectors';
 
@@ -25,7 +24,6 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
   const equippedWearables = useSelector(selectEquippedWearables);
-  const equipmentMods = useSelector(selectEquipmentMods);
 
   const charWearables = useSelector(selectCharWearables);
   const campWearables = useSelector(selectCampWearables);
@@ -115,7 +113,6 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
                 belonging={wearable}
                 belongingKind="Wearable"
                 equippedBelongings={equippedWearables}
-                equipmentMods={equipmentMods}
               />
             </div>
           </div>
