@@ -59,7 +59,11 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
   }, [charSheet, campSheet, type, playerId, npcId, creatureId]);
 
   const calcAdvantage = () => {
-    return +advantage + (statKey === 'strength' || statKey === 'agility' ? -sheet.conditions.injured : -sheet.conditions.disturbed);
+    if (sheet?.conditions) {
+      return +advantage + (statKey === 'strength' || statKey === 'agility' ? -sheet.conditions.injured : -sheet.conditions.disturbed);
+    }
+
+    return +advantage;
   };
 
   const getSubmitText = () => {
@@ -146,7 +150,7 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
         />
       )}
 
-      {stat ? (
+      {stat && sheet?.conditions ? (
         <>
           <Detail slideOver label="Die" detail={'D' + stat.die} />
           {statKey === 'strength' || statKey === 'agility' ? (
@@ -183,7 +187,7 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
 
       {results ? (
         <div className="mt-8">
-          <div className="flex flex-col items-center mt-8 text-5xl font-semibold text-gray-900 shrink-0">
+          <div className="flex flex-col items-center p-4 mx-8 mt-8 text-5xl font-semibold text-gray-900 rounded-md bg-gray-50 shrink-0">
             {results.total}
             <p className="text-sm font-medium text-gray-500">{results.roll} NATURAL</p>
             <p className="text-sm font-medium text-gray-500">{results.advantage * 2} ADVANTAGE (ADV * 2)</p>

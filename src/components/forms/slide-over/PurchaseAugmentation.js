@@ -111,7 +111,7 @@ const PurchaseAugmentation = ({ data }) => {
           {augmentation ? (
             <>
               <Detail slideOver label="Name" detail={augmentation.name} />
-              <Detail status={data.entity.experience < augmentation.pointCost ? 'error' : ''} slideOver label="Point Cost" detail={augmentation.pointCost} />
+              <Detail status={data.entity.experience < augmentation.pointCost ? 'error' : ''} slideOver label="Experience Cost" detail={augmentation.pointCost} />
               <Detail slideOver label="Description" detail={augmentation.description} />
             </>
           ) : null}

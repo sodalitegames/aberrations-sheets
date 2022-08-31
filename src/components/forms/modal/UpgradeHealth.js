@@ -27,7 +27,7 @@ const UpgradeHealth = ({ data }) => {
           updateSheetStart(
             'characters',
             data.entity._id,
-            { experience: data.entity.experience - +amount, maxHp: data.entity.maxHp + +amount },
+            { experience: data.entity.experience - +amount, currentHp: data.entity.currentHp + +amount, maxHp: data.entity.maxHp + +amount },
             { modal: true, notification: { status: 'success', heading: 'Health Upgraded', message: `You have successfully upgraded your health by ${amount}.` } }
           )
         );
@@ -37,7 +37,7 @@ const UpgradeHealth = ({ data }) => {
           updateSheetStart(
             'characters',
             data.entity._id,
-            { experience: data.entity.experience - +amount, maxHp: data.entity.maxHp + +amount },
+            { experience: data.entity.experience - +amount, currentHp: data.entity.currentHp + +amount, maxHp: data.entity.maxHp + +amount },
             {
               forPlayer: true,
               modal: true,
@@ -53,7 +53,7 @@ const UpgradeHealth = ({ data }) => {
             data.entity.sheetId,
             'npcs',
             data.entity._id,
-            { experience: data.entity.experience - +amount, maxHp: data.entity.maxHp + +amount },
+            { experience: data.entity.experience - +amount, currentHp: data.entity.currentHp + +amount, maxHp: data.entity.maxHp + +amount },
             { modal: true, notification: { status: 'success', heading: 'Health Upgraded', message: `You have successfully upgraded your health by ${amount}.` } }
           )
         );
