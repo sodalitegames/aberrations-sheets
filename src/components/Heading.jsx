@@ -6,10 +6,11 @@ import classNames from '../utils/classNames';
 
 import Button from './Button';
 
-const Heading = ({ edit, children }) => {
+const Heading = ({ edit, children, secondary }) => {
   return (
     <h3 className="flex items-center justify-between mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">
       {children}
+      <span className="text-xs font-medium">{secondary}</span>
       {edit &&
         (edit.menu ? (
           <Menu as="div" className="relative inline-block text-left">
