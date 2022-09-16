@@ -34,6 +34,7 @@ import CharacterCharacterPage from './pages/sheets/characters/character';
 
 // Campaign Pages
 import CampaignCampaignPage from './pages/sheets/campaigns/campaign';
+import CampaignCombatPage from './pages/sheets/campaigns/combat';
 import CampaignPlayersPage from './pages/sheets/campaigns/players';
 import CampaignNpcsPage from './pages/sheets/campaigns/npcs';
 import CampaignCreaturesPage from './pages/sheets/campaigns/creatures';
@@ -86,6 +87,7 @@ ReactDOM.render(
                 <Route path="campaigns/:campId" element={<CampaignSheet />}>
                   <Route index element={<Navigate to="campaign" />} />
                   <Route path="campaign" element={<CampaignCampaignPage />} />
+                  <Route path="combat" element={<CampaignCombatPage />} />
                   <Route path="players" element={<CampaignPlayersPage />} />
                   <Route path="npcs" element={<CampaignNpcsPage />} />
                   <Route path="creatures" element={<CampaignCreaturesPage />} />

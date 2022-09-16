@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCampaign, selectCombatants } from '../../../redux/campaign/campaign.selectors';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+import { selectCombats, selectCurrentCampaign, selectPotentialCombatants } from '../../../redux/campaign/campaign.selectors';
 
 import { useActions } from '../../../hooks/useActions';
 
@@ -28,26 +30,28 @@ const CampaignCombatPage = () => {
   const dispatch = useDispatch();
 
   const campSheet = useSelector(selectCurrentCampaign);
-  const combatants = useSelector(selectCombatants);
+  const combats = useSelector(selectCombats);
+  const potentialCombatants = useSelector(selectPotentialCombatants);
 
   const { setSlideOver } = useActions();
 
   const species = useResource(ResourceType.Species);
 
+  const [combatants, setCombatants] = useState(combats.length ? [] : []);
+
+  const [selected, setSelected] = useState(combats.length ? combats[0].combatants[0] : null);
   const [entity, setEntity] = useState(combatants.length ? combatants[0] : null);
+
   const [id, setId] = useState(combatants.length ? combatants[0]._id : null);
 
   useEffect(() => {
     if (combatants.length) {
-      if (id) {
-        setEntity(combatants.find(comba => comba._id === id));
+      if (selected) {
+        setEntity(campSheet[selected.type].find(comba => comba._id === selected._id));
         return;
       }
-
-      setEntity(combatants[0]);
-      setId(combatants[0]._id);
     }
-  }, [id, combatants]);
+  }, [id, combatants, campSheet, selected]);
 
   const endTurn = entId => {
     const activeCombatants = combatants.filter(comb => comb.active);
@@ -67,10 +71,10 @@ const CampaignCombatPage = () => {
         <SheetPagePanel title="In Combat (Active)">
           <div className="space-y-4">
             {combatants
-              .filter(ent => ent.active)
+              // .filter(ent => ent.active)
               .map((ent, index) => (
-                <div key={ent._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer')} onClick={() => setId(ent._id)}>
-                  <CombatCard entity={ent} index={index} active={entity._id === ent._id} inCombat />
+                <div key={ent._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')} onClick={() => setSelected(ent)}>
+                  <CombatCard entity={entity} index={index} active={entity._id === ent._id} inCombat />
                 </div>
               ))}
           </div>
@@ -78,11 +82,11 @@ const CampaignCombatPage = () => {
 
         <SheetPagePanel title="Out of Combat (Inactive)">
           <div className="space-y-4">
-            {combatants
-              .filter(entity => !entity.active)
-              .map((entity, index) => (
+            {/* {combatants
+              .filter(ent => !ent.active)
+              .map((ent, index) => (
                 <CombatCard key={index} entity={entity} index={index} />
-              ))}
+              ))} */}
           </div>
         </SheetPagePanel>
       </div>

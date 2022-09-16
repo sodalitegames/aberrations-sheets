@@ -15,25 +15,25 @@ const CombatCard = ({ entity, active, index, inCombat }) => {
 
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const getPositive = () => {
-    let status = false;
+  // const getPositive = () => {
+  //   let status = false;
 
-    if (entity.fortitude.advantage > 0 || entity.agility.advantage > 0 || entity.persona.advantage > 0 || entity.aptitude.advantage > 0) {
-      status = true;
-    }
+  //   if (entity.fortitude.advantage > 0 || entity.agility.advantage > 0 || entity.persona.advantage > 0 || entity.aptitude.advantage > 0) {
+  //     status = true;
+  //   }
 
-    return status;
-  };
+  //   return status;
+  // };
 
-  const getNegative = () => {
-    let status = false;
+  // const getNegative = () => {
+  //   let status = false;
 
-    if (entity.fortitude.advantage < 0 || entity.agility.advantage < 0 || entity.persona.advantage < 0 || entity.aptitude.advantage < 0) {
-      status = true;
-    }
+  //   if (entity.fortitude.advantage < 0 || entity.agility.advantage < 0 || entity.persona.advantage < 0 || entity.aptitude.advantage < 0) {
+  //     status = true;
+  //   }
 
-    return status;
-  };
+  //   return status;
+  // };
 
   if (!inCombat) {
     return (
@@ -111,13 +111,12 @@ const CombatCard = ({ entity, active, index, inCombat }) => {
             </span>
           </div>
           <p className="mt-1 text-sm text-gray-500 truncate">
-            FOR {entity.fortitude.points + (entity.fortitude.modifier || 0)} / AGL {entity.agility.points + (entity.agility.modifier || 0)} / PER{' '}
-            {entity.persona.points + (entity.persona.modifier || 0)} / APT {entity.aptitude.points + (entity.aptitude.modifier || 0)}
+            STR D{entity.strength.die} / AGL D{entity.agility.die} / PER D{entity.persona.die} / APT D{entity.aptitude.die}
           </p>
         </div>
         <div className="flex items-center justify-center">
-          {getNegative() ? <ChevronDoubleDownIcon className="w-5 h-5 text-red-400" aria-hidden="true" /> : null}
-          {getPositive() ? <ChevronDoubleUpIcon className="w-5 h-5 text-green-400" aria-hidden="true" /> : null}
+          {/* {getNegative() ? <ChevronDoubleDownIcon className="w-5 h-5 text-red-400" aria-hidden="true" /> : null}
+          {getPositive() ? <ChevronDoubleUpIcon className="w-5 h-5 text-green-400" aria-hidden="true" /> : null} */}
         </div>
       </div>
       <div>
