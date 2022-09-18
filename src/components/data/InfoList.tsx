@@ -3,7 +3,7 @@ import NewlineText from '../NewlineText';
 import Tooltip from '../Tooltip';
 
 export interface InfoListItem {
-  tooltip?: string;
+  tooltip?: string[];
   value: string;
   clamp?: boolean;
 }
@@ -34,7 +34,7 @@ const InfoList: React.FC<InfoListProps> = ({ list }) => {
         }
 
         return (
-          <Tooltip key={index} message={item.tooltip || ''}>
+          <Tooltip key={index} message={item.tooltip || []}>
             <span className="mt-1 text-sm text-gray-600 line-clamp-2">
               <NewlineText text={String(item.value || '')} />
             </span>

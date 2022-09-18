@@ -9,7 +9,7 @@ import InfoList from '../data/InfoList';
 
 const createWeaponList = (stat, range, ability) => {
   const weapon = [`${capitalize(stat)} | ${range} Range`];
-  if (ability) weapon.push({ tooltip: ability, value: ability.replace('"', '') });
+  if (ability) weapon.push({ tooltip: [ability], value: ability.replace('"', '') });
   return weapon;
 };
 
@@ -43,7 +43,7 @@ const DisplayWeapon = ({ weapon, condensed, actions, noButtonPanel, listItem, sh
           heading={`${weapon.name} (Mod +${weapon.damageModifier})`}
           view={{ type: ModalTypes.showBelonging, id: weapon._id, data: { sheetType: sheetType, playerId, belongingType: 'weapons' } }}
         >
-          <InfoList list={createWeaponList(weapon.associatedStat, weapon.range, weapon.ability)} />
+          <InfoList list={createWeaponList(weapon.associatedStat, getWeaponRangeString(weapon.range), weapon.ability)} />
         </ListItem>
       );
     }
@@ -51,7 +51,7 @@ const DisplayWeapon = ({ weapon, condensed, actions, noButtonPanel, listItem, sh
     if (condensed) {
       return (
         <ListItem heading={`${weapon.nickname || weapon.name} (Mod +${weapon.damageModifier})`} actions={actions}>
-          <InfoList list={[`${capitalize(weapon.associatedStat)} | ${weapon.range} Range`]} />
+          <InfoList list={[`${capitalize(weapon.associatedStat)} | ${getWeaponRangeString(weapon.range)} Range`]} />
         </ListItem>
       );
     }
