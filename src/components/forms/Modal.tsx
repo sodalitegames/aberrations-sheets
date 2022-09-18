@@ -39,12 +39,15 @@ import DeleteResource from './modal/DeleteResource';
 import UpdateInviteStatus from './modal/UpdateInviteStatus';
 import ManageTransaction from './modal/ManageTransaction';
 import RemoveCharacterFromCampaign from './modal/RemoveCharacterFromCampaign';
-import EditSpentUpgradePoints from './modal/EditSpentUpgradePoints';
+import EditExperience from './modal/EditExperience';
 import EditMortality from './modal/EditMortality';
 import EditStat from './modal/EditStat';
+import UpgradeStat from './modal/UpgradeStat';
 import EditCondition from './modal/EditCondition';
 import EditHealth from './modal/EditHealth';
+import UpgradeHealth from './modal/UpgradeHealth';
 import EditWallet from './modal/EditWallet';
+import ReachMilestone from './modal/ReachMilestone';
 
 interface ModalFormProps {
   title: string;
@@ -66,28 +69,31 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
   return (
     <Fragment>
       {/* Character Sheet */}
-      {modal && modal.type === ModalTypes.takeARest ? <TakeARest /> : null}
-      {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage /> : null}
-      {modal && modal.type === ModalTypes.healDamage ? <HealDamage /> : null}
-      {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney /> : null}
-      {modal && modal.type === ModalTypes.payMoney ? <PayMoney /> : null}
       {modal && modal.type === ModalTypes.errorEquippingBelonging ? <ErrorEquippingBelonging data={modal.data} nested={nested} /> : null}
       {/* Campaign Sheet */}
       {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
       {modal && modal.type === ModalTypes.assignBelonging ? <AssignBelonging id={modal.id} data={modal.data} /> : null}
       {/* Shared */}
+      {modal && modal.type === ModalTypes.takeARest ? <TakeARest data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.healDamage ? <HealDamage data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.payMoney ? <PayMoney data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.deleteSheet ? <DeleteSheet data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.manageTransaction ? <ManageTransaction id={modal.id} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editSpentUpgradePoints ? <EditSpentUpgradePoints data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editExperience ? <EditExperience data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editMortality ? <EditMortality data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id as Stat} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.upgradeStat ? <UpgradeStat id={modal.id as Stat} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as Condition} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editHealth ? <EditHealth data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.upgradeHealth ? <UpgradeHealth data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editWallet ? <EditWallet data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.reachMilestone ? <ReachMilestone data={modal.data} /> : null}
     </Fragment>
   );
 };

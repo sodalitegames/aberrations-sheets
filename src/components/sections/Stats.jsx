@@ -7,33 +7,17 @@ import { useActions } from '../../hooks/useActions';
 import { selectCurrentCharacter } from '../../redux/character/character.selectors';
 
 import ModalTypes from '../../utils/ModalTypes';
+import SlideOverTypes from '../../utils/SlideOverTypes';
 
-import Chip from '../Chip';
+import Button from '../Button';
 
-const Stats = ({ stats, power, mortality, slowed }) => {
-  const { setModal } = useActions();
+const Stats = ({ stats }) => {
+  const { setModal, setSlideOver } = useActions();
   const charSheet = useSelector(selectCurrentCharacter);
   return (
     <div>
       <div className="flex flex-wrap justify-between mx-2 space-y-2">
         <h3 className="text-lg font-medium text-gray-900">Stats</h3>
-        {/* Chips */}
-        <div className="space-x-2">
-          {/* Advantage Pool */}
-          <Chip color="green">Advantage Pool: {stats.reduce((prev, curr) => prev || 0 + curr.pool || 0, 0)}</Chip>
-
-          {/* Mortality */}
-          <Chip
-            color={mortality >= stats[0].points ? 'red' : mortality >= stats[0].points / 2 ? 'yellow' : 'green'}
-            editable={{ type: ModalTypes.editMortality, data: { type: 'character', entity: charSheet } }}
-          >
-            {mortality} Mortality
-          </Chip>
-
-          {/* Power */}
-          <Chip color="green">{power} Power</Chip>
-        </div>
-        {/* End Chips */}
       </div>
 
       <dl className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 md:grid-cols-4">
@@ -52,48 +36,18 @@ const Stats = ({ stats, power, mortality, slowed }) => {
                       />
                     </span>
                   </h5>
-                  {stat.points + stat.modifier}
-                  <span className="text-sm font-medium text-gray-500">
-                    {stat.points} NAT &amp; {stat.modifier} MOD
-                  </span>
+                  D{stat.die}
                 </div>
 
                 <div className="flex flex-col mt-4 space-y-2">
-                  {/* Experience */}
-                  {stat.experience ? (
-                    <Chip color={stat.experience >= stat.points ? 'green' : 'yellow'}>
-                      {stat.experience} / {stat.points} Experience
-                    </Chip>
-                  ) : (
-                    <Chip color="gray">No Experience</Chip>
-                  )}
-                  {/* Temporary Advantage */}
-                  {stat.advantage ? <Chip color={stat.advantage < 0 ? 'red' : 'green'}>{stat.advantage} Advantage</Chip> : <Chip color="gray">No Advantage</Chip>}
+                  <Button rounded classes="justify-center" onClick={() => setModal({ type: ModalTypes.upgradeStat, id: stat.name.toLowerCase(), data: { type: 'character', resource: charSheet } })}>
+                    Upgrade
+                  </Button>
+                  <Button dark rounded classes="justify-center" onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character' } })}>
+                    Roll
+                  </Button>
                 </div>
               </dd>
-            </div>
-
-            {/* Passive Stat */}
-            <div className="flex flex-col items-center py-3 border border-gray-100 rounded-md bg-gray-50 md:border-0">
-              {stat.passive ? (
-                <>
-                  <h4 className="text-sm uppercase">{stat.passive.name}</h4>
-                  <p className="text-lg font-bold">
-                    {/* Subtract Slowed from total if current passive stat is Shield Value */}
-                    {stat.passive.name === 'Shield Value' && slowed ? (
-                      <span className="relative">
-                        <span className="absolute text-red-900 line-through -left-4">{stat.passive.value}</span>
-                        {stat.passive.value - slowed}
-                      </span>
-                    ) : (
-                      stat.passive.value
-                    )}
-                  </p>
-                  <p className="text-xs font-medium text-gray-500 uppercase">{stat.passive.calc}</p>
-                </>
-              ) : (
-                <h4 className="text-xs font-medium text-gray-500 uppercase">No passive stat</h4>
-              )}
             </div>
           </div>
         ))}

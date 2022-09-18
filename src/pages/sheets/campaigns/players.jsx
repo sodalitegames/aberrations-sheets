@@ -102,19 +102,17 @@ const CampaignPlayersPage = () => {
 
               {/* Player Actions */}
 
-              <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>
-                Roll Dice
-              </Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'player', playerId: player._id } })}>Roll Dice</Button>
 
-              <Button disabled>Take Damage</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'player', playerId: player._id } })}>Take Damage</Button>
 
-              <Button disabled>Heal Damage</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'player', playerId: player._id } })}>Heal Damage</Button>
 
-              <Button disabled>Pay Money</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: 'player', playerId: player._id } })}>Pay Money</Button>
 
-              <Button disabled>Recieve Money</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: 'player', playerId: player._id } })}>Recieve Money</Button>
 
-              <Button disabled>Take A Rest</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'player', playerId: player._id } })}>Take A Rest</Button>
 
               {/* Activate or Deactivate */}
               <div className="pt-4 mt-4 border-t border-gray-200">

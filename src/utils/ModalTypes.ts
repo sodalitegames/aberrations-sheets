@@ -18,12 +18,15 @@ enum ModalTypes {
   updateInviteStatus = 'UPDATE_INVITE_STATUS',
   manageTransaction = 'MANAGE_TRANSACTION',
   removeCharacterFromCampaign = 'REMOVE_CHARACTER_FROM_CAMPAIGN',
-  editSpentUpgradePoints = 'EDIT_SPENT_UPGRADE_POINTS',
+  editExperience = 'EDIT_EXPERIENCE',
   editMortality = 'EDIT_MORTALITY',
   editStat = 'EDIT_STAT',
+  upgradeStat = 'UPGRADE_STAT',
   editCondition = 'EDIT_CONDITION',
   editHealth = 'EDIT_HEALTH',
+  upgradeHealth = 'UPGRADE_HEALTH',
   editWallet = 'EDIT_WALLET',
+  reachMilestone = 'REACH_MILESTONE',
 }
 
 export default ModalTypes;

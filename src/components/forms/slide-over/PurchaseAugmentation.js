@@ -87,11 +87,11 @@ const PurchaseAugmentation = ({ data }) => {
     );
 
     if (data.sheetType === 'characters') {
-      dispatch(updateSheetStart(data.sheetType, data.sheetId, { spentUpgradePoints: data.entity.spentUpgradePoints + pointCost }, { slideOver: true }));
+      dispatch(updateSheetStart(data.sheetType, data.sheetId, { experience: data.entity.experience - pointCost }, { slideOver: true }));
     }
 
     if (data.sheetType === 'campaigns') {
-      dispatch(updateSheetResourceStart(data.sheetType, data.sheetId, 'npcs', data.entity._id, { spentUpgradePoints: data.entity.spentUpgradePoints + pointCost }, { slideOver: true }));
+      dispatch(updateSheetResourceStart(data.sheetType, data.sheetId, 'npcs', data.entity._id, { experience: data.entity.experience - pointCost }, { slideOver: true }));
     }
   };
 
@@ -103,7 +103,7 @@ const PurchaseAugmentation = ({ data }) => {
       submitDisabled={!!(!augmentation || (augmentation && data.entity.upgradePoints < augmentation.pointCost))}
       submitHandler={submitHandler}
     >
-      <Detail slideOver label="Upgrade Points Available" detail={data.entity.upgradePoints} />
+      <Detail slideOver label="Experience Available" detail={data.entity.experience} />
       {augmentationGroups && augsList ? (
         <>
           <Select slideOver label="Choose an Augmentation" name="augmentations" options={augsList} changeHandler={selectAugmentation} />
@@ -111,7 +111,7 @@ const PurchaseAugmentation = ({ data }) => {
           {augmentation ? (
             <>
               <Detail slideOver label="Name" detail={augmentation.name} />
-              <Detail status={data.entity.upgradePoints < augmentation.pointCost ? 'error' : ''} slideOver label="Point Cost" detail={augmentation.pointCost} />
+              <Detail status={data.entity.experience < augmentation.pointCost ? 'error' : ''} slideOver label="Experience Cost" detail={augmentation.pointCost} />
               <Detail slideOver label="Description" detail={augmentation.description} />
             </>
           ) : null}

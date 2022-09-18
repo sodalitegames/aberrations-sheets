@@ -24,18 +24,11 @@ export const selectEquippedWearables = createSelector([selectCurrentCharacter], 
 export const selectEquippedConsumables = createSelector([selectCurrentCharacter], current => (current ? current.consumables.filter(consumable => consumable.equipped && !consumable.archived) : []));
 export const selectEquippedUsables = createSelector([selectCurrentCharacter], current => (current ? current.usables.filter(usable => usable.equipped && !usable.archived) : []));
 
-export const selectEquipmentMods = createSelector([selectEquippedWearables], equippedWearables =>
-  equippedWearables
-    ? equippedWearables.reduce(
-        (mods, wearable) => ({
-          fortitude: mods.fortitude + wearable.statMods.fortitude,
-          agility: mods.agility + wearable.statMods.agility,
-          persona: mods.persona + wearable.statMods.persona,
-          aptitude: mods.aptitude + wearable.statMods.aptitude,
-        }),
-        { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
-      )
-    : { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
+export const selectShieldValue = createSelector([selectEquippedWearables], equippedWearables =>
+  equippedWearables.length ? equippedWearables.reduce((shieldValue, wearable) => wearable.shieldValue || 0 + shieldValue, 0) : 0
+);
+export const selectSpeedAdjustment = createSelector([selectEquippedWearables], equippedWearables =>
+  equippedWearables.length ? equippedWearables.reduce((speedAdjustment, wearable) => wearable.speedAdjustment || 0 + speedAdjustment, 0) : 0
 );
 
 export const selectPendingTransactions = createSelector([selectCurrentCharacter], current =>

@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
+import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
-import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
+import { updateSheetStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { correctCurrentHp } from '../../../utils/functions/updateHealth';
 
@@ -12,66 +13,134 @@ import { ModalForm } from '../Modal';
 import Input from '../elements/Input';
 import Notice from '../../Notice';
 
-const HealDamage = () => {
+const HealDamage = ({ data: { type, playerId, npcId, creatureId } }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
+  const campSheet = useSelector(selectCurrentCampaign);
 
   const [damage, setDamage] = useState(0);
   const [actions, setActions] = useState([]);
   const [status, setStatus] = useState('success');
 
+  const [sheet, setSheet] = useState(null);
+
   useEffect(() => {
-    const updatedHp = correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp);
-
-    const actionsArr = [`You will be at ${correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp)} health.`];
-
-    // If they will not be mauled and were mauled previously
-    if (charSheet.currentHp < charSheet.maxHp / 5 && updatedHp >= charSheet.maxHp / 5) {
-      actionsArr.push(`You will no longer be mauled.`);
+    switch (type) {
+      case 'character':
+        setSheet(charSheet);
+        return;
+      case 'player':
+        const player = campSheet.players.find(player => player._id === playerId);
+        setSheet(player);
+        return;
+      case 'npc':
+        const npc = campSheet.npcs.find(npc => npc._id === npcId);
+        setSheet(npc);
+        return;
+      case 'creature':
+        const creature = campSheet.creatures.find(creature => creature._id === creatureId);
+        setSheet(creature);
+        return;
+      default:
+        return;
     }
+  }, [charSheet, campSheet, type, playerId, npcId, creatureId]);
 
-    // If they will not be bloodied, and were bloodied previously
-    if (charSheet.currentHp < charSheet.maxHp / 2 && updatedHp >= charSheet.maxHp / 2) {
-      actionsArr.push(`You will no longer be bloodied.`);
-      setStatus('success');
-    }
+  useEffect(() => {
+    if (sheet) {
+      const updatedHp = correctCurrentHp(sheet.currentHp + +damage, sheet.maxHp);
 
-    // If they will be bloodied
-    if (updatedHp < charSheet.maxHp / 2 && updatedHp > charSheet.maxHp / 5) {
-      // And were bloodied previously
-      if (charSheet.currentHp >= charSheet.maxHp / 5) {
-        actionsArr.push(`You will still be bloodied.`);
+      const actionsArr = [`You will be at ${correctCurrentHp(sheet.currentHp + +damage, sheet.maxHp)} health.`];
+
+      // If they will not be mauled and were mauled previously
+      if (sheet.currentHp < sheet.maxHp / 5 && updatedHp >= sheet.maxHp / 5) {
+        actionsArr.push(`You will no longer be mauled.`);
       }
 
-      // And were mauled previously
-      if (charSheet.currentHp < charSheet.maxHp / 5) {
-        actionsArr.push(`You now be bloodied.`);
+      // If they will not be bloodied, and were bloodied previously
+      if (sheet.currentHp < sheet.maxHp / 2 && updatedHp >= sheet.maxHp / 2) {
+        actionsArr.push(`You will no longer be bloodied.`);
+        setStatus('success');
       }
 
-      setStatus('warn');
-    }
+      // If they will be bloodied
+      if (updatedHp < sheet.maxHp / 2 && updatedHp > sheet.maxHp / 5) {
+        // And were bloodied previously
+        if (sheet.currentHp >= sheet.maxHp / 5) {
+          actionsArr.push(`You will still be bloodied.`);
+        }
 
-    // If they will be mauled and were mauled previously
-    if (updatedHp < charSheet.maxHp / 5) {
-      actionsArr.push(`You will still be mauled.`);
-      setStatus('error');
-    }
+        // And were mauled previously
+        if (sheet.currentHp < sheet.maxHp / 5) {
+          actionsArr.push(`You now be bloodied.`);
+        }
 
-    setActions(actionsArr);
-  }, [charSheet.currentHp, charSheet.maxHp, damage]);
+        setStatus('warn');
+      }
+
+      // If they will be mauled and were mauled previously
+      if (updatedHp < sheet.maxHp / 5) {
+        actionsArr.push(`You will still be mauled.`);
+        setStatus('error');
+      }
+
+      setActions(actionsArr);
+    }
+  }, [sheet, damage]);
 
   const submitHandler = async e => {
     e.preventDefault();
 
-    dispatch(
-      updateSheetStart(
-        'characters',
-        charSheet._id,
-        { currentHp: correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp) },
-        { modal: true, notification: { status: 'success', heading: 'Healed Damage', message: `You have successfully healed ${damage} damage.` } }
-      )
-    );
+    switch (type) {
+      case 'player':
+        dispatch(
+          updateSheetStart(
+            'characters',
+            sheet._id,
+            { currentHp: correctCurrentHp(sheet.currentHp + +damage, sheet.maxHp) },
+            { modal: true, notification: { status: 'success', heading: 'Healed Damage', message: `${sheet.characterName} has successfully healed ${damage} damage.` } }
+          )
+        );
+        return;
+      case 'character':
+        dispatch(
+          updateSheetStart(
+            'characters',
+            charSheet._id,
+            { currentHp: correctCurrentHp(charSheet.currentHp + +damage, charSheet.maxHp) },
+            { modal: true, notification: { status: 'success', heading: 'Healed Damage', message: `You have successfully healed ${damage} damage.` } }
+          )
+        );
+        return;
+      case 'npc':
+        dispatch(
+          updateSheetResourceStart(
+            'campaigns',
+            campSheet._id,
+            'npcs',
+            npcId,
+            { currentHp: correctCurrentHp(sheet.currentHp + +damage, sheet.maxHp) },
+            { modal: true, notification: { status: 'success', heading: 'Healed Damage', message: `You have successfully healed ${damage} damage.` } }
+          )
+        );
+        return;
+      case 'creature':
+        dispatch(
+          updateSheetResourceStart(
+            'campaigns',
+            campSheet._id,
+            'creatures',
+            creatureId,
+            { currentHp: correctCurrentHp(sheet.currentHp + +damage, sheet.maxHp) },
+            { modal: true, notification: { status: 'success', heading: 'Healed Damage', message: `You have successfully healed ${damage} damage.` } }
+          )
+        );
+        return;
+
+      default:
+        return;
+    }
   };
 
   return (

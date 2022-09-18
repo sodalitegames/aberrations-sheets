@@ -80,11 +80,12 @@ const NewCharacter: React.FC = () => {
           charBackground,
           speciesId: species.id,
           speciesName: species.name,
-          currentHp: species.stats.fortitude * 10,
-          fortitude: { points: species.stats.fortitude },
-          agility: { points: species.stats.agility },
-          persona: { points: species.stats.persona },
-          aptitude: { points: species.stats.aptitude },
+          currentHp: species.health,
+          maxHp: species.health,
+          strength: { die: species.stats.strength },
+          agility: { die: species.stats.agility },
+          persona: { die: species.stats.persona },
+          aptitude: { die: species.stats.aptitude },
         },
         { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Created', message: `You have successfully successfully created ${characterName}.` } }
       )

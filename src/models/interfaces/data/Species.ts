@@ -10,8 +10,14 @@ export interface Species {
   id: string;
   name: string;
   ability: string;
+  abilities: {
+    activated: string;
+    passive: string;
+    detraction: string;
+  };
   basicInfo: string;
   appearance: string;
   stats: StatsObject;
+  health: number;
   lore: SpeciesLore;
 }

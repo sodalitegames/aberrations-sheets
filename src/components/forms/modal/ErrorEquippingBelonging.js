@@ -1,14 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import {
-  selectCurrentCharacter,
-  selectEquippedWeapons,
-  selectEquippedWearables,
-  selectEquippedConsumables,
-  selectEquippedUsables,
-  selectEquipmentMods,
-} from '../../../redux/character/character.selectors';
+import { selectCurrentCharacter, selectEquippedWeapons, selectEquippedWearables, selectEquippedConsumables, selectEquippedUsables } from '../../../redux/character/character.selectors';
 
 import { capitalize } from '../../../utils/helpers/strings';
 import equipBelonging from '../../../utils/functions/equipBelonging';
@@ -29,7 +22,6 @@ const ErrorEquippingBelonging = ({ data, nested }) => {
   const equippedWearables = useSelector(selectEquippedWearables);
   const equippedConsumables = useSelector(selectEquippedConsumables);
   const equippedUsables = useSelector(selectEquippedUsables);
-  const equipmentMods = useSelector(selectEquipmentMods);
 
   const [belongingToReplace, setBelongingToReplace] = useState(null);
 
@@ -89,7 +81,6 @@ const ErrorEquippingBelonging = ({ data, nested }) => {
         belongingType: data.belongingType,
         belonging: wearableToReplace,
         equippedList: equippedWearables,
-        equipmentMods,
       });
 
       // Equip the belonging that is replacing the old equipped belonging
@@ -100,7 +91,6 @@ const ErrorEquippingBelonging = ({ data, nested }) => {
           belongingType: data.belongingType,
           belonging: data.belonging,
           equippedList: equippedWearables.filter(wear => wear._id !== wearableToReplace._id),
-          equipmentMods,
         },
         config
       );
