@@ -17,7 +17,7 @@ const ConsumableDetails = ({ consumable, sheetType }) => {
         sheetType === 'campaigns' ? { name: 'Active', values: [consumable.active ? 'Yes' : 'No'], half: true } : null,
         consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? consumable.npcId : 'Unassigned'], half: true } : null,
-        { name: 'Categories', values: [consumable.categories.map(cat => cat.name).join(', ')] },
+        { name: 'Categories', values: [{ value: consumable.categories.map(cat => cat.name).join(', '), tooltip: consumable.categories.map(cat => `${cat.name} - ${cat.description}`) }] },
         consumable.description ? { name: 'Description', values: [consumable.description] } : null,
         consumable.metadata?.givenBy ? { name: 'Received From', values: [consumable.metadata.givenBy], half: true } : null,
         consumable.metadata?.givenTo ? { name: 'Given To', values: [consumable.metadata.givenTo], half: true } : null,
@@ -35,7 +35,12 @@ const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, list
           heading={`${consumable.name} (Level ${consumable.level})`}
           view={{ type: ModalTypes.showBelonging, id: consumable._id, data: { sheetType: sheetType, playerId, belongingType: 'consumables' } }}
         >
-          <InfoList list={[`Categories: ${consumable.categories.map(cat => cat.name).join(', ')}`, `Uses left: ${consumable.uses}`]} />
+          <InfoList
+            list={[
+              { tooltip: consumable.categories.map(cat => `${cat.name} - ${cat.description}`), value: `Categories: ${consumable.categories.map(cat => cat.name).join(', ')}` },
+              `Uses left: ${consumable.uses}`,
+            ]}
+          />
         </ListItem>
       );
     }
