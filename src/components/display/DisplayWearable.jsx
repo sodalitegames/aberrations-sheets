@@ -34,7 +34,7 @@ const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem
           heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`}
           view={{ type: ModalTypes.showBelonging, id: wearable._id, data: { sheetType: sheetType, playerId, belongingType: 'wearables' } }}
         >
-          <InfoList list={[`Shield Value: ${wearable.shieldValue}`, `Speed Adjustment: ${wearable.speedAdjustment}`]} />
+          <InfoList list={[`Shield Value: ${wearable.shieldValue} / Speed Adjustment: ${wearable.speedAdjustment}`]} />
         </ListItem>
       );
     }
@@ -42,7 +42,7 @@ const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem
     if (condensed) {
       return (
         <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} actions={actions}>
-          <InfoList list={[`Shield Value: ${wearable.shieldValue}`, `Speed Adjustment: ${wearable.speedAdjustment}`]} />
+          <InfoList list={[`Shield Value: ${wearable.shieldValue} / Speed Adjustment: ${wearable.speedAdjustment}`]} />
         </ListItem>
       );
     }

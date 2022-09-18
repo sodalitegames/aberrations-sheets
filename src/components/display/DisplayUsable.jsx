@@ -29,7 +29,7 @@ const DisplayUsable = ({ usable, condensed, actions, noButtonPanel, listItem, sh
     if (condensed === 'view') {
       return (
         <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.showBelonging, id: usable._id, data: { sheetType: sheetType, playerId, belongingType: 'usables' } }}>
-          <InfoList list={[{ title: usable.description, value: usable.description }]} />
+          <InfoList list={[{ tooltip: [usable.description], value: usable.description }]} />
         </ListItem>
       );
     }

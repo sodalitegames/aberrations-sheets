@@ -1,8 +1,9 @@
 import React from 'react';
 import NewlineText from '../NewlineText';
+import Tooltip from '../Tooltip';
 
 export interface InfoListItem {
-  title?: string;
+  tooltip?: string[];
   value: string;
   clamp?: boolean;
 }
@@ -18,7 +19,7 @@ const InfoList: React.FC<InfoListProps> = ({ list }) => {
         if (!item) {
           return (
             <span key={index} className="mt-1 text-sm text-gray-600">
-              undefined (info list error)
+              [undefined]
             </span>
           );
         }
@@ -33,9 +34,11 @@ const InfoList: React.FC<InfoListProps> = ({ list }) => {
         }
 
         return (
-          <span key={index} title={item.title || ''} className="mt-1 text-sm text-gray-600 line-clamp-2">
-            <NewlineText text={String(item.value || '')} />
-          </span>
+          <Tooltip key={index} message={item.tooltip || []}>
+            <span className="mt-1 text-sm text-gray-600 line-clamp-2">
+              <NewlineText text={String(item.value || '')} />
+            </span>
+          </Tooltip>
         );
       })}
     </React.Fragment>
