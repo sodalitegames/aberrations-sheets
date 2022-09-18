@@ -19,7 +19,7 @@ const InfoList: React.FC<InfoListProps> = ({ list }) => {
         if (!item) {
           return (
             <span key={index} className="mt-1 text-sm text-gray-600">
-              undefined (info list error)
+              [undefined]
             </span>
           );
         }
