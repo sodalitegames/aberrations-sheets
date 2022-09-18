@@ -177,7 +177,7 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
       });
     }
 
-    if (config.forPlayer) {
+    if (config?.forPlayer) {
       yield put(createPlayerResourceSuccess('campaigns', sheetId, resourceType, response.data.data.doc));
     } else {
       // Emit changes to connected clients
@@ -194,7 +194,7 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
     if (config?.modal) yield put(closeModal());
     if (config?.nestedModal) yield put(closeNestedModal());
   } catch (err) {
-    yield put(createSheetResourceFailure(sheetType, err.response.data));
+    yield put(createSheetResourceFailure(sheetType, err?.response?.data || err));
   }
 }
 
@@ -314,7 +314,7 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
       }
     }
 
-    if (config.forPlayer) {
+    if (config?.forPlayer) {
       yield put(updatePlayerResourceSuccess('campaigns', sheetId, resourceType, response.data.data.doc));
     } else {
       // Emit changes to connected clients
@@ -331,7 +331,7 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
     if (config?.modal) yield put(closeModal());
     if (config?.nestedModal) yield put(closeNestedModal());
   } catch (err) {
-    yield put(updateSheetResourceFailure(sheetType, err.response.data));
+    yield put(updateSheetResourceFailure(sheetType, err?.response?.data || err));
   }
 }
 
@@ -368,7 +368,7 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
       });
     }
 
-    if (config.forPlayer) {
+    if (config?.forPlayer) {
       yield put(deletePlayerResourceSuccess('campaigns', sheetId, resourceType, resourceId, response.data.data));
     } else {
       // Emit changes to connected clients
@@ -385,7 +385,7 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
     if (config?.modal) yield put(closeModal());
     if (config?.nestedModal) yield put(closeNestedModal());
   } catch (err) {
-    yield put(deleteSheetResourceFailure(sheetType, err.response.data));
+    yield put(deleteSheetResourceFailure(sheetType, err?.response?.data || err));
   }
 }
 
