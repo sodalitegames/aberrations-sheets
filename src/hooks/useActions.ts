@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import * as rootActions from '../redux/root-actions';
 
-console.log('Root Actions', rootActions);
+// console.log('Root Actions', rootActions);
 
 export const useActions = () => {
   const dispatch = useDispatch();

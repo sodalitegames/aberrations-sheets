@@ -108,8 +108,6 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
 
       setResults({ roll, advantage: calcAdvantage(), total: roll + calcAdvantage() * 2 });
 
-      console.log(results);
-
       // Add a notification with a message about your results
       // addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) });
 
@@ -119,8 +117,6 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
     const roll = Math.ceil(Math.random() * stat.die);
 
     setResults({ roll, advantage: calcAdvantage(), total: roll + calcAdvantage() * 2 });
-
-    console.log(results);
 
     // Add a notification with a message about your results
     // addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) });
