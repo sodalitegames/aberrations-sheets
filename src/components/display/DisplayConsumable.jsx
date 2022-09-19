@@ -1,12 +1,18 @@
+import { useSelector } from 'react-redux';
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+
 import SlideOverTypes from '../../utils/SlideOverTypes';
 import ModalTypes from '../../utils/ModalTypes';
 import { capitalize } from '../../utils/helpers/strings';
+import { getNpcName } from '../../utils/helpers/npcs';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
 const ConsumableDetails = ({ consumable, sheetType }) => {
+  const campSheet = useSelector(selectCurrentCampaign);
+
   return (
     <DescriptionList
       list={[
@@ -16,7 +22,7 @@ const ConsumableDetails = ({ consumable, sheetType }) => {
         sheetType === 'characters' ? { name: 'Equipped', values: [consumable.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [consumable.active ? 'Yes' : 'No'], half: true } : null,
         consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? consumable.npcId : 'Unassigned'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? getNpcName(consumable.npcId, campSheet.npcs) : 'Unassigned'], half: true } : null,
         { name: 'Categories', values: [{ value: consumable.categories.map(cat => cat.name).join(', '), tooltip: consumable.categories.map(cat => `${cat.name} - ${cat.description}`) }] },
         consumable.description ? { name: 'Description', values: [consumable.description] } : null,
         consumable.metadata?.givenBy ? { name: 'Received From', values: [consumable.metadata.givenBy], half: true } : null,

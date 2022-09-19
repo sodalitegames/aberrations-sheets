@@ -1,7 +1,11 @@
+import { useSelector } from 'react-redux';
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+
 import SlideOverTypes from '../../utils/SlideOverTypes';
 import ModalTypes from '../../utils/ModalTypes';
 import { capitalize } from '../../utils/helpers/strings';
 import { getWeaponRangeString } from '../../utils/helpers/belongings';
+import { getNpcName } from '../../utils/helpers/npcs';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -14,6 +18,8 @@ const createWeaponList = (stat, range, ability) => {
 };
 
 const WeaponDetails = ({ weapon, sheetType }) => {
+  const campSheet = useSelector(selectCurrentCampaign);
+
   return (
     <DescriptionList
       list={[
@@ -24,7 +30,7 @@ const WeaponDetails = ({ weapon, sheetType }) => {
         sheetType === 'characters' ? { name: 'Equipped', values: [weapon.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [weapon.active ? 'Yes' : 'No'], half: true } : null,
         { name: 'Quantity', values: [weapon.quantity], half: true },
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [weapon.npcId ? weapon.npcId : 'Unassigned'] } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [weapon.npcId ? getNpcName(weapon.npcId, campSheet.npcs) : 'Unassigned'] } : null,
         weapon.ability ? { name: 'Ability', values: [weapon.ability] } : null,
         weapon.description ? { name: 'Description', values: [weapon.description] } : null,
         weapon.metadata?.givenBy ? { name: 'Received From', values: [weapon.metadata.givenBy], half: true } : null,

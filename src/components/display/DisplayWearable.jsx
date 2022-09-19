@@ -1,12 +1,18 @@
+import { useSelector } from 'react-redux';
+import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
+
 import SlideOverTypes from '../../utils/SlideOverTypes';
 import ModalTypes from '../../utils/ModalTypes';
 import { capitalize } from '../../utils/helpers/strings';
+import { getNpcName } from '../../utils/helpers/npcs';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
 const WearableDetails = ({ wearable, sheetType }) => {
+  const campSheet = useSelector(selectCurrentCampaign);
+
   return (
     <DescriptionList
       list={[
@@ -14,7 +20,7 @@ const WearableDetails = ({ wearable, sheetType }) => {
         sheetType === 'characters' ? { name: 'Equipped', values: [wearable.equipped ? 'Yes' : 'No'], half: true } : null,
         { name: 'Quantity', values: [wearable.quantity], half: true },
         sheetType === 'campaigns' ? { name: 'Active', values: [wearable.active ? 'Yes' : 'No'], half: true } : null,
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [wearable.npcId ? wearable.npcId : 'Unassigned'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [wearable.npcId ? getNpcName(wearable.npcId, campSheet.npcs) : 'Unassigned'], half: true } : null,
         { name: 'Description', values: [wearable.description] },
         { name: 'Shield Value', values: [wearable.shieldValue], half: true },
         { name: 'Speed Adjustment', values: [wearable.speedAdjustment], half: true },
