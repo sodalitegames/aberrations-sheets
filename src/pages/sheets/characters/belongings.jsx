@@ -16,9 +16,9 @@ const tabs = [
 ];
 
 const belongingStates = [
-  { title: 'Current', href: 'current', description: 'The belongings that you currently have in your SURONIS or equipped.', current: true },
-  { title: 'Archived', href: 'archived', description: 'The belongings that you have previously had, but used, gave away, sold, or deleted.', current: false },
-  // { title: 'Group Belongings - Coming Soon', href: 'group', description: 'The belongings that you and your campaign group collectively have, until a player claims it as their own.', current: false },
+  { title: 'Current', href: '?show=current', description: 'The belongings that you currently have in your SURONIS or equipped.', current: true },
+  { title: 'Archived', href: '?show=archived', description: 'The belongings that you have previously had, but used, gave away, sold, or deleted.', current: false },
+  // { title: 'Group Belongings - Coming Soon', href: '?show=group', description: 'The belongings that you and your campaign group collectively have, until a player claims it as their own.', current: false },
 ];
 
 const CharacterBelongingsPage = () => {
