@@ -21,6 +21,8 @@ import ListInteractables, { ListInteractablesMessage } from '../../../components
 
 import Button from '../../../components/Button';
 
+import InteractableActions from '../../../components/sections/InteractableActions';
+
 import DisplayNpc from '../../../components/display/DisplayNpc';
 
 const CampaignNpcsPage = () => {
@@ -102,18 +104,7 @@ const CampaignNpcsPage = () => {
               </div>
 
               {/* Npc Actions */}
-
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'npc', npcId: npc._id } })}>Roll Dice</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'npc', npcId: npc._id } })}>Take Damage</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'npc', npcId: npc._id } })}>Heal Damage</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: 'npc', npcId: npc._id } })}>Pay Money</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: 'npc', npcId: npc._id } })}>Recieve Money</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'npc', npcId: npc._id } })}>Take A Rest</Button>
+              <InteractableActions type="npc" id={{ prop: 'npcId', value: npc._id }} />
 
               {/* Activate or Deactivate */}
               {!npc.archived && (

@@ -22,6 +22,8 @@ import ListContainer from '../../../components/data/ListContainer';
 
 import Button from '../../../components/Button';
 
+import InteractableActions from '../../../components/sections/InteractableActions';
+
 import DisplayPlayer from '../../../components/display/DisplayPlayer';
 
 const CampaignPlayersPage = () => {
@@ -101,18 +103,7 @@ const CampaignPlayersPage = () => {
               </div>
 
               {/* Player Actions */}
-
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'player', playerId: player._id } })}>Roll Dice</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'player', playerId: player._id } })}>Take Damage</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'player', playerId: player._id } })}>Heal Damage</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: 'player', playerId: player._id } })}>Pay Money</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: 'player', playerId: player._id } })}>Recieve Money</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'player', playerId: player._id } })}>Take A Rest</Button>
+              <InteractableActions type="player" id={{ prop: 'playerId', value: player._id }} />
 
               {/* Activate or Deactivate */}
               <div className="pt-4 mt-4 border-t border-gray-200">
