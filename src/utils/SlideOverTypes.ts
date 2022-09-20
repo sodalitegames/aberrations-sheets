@@ -11,7 +11,7 @@ enum SlideOverTypes {
 
   // Campaign Forms
   manageCampaign = 'MANAGE_CAMPAIGN',
-  startCombat = 'START_COMBAT',
+  combatForm = 'COMBAT_FORM',
   campOverviewForm = 'CAMPAIGN_OVERVIEW_FORM',
   campDetailsForm = 'CAMPAIGN_DETAILS_FORM',
   manageSentInvites = 'MANAGE_SENT_INVITES',
