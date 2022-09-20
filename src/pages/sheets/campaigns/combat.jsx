@@ -1,9 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-import { selectCombats, selectCurrentCampaign, selectPotentialCombatants } from '../../../redux/campaign/campaign.selectors';
+import { selectCombats, selectPotentialCombatants } from '../../../redux/campaign/campaign.selectors';
 
 import { useActions } from '../../../hooks/useActions';
 
@@ -18,9 +16,13 @@ import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
 
 import CombatCard from '../../../components/CombatCard';
 import Button from '../../../components/Button';
+import SelectButton from '../../../components/SelectButton';
+
+import InteractableActions from '../../../components/sections/InteractableActions';
 
 import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
+import ModalTypes from '../../../utils/ModalTypes';
 
 import DisplayPlayer from '../../../components/display/DisplayPlayer';
 import DisplayNpc from '../../../components/display/DisplayNpc';
@@ -29,153 +31,235 @@ import DisplayCreature from '../../../components/display/DisplayCreature';
 const CampaignCombatPage = () => {
   const dispatch = useDispatch();
 
-  const campSheet = useSelector(selectCurrentCampaign);
   const combats = useSelector(selectCombats);
   const potentialCombatants = useSelector(selectPotentialCombatants);
 
-  const { setSlideOver } = useActions();
+  const { setSlideOver, setModal } = useActions();
 
   const species = useResource(ResourceType.Species);
 
-  const [combatants, setCombatants] = useState(combats.length ? [] : []);
+  const [combatants, setCombatants] = useState([]);
 
-  const [selected, setSelected] = useState(combats.length ? combats[0].combatants[0] : null);
-  const [entity, setEntity] = useState(combatants.length ? combatants[0] : null);
+  const [combatOptions, setCombatOptions] = useState([]);
 
-  const [id, setId] = useState(combatants.length ? combatants[0]._id : null);
+  const [combat, setCombat] = useState(null);
+  const [entity, setEntity] = useState(null);
 
   useEffect(() => {
-    if (combatants.length) {
-      if (selected) {
-        setEntity(campSheet[selected.type].find(comba => comba._id === selected._id));
-        return;
-      }
+    if (combats.length) {
+      setCombatOptions(
+        combats.map(combat => ({
+          ...combat,
+          title: combat.description,
+          href: '',
+          description: combat.combatants.map(combatant => combatant.name).join(', '),
+        }))
+      );
+    } else {
+      setCombatOptions([]);
     }
-  }, [id, combatants, campSheet, selected]);
+  }, [combats]);
+
+  useEffect(() => {
+    if (combatOptions.length) {
+      setCombat(combatOptions[0]);
+    } else {
+      setCombat(null);
+    }
+  }, [combatOptions]);
+
+  useEffect(() => {
+    if (potentialCombatants.length && combat) {
+      const combatants = combat.combatants
+        .map(comba => {
+          const entity = potentialCombatants.find(ent => ent._id === comba._id);
+
+          if (entity) {
+            return {
+              ...entity,
+              ...comba,
+            };
+          }
+
+          return null;
+        })
+        .filter(comba => comba);
+
+      setCombatants(combatants);
+    }
+  }, [potentialCombatants, combat]);
+
+  useEffect(() => {
+    if (combat && combatants.length) {
+      const currentTurn = combatants.find(combatant => combatant._id === combat.activeTurn);
+      setEntity(currentTurn);
+    }
+  }, [combatants, combat]);
 
   const endTurn = entId => {
-    const activeCombatants = combatants.filter(comb => comb.active);
-    const index = activeCombatants.findIndex(comb => comb._id === entId);
+    const index = combatants.findIndex(comb => comb._id === entId);
 
-    if (index + 1 === activeCombatants.length) {
-      setId(activeCombatants[0]._id);
+    if (index + 1 === combatants.length) {
+      setEntity(combatants[0]);
       return;
     }
 
-    setId(activeCombatants[index + 1]._id);
+    setEntity(combatants[index + 1]);
   };
 
   return (
-    <SheetPageContent title="Stats Tracker" columns={3}>
-      <div className="space-y-4">
-        <SheetPagePanel title="In Combat (Active)">
+    <SheetPageContent title="Combat" columns={3}>
+      {combats.length ? (
+        <Fragment>
           <div className="space-y-4">
-            {combatants
-              // .filter(ent => ent.active)
-              .map((ent, index) => (
-                <div key={ent._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')} onClick={() => setSelected(ent)}>
-                  <CombatCard entity={entity} index={index} active={entity._id === ent._id} inCombat />
-                </div>
-              ))}
-          </div>
-        </SheetPagePanel>
+            <SheetPagePanel title="Select Combat">
+              <div className="flow-root w-full mt-2">{combatOptions.length && <SelectButton value={combatOptions[0]} onChange={setCombat} options={combatOptions} />}</div>
+            </SheetPagePanel>
 
-        <SheetPagePanel title="Out of Combat (Inactive)">
-          <div className="space-y-4">
-            {/* {combatants
-              .filter(ent => !ent.active)
-              .map((ent, index) => (
-                <CombatCard key={index} entity={entity} index={index} />
-              ))} */}
-          </div>
-        </SheetPagePanel>
-      </div>
-
-      <SheetPagePanel title="Active Combatant" colSpan={2}>
-        {entity ? (
-          <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
-            <div className="col-span-2">
-              {entity.type === 'Player' ? (
-                <DisplayPlayer player={entity} species={species} />
-              ) : entity.type === 'Npc' ? (
-                <DisplayNpc npc={entity} species={species} />
-              ) : entity.type === 'Creature' ? (
-                <DisplayCreature creature={entity} />
-              ) : null}
-            </div>
-
-            <div className="col-span-1 pl-8 space-y-4">
-              {/* End Turn */}
-              <div className="pb-4 mb-4 border-b border-gray-200">
-                <Button dark onClick={() => endTurn(entity._id)}>
-                  End Turn
+            <SheetPagePanel>
+              <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
+                <h2 className="text-base font-medium text-gray-900">In Combat</h2>
+                <Button rounded onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, id: combat._id })}>
+                  Edit Combat
                 </Button>
               </div>
+              <div className="mt-6 space-y-4">
+                {combatants.map((ent, index) => (
+                  <div key={ent._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')} onClick={() => setEntity(ent)}>
+                    <CombatCard entity={ent} index={index} active={entity?._id === ent._id} inCombat />
+                  </div>
+                ))}
+              </div>
+            </SheetPagePanel>
 
-              {/* Attack */}
-              <Button disabled>Attack</Button>
-
-              {/* Roll */}
-              <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>
-                Roll
+            <SheetPagePanel>
+              <Button
+                alert
+                onClick={() =>
+                  setModal({
+                    type: ModalTypes.deleteResource,
+                    id: combat._id,
+                    data: {
+                      sheetType: 'campaigns',
+                      resourceType: 'combats',
+                      title: `Are you sure you want to end this combat?`,
+                      submitText: `Yes, end combat`,
+                      notification: { heading: 'Combat Ended', message: `You have successfully ended combat.` },
+                    },
+                  })
+                }
+              >
+                End Combat
               </Button>
+            </SheetPagePanel>
+          </div>
 
-              {/* Leave Combat */}
-              <div className="pt-4 mt-4 border-t border-gray-200">
-                {entity.type === 'Player' ? (
-                  <Button
-                    alert
-                    onClick={() =>
-                      dispatch(
-                        updateSheetStart(
-                          'characters',
-                          entity._id,
-                          { active: !entity.active },
-                          {
-                            notification: {
-                              status: 'success',
-                              heading: `${entity.type} Left Combat`,
-                              message: `You have successfully taken ${entity.characterName} out of combat.`,
-                            },
-                          }
-                        )
-                      )
-                    }
-                  >
-                    Leave Combat
-                  </Button>
-                ) : (
-                  <Button
-                    alert
-                    onClick={() =>
-                      dispatch(
-                        updateSheetResourceStart(
-                          'campaigns',
-                          campSheet._id,
-                          entity.type === 'Npc' ? 'npcs' : 'creatures',
-                          entity._id,
-                          { active: !entity.active },
-                          {
-                            notification: {
-                              status: 'success',
-                              heading: `${entity.type} Left Combat`,
-                              message: `You have successfully taken ${entity.name || entity.characterName} out of combat.`,
-                            },
-                          }
-                        )
-                      )
-                    }
-                  >
-                    Leave Combat
-                  </Button>
-                )}
+          <SheetPagePanel title="Active Combatant" colSpan={2}>
+            {entity ? (
+              <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
+                <div className="col-span-2">
+                  {entity.type === 'players' ? (
+                    <DisplayPlayer player={entity} species={species} />
+                  ) : entity.type === 'npcs' ? (
+                    <DisplayNpc npc={entity} species={species} />
+                  ) : entity.type === 'creatures' ? (
+                    <DisplayCreature creature={entity} />
+                  ) : null}
+                </div>
+
+                <div className="col-span-1 pl-8 space-y-4">
+                  {/* End Turn */}
+                  <div className="pb-4 mb-4 border-b border-gray-200">
+                    <Button dark onClick={() => endTurn(entity._id)}>
+                      End Turn
+                    </Button>
+                  </div>
+
+                  {/* Actions */}
+                  {entity.type === 'players' ? (
+                    <InteractableActions type="player" id={{ prop: 'playerId', value: entity._id }} />
+                  ) : entity.type === 'npcs' ? (
+                    <InteractableActions type="npc" id={{ prop: 'npcId', value: entity._id }} />
+                  ) : entity.type === 'creatures' ? (
+                    <InteractableActions type="creature" id={{ prop: 'creatureId', value: entity._id }} />
+                  ) : null}
+
+                  {/* Leave Combat */}
+                  <div className="pt-4 mt-4 border-t border-gray-200">
+                    {entity.type === 'players' ? (
+                      <Button
+                        alert
+                        onClick={() =>
+                          dispatch(
+                            updateSheetStart(
+                              'characters',
+                              entity._id,
+                              { active: !entity.active },
+                              {
+                                notification: {
+                                  status: 'success',
+                                  heading: `${entity.type} Left Combat`,
+                                  message: `You have successfully taken ${entity.characterName} out of combat.`,
+                                },
+                              }
+                            )
+                          )
+                        }
+                      >
+                        Leave Combat
+                      </Button>
+                    ) : (
+                      <Button
+                        alert
+                        onClick={() =>
+                          dispatch(
+                            updateSheetResourceStart(
+                              'campaigns',
+                              entity.sheetId,
+                              entity.type,
+                              entity._id,
+                              { active: !entity.active },
+                              {
+                                notification: {
+                                  status: 'success',
+                                  heading: `${entity.type} Left Combat`,
+                                  message: `You have successfully taken ${entity.name || entity.characterName} out of combat.`,
+                                },
+                              }
+                            )
+                          )
+                        }
+                      >
+                        Leave Combat
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm italic text-gray-400">Please create or select a combatant to get started.</p>
+            )}
+          </SheetPagePanel>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <SheetPagePanel colSpan={3}>
+            <div className="items-center justify-between px-2 py-8 sm:flex">
+              <div className="items-center sm:flex">
+                <div>
+                  <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">No Combats</h1>
+                  <p className="mt-1 text-base text-gray-500">You do not have any combats. Create one to get started.</p>
+                </div>
+              </div>
+              <div className="space-x-3 sm:pl-6">
+                <Button dark onClick={() => setSlideOver({ type: SlideOverTypes.combatForm })}>
+                  Create Combat
+                </Button>
               </div>
             </div>
-          </div>
-        ) : (
-          <p className="text-sm italic text-gray-400">Please create or select a combatant to get started.</p>
-        )}
-      </SheetPagePanel>
+          </SheetPagePanel>
+        </Fragment>
+      )}
     </SheetPageContent>
   );
 };
