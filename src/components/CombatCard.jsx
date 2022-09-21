@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ShieldCheckIcon, LightningBoltIcon, ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/solid';
+import { ShieldCheckIcon, LightningBoltIcon } from '@heroicons/react/solid';
 
 import { selectCurrentCampaign } from '../redux/campaign/campaign.selectors';
 
 import { updateSheetStart, updateSheetResourceStart } from '../redux/sheet/sheet.actions';
 
 import classNames from '../utils/classNames';
+import { getInteractableType } from '../utils/helpers/interactables';
 
 import Button from './Button';
 
@@ -42,7 +43,7 @@ const CombatCard = ({ entity, active, index, inCombat }) => {
           <div className="flex-1 truncate">
             <div className="flex items-center">
               <h3 className="text-sm font-medium text-gray-900 truncate">
-                {entity.name || entity.characterName} ({entity.type})
+                {entity.name || entity.characterName} ({getInteractableType(entity.type)})
               </h3>
             </div>
           </div>
@@ -104,7 +105,7 @@ const CombatCard = ({ entity, active, index, inCombat }) => {
         <div className="flex-1 truncate">
           <div className="flex items-center space-x-3">
             <h3 className="text-sm font-medium text-gray-900 truncate">
-              {entity.name || entity.characterName} / {entity.type}
+              {entity.name || entity.characterName} / {getInteractableType(entity.type)}
             </h3>
             <span className="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-green-100 rounded-full">
               {entity.currentHp} / {entity.maxHp} Health
