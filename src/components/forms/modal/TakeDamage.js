@@ -104,6 +104,7 @@ const TakeDamage = ({ data: { type, playerId, npcId, creatureId } }) => {
       case 'player':
         dispatch(
           updateSheetStart('characters', playerId, body, {
+            forPlayer: true,
             modal: true,
             notification: { status: 'success', heading: 'Damage Taken', message: `${sheet.characterName} has successfully taken ${damage} damage.` },
           })

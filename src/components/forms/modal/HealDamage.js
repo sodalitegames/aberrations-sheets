@@ -99,7 +99,7 @@ const HealDamage = ({ data: { type, playerId, npcId, creatureId } }) => {
             'characters',
             sheet._id,
             { currentHp: correctCurrentHp(sheet.currentHp + +damage, sheet.maxHp) },
-            { modal: true, notification: { status: 'success', heading: 'Healed Damage', message: `${sheet.characterName} has successfully healed ${damage} damage.` } }
+            { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Healed Damage', message: `${sheet.characterName} has successfully healed ${damage} damage.` } }
           )
         );
         return;

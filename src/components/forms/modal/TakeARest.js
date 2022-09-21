@@ -135,7 +135,7 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
                 persona: { ...persona, advantage: 0 },
                 aptitude: { ...aptitude, advantage: 0 },
               },
-              { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
+              { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
           );
           return;

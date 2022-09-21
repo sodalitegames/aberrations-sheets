@@ -40,7 +40,7 @@ const EditDescription = ({ data }) => {
             'characters',
             data.resourceId,
             { charDescription: description },
-            { slideOver: true, notification: { status: 'success', heading: 'Player Updated', message: "You have successfully updated your player's character description." } }
+            { forPlayer: true, slideOver: true, notification: { status: 'success', heading: 'Player Updated', message: "You have successfully updated your player's character description." } }
           )
         );
         return;
