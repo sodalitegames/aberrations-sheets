@@ -91,10 +91,12 @@ const CampaignCombatPage = () => {
 
   useEffect(() => {
     if (combat && combatants.length) {
-      const currentTurn = combatants.find(combatant => combatant._id === combat.activeTurn);
-      setEntity(currentTurn);
+      if (!entity) {
+        const currentTurn = combatants.find(combatant => combatant._id === combat.activeTurn);
+        setEntity(currentTurn);
+      }
     }
-  }, [combatants, combat]);
+  }, [combatants, combat, entity]);
 
   const endTurn = entId => {
     const index = combatants.findIndex(comb => comb._id === entId);
