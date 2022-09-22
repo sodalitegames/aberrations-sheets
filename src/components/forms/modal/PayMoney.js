@@ -107,6 +107,7 @@ const PayMoney = ({ data: { type, playerId, npcId } }) => {
                 documentType: 'wallet',
               },
               {
+                forPlayer: true,
                 modal: true,
                 notification: {
                   status: 'success',

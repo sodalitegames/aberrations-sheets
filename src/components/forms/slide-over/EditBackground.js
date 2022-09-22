@@ -40,7 +40,7 @@ const EditBackground = ({ data }) => {
             'characters',
             data.resourceId,
             { charBackground: background },
-            { slideOver: true, notification: { status: 'success', heading: 'Player Updated', message: "You have successfully updated your player's character background." } }
+            { forPlayer: true, slideOver: true, notification: { status: 'success', heading: 'Player Updated', message: "You have successfully updated your player's character background." } }
           )
         );
         return;

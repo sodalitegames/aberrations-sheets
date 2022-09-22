@@ -21,6 +21,7 @@ const navigation = {
   ],
   campaigns: [
     { name: 'Campaign', href: 'campaign' },
+    { name: 'Combat', href: 'combat' },
     { name: 'Players', href: 'players' },
     { name: 'Npcs', href: 'npcs' },
     { name: 'Creatures', href: 'creatures' },

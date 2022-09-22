@@ -16,10 +16,10 @@ const tabs = [
 ];
 
 const belongingStates = [
-  { title: 'All', href: 'all', description: 'View and edit both active and inactive Belongings. You will not see your archived belongings here.', current: false },
-  { title: 'Active', href: 'active', description: 'View and edit only your active belongings.', current: true },
-  { title: 'Inactive', href: 'inactive', description: 'Inactive Belongings are hidden elsewhere, but can be viewed and edited here.', current: false },
-  { title: 'Archived', href: 'archived', description: 'The belongings that you have previously had, but gave away, sold, or deleted.', current: false },
+  { title: 'All', href: '?show=all', description: 'View and edit both active and inactive Belongings. You will not see your archived belongings here.', current: false },
+  { title: 'Active', href: '?show=active', description: 'View and edit only your active belongings.', current: true },
+  { title: 'Inactive', href: '?show=inactive', description: 'Inactive Belongings are hidden elsewhere, but can be viewed and edited here.', current: false },
+  { title: 'Archived', href: '?show=archived', description: 'The belongings that you have previously had, but gave away, sold, or deleted.', current: false },
 ];
 
 const CampaignBelongingsPage = () => {

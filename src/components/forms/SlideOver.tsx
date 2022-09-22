@@ -30,6 +30,7 @@ import PurchaseAugmentation from './slide-over/PurchaseAugmentation';
 
 // Campaign Sheet
 import ManageCampaign from './slide-over/ManageCampaign';
+import CombatForm from './slide-over/CombatForm';
 import CampOverview from './slide-over/CampOverview';
 import CampDetails from './slide-over/CampDetails';
 import ManageInvites from './slide-over/ManageInvites';
@@ -203,6 +204,7 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
                 {/* Campaign Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCampaign ? <ManageCampaign /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.combatForm ? <CombatForm id={slideOver.id} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}

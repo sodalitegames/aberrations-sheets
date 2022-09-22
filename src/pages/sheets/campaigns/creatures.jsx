@@ -18,6 +18,8 @@ import ListInteractables, { ListInteractablesMessage } from '../../../components
 
 import Button from '../../../components/Button';
 
+import InteractableActions from '../../../components/sections/InteractableActions';
+
 import DisplayCreature from '../../../components/display/DisplayCreature';
 
 const CampaignCreaturesPage = () => {
@@ -97,12 +99,7 @@ const CampaignCreaturesPage = () => {
               </div>
 
               {/* Creature Actions */}
-
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'creature', creatureId: creature._id } })}>Roll Dice</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'creature', creatureId: creature._id } })}>Take Damage</Button>
-
-              <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'creature', creatureId: creature._id } })}>Heal Damage</Button>
+              <InteractableActions type="creature" id={{ prop: 'creatureId', value: creature._id }} />
 
               {/* Activate or Deactivate */}
               {!creature.archived && (

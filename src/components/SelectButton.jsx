@@ -35,7 +35,7 @@ const SelectButton = ({ value, onChange, options }) => {
                     value={option}
                   >
                     {({ selected, active }) => (
-                      <Link to={`?show=${option.href}`}>
+                      <Link to={`${option.href}`}>
                         <div className="flex flex-col">
                           <div className="flex justify-between">
                             <p className={selected ? 'font-semibold' : 'font-normal'}>{option.title}</p>

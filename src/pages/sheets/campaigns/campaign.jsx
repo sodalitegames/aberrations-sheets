@@ -36,7 +36,7 @@ const CampaignCampaignPage = () => {
           <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
             Manage Campaign
           </Button>
-          <Button disabled onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.combatForm })} classes="mt-2">
             Start Combat
           </Button>
         </SheetPagePanel>

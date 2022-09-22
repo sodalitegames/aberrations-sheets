@@ -48,7 +48,7 @@ const ReceiveMoney = ({ data: { type, playerId, npcId } }) => {
             'characters',
             sheet._id,
             { wallet: sheet.wallet + +amount },
-            { modal: true, notification: { status: 'success', heading: 'Money Received', message: `You have successfully received ${amount} monies.` } }
+            { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Money Received', message: `You have successfully received ${amount} monies.` } }
           )
         );
         return;

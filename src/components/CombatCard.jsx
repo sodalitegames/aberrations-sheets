@@ -1,12 +1,13 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ShieldCheckIcon, LightningBoltIcon, ChevronDoubleDownIcon, ChevronDoubleUpIcon } from '@heroicons/react/solid';
+import { ShieldCheckIcon, LightningBoltIcon } from '@heroicons/react/solid';
 
 import { selectCurrentCampaign } from '../redux/campaign/campaign.selectors';
 
 import { updateSheetStart, updateSheetResourceStart } from '../redux/sheet/sheet.actions';
 
 import classNames from '../utils/classNames';
+import { getInteractableType } from '../utils/helpers/interactables';
 
 import Button from './Button';
 
@@ -15,25 +16,25 @@ const CombatCard = ({ entity, active, index, inCombat }) => {
 
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const getPositive = () => {
-    let status = false;
+  // const getPositive = () => {
+  //   let status = false;
 
-    if (entity.fortitude.advantage > 0 || entity.agility.advantage > 0 || entity.persona.advantage > 0 || entity.aptitude.advantage > 0) {
-      status = true;
-    }
+  //   if (entity.fortitude.advantage > 0 || entity.agility.advantage > 0 || entity.persona.advantage > 0 || entity.aptitude.advantage > 0) {
+  //     status = true;
+  //   }
 
-    return status;
-  };
+  //   return status;
+  // };
 
-  const getNegative = () => {
-    let status = false;
+  // const getNegative = () => {
+  //   let status = false;
 
-    if (entity.fortitude.advantage < 0 || entity.agility.advantage < 0 || entity.persona.advantage < 0 || entity.aptitude.advantage < 0) {
-      status = true;
-    }
+  //   if (entity.fortitude.advantage < 0 || entity.agility.advantage < 0 || entity.persona.advantage < 0 || entity.aptitude.advantage < 0) {
+  //     status = true;
+  //   }
 
-    return status;
-  };
+  //   return status;
+  // };
 
   if (!inCombat) {
     return (
@@ -42,7 +43,7 @@ const CombatCard = ({ entity, active, index, inCombat }) => {
           <div className="flex-1 truncate">
             <div className="flex items-center">
               <h3 className="text-sm font-medium text-gray-900 truncate">
-                {entity.name || entity.characterName} ({entity.type})
+                {entity.name || entity.characterName} ({getInteractableType(entity.type)})
               </h3>
             </div>
           </div>
@@ -104,20 +105,19 @@ const CombatCard = ({ entity, active, index, inCombat }) => {
         <div className="flex-1 truncate">
           <div className="flex items-center space-x-3">
             <h3 className="text-sm font-medium text-gray-900 truncate">
-              {entity.name || entity.characterName} / {entity.type}
+              {entity.name || entity.characterName} / {getInteractableType(entity.type)}
             </h3>
             <span className="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 text-xs font-medium bg-green-100 rounded-full">
               {entity.currentHp} / {entity.maxHp} Health
             </span>
           </div>
           <p className="mt-1 text-sm text-gray-500 truncate">
-            FOR {entity.fortitude.points + (entity.fortitude.modifier || 0)} / AGL {entity.agility.points + (entity.agility.modifier || 0)} / PER{' '}
-            {entity.persona.points + (entity.persona.modifier || 0)} / APT {entity.aptitude.points + (entity.aptitude.modifier || 0)}
+            STR D{entity.strength.die} / AGL D{entity.agility.die} / PER D{entity.persona.die} / APT D{entity.aptitude.die}
           </p>
         </div>
         <div className="flex items-center justify-center">
-          {getNegative() ? <ChevronDoubleDownIcon className="w-5 h-5 text-red-400" aria-hidden="true" /> : null}
-          {getPositive() ? <ChevronDoubleUpIcon className="w-5 h-5 text-green-400" aria-hidden="true" /> : null}
+          {/* {getNegative() ? <ChevronDoubleDownIcon className="w-5 h-5 text-red-400" aria-hidden="true" /> : null}
+          {getPositive() ? <ChevronDoubleUpIcon className="w-5 h-5 text-green-400" aria-hidden="true" /> : null} */}
         </div>
       </div>
       <div>
