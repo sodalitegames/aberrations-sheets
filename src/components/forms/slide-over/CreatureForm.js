@@ -46,7 +46,7 @@ const CreatureForm = ({ id }) => {
         return {
           universalId: type._id,
           name: type.name,
-          description: type.description,
+          description: type.summary,
         };
       });
 

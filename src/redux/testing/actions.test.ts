@@ -29,11 +29,13 @@ describe('resource actions', () => {
       {
         id: '1',
         name: 'Fake Name 1',
+        summary: 'Fake summary 1.',
         description: 'Fake description 1.',
       },
       {
         id: '2',
         name: 'Fake Name 2',
+        summary: 'Fake summary 2.',
         description: 'Fake description 2.',
       },
     ];
