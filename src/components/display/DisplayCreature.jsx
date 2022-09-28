@@ -14,7 +14,7 @@ const CreatureDetails = ({ creature }) => {
   return (
     <DescriptionList
       list={[
-        { name: 'Types', values: [creature.types.map(type => type.name).join(', ')] },
+        { name: 'Types', values: [{ value: creature.types.map(type => type.name).join(', '), tooltip: creature.types.map(type => `${type.name} - ${type.description}`) }] },
         { name: 'Description', values: [creature.description] },
         { name: 'Damage Level', values: [creature.damageLevel], half: true },
         { name: 'Attacking Stat', values: [capitalize(creature.attackingStat)], half: true },
