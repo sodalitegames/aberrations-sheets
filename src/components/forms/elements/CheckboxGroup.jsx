@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Row from './Row';
+import Tooltip from '../../Tooltip';
 
 export const Checkbox = ({ heading, description, name, checked }) => {
   const [selected, setSelected] = useState(checked);
@@ -12,9 +13,9 @@ export const Checkbox = ({ heading, description, name, checked }) => {
         <label htmlFor={name} className="font-medium text-gray-700">
           {heading}
         </label>
-        <p className="text-sm text-gray-500 line-clamp-2" title={description}>
-          {description}
-        </p>
+        <Tooltip message={[description]}>
+          <p className="text-sm text-gray-500 line-clamp-2">{description}</p>
+        </Tooltip>
       </div>
     </div>
   );
