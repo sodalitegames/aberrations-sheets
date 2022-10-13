@@ -43,7 +43,7 @@ const Stats = ({ stats }) => {
                   <Button rounded classes="justify-center" onClick={() => setModal({ type: ModalTypes.upgradeStat, id: stat.name.toLowerCase(), data: { type: 'character', resource: charSheet } })}>
                     Upgrade
                   </Button>
-                  <Button dark rounded classes="justify-center" onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character' } })}>
+                  <Button dark rounded classes="justify-center" onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character', rollingStat: stat.name.toLowerCase() } })}>
                     Roll
                   </Button>
                 </div>

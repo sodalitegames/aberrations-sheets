@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-// import { roll } from '@aberrations-rpg/functions';
+import { roll } from '@aberrations-rpg/functions';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
@@ -17,7 +17,7 @@ import Input from '../elements/Input';
 import Select from '../elements/Select';
 import Detail from '../elements/Detail';
 
-const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
+const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) => {
   // const dispatch = useDispatch();
   // const { addNotification } = useActions();
 
@@ -57,6 +57,13 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
         return;
     }
   }, [charSheet, campSheet, type, playerId, npcId, creatureId]);
+
+  useEffect(() => {
+    if (rollingStat && sheet) {
+      setStatKey(rollingStat);
+      setStat(sheet[rollingStat]);
+    }
+  }, [rollingStat, sheet]);
 
   const calcAdvantage = () => {
     if (sheet?.conditions) {
@@ -104,9 +111,9 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
     e.preventDefault();
 
     if (!stat) {
-      const roll = Math.ceil(Math.random() * die);
+      const results = roll(die, calcAdvantage());
 
-      setResults({ roll, advantage: calcAdvantage(), total: roll + calcAdvantage() * 2 });
+      setResults(results);
 
       // Add a notification with a message about your results
       // addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) });
@@ -114,9 +121,9 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
       return;
     }
 
-    const roll = Math.ceil(Math.random() * stat.die);
+    const results = roll(stat.die, calcAdvantage());
 
-    setResults({ roll, advantage: calcAdvantage(), total: roll + calcAdvantage() * 2 });
+    setResults(results);
 
     // Add a notification with a message about your results
     // addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) });
@@ -129,22 +136,25 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
 
   return (
     <SlideOverForm title="Roll Dice" description="Fill out the information below to make a roll." submitText={getSubmitText()} cancelText="Done" submitHandler={submitHandler}>
-      {type !== 'campaign' && (
-        <Select
-          slideOver
-          label="Which Stat?"
-          name="stat"
-          value={statKey}
-          options={[
-            { name: 'Strength', id: 'strength' },
-            { name: 'Agility', id: 'agility' },
-            { name: 'Persona', id: 'persona' },
-            { name: 'Aptitude', id: 'aptitude' },
-            { name: 'None', id: 'none' },
-          ]}
-          changeHandler={selectStat}
-        />
-      )}
+      {type !== 'campaign' &&
+        (rollingStat ? (
+          <Detail slideOver label="Which Stat?" detail={capitalize(rollingStat)} />
+        ) : (
+          <Select
+            slideOver
+            label="Which Stat?"
+            name="stat"
+            value={statKey}
+            options={[
+              { name: 'Strength', id: 'strength' },
+              { name: 'Agility', id: 'agility' },
+              { name: 'Persona', id: 'persona' },
+              { name: 'Aptitude', id: 'aptitude' },
+              { name: 'None', id: 'none' },
+            ]}
+            changeHandler={selectStat}
+          />
+        ))}
 
       {stat && sheet?.conditions ? (
         <>
@@ -183,11 +193,14 @@ const RollDice = ({ data: { type, playerId, npcId, creatureId } }) => {
 
       {results ? (
         <div className="mt-8">
-          <div className="flex flex-col items-center p-4 mx-8 mt-8 text-5xl font-semibold text-gray-900 rounded-md bg-gray-50 shrink-0">
-            {results.total}
-            <p className="text-sm font-medium text-gray-500">{results.roll} NATURAL</p>
-            <p className="text-sm font-medium text-gray-500">{results.advantage * 2} ADVANTAGE (ADV * 2)</p>
-            <p className="text-sm font-medium text-gray-500">{results.total} TOTAL</p>
+          <div className="flex flex-col items-center p-4 mx-8 mt-8 bg-gray-100 rounded-md shrink-0">
+            {results.critical.success ? <p className="px-4 py-1 my-1 text-2xl font-semibold text-white uppercase bg-green-600 rounded-md">Critical Success</p> : null}
+            {results.critical.failure ? <p className="px-4 py-1 my-1 text-2xl font-semibold text-white uppercase bg-red-600 rounded-md">Critical Failure</p> : null}
+            <p className="px-4 py-1 my-2 text-5xl font-semibold text-white bg-gray-900 rounded-md">{results.total}</p>
+            <p className="text-sm font-medium text-gray-500 uppercase">{results.roll} NATURAL</p>
+            {results.critical.success ? <p className="text-sm font-medium text-gray-500 uppercase">{results.bonus} BONUS</p> : null}
+            <p className="text-sm font-medium text-gray-500 uppercase">{results.advantage.calculated} ADVANTAGE (ADV * 2)</p>
+            <p className="text-sm font-medium text-gray-500 uppercase">{results.total} TOTAL</p>
           </div>
         </div>
       ) : null}
