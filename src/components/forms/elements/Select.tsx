@@ -1,9 +1,11 @@
 import React from 'react';
+import { Field, useField, ErrorMessage } from 'formik';
 
 import classNames from '../../../utils/classNames';
 
 import Row from './Row';
 
+const SELECT_STYLES = 'w-full text-gray-900 border-gray-300 rounded-md shadow-sm lock sm:text-sm focus:ring-gray-900 focus:border-gray-900';
 export interface SelectOption {
   id: string;
   name: string;
@@ -12,31 +14,9 @@ export interface SelectOption {
   children?: SelectOption[];
 }
 
-interface SelectProps {
-  label: string;
-  name: string;
-  value: string;
-  options: SelectOption[];
-  changeHandler: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
-  slideOver?: boolean;
-}
-
-interface SelectInputProps {
-  name: string;
-  value: string;
-  options: SelectOption[];
-  changeHandler: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
-}
-
-export const SelectInput: React.FC<SelectInputProps> = ({ name, value, options, changeHandler, ...otherProps }) => {
+const SelectOptions = ({ options }: { options: SelectOption[] }) => {
   return (
-    <select
-      className="w-full text-gray-900 border-gray-300 rounded-md shadow-sm lock sm:text-sm focus:ring-gray-900 focus:border-gray-900"
-      name={name}
-      value={value}
-      onChange={(event: React.ChangeEvent<HTMLSelectElement>) => changeHandler(event)}
-      {...otherProps}
-    >
+    <>
       <option className="text-sm" value="">
         Select One
       </option>
@@ -57,14 +37,58 @@ export const SelectInput: React.FC<SelectInputProps> = ({ name, value, options, 
           </React.Fragment>
         );
       })}
+    </>
+  );
+};
+
+interface BasicSelectProps {
+  name: string;
+  value: string;
+  options: SelectOption[];
+  changeHandler: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+export const BasicSelect: React.FC<BasicSelectProps> = ({ name, value, options, changeHandler }) => {
+  return (
+    <select className={SELECT_STYLES} name={name} value={value} onChange={(event: React.ChangeEvent<HTMLSelectElement>) => changeHandler(event)}>
+      <SelectOptions options={options} />
     </select>
   );
 };
 
-const Select: React.FC<SelectProps> = ({ label, changeHandler, value, name, options, slideOver, ...otherProps }) => {
+interface FormikSelectProps {
+  name: string;
+  options: SelectOption[];
+}
+
+export const FormikSelect: React.VFC<FormikSelectProps> = ({ name, options }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [field, meta, helpers] = useField(name);
+
+  return (
+    <>
+      <Field as="select" name={name} className={classNames(SELECT_STYLES, meta.error && meta.touched ? 'border-red-700 focus:ring-red-700 focus:border-red-700' : '')}>
+        <SelectOptions options={options} />
+      </Field>
+      <ErrorMessage name={name}>{message => <p className="mt-1 text-xs text-right text-red-700">{message}</p>}</ErrorMessage>
+    </>
+  );
+};
+
+interface SelectProps {
+  label: string;
+  name: string;
+  value?: string;
+  options: SelectOption[];
+  changeHandler?: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
+  slideOver?: boolean;
+  formik?: boolean;
+}
+
+const Select: React.FC<SelectProps> = ({ label, changeHandler, value, name, options, formik, slideOver }) => {
   return (
     <Row name={name} label={label} slideOver={slideOver}>
-      <SelectInput name={name} value={value} options={options} changeHandler={changeHandler} {...otherProps} />
+      {formik ? <FormikSelect name={name} options={options} /> : <BasicSelect name={name} value={value!} options={options} changeHandler={changeHandler!} />}
     </Row>
   );
 };
