@@ -104,7 +104,7 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
               <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
                 {/* Form content */}
                 {children}
-                {JSON.stringify({ values, errors })}
+                {/* {JSON.stringify({ values, errors })} */}
               </div>
             </div>
 
@@ -289,7 +289,7 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeaponForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm id={slideOver.id} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm id={slideOver.id!} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.usableForm ? <UsableForm id={slideOver.id!} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm id={slideOver.id} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newTransactionForm ? <NewTransactionForm data={slideOver.data} /> : null}
