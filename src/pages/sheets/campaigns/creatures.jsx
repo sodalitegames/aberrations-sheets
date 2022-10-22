@@ -62,8 +62,11 @@ const CampaignCreaturesPage = () => {
   }, [searchParams, archivedCreatures, creatures]);
 
   useEffect(() => {
+    const id = searchParams.get('id');
+
     if (creaturesList.length) {
       if (id) {
+        setId(id);
         setCreature(creaturesList.find(crea => crea._id === id));
         return;
       }
@@ -71,17 +74,18 @@ const CampaignCreaturesPage = () => {
       setCreature(creaturesList[0]);
       setId(creaturesList[0]._id);
     }
-  }, [id, creaturesList]);
+  }, [searchParams, id, creaturesList]);
 
   return (
     <SheetPageContent title="Creatures" columns={4}>
+      {/* Showing Archived Creatures Notice */}
+      <ListInteractablesMessage show={searchParams.get('show')} interactableType="creatures" />
+
       {/* Creatures List */}
       <SheetPagePanel title="Manage Creatures">
         <div className="flow-root mt-2">
-          <ListInteractables sheetType="campaigns" interactableType="creatures" id={id} setId={setId} interactablesList={creaturesList} label="Creature" show={searchParams.get('show')} />
+          <ListInteractables sheetType="campaigns" interactableType="creatures" id={id} interactablesList={creaturesList} label="Creature" show={searchParams.get('show')} />
         </div>
-        {/* Showing Archived Creatures Notice */}
-        <ListInteractablesMessage show={searchParams.get('show')} interactableType="creatures" />
       </SheetPagePanel>
 
       {/* Selected Creature */}

@@ -69,8 +69,11 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
   }, [sheetType, searchParams, charArchivedUsables, campArchivedUsables, charUsables, campUsables]);
 
   useEffect(() => {
+    const id = searchParams.get('id');
+
     if (usablesList.length) {
       if (id) {
+        setId(id);
         setUsable(usablesList.find(usab => usab._id === id));
         return;
       }
@@ -78,7 +81,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
       setUsable(usablesList[0]);
       setId(usablesList[0]._id);
     }
-  }, [sheetType, id, usablesList]);
+  }, [id, usablesList, searchParams]);
 
   return (
     <SheetPageContent title="Usables" columns={4}>
@@ -88,7 +91,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
       {/* Usables List */}
       <SheetPagePanel title="Manage Usables">
         <div className="flow-root mt-2">
-          <ListInteractables sheetType={sheetType} interactableType="usables" id={id} setId={setId} interactablesList={usablesList} label="Usable" show={searchParams.get('show')} />
+          <ListInteractables sheetType={sheetType} interactableType="usables" id={id} interactablesList={usablesList} label="Usable" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 

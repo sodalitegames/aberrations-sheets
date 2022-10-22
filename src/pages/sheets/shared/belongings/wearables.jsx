@@ -74,8 +74,11 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
   }, [sheetType, searchParams, charArchivedWearables, campArchivedWearables, charWearables, campWearables]);
 
   useEffect(() => {
+    const id = searchParams.get('id');
+
     if (wearablesList.length) {
       if (id) {
+        setId(id);
         setWearable(wearablesList.find(wear => wear._id === id));
         return;
       }
@@ -83,7 +86,7 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
       setWearable(wearablesList[0]);
       setId(wearablesList[0]._id);
     }
-  }, [sheetType, id, wearablesList]);
+  }, [searchParams, id, wearablesList]);
 
   return (
     <SheetPageContent title="Wearables" columns={4}>
@@ -93,7 +96,7 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
       {/* Wearables List */}
       <SheetPagePanel title="Manage Wearables">
         <div className="flow-root mt-2">
-          <ListInteractables sheetType={sheetType} interactableType="wearables" id={id} setId={setId} interactablesList={wearablesList} label="Wearable" show={searchParams.get('show')} />
+          <ListInteractables sheetType={sheetType} interactableType="wearables" id={id} interactablesList={wearablesList} label="Wearable" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 
