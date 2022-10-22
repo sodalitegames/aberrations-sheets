@@ -16,6 +16,7 @@ const Button: React.FC<ButtonProps> = ({ children, classes, text, rounded, alert
   if (text) {
     return (
       <button
+        type="button"
         className={classNames('w-full flex justify-center items-center px-4 py-2 text-sm font-medium rounded-md text-gray-500 bg-white hover:bg-gray-50 hover:text-gray-600', classes ? classes : '')}
         onClick={onClick}
         {...props}
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonProps> = ({ children, classes, text, rounded, alert
   return (
     <>
       <button
+        type="button"
         className={classNames(
           rounded
             ? 'inline-flex items-center shadow-sm px-2.5 py-0.5 border border-gray-300 leading-5 font-medium rounded-full'
