@@ -129,12 +129,12 @@ const SheetPageTransactions = ({ pending, resolved, type }) => {
                   </Tab.List>
                   <Tab.Panels className="mt-2">
                     {/* Transactions Received Panel */}
-                    <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60')}>
+                    <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60 space-y-4')}>
                       <TransactionsTabPanel pending={pending.received} resolved={resolved.received} type={type} />
                     </Tab.Panel>
 
                     {/* Transactions Sent Panel */}
-                    <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60 space-y-6')}>
+                    <Tab.Panel className={classNames('bg-white rounded-xl p-3', 'focus:outline-none focus:ring-2 ring-offset-2 ring-white ring-opacity-60 space-y-4')}>
                       <TransactionsTabPanel pending={pending.sent} resolved={resolved.sent} type={type} sent={true} />
                     </Tab.Panel>
                   </Tab.Panels>
