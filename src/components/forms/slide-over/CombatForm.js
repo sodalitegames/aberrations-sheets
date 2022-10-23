@@ -25,34 +25,27 @@ const StartCombat = ({ id }) => {
 
   const [description, setDescription] = useState(id ? campSheet.combats.find(combat => combat._id === id).description : '');
 
-  const [combatants, setCombatants] = useState(
-    id
-      ? campSheet.combats.find(combat => combat._id === id).combatants
-      : potentialCombatants
-          .map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, active: comba.active, type: comba.type, initiative: calculateInitiative(comba), inCombat: comba.inCombat }))
-          .filter(combatant => combatant.inCombat)
-  );
+  const [combatants, setCombatants] = useState(id ? campSheet.combats.find(combat => combat._id === id).combatants : []);
   const [nonCombatants, setNonCombatants] = useState(
     id
       ? potentialCombatants
-          .map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, active: comba.active, type: comba.type, initiative: calculateInitiative(comba), inCombat: comba.inCombat }))
+          .filter(combatant => combatant.active)
+          .map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, type: comba.type, initiative: calculateInitiative(comba) }))
           .filter(comba => {
             const combat = campSheet.combats.find(combat => combat._id === id);
             return !combat.combatants.map(({ _id }) => _id).includes(comba._id);
           })
-      : potentialCombatants
-          .map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, active: comba.active, type: comba.type, initiative: calculateInitiative(comba), inCombat: comba.inCombat }))
-          .filter(combatant => !combatant.inCombat)
+      : potentialCombatants.filter(combatant => combatant.active).map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, type: comba.type, initiative: calculateInitiative(comba) }))
   );
 
   const enterCombat = entity => {
-    setCombatants([...combatants, { ...entity, inCombat: true }]);
+    setCombatants([...combatants, nonCombatants.find(ent => ent._id === entity._id)]);
     setNonCombatants(nonCombatants.filter(ent => ent._id !== entity._id));
   };
 
   const leaveCombat = entity => {
     setCombatants(combatants.filter(ent => ent._id !== entity._id));
-    setNonCombatants([...nonCombatants, { ...entity, inCombat: false }]);
+    setNonCombatants([...nonCombatants, combatants.find(ent => ent._id === entity._id)]);
   };
 
   const onDragEnd = result => {
