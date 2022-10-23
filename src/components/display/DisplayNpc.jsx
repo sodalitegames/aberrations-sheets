@@ -171,11 +171,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       >
         Weapons
       </Heading>
-      <ul className="grid grid-cols-2">
+      <ul className="grid grid-cols-2 gap-4">
         {campSheet.weapons
           .filter(weap => weap.npcId === npc._id)
           .map(weapon => (
-            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed />
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed="view" />
           ))}
       </ul>
 
@@ -187,11 +187,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       >
         Wearables
       </Heading>
-      <ul className="grid grid-cols-2">
+      <ul className="grid grid-cols-2 gap-4">
         {campSheet.wearables
           .filter(wear => wear.npcId === npc._id)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed="view" />
           ))}
       </ul>
 
@@ -203,11 +203,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       >
         Consumables
       </Heading>
-      <ul className="grid grid-cols-2">
+      <ul className="grid grid-cols-2 gap-4">
         {campSheet.consumables
           .filter(cons => cons.npcId === npc._id)
           .map(consumable => (
-            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="campaigns" listItem condensed />
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="campaigns" listItem condensed="view" />
           ))}
       </ul>
 
@@ -219,11 +219,11 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
       >
         Usables
       </Heading>
-      <ul className="grid grid-cols-2">
+      <ul className="grid grid-cols-2 gap-4">
         {campSheet.usables
           .filter(usab => usab.npcId === npc._id)
           .map(usable => (
-            <DisplayUsable key={usable._id} usable={usable} sheetType="campaigns" listItem condensed />
+            <DisplayUsable key={usable._id} usable={usable} sheetType="campaigns" listItem condensed="view" />
           ))}
       </ul>
     </div>
