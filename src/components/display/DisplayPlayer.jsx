@@ -150,7 +150,12 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       </Heading>
       <InfoList list={[player.charBackground]} />
 
-      <Heading edit={{ text: 'Purchase', click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: player._id, entity: player } }) }}>
+      <Heading
+        edit={{
+          text: 'Purchase',
+          click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: player._id, entity: player, entityType: 'player' } }),
+        }}
+      >
         Augmentations
       </Heading>
       <ul className="grid">
@@ -171,11 +176,11 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       >
         Equipped Weapons
       </Heading>
-      <ul className="grid grid-cols-2">
+      <ul className="grid grid-cols-2 gap-4">
         {player.weapons
           .filter(weapon => weapon.equipped)
           .map(weapon => (
-            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="players" playerId={player._id} listItem condensed />
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="players" playerId={player._id} listItem condensed="view" />
           ))}
       </ul>
 
@@ -191,11 +196,11 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       >
         Equipped Wearables
       </Heading>
-      <ul className="grid grid-cols-2">
+      <ul className="grid grid-cols-2 gap-4">
         {player.wearables
           .filter(wearable => wearable.equipped)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType="players" playerId={player._id} listItem condensed />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType="players" playerId={player._id} listItem condensed="view" />
           ))}
       </ul>
 
@@ -211,11 +216,11 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       >
         Equipped Consumables
       </Heading>
-      <ul className="grid grid-cols-2">
+      <ul className="grid grid-cols-2 gap-4">
         {player.consumables
           .filter(consumable => consumable.equipped)
           .map(consumable => (
-            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="players" playerId={player._id} listItem condensed />
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="players" playerId={player._id} listItem condensed="view" />
           ))}
       </ul>
 
@@ -231,11 +236,11 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       >
         Equipped Usables
       </Heading>
-      <ul className="grid grid-cols-2">
+      <ul className="grid grid-cols-2 gap-4">
         {player.usables
           .filter(usable => usable.equipped)
           .map(usable => (
-            <DisplayUsable key={usable._id} usable={usable} sheetType="players" playerId={player._id} listItem condensed />
+            <DisplayUsable key={usable._id} usable={usable} sheetType="players" playerId={player._id} listItem condensed="view" />
           ))}
       </ul>
     </div>
