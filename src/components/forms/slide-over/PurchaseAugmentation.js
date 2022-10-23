@@ -82,12 +82,12 @@ const PurchaseAugmentation = ({ data }) => {
         data.sheetId,
         'augmentations',
         { name, pointCost, description, universalId, npcId: data.sheetType === 'campaigns' ? data.entity._id : undefined },
-        { notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` } }
+        { forPlayer: data.entityType === 'player' ? true : false, notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` } }
       )
     );
 
     if (data.sheetType === 'characters') {
-      dispatch(updateSheetStart(data.sheetType, data.sheetId, { experience: data.entity.experience - pointCost }, { slideOver: true }));
+      dispatch(updateSheetStart(data.sheetType, data.sheetId, { experience: data.entity.experience - pointCost }, { slideOver: true, forPlayer: data.entityType === 'player' ? true : false }));
     }
 
     if (data.sheetType === 'campaigns') {

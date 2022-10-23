@@ -169,6 +169,11 @@ const campaignReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.CREATE_PLAYER_RESOURCE_SUCCESS:
       const oldPlayerCreate = state.current.players.find(player => player._id === action.payload.playerId);
 
+      // Transactions are not kept track of in players array
+      if (action.payload.resourceType === 'transactions') {
+        return state;
+      }
+
       return {
         ...state,
         current: {

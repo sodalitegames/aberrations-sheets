@@ -32,10 +32,10 @@ export const selectCombats = createSelector([selectCurrentCampaign], current => 
 export const selectPotentialCombatants = createSelector([selectCurrentCampaign], current =>
   current
     ? [
-        ...current.players.map(player => ({ ...player, type: 'players', initiative: calculateInitiative(player), inCombat: false })),
-        ...current.npcs.map(npc => ({ ...npc, type: 'npcs', initiative: calculateInitiative(npc), inCombat: false })),
-        ...current.creatures.map(creature => ({ ...creature, type: 'creatures', initiative: calculateInitiative(creature), inCombat: false })),
-      ].filter(combatant => !combatant.archived && combatant.active)
+        ...current.players.map(player => ({ ...player, type: 'players', initiative: calculateInitiative(player) })),
+        ...current.npcs.map(npc => ({ ...npc, type: 'npcs', initiative: calculateInitiative(npc) })),
+        ...current.creatures.map(creature => ({ ...creature, type: 'creatures', initiative: calculateInitiative(creature) })),
+      ].filter(combatant => !combatant.archived)
     : // .sort((prev, curr) => (prev.initiative < curr.initiative ? 1 : -1))
       []
 );

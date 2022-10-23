@@ -5,7 +5,7 @@ import { selectCombats, selectPotentialCombatants } from '../../../redux/campaig
 
 import { useActions } from '../../../hooks/useActions';
 
-import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet/sheet.actions';
+import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { useResource } from '../../../hooks/useResource';
 
@@ -109,6 +109,25 @@ const CampaignCombatPage = () => {
     setEntity(combatants[index + 1]);
   };
 
+  const leaveCombat = entId => {
+    dispatch(
+      updateSheetResourceStart(
+        'campaigns',
+        combat.sheetId,
+        'combats',
+        combat._id,
+        { combatants: combat.combatants.filter(com => com._id !== entId) },
+        {
+          notification: {
+            status: 'success',
+            heading: `${entity.name || entity.characterName} Left Combat`,
+            message: `You have successfully taken ${entity.name || entity.characterName} out of combat.`,
+          },
+        }
+      )
+    );
+  };
+
   return (
     <SheetPageContent title="Combat" columns={3}>
       {combats.length ? (
@@ -188,53 +207,9 @@ const CampaignCombatPage = () => {
 
                   {/* Leave Combat */}
                   <div className="pt-4 mt-4 border-t border-gray-200">
-                    {entity.type === 'players' ? (
-                      <Button
-                        alert
-                        onClick={() =>
-                          dispatch(
-                            updateSheetStart(
-                              'characters',
-                              entity._id,
-                              { active: !entity.active },
-                              {
-                                notification: {
-                                  status: 'success',
-                                  heading: `${entity.type} Left Combat`,
-                                  message: `You have successfully taken ${entity.characterName} out of combat.`,
-                                },
-                              }
-                            )
-                          )
-                        }
-                      >
-                        Leave Combat
-                      </Button>
-                    ) : (
-                      <Button
-                        alert
-                        onClick={() =>
-                          dispatch(
-                            updateSheetResourceStart(
-                              'campaigns',
-                              entity.sheetId,
-                              entity.type,
-                              entity._id,
-                              { active: !entity.active },
-                              {
-                                notification: {
-                                  status: 'success',
-                                  heading: `${entity.type} Left Combat`,
-                                  message: `You have successfully taken ${entity.name || entity.characterName} out of combat.`,
-                                },
-                              }
-                            )
-                          )
-                        }
-                      >
-                        Leave Combat
-                      </Button>
-                    )}
+                    <Button alert onClick={() => leaveCombat(entity._id)}>
+                      Leave Combat
+                    </Button>
                   </div>
                 </div>
               </div>
