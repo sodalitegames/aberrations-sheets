@@ -63,7 +63,7 @@ const AssignBelonging = ({ id, data }) => {
 
   return (
     <ModalForm title={`Assign ${data.name}`} submitText={`Assign ${data.name} ${npc ? `to ${npc.name}` : ''}`} submitHandler={submitHandler} submitDisabled={!npcId}>
-      <Select label="Assign to Npc" name="npcId" value={npcId} options={campSheet.npcs.map(npc => ({ name: npc.name, id: npc._id }))} changeHandler={selectNpc} required />
+      <Select label="Assign to Npc" name="npcId" value={npcId} options={campSheet.npcs.filter(npc => npc.active).map(npc => ({ name: npc.name, id: npc._id }))} changeHandler={selectNpc} required />
       {npc ? (
         <ListContainer classes="mt-4">
           <DisplayNpc key={npc._id} npc={npc} condensed listItem />
