@@ -150,7 +150,12 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
       </Heading>
       <InfoList list={[player.charBackground]} />
 
-      <Heading edit={{ text: 'Purchase', click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: player._id, entity: player } }) }}>
+      <Heading
+        edit={{
+          text: 'Purchase',
+          click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: player._id, entity: player, entityType: 'player' } }),
+        }}
+      >
         Augmentations
       </Heading>
       <ul className="grid">
