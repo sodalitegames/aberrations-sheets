@@ -67,8 +67,11 @@ const CampaignNpcsPage = () => {
   }, [searchParams, archivedNpcs, npcs]);
 
   useEffect(() => {
+    const id = searchParams.get('id');
+
     if (npcsList.length) {
       if (id) {
+        setId(id);
         setNpc(npcsList.find(npc => npc._id === id));
         return;
       }
@@ -76,17 +79,18 @@ const CampaignNpcsPage = () => {
       setNpc(npcsList[0]);
       setId(npcsList[0]._id);
     }
-  }, [id, npcsList]);
+  }, [id, npcsList, searchParams]);
 
   return (
     <SheetPageContent title="Npcs" columns={4}>
+      {/* Showing Archived Npcs Notice */}
+      <ListInteractablesMessage show={searchParams.get('show')} interactableType="npcs" />
+
       {/* Npcs List */}
       <SheetPagePanel title="Manage Npcs">
-        <div className="flow-root mt-2">
-          <ListInteractables sheetType="campaigns" interactableType="npcs" id={id} setId={setId} interactablesList={npcsList} label="Npc" show={searchParams.get('show')} />
+        <div className="flow-root mt-2 space-y-4">
+          <ListInteractables sheetType="campaigns" interactableType="npcs" id={id} interactablesList={npcsList} label="Npc" show={searchParams.get('show')} />
         </div>
-        {/* Showing Archived Npcs Notice */}
-        <ListInteractablesMessage show={searchParams.get('show')} interactableType="npcs" />
       </SheetPagePanel>
 
       {/* Selected Npc */}

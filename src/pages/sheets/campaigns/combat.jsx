@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
 import { selectCombats, selectPotentialCombatants } from '../../../redux/campaign/campaign.selectors';
 
@@ -30,6 +31,7 @@ import DisplayCreature from '../../../components/display/DisplayCreature';
 
 const CampaignCombatPage = () => {
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
 
   const combats = useSelector(selectCombats);
   const potentialCombatants = useSelector(selectPotentialCombatants);
@@ -51,7 +53,7 @@ const CampaignCombatPage = () => {
         combats.map(combat => ({
           ...combat,
           title: combat.description,
-          href: '',
+          href: `?id=${combat._id}`,
           description: combat.combatants.map(combatant => combatant.name).join(', '),
         }))
       );
@@ -62,11 +64,14 @@ const CampaignCombatPage = () => {
 
   useEffect(() => {
     if (combatOptions.length) {
-      setCombat(combatOptions[0]);
+      const id = searchParams.get('id');
+      setCombat(id ? combatOptions.find(combat => combat._id === id) : combatOptions[0]);
+      setEntity(null);
     } else {
       setCombat(null);
+      setEntity(null);
     }
-  }, [combatOptions]);
+  }, [combatOptions, searchParams]);
 
   useEffect(() => {
     if (potentialCombatants.length && combat) {
@@ -92,8 +97,9 @@ const CampaignCombatPage = () => {
   useEffect(() => {
     if (combat && combatants.length) {
       if (!entity) {
-        const currentTurn = combatants.find(combatant => combatant._id === combat.activeTurn);
-        setEntity(currentTurn);
+        // const currentTurn = combatants.find(combatant => combatant._id === combat.activeTurn);
+        // setEntity(currentTurn);
+        setEntity(combatants[0]);
       }
     }
   }, [combatants, combat, entity]);
@@ -134,7 +140,9 @@ const CampaignCombatPage = () => {
         <Fragment>
           <div className="space-y-4">
             <SheetPagePanel title="Select Combat">
-              <div className="flow-root w-full mt-2">{combatOptions.length && <SelectButton value={combatOptions[0]} onChange={setCombat} options={combatOptions} />}</div>
+              <div className="flow-root w-full mt-2">
+                {combatOptions.length && <SelectButton value={combatOptions.find(comb => comb._id === searchParams.get('id')) || combatOptions[0]} onChange={setCombat} options={combatOptions} />}
+              </div>
             </SheetPagePanel>
 
             <SheetPagePanel>

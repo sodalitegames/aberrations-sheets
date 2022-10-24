@@ -69,8 +69,11 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
   }, [sheetType, searchParams, charArchivedWeapons, campArchivedWeapons, charWeapons, campWeapons]);
 
   useEffect(() => {
+    const id = searchParams.get('id');
+
     if (weaponsList.length) {
       if (id) {
+        setId(id);
         setWeapon(weaponsList.find(weap => weap._id === id));
         return;
       }
@@ -78,7 +81,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
       setWeapon(weaponsList[0]);
       setId(weaponsList[0]._id);
     }
-  }, [weaponsList, id]);
+  }, [searchParams, weaponsList, id]);
 
   return (
     <SheetPageContent title="Weapons" columns={4}>
@@ -88,7 +91,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
       {/* Weapons List */}
       <SheetPagePanel title="Manage Weapons">
         <div className="flow-root mt-2">
-          <ListInteractables sheetType={sheetType} interactableType="weapons" id={id} setId={setId} interactablesList={weaponsList} label="Weapon" show={searchParams.get('show')} />
+          <ListInteractables sheetType={sheetType} interactableType="weapons" id={id} interactablesList={weaponsList} label="Weapon" show={searchParams.get('show')} />
         </div>
       </SheetPagePanel>
 
