@@ -15,7 +15,7 @@ import { SlideOverForm } from '../SlideOver';
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Row from '../elements/Row';
-import { SelectInput, SelectOption } from '../elements/Select';
+import { BasicSelect, SelectOption } from '../elements/Select';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Detail from '../elements/Detail';
 
@@ -100,7 +100,7 @@ const NewCharacter: React.FC = () => {
       <Row slideOver name="species" label="Character Species">
         {fetchedSpecies && speciesList ? (
           <>
-            <SelectInput name="species" value={species ? species.id : ''} options={speciesList} changeHandler={selectCurrentSpecies} />
+            <BasicSelect name="species" value={species ? species.id : ''} options={speciesList} changeHandler={selectCurrentSpecies} />
             {species ? (
               <ul className="mt-3 divide-y divide-gray-200">
                 <DisplaySpecies species={species} />
@@ -113,8 +113,8 @@ const NewCharacter: React.FC = () => {
           </Row>
         )}
       </Row>
-      <TextArea slideOver label="Character Description" name="charDescription" rows={4} value={charDescription} changeHandler={setCharDescription} />
-      <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} />
+      <TextArea slideOver label="Character Description" name="charDescription" rows={4} value={charDescription} changeHandler={setCharDescription} formik={false} />
+      <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} formik={false} />
     </SlideOverForm>
   );
 };

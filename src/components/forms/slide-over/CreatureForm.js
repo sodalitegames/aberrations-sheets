@@ -14,7 +14,7 @@ import { SlideOverForm } from '../SlideOver';
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
-import CheckboxGroup, { Checkbox } from '../elements/CheckboxGroup';
+import CheckboxGroup, { BasicCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 
@@ -144,7 +144,7 @@ const CreatureForm = ({ id }) => {
       {creatureTypes && typesList ? (
         <CheckboxGroup slideOver label="Types">
           {typesList.map(type => (
-            <Checkbox
+            <BasicCheckbox
               key={type.universalId}
               heading={type.name}
               checked={id ? !!types.find(tp => tp.universalId === type.universalId) : false}

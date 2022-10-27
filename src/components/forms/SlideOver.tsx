@@ -1,6 +1,7 @@
-import { Fragment } from 'react';
+import { FormEventHandler, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useSelector } from 'react-redux';
+import { Formik, Form, FormikHelpers } from 'formik';
 
 import { XIcon } from '@heroicons/react/outline';
 
@@ -57,7 +58,10 @@ interface SlideOverFormProps {
   submitText?: string;
   cancelText?: string;
   submitDisabled?: boolean;
-  submitHandler: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  initialValues?: any;
+  validationSchema?: any;
+  submitHandler: FormEventHandler<HTMLFormElement> | ((values: any, actions: FormikHelpers<any>) => void | Promise<any>);
+  formik?: boolean;
 }
 
 interface SlideOverContainerProps {
@@ -66,15 +70,78 @@ interface SlideOverContainerProps {
   cancelText?: string;
 }
 
-export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description, submitText, cancelText, submitDisabled, submitHandler, children }) => {
+export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description, submitText, cancelText, submitDisabled, initialValues, validationSchema, submitHandler, formik, children }) => {
   const { closeSlideOver } = useActions();
 
   const characterError = useSelector(selectCharacterError);
   const campaignError = useSelector(selectCampaignError);
   const resourceError = useSelector(selectResourceError);
 
+  if (formik) {
+    return (
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={submitHandler} enableReinitialize={true}>
+        {({ values, errors, isSubmitting }) => (
+          <Form className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
+            <div className="flex-1">
+              {/* Header */}
+              <div className="px-4 py-6 bg-gray-50 sm:px-6">
+                <div className="flex items-start justify-between space-x-3">
+                  <div className="space-y-1">
+                    <Dialog.Title className="text-lg font-medium text-gray-900">{title}</Dialog.Title>
+                    <p className="text-sm text-gray-500">{description}</p>
+                  </div>
+                  {/* Close button */}
+                  <div className="flex items-center h-7">
+                    <button type="button" className="text-gray-400 hover:text-gray-500" onClick={() => closeSlideOver()}>
+                      <span className="sr-only">Close panel</span>
+                      <XIcon className="w-6 h-6" aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Divider container */}
+              <div className="py-6 space-y-6 sm:py-0 sm:space-y-0 sm:divide-y sm:divide-gray-200">
+                {/* Form content */}
+                {children}
+                {/* {JSON.stringify({ values, errors })} */}
+              </div>
+            </div>
+
+            {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+            {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+            {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
+
+            {/* Action buttons */}
+            <div className="px-4 py-5 border-t border-gray-200 shrink-0 sm:px-6">
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark"
+                  onClick={() => closeSlideOver()}
+                >
+                  {cancelText || 'Cancel'}
+                </button>
+                <button
+                  type="submit"
+                  className={classNames(
+                    submitDisabled ? 'bg-gray-200 text-gray-400 cursor-default' : 'text-white bg-dark hover:bg-dark-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-200',
+                    'inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md'
+                  )}
+                  disabled={isSubmitting || submitDisabled}
+                >
+                  {submitText}
+                </button>
+              </div>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    );
+  }
+
   return (
-    <form onSubmit={submitHandler} className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
+    <form onSubmit={submitHandler as FormEventHandler<HTMLFormElement>} className="flex flex-col h-full overflow-y-scroll bg-white shadow-xl">
       <div className="flex-1">
         {/* Header */}
         <div className="px-4 py-6 bg-gray-50 sm:px-6">
@@ -222,8 +289,8 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeaponForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm id={slideOver.id} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <UsableForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm id={slideOver.id!} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <UsableForm id={slideOver.id!} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm id={slideOver.id} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newTransactionForm ? <NewTransactionForm data={slideOver.data} /> : null}
               </div>
