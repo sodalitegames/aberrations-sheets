@@ -22,7 +22,6 @@ import CheckboxGroup, { FormikCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 import { ConsumableCategory } from '../../../models/interfaces/data';
-// import List from '../elements/List';
 
 type SheetConsumableCategory = {
   universalId: string;
@@ -116,10 +115,6 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
   }, [id, data.sheetType, charSheet, campSheet]);
 
   const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    console.log({ values, actions });
-
-    console.log(values);
-
     const { name, level, uses, categories, associatedStat, quantity, description } = values;
 
     let detailedCategories: SheetConsumableCategory[] = [];
@@ -129,8 +124,6 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
         detailedCategories.push(categ);
       }
     });
-
-    console.log(detailedCategories);
 
     let body = { name, level, uses, quantity, categories: detailedCategories, description, associatedStat: associatedStat ? associatedStat : undefined };
 
@@ -194,16 +187,6 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
         formik
       />
       <TextArea slideOver label="Description (Opt.)" name="description" rows={4} formik />
-
-      {/* <List
-        slideOver
-        label="Modifiers"
-        name="modifiers"
-        fields={[
-          { name: 'modifier', type: 'text', label: 'Modifier' },
-          { name: 'amount', type: 'number', label: 'Amount' },
-        ]}
-      /> */}
     </SlideOverForm>
   );
 };

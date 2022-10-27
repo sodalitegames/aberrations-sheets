@@ -80,8 +80,6 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
   }, [id, data.sheetType, charSheet, campSheet]);
 
   const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    console.log({ values, actions });
-
     const { name, type, description, equippable, quantity, units } = values;
 
     const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
