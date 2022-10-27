@@ -24,6 +24,7 @@ const WearableDetails = ({ wearable, sheetType }) => {
         { name: 'Description', values: [wearable.description] },
         { name: 'Shield Value', values: [wearable.shieldValue], half: true },
         { name: 'Speed Adjustment', values: [wearable.speedAdjustment], half: true },
+        { name: 'Modifiers', values: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`) },
         wearable.metadata?.givenBy ? { name: 'Received From', values: [wearable.metadata.givenBy], half: true } : null,
         wearable.metadata?.givenTo ? { name: 'Given To', values: [wearable.metadata.givenTo], half: true } : null,
       ]}
@@ -40,7 +41,15 @@ const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem
           heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`}
           view={{ type: ModalTypes.showBelonging, id: wearable._id, data: { sheetType: sheetType, playerId, belongingType: 'wearables' } }}
         >
-          <InfoList list={[`Shield Value: ${wearable.shieldValue} / Speed Adjustment: ${wearable.speedAdjustment}`]} />
+          <InfoList
+            list={[
+              { tooltip: [`Shield Value: ${wearable.shieldValue} / Speed Adjustment: ${wearable.speedAdjustment}`], value: `SV: ${wearable.shieldValue} / SA: ${wearable.speedAdjustment}` },
+              {
+                tooltip: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`),
+                value: `${wearable.modifiers.length} Modifier${wearable.modifiers.length > 1 ? 's' : ''}`,
+              },
+            ]}
+          />
         </ListItem>
       );
     }
@@ -48,7 +57,18 @@ const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem
     if (condensed) {
       return (
         <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} actions={actions}>
-          <InfoList list={[`Shield Value: ${wearable.shieldValue} / Speed Adjustment: ${wearable.speedAdjustment}`]} />
+          <InfoList
+            list={[
+              {
+                tooltip: [`Shield Value: ${wearable.shieldValue}`, `Speed Adjustment: ${wearable.speedAdjustment}`],
+                value: `SV: ${wearable.shieldValue} / SA: ${wearable.speedAdjustment}`,
+              },
+              {
+                tooltip: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`),
+                value: `${wearable.modifiers.length} Modifier${wearable.modifiers.length > 1 ? 's' : ''}`,
+              },
+            ]}
+          />
         </ListItem>
       );
     }
