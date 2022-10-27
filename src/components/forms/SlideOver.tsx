@@ -288,7 +288,7 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.editBackgroundForm ? <EditBackground data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeaponForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm id={slideOver.id!} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm id={slideOver.id!} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.usableForm ? <UsableForm id={slideOver.id!} data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm id={slideOver.id} data={slideOver.data} /> : null}
