@@ -11,6 +11,7 @@ import {
   selectEquippedUsables,
   selectShieldValue,
   selectSpeedAdjustment,
+  selectModifiers,
 } from '../../../redux/character/character.selectors';
 
 import { useActions } from '../../../hooks/useActions';
@@ -49,6 +50,7 @@ const CharacterGameplayPage = () => {
 
   const speedAdjustment = useSelector(selectSpeedAdjustment);
   const shieldValue = useSelector(selectShieldValue);
+  const modifiers = useSelector(selectModifiers);
 
   return (
     <SheetPageContent title="Gameplay" columns={3}>
@@ -68,6 +70,15 @@ const CharacterGameplayPage = () => {
             <div className="flex flex-col justify-center mt-5 ml-5 space-y-2 shrink-0 sm:mt-0">
               <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character' } })}>Roll Dice</Button>
             </div>
+          </div>
+
+          <h3 className="text-lg font-medium text-center text-gray-900 md:text-left">Modifiers</h3>
+          <div className="space-y-1 columns-4">
+            {modifiers.map(({ modifier, amount }) => (
+              <p key={modifier + '_' + amount} className="text-sm">
+                {modifier} {amount > 0 ? `+${amount}` : amount}
+              </p>
+            ))}
           </div>
         </SheetPagePanel>
 
