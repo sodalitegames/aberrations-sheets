@@ -34,7 +34,7 @@ const ListItem = ({ heading, editable, deletable, editText, deleteText, actions,
 
   if (view) {
     return (
-      <li className="py-4">
+      <li className="w-full py-4">
         <div className="flex items-center space-x-4">
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-gray-800">{heading}</h3>
@@ -53,7 +53,7 @@ const ListItem = ({ heading, editable, deletable, editText, deleteText, actions,
 
   if (actions) {
     return (
-      <li className="py-4">
+      <li className="w-full py-4">
         <div className="flex items-center space-x-4">
           <div className="flex-1 min-w-0">
             <h3 className="text-sm font-semibold text-gray-800">{heading}</h3>
@@ -74,7 +74,7 @@ const ListItem = ({ heading, editable, deletable, editText, deleteText, actions,
   }
 
   return (
-    <li className="py-3">
+    <li className="w-full py-3">
       <h3 className="text-sm font-semibold text-gray-800">{heading}</h3>
       <div>{children}</div>
       {!noButtonPanel ? <ButtonPanel editable={editable} deletable={deletable} editText={editText} deleteText={deleteText} /> : null}
