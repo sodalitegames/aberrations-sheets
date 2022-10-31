@@ -30,6 +30,16 @@ export const selectShieldValue = createSelector([selectEquippedWearables], equip
 export const selectSpeedAdjustment = createSelector([selectEquippedWearables], equippedWearables =>
   equippedWearables.length ? equippedWearables.reduce((speedAdjustment, wearable) => wearable.speedAdjustment || 0 + speedAdjustment, 0) : 0
 );
+export const selectModifiers = createSelector([selectCurrentCharacter, selectEquippedWearables], (current, equippedWearables) => {
+  const characterModifiers = current.modifiers || [];
+  const wearableModifiers = equippedWearables.map(wearable => wearable.modifiers || []).flat();
+
+  const modifiers = [...characterModifiers, ...wearableModifiers];
+
+  // TODO: Check if any modifers are the same and combine them if so
+
+  return modifiers;
+});
 
 export const selectPendingTransactions = createSelector([selectCurrentCharacter], current =>
   current

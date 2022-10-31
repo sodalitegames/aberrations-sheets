@@ -18,7 +18,7 @@ const InfoList: React.FC<InfoListProps> = ({ list }) => {
       {list.map((item, index: number) => {
         if (!item) {
           return (
-            <span key={index} className="mt-1 text-sm text-gray-600">
+            <span key={index} className="w-full mt-1 text-sm text-gray-600">
               [undefined]
             </span>
           );
@@ -27,7 +27,7 @@ const InfoList: React.FC<InfoListProps> = ({ list }) => {
         // Check if item is a string
         if (typeof item === 'string') {
           return (
-            <span key={index} className="mt-1 text-sm text-gray-600">
+            <span key={index} className="w-full mt-1 text-sm text-gray-600">
               <NewlineText text={String(item || '')} />
             </span>
           );
@@ -35,7 +35,7 @@ const InfoList: React.FC<InfoListProps> = ({ list }) => {
 
         return (
           <Tooltip key={index} message={item.tooltip || []}>
-            <span className="mt-1 text-sm text-gray-600 line-clamp-2">
+            <span className="w-full mt-1 text-sm text-gray-600 line-clamp-2">
               <NewlineText text={String(item.value || '')} />
             </span>
           </Tooltip>
