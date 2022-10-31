@@ -125,7 +125,9 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
                 <button
                   type="submit"
                   className={classNames(
-                    submitDisabled ? 'bg-gray-200 text-gray-400 cursor-default' : 'text-white bg-dark hover:bg-dark-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-200',
+                    isSubmitting || submitDisabled
+                      ? 'bg-gray-200 text-gray-400 cursor-default'
+                      : 'text-white bg-dark hover:bg-dark-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-dark-200',
                     'inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md'
                   )}
                   disabled={isSubmitting || submitDisabled}

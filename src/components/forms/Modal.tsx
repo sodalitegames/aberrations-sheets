@@ -1,6 +1,7 @@
-import { Fragment } from 'react';
+import { FormEventHandler, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useSelector } from 'react-redux';
+import { Formik, Form, FormikHelpers } from 'formik';
 
 import { XIcon, ExclamationIcon } from '@heroicons/react/outline';
 
@@ -48,15 +49,19 @@ import EditHealth from './modal/EditHealth';
 import UpgradeHealth from './modal/UpgradeHealth';
 import EditWallet from './modal/EditWallet';
 import ReachMilestone from './modal/ReachMilestone';
+import EditModifiers from './modal/EditModifiers';
 
 interface ModalFormProps {
   title: string;
   submitText?: string;
   cancelText?: string;
   submitDisabled?: boolean;
-  submitHandler: (event: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  submitHandler: FormEventHandler<HTMLFormElement> | ((values: any, actions: FormikHelpers<any>) => void | Promise<any>);
   nested?: boolean;
   type?: 'alert';
+  initialValues?: any;
+  validationSchema?: any;
+  formik?: boolean;
 }
 
 interface ModalContainerProps {
@@ -94,19 +99,76 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.upgradeHealth ? <UpgradeHealth data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editWallet ? <EditWallet data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.reachMilestone ? <ReachMilestone data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editModifiers ? <EditModifiers data={modal.data} /> : null}
     </Fragment>
   );
 };
 
-export const ModalForm: React.FC<ModalFormProps> = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children, nested }) => {
+export const ModalForm: React.FC<ModalFormProps> = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children, nested, initialValues, validationSchema, formik }) => {
   const { closeModal, closeNestedModal } = useActions();
 
   const characterError = useSelector(selectCharacterError);
   const campaignError = useSelector(selectCampaignError);
   const resourceError = useSelector(selectResourceError);
 
+  if (formik) {
+    return (
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={submitHandler} enableReinitialize={true}>
+        {({ values, errors, isSubmitting }) => (
+          <Form>
+            <div>
+              {/* Icon */}
+              {type === 'alert' ? (
+                <div className="flex items-center justify-center w-12 h-12 mx-4 bg-red-100 rounded-full shrink-0 sm:h-10 sm:w-10">
+                  <ExclamationIcon className="w-6 h-6 text-red-600" aria-hidden="true" />
+                </div>
+              ) : null}
+              <div className="flex flex-col px-4 mt-2 mr-6">
+                {/* Title */}
+                <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                  {title}
+                </Dialog.Title>
+                {/* Form body */}
+                <fieldset className="mb-4">{children}</fieldset>
+              </div>
+            </div>
+
+            {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+            {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+            {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
+
+            {/* Action buttons panel */}
+            <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+              <button
+                type="submit"
+                className={classNames(
+                  isSubmitting || submitDisabled
+                    ? 'bg-gray-200 text-gray-400 cursor-default'
+                    : type === 'alert'
+                    ? 'bg-red-700 hover:bg-red-800 focus:ring-red-500'
+                    : 'bg-dark hover:bg-dark-400 focus:ring-dark-200',
+                  'w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm'
+                )}
+                disabled={isSubmitting || submitDisabled}
+              >
+                {submitText}
+              </button>
+              <button
+                type="button"
+                className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 sm:mt-0 sm:w-auto sm:text-sm"
+                onClick={nested ? () => closeNestedModal() : () => closeModal()}
+              >
+                {cancelText || 'Cancel'}
+              </button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    );
+  }
+
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submitHandler as FormEventHandler<HTMLFormElement>}>
       <div>
         {/* Icon */}
         {type === 'alert' ? (
