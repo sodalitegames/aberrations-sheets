@@ -72,14 +72,20 @@ const CharacterGameplayPage = () => {
             </div>
           </div>
 
-          <h3 className="text-lg font-medium text-center text-gray-900 md:text-left">Modifiers</h3>
-          <div className="space-y-1 columns-4">
-            {modifiers.map(({ modifier, amount }) => (
-              <p key={modifier + '_' + amount} className="text-sm">
-                {modifier} {amount > 0 ? `+${amount}` : amount}
-              </p>
-            ))}
-          </div>
+          <h3 className="flex items-center text-lg font-medium text-gray-900">Modifiers</h3>
+          {modifiers.length ? (
+            <div className="space-y-1 columns-4">
+              {modifiers.map(({ modifier, amount }) => (
+                <p key={modifier + '_' + amount} className="text-sm">
+                  {modifier} {amount > 0 ? `+${amount}` : amount}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm">You do not have any modifiers.</p>
+            </div>
+          )}
         </SheetPagePanel>
 
         {/* Stats */}

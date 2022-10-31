@@ -24,7 +24,7 @@ const WearableDetails = ({ wearable, sheetType }) => {
         { name: 'Description', values: [wearable.description] },
         { name: 'Shield Value', values: [wearable.shieldValue], half: true },
         { name: 'Speed Adjustment', values: [wearable.speedAdjustment], half: true },
-        { name: 'Modifiers', values: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`) },
+        { name: 'Modifiers', values: wearable.modifiers.length ? wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`) : ['No modifiers'] },
         wearable.metadata?.givenBy ? { name: 'Received From', values: [wearable.metadata.givenBy], half: true } : null,
         wearable.metadata?.givenTo ? { name: 'Given To', values: [wearable.metadata.givenTo], half: true } : null,
       ]}
@@ -44,10 +44,12 @@ const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem
           <InfoList
             list={[
               { tooltip: [`Shield Value: ${wearable.shieldValue} / Speed Adjustment: ${wearable.speedAdjustment}`], value: `SV: ${wearable.shieldValue} / SA: ${wearable.speedAdjustment}` },
-              {
-                tooltip: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`),
-                value: `${wearable.modifiers.length} Modifier${wearable.modifiers.length > 1 ? 's' : ''}`,
-              },
+              wearable.modifiers.length
+                ? {
+                    tooltip: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`),
+                    value: `${wearable.modifiers.length} Modifier${wearable.modifiers.length > 1 ? 's' : ''}`,
+                  }
+                : '0 Modifiers',
             ]}
           />
         </ListItem>
@@ -63,10 +65,12 @@ const DisplayWearable = ({ wearable, condensed, actions, noButtonPanel, listItem
                 tooltip: [`Shield Value: ${wearable.shieldValue}`, `Speed Adjustment: ${wearable.speedAdjustment}`],
                 value: `SV: ${wearable.shieldValue} / SA: ${wearable.speedAdjustment}`,
               },
-              {
-                tooltip: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`),
-                value: `${wearable.modifiers.length} Modifier${wearable.modifiers.length > 1 ? 's' : ''}`,
-              },
+              wearable.modifiers.length
+                ? {
+                    tooltip: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`),
+                    value: `${wearable.modifiers.length} Modifier${wearable.modifiers.length > 1 ? 's' : ''}`,
+                  }
+                : '0 Modifiers',
             ]}
           />
         </ListItem>

@@ -32,7 +32,7 @@ export const selectSpeedAdjustment = createSelector([selectEquippedWearables], e
 );
 export const selectModifiers = createSelector([selectCurrentCharacter, selectEquippedWearables], (current, equippedWearables) => {
   const characterModifiers = current.modifiers || [];
-  const wearableModifiers = equippedWearables.map(wearable => wearable.modifiers).flat();
+  const wearableModifiers = equippedWearables.map(wearable => wearable.modifiers || []).flat();
 
   const modifiers = [...characterModifiers, ...wearableModifiers];
 
