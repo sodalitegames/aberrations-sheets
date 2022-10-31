@@ -27,6 +27,7 @@ enum ModalTypes {
   upgradeHealth = 'UPGRADE_HEALTH',
   editWallet = 'EDIT_WALLET',
   reachMilestone = 'REACH_MILESTONE',
+  editModifiers = 'EDIT_MODIFIERS',
 }
 
 export default ModalTypes;
