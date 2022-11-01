@@ -15,11 +15,12 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import List from '../elements/List';
+import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
 
 interface WearableFormProps {
   id: string;
   data: {
-    sheetType: 'characters' | 'campaigns';
+    sheetType: SheetType;
   };
 }
 
@@ -93,7 +94,7 @@ const WearableForm: React.FC<WearableFormProps> = ({ id, data }) => {
         updateSheetResourceStart(
           data.sheetType,
           sheetId,
-          'wearables',
+          SheetResourceType.wearables,
           id,
           { name, bodyArea, description, shieldValue, speedAdjustment, quantity, modifiers },
           { slideOver: true, notification: { status: 'success', heading: 'Wearable Updated', message: `You have successfully updated ${name}.` } }
@@ -106,7 +107,7 @@ const WearableForm: React.FC<WearableFormProps> = ({ id, data }) => {
       createSheetResourceStart(
         data.sheetType,
         sheetId,
-        'wearables',
+        SheetResourceType.wearables,
         { name, bodyArea, description, shieldValue, speedAdjustment, quantity, modifiers },
         { slideOver: true, notification: { status: 'success', heading: 'Wearable Created', message: `You have successfully created ${name}.` } }
       )

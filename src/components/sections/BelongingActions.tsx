@@ -12,6 +12,7 @@ import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
 import Button from '../Button';
+import { SheetResourceType } from '../../models/sheet-actions';
 
 interface BelongingActionsProps {
   sheetType: SheetType;
@@ -58,7 +59,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                     updateSheetResourceStart(
                       sheetType,
                       sheet._id,
-                      belongingType,
+                      belongingType as unknown as SheetResourceType,
                       belonging._id,
                       { npcId: null },
                       { notification: { status: 'success', heading: `${belongingKind} Unassigned`, message: `You have successfully unassigned ${belonging.nickname || belonging.name}.` } }
@@ -82,7 +83,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                   updateSheetResourceStart(
                     sheetType,
                     sheet._id,
-                    belongingType,
+                    belongingType as unknown as SheetResourceType,
                     belonging._id,
                     { active: !belonging.active },
                     {
@@ -123,7 +124,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
             updateSheetResourceStart(
               sheetType,
               sheet._id,
-              belongingType,
+              belongingType as unknown as SheetResourceType,
               belonging._id,
               { archived: !belonging.archived, equipped: false, active: false, npcId: null },
               {

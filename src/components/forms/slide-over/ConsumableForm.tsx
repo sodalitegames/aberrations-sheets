@@ -22,6 +22,7 @@ import CheckboxGroup, { FormikCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 import { ConsumableCategory } from '../../../models/interfaces/data';
+import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
 
 type SheetConsumableCategory = {
   universalId: string;
@@ -32,7 +33,7 @@ type SheetConsumableCategory = {
 interface ConsumableFormProps {
   id: string;
   data: {
-    sheetType: 'characters' | 'campaigns';
+    sheetType: SheetType;
   };
 }
 
@@ -131,7 +132,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
 
     if (id) {
       dispatch(
-        updateSheetResourceStart(data.sheetType, sheetId, 'consumables', id, body, {
+        updateSheetResourceStart(data.sheetType, sheetId, SheetResourceType.consumables, id, body, {
           slideOver: true,
           notification: { status: 'success', heading: 'Consumabled Updated', message: `You have successfully updated ${name}.` },
         })
@@ -140,7 +141,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
     }
 
     dispatch(
-      createSheetResourceStart(data.sheetType, sheetId, 'consumables', body, {
+      createSheetResourceStart(data.sheetType, sheetId, SheetResourceType.consumables, body, {
         slideOver: true,
         notification: { status: 'success', heading: 'Consumable Created', message: `You have successfully created ${name}.` },
       })

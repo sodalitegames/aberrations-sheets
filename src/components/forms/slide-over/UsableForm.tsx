@@ -15,11 +15,12 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import Toggle from '../elements/Toggle';
+import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
 
 interface UsableFormProps {
   id: string;
   data: {
-    sheetType: 'characters' | 'campaigns';
+    sheetType: SheetType;
   };
 }
 
@@ -89,7 +90,7 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
         updateSheetResourceStart(
           data.sheetType,
           sheetId,
-          'usables',
+          SheetResourceType.usables,
           id,
           { name, type, description, equippable, quantity, units },
           { slideOver: true, notification: { status: 'success', heading: 'Usable Updated', message: `You have successfully updated ${name}.` } }
@@ -102,7 +103,7 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
       createSheetResourceStart(
         data.sheetType,
         sheetId,
-        'usables',
+        SheetResourceType.usables,
         { name, type, description, equippable, quantity, units },
         { slideOver: true, notification: { status: 'success', heading: 'Usable Created', message: `You have successfully created ${name}.` } }
       )

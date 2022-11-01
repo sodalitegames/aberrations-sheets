@@ -10,6 +10,7 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 import { ModalForm } from '../Modal';
 
 import List from '../elements/List';
+import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
 
 interface EditModifiersProps {
   data: {
@@ -42,7 +43,7 @@ const EditModifiers: React.VFC<EditModifiersProps> = ({ data }) => {
       case 'character':
         dispatch(
           updateSheetStart(
-            'characters',
+            SheetType.characters,
             charSheet._id,
             { modifiers },
             { modal: true, notification: { status: 'success', heading: 'Modifiers Updated', message: `You have successfully updated your modifiers.` } }
@@ -52,7 +53,7 @@ const EditModifiers: React.VFC<EditModifiersProps> = ({ data }) => {
       case 'player':
         dispatch(
           updateSheetStart(
-            'characters',
+            SheetType.characters,
             data.resource._id,
             { modifiers },
             { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Modifers Updated', message: `You have successfully updated your player's modifiers.` } }
@@ -62,9 +63,9 @@ const EditModifiers: React.VFC<EditModifiersProps> = ({ data }) => {
       case 'npc':
         dispatch(
           updateSheetResourceStart(
-            'campaigns',
+            SheetType.campaigns,
             campSheet._id,
-            'npcs',
+            SheetResourceType.npcs,
             data.resource._id,
             { modifiers },
             { modal: true, notification: { status: 'success', heading: 'Modifiers Updated', message: `You have successfully updated your npc's modifiers.` } }
@@ -74,9 +75,9 @@ const EditModifiers: React.VFC<EditModifiersProps> = ({ data }) => {
       case 'creature':
         dispatch(
           updateSheetResourceStart(
-            'campaigns',
+            SheetType.campaigns,
             campSheet._id,
-            'creatures',
+            SheetResourceType.creatures,
             data.resource._id,
             { modifiers },
             { modal: true, notification: { status: 'success', heading: 'Modifiers Updated', message: `You have successfully updated your creature's modifiers.` } }

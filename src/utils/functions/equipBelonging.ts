@@ -6,6 +6,7 @@ import { setModal, setNestedModal } from '../../redux/app/app.actions';
 import ModalTypes from '../ModalTypes';
 import { getBelongingTypeCapitalized } from '../helpers/belongings';
 import { BelongingType, SheetType } from '../../models/enums';
+import { SheetResourceType } from '../../models/sheet-actions';
 
 interface Data {
   sheetType: SheetType;
@@ -38,7 +39,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
       updateSheetResourceStart(
         sheetType,
         sheet._id,
-        belongingType,
+        belongingType as unknown as SheetResourceType,
         belonging._id,
         { equipped: false },
         {
@@ -103,7 +104,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
     updateSheetResourceStart(
       sheetType,
       sheet._id,
-      belongingType,
+      belongingType as unknown as SheetResourceType,
       belonging._id,
       { equipped: true },
       {
