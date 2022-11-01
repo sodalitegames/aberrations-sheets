@@ -1,7 +1,18 @@
-import SheetActionTypes from '../sheet/sheet.types';
-import { AppActionTypes } from '../app/app.types';
+import { SheetActionTypes, SheetAction } from '../sheet/sheet.types';
 
 import { replaceItemById, removeItemById } from '../../utils/helpers/arrays';
+
+import { SheetPermissions } from '../../models/sheet-actions';
+import { AppError } from '../../models/interfaces/app';
+// import { CampaignSheet } from '../../models/interfaces/sheet/CampaignSheet';
+
+export interface CampaignState {
+  current: any | null;
+  loading: boolean;
+  error: AppError | null;
+  permissions: SheetPermissions | undefined;
+  reload: string | undefined;
+}
 
 const INITIAL_STATE = {
   current: null,
@@ -11,9 +22,9 @@ const INITIAL_STATE = {
   reload: undefined,
 };
 
-const characterReducer = (state = INITIAL_STATE, action) => {
-  // Make sure the action is from the character sheet
-  if (action.payload && action.payload.sheetType !== 'characters') {
+const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetAction): CampaignState => {
+  // Make sure the action is from the campaign sheet
+  if (action.payload && action.payload.sheetType !== 'campaigns') {
     return state;
   }
 
@@ -31,7 +42,6 @@ const characterReducer = (state = INITIAL_STATE, action) => {
         current: action.payload.currentSheet,
         loading: false,
         error: null,
-        permissions: action.payload.permissions,
         reload: undefined,
       };
     case SheetActionTypes.UPDATE_SHEET_SUCCESS:
@@ -45,13 +55,25 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       };
     case SheetActionTypes.DELETE_SHEET_SUCCESS:
       return {
+        ...state,
         current: null,
         error: null,
         permissions: undefined,
       };
     case SheetActionTypes.CREATE_SHEET_RESOURCE_SUCCESS:
       let { resourceType: createdResourceType, newResource } = action.payload;
-      if (createdResourceType === 'logs') createdResourceType = 'characterLogs';
+
+      // If resource type is transaction, update the state accordingly
+      if (createdResourceType === 'logs') {
+        return {
+          ...state,
+          error: null,
+          current: {
+            ...state.current,
+            captainsLogs: [newResource, ...state.current.captainsLogs],
+          },
+        };
+      }
 
       // If resource type is transaction, update the state accordingly
       if (createdResourceType === 'transactions') {
@@ -81,7 +103,18 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       };
     case SheetActionTypes.UPDATE_SHEET_RESOURCE_SUCCESS:
       let { resourceType: updatedResourceType, updatedResource } = action.payload;
-      if (updatedResourceType === 'logs') updatedResourceType = 'characterLogs';
+
+      // If resource type is transaction, update the state accordingly
+      if (updatedResourceType === 'logs') {
+        return {
+          ...state,
+          error: null,
+          current: {
+            ...state.current,
+            captainsLogs: replaceItemById(state.current.captainsLogs, updatedResource._id, updatedResource),
+          },
+        };
+      }
 
       // If resource type is transaction, update the state accordingly
       if (updatedResourceType === 'transactions') {
@@ -111,13 +144,24 @@ const characterReducer = (state = INITIAL_STATE, action) => {
       };
     case SheetActionTypes.DELETE_SHEET_RESOURCE_SUCCESS:
       let { resourceType: deletedResourceType, resourceId } = action.payload;
-      if (deletedResourceType === 'logs') deletedResourceType = 'characterLogs';
+
+      // If resource type is transaction, update the state accordingly
+      if (deletedResourceType === 'logs') {
+        return {
+          ...state,
+          error: null,
+          current: {
+            ...state.current,
+            captainsLogs: removeItemById(state.current.captainsLogs, resourceId),
+          },
+        };
+      }
 
       // If resource type is transaction, update the state accordingly
       if (deletedResourceType === 'transactions') {
         // Set transaction type
         let transactionType = 'received';
-        if (state.current.transactions.sent.find(transac => transac._id === resourceId)) transactionType = 'sent';
+        if (state.current.transactions.sent.find((transac: any) => transac._id === resourceId)) transactionType = 'sent';
 
         return {
           ...state,
@@ -144,11 +188,7 @@ const characterReducer = (state = INITIAL_STATE, action) => {
     case SheetActionTypes.ADD_CAMPAIGN_TO_CHARACTER_SUCCESS:
       return {
         ...state,
-        error: null,
-        current: {
-          ...state.current,
-          campaign: action.payload.campaign,
-        },
+        reload: 'A new player has joined your campaign. Please refresh to get the latest data.',
       };
     case SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS:
       return {
@@ -156,7 +196,63 @@ const characterReducer = (state = INITIAL_STATE, action) => {
         error: null,
         current: {
           ...state.current,
-          campaign: undefined,
+          players: removeItemById(state.current.players, action.payload.data.metadata.charId),
+        },
+      };
+    case SheetActionTypes.UPDATE_PLAYER_SUCCESS:
+      const { updatedPlayer } = action.payload;
+
+      const oldPlayer = state.current.players.find((player: any) => player._id === action.payload.updatedPlayer._id);
+
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: replaceItemById(state.current.players, updatedPlayer._id, { ...oldPlayer, ...updatedPlayer }),
+        },
+      };
+    case SheetActionTypes.CREATE_PLAYER_RESOURCE_SUCCESS:
+      const oldPlayerCreate = state.current.players.find((player: any) => player._id === action.payload.playerId);
+
+      // Transactions are not kept track of in players array
+      if (action.payload.resourceType === 'transactions') {
+        return state;
+      }
+
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: replaceItemById(state.current.players, action.payload.playerId, {
+            ...oldPlayerCreate,
+            [action.payload.resourceType]: [action.payload.newResource, ...oldPlayerCreate[action.payload.resourceType]],
+          }),
+        },
+      };
+    case SheetActionTypes.UPDATE_PLAYER_RESOURCE_SUCCESS:
+      const oldPlayerUpdate = state.current.players.find((player: any) => player._id === action.payload.playerId);
+
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: replaceItemById(state.current.players, action.payload.playerId, {
+            ...oldPlayerUpdate,
+            [action.payload.resourceType]: replaceItemById(oldPlayerUpdate[action.payload.resourceType], action.payload.updatedResource._id, action.payload.updatedResource),
+          }),
+        },
+      };
+    case SheetActionTypes.DELETE_PLAYER_RESOURCE_SUCCESS:
+      const oldPlayerDelete = state.current.players.find((player: any) => player._id === action.payload.playerId);
+
+      return {
+        ...state,
+        current: {
+          ...state.current,
+          players: replaceItemById(state.current.players, action.payload.playerId, {
+            ...oldPlayerDelete,
+            [action.payload.resourceType]: removeItemById(oldPlayerDelete[action.payload.resourceType], action.payload.resourceId),
+          }),
         },
       };
     case SheetActionTypes.FETCH_CURRENT_SHEET_FAILURE:
@@ -176,16 +272,9 @@ const characterReducer = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.payload.error,
       };
-    case AppActionTypes.SET_MODAL:
-    case AppActionTypes.SET_NESTED_MODAL:
-    case AppActionTypes.SET_SLIDE_OVER:
-      return {
-        ...state,
-        error: null,
-      };
     default:
       return state;
   }
 };
 
-export default characterReducer;
+export default campaignReducer;
