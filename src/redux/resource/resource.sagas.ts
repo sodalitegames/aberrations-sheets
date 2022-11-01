@@ -7,7 +7,7 @@ import { ResourceType } from '../../models/enums';
 import { AppError } from '../../models/interfaces/app';
 import { Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/interfaces/data';
 
-import { ResourceActionTypes } from './resource.types';
+import { FetchResourceStartAction, ResourceActionTypes } from './resource.types';
 
 import { fetchSpecies, fetchWeapons, fetchAugmentationGroups, fetchConsumableCategories, fetchCreatureTypes, fetchNpcTypes } from '../../apis/aberrations.api';
 
@@ -15,7 +15,7 @@ export function* onFetchResourceStart() {
   yield takeLatest(ResourceActionTypes.FETCH_RESOURCE_START, fetchResource);
 }
 
-export function* fetchResource({ payload: { resourceType } }: { type: ResourceActionTypes.FETCH_RESOURCE_START; payload: { resourceType: ResourceType } }) {
+export function* fetchResource({ payload: { resourceType } }: FetchResourceStartAction) {
   try {
     switch (resourceType) {
       case ResourceType.Species:

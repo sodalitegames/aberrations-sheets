@@ -13,7 +13,7 @@ export enum ResourceActionTypes {
 export type FetchResourceSuccessData = Species[] | Weapon[] | AugmentationGroup[] | ConsumableCategory[] | CreatureType[] | NpcType[];
 
 // Interfaces
-interface FetchResourceStartAction {
+export interface FetchResourceStartAction {
   type: ResourceActionTypes.FETCH_RESOURCE_START;
   payload: { resourceType: ResourceType };
 }
