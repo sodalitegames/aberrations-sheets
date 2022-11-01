@@ -7,14 +7,14 @@ import { XIcon } from '@heroicons/react/outline';
 
 import { selectSlideOver } from '../../redux/app/app.selectors';
 import { selectResourceError } from '../../redux/resource/resource.selectors';
-import { selectCharacterError } from '../../redux/character/character.selectors';
-import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
+// import { selectCharacterError } from '../../redux/character/character.selectors';
+// import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
 
 import { useActions } from '../../hooks/useActions';
 
 import classNames from '../../utils/classNames';
 import SlideOverTypes from '../../utils/SlideOverTypes';
-import { formatValidationErrors } from '../../utils/helpers/errors';
+// import { formatValidationErrors } from '../../utils/helpers/errors';
 
 import { NestedModal } from './Modal';
 
@@ -73,8 +73,8 @@ interface SlideOverContainerProps {
 export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description, submitText, cancelText, submitDisabled, initialValues, validationSchema, submitHandler, formik, children }) => {
   const { closeSlideOver } = useActions();
 
-  const characterError = useSelector(selectCharacterError);
-  const campaignError = useSelector(selectCampaignError);
+  // const characterError = useSelector(selectCharacterError);
+  // const campaignError = useSelector(selectCampaignError);
   const resourceError = useSelector(selectResourceError);
 
   if (formik) {
@@ -108,8 +108,8 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
               </div>
             </div>
 
-            {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
-            {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+            {/* {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+            {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null} */}
             {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
             {/* Action buttons */}
@@ -169,8 +169,8 @@ export const SlideOverForm: React.FC<SlideOverFormProps> = ({ title, description
         </div>
       </div>
 
-      {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
-      {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+      {/* {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+      {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null} */}
       {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
       {/* Action buttons */}
