@@ -1,5 +1,5 @@
-import { AppError } from '../../models/interfaces/app';
-import { Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/interfaces/data';
+import { AppError } from '../../models/app';
+import { Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/resource';
 
 import { ResourceActionTypes, ResourceAction } from './resource.types';
 

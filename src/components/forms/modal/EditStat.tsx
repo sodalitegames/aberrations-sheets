@@ -13,7 +13,7 @@ import { ModalForm } from '../Modal';
 import Select from '../elements/Select';
 
 import { Stat } from '../../../models/enums';
-import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 interface EditStatProps {
   id: Stat;

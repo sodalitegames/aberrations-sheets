@@ -5,8 +5,8 @@ import { updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
 
 import { useActions } from '../../hooks/useActions';
 
-import { Belonging, Sheet, SheetType, SheetResourceType, BelongingType } from '../../models/interfaces/sheet';
-import { Weapon } from '../../models/interfaces/sheet/resources';
+import { Belonging, Sheet, SheetType, SheetResourceType, BelongingType } from '../../models/sheet';
+import { Weapon } from '../../models/sheet/resources';
 
 import equipBelonging from '../../utils/functions/equipBelonging';
 import ModalTypes from '../../utils/ModalTypes';

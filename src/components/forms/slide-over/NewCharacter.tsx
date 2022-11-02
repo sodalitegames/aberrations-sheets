@@ -8,7 +8,7 @@ import { createSheetForUserStart } from '../../../redux/user/user.actions';
 import { useResource } from '../../../hooks/useResource';
 
 import { ResourceType } from '../../../models/enums/ResourceType';
-import { Species } from '../../../models/interfaces/data';
+import { Species } from '../../../models/resource';
 
 import { SlideOverForm } from '../SlideOver';
 

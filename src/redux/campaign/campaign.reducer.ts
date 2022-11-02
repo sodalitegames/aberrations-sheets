@@ -2,10 +2,10 @@ import { SheetActionTypes, SheetAction } from '../sheet/sheet.types';
 
 import { replaceItemById, removeItemById } from '../../utils/helpers/arrays';
 
-import { PlayerResourceType, SheetPermissions } from '../../models/interfaces/sheet';
-import { AppError } from '../../models/interfaces/app';
-import { CampaignSheet } from '../../models/interfaces/sheet/CampaignSheet';
-import { Log } from '../../models/interfaces/sheet/resources';
+import { PlayerResourceType, SheetPermissions } from '../../models/sheet';
+import { AppError } from '../../models/app';
+import { CampaignSheet } from '../../models/sheet/CampaignSheet';
+import { Log } from '../../models/sheet/resources';
 
 export interface CampaignState {
   current: CampaignSheet | null;

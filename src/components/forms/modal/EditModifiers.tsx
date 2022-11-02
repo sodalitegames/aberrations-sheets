@@ -10,7 +10,7 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 import { ModalForm } from '../Modal';
 
 import List from '../elements/List';
-import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 interface EditModifiersProps {
   data: {

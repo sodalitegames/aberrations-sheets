@@ -4,8 +4,8 @@ import { AxiosResponse } from 'axios';
 import { fetchResourceSuccess, fetchResourceFailure } from './resource.actions';
 
 import { ResourceType } from '../../models/enums';
-import { AppError } from '../../models/interfaces/app';
-import { Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/interfaces/data';
+import { AppError } from '../../models/app';
+import { Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/resource';
 
 import { FetchResourceStartAction, ResourceActionTypes } from './resource.types';
 

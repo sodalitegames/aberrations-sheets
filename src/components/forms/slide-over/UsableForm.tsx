@@ -15,7 +15,7 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import Toggle from '../elements/Toggle';
-import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 interface UsableFormProps {
   id: string;

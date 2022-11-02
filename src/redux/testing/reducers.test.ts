@@ -6,7 +6,7 @@ import resourceReducer from '../resource/resource.reducer';
 
 import { ResourceActionTypes } from '../resource/resource.types';
 import { ResourceType } from '../../models/enums';
-import { ConsumableCategory } from '../../models/interfaces/data';
+import { ConsumableCategory } from '../../models/resource';
 
 describe('resource reducer', () => {
   const initialStateMock = {

@@ -5,9 +5,9 @@ import { setModal, setNestedModal } from '../../redux/app/app.actions';
 
 import ModalTypes from '../ModalTypes';
 import { getBelongingTypeCapitalized } from '../helpers/belongings';
-import { SheetResourceType } from '../../models/interfaces/sheet';
-import { Belonging, Sheet, BelongingType, SheetType } from '../../models/interfaces/sheet';
-import { Usable, Weapon, Wearable } from '../../models/interfaces/sheet/resources';
+import { SheetResourceType } from '../../models/sheet';
+import { Belonging, Sheet, BelongingType, SheetType } from '../../models/sheet';
+import { Usable, Weapon, Wearable } from '../../models/sheet/resources';
 
 interface Data {
   sheetType: SheetType;

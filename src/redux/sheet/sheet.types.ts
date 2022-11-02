@@ -1,7 +1,7 @@
-import { AppError } from '../../models/interfaces/app';
-import { Campaign } from '../../models/interfaces/sheet/CharacterSheet';
-import { Player } from '../../models/interfaces/sheet/resources';
-import { Sheet, SheetResource, SheetConfig, SheetPermissions, SheetResourceType, SheetType } from '../../models/interfaces/sheet';
+import { AppError } from '../../models/app';
+import { Campaign } from '../../models/sheet/CharacterSheet';
+import { Player } from '../../models/sheet/resources';
+import { Sheet, SheetResource, SheetConfig, SheetPermissions, SheetResourceType, SheetType } from '../../models/sheet';
 
 // Action Types
 export enum SheetActionTypes {

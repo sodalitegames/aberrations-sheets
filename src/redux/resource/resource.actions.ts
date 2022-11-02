@@ -1,5 +1,5 @@
 import { ResourceType } from '../../models/enums';
-import { AppError } from '../../models/interfaces/app';
+import { AppError } from '../../models/app';
 
 import { ResourceActionTypes, FetchResourceSuccessData } from './resource.types';
 

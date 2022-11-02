@@ -1,4 +1,4 @@
-import { SheetType } from '../../../interfaces/sheet';
+import { SheetType } from '../index';
 
 export interface Transaction {
   _id: string;

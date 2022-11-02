@@ -21,8 +21,8 @@ import Select from '../elements/Select';
 import CheckboxGroup, { FormikCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
-import { ConsumableCategory } from '../../../models/interfaces/data';
-import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
+import { ConsumableCategory } from '../../../models/resource';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 type SheetConsumableCategory = {
   universalId: string;

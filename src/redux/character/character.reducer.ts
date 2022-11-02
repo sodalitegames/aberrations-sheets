@@ -2,10 +2,10 @@ import { SheetActionTypes, SheetAction } from '../sheet/sheet.types';
 
 import { replaceItemById, removeItemById } from '../../utils/helpers/arrays';
 
-import { CharacterResourceType, SheetPermissions } from '../../models/interfaces/sheet';
-import { AppError } from '../../models/interfaces/app';
-import { CharacterSheet } from '../../models/interfaces/sheet/CharacterSheet';
-import { Log } from '../../models/interfaces/sheet/resources';
+import { CharacterResourceType, SheetPermissions } from '../../models/sheet';
+import { AppError } from '../../models/app';
+import { CharacterSheet } from '../../models/sheet/CharacterSheet';
+import { Log } from '../../models/sheet/resources';
 
 export interface CharacterState {
   current: CharacterSheet | null;

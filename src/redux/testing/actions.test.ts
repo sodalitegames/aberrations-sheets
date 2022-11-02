@@ -6,7 +6,7 @@ import * as resourceActions from '../resource/resource.actions';
 import { ResourceAction, ResourceActionTypes } from '../resource/resource.types';
 
 import { ResourceType } from '../../models/enums';
-import { CreatureType } from '../../models/interfaces/data';
+import { CreatureType } from '../../models/resource';
 
 describe('resource actions', () => {
   // USE A MOCK REDUX STORE FOR THIS

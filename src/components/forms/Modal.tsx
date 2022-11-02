@@ -16,7 +16,7 @@ import classNames from '../../utils/classNames';
 import ModalTypes from '../../utils/ModalTypes';
 // import { formatValidationErrors } from '../../utils/helpers/errors';
 
-import { Modal as IModal } from '../../models/interfaces/app';
+import { Modal as IModal } from '../../models/app';
 import { Stat, Condition } from '../../models/enums';
 
 import Notice, { NoticeStatus } from '../Notice';

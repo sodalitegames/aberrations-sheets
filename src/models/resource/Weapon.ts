@@ -1,4 +1,4 @@
-import { WeaponType, WeaponRange, AssociatedStat } from '../../enums/Weapon';
+import { WeaponType, WeaponRange, AssociatedStat } from '../enums/Weapon';
 
 export interface Weapon {
   id: string;

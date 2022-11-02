@@ -15,7 +15,7 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import List from '../elements/List';
-import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 interface WearableFormProps {
   id: string;

@@ -12,7 +12,7 @@ import { ModalForm } from '../Modal';
 
 import Input from '../elements/Input';
 import { Condition } from '../../../models/enums';
-import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 interface EditConditionProps {
   id: Condition;
