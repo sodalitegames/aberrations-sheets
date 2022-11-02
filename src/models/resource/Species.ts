@@ -1,23 +1,30 @@
-import { StatsObject } from './Stats';
-
-interface SpeciesLore {
+type Lore = {
   worldTitle: string;
   history: string;
   current: string;
-}
+};
+
+type Abilities = {
+  activated: string;
+  passive: string;
+  detraction: string;
+};
+
+type Stats = {
+  strength: number;
+  agility: number;
+  persona: number;
+  aptitude: number;
+};
 
 export interface Species {
   id: string;
   name: string;
   ability: string;
-  abilities: {
-    activated: string;
-    passive: string;
-    detraction: string;
-  };
+  abilities: Abilities;
   basicInfo: string;
   appearance: string;
-  stats: StatsObject;
+  stats: Stats;
   health: number;
-  lore: SpeciesLore;
+  lore: Lore;
 }

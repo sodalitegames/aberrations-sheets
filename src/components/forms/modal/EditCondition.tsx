@@ -8,14 +8,14 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 
 import { capitalize } from '../../../utils/helpers/strings';
 
+import { SheetResourceType, SheetType, ConditionType } from '../../../models/sheet';
+
 import { ModalForm } from '../Modal';
 
 import Input from '../elements/Input';
-import { Condition } from '../../../models/enums';
-import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 interface EditConditionProps {
-  id: Condition;
+  id: ConditionType;
   data: {
     type: 'character' | 'player' | 'npc' | 'creature';
     resource: {

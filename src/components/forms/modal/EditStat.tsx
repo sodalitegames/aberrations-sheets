@@ -8,15 +8,14 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 
 import { capitalize } from '../../../utils/helpers/strings';
 
+import { SheetResourceType, SheetType, StatType } from '../../../models/sheet';
+
 import { ModalForm } from '../Modal';
 
 import Select from '../elements/Select';
 
-import { Stat } from '../../../models/enums';
-import { SheetResourceType, SheetType } from '../../../models/sheet';
-
 interface EditStatProps {
-  id: Stat;
+  id: StatType;
   data: {
     type: 'character' | 'player' | 'npc' | 'creature';
     resource: {

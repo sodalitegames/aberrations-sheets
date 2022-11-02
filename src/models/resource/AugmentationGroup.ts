@@ -1,5 +1,9 @@
-import { Augmentation } from './Augmentation';
-
+type Augmentation = {
+  id: string;
+  name: string;
+  description: string;
+  pointCost: number;
+};
 export interface AugmentationGroup {
   id: string;
   groupName: string;

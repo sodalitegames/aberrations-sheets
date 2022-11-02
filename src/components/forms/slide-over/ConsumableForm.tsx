@@ -9,7 +9,8 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../red
 
 import { useResource } from '../../../hooks/useResource';
 
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType, ConsumableCategory } from '../../../models/resource';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -21,8 +22,6 @@ import Select from '../elements/Select';
 import CheckboxGroup, { FormikCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
-import { ConsumableCategory } from '../../../models/resource';
-import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 type SheetConsumableCategory = {
   universalId: string;
@@ -53,7 +52,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
   const charSheet = useSelector(selectCurrentCharacter)!;
   const campSheet = useSelector(selectCurrentCampaign)!;
 
-  const fetchedCategories = useResource(ResourceType.ConsumableCategories);
+  const fetchedCategories = useResource(FetchedResourceType.ConsumableCategories);
 
   const [categoriesList, setCategoriesList] = useState<SheetConsumableCategory[]>([]);
 

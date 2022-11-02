@@ -2,9 +2,8 @@ import { SheetActionTypes, SheetAction } from '../sheet/sheet.types';
 
 import { replaceItemById, removeItemById } from '../../utils/helpers/arrays';
 
-import { PlayerResourceType, SheetPermissions } from '../../models/sheet';
+import { PlayerResourceType, SheetPermissions, CampaignSheet } from '../../models/sheet';
 import { AppError } from '../../models/app';
-import { CampaignSheet } from '../../models/sheet/CampaignSheet';
 import { Log } from '../../models/sheet/resources';
 
 export interface CampaignState {

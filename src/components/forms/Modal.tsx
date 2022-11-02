@@ -17,7 +17,7 @@ import ModalTypes from '../../utils/ModalTypes';
 // import { formatValidationErrors } from '../../utils/helpers/errors';
 
 import { Modal as IModal } from '../../models/app';
-import { Stat, Condition } from '../../models/enums';
+import { StatType, ConditionType } from '../../models/sheet';
 
 import Notice, { NoticeStatus } from '../Notice';
 
@@ -92,9 +92,9 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editExperience ? <EditExperience data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editMortality ? <EditMortality data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id as Stat} data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.upgradeStat ? <UpgradeStat id={modal.id as Stat} data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as Condition} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id as StatType} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.upgradeStat ? <UpgradeStat id={modal.id as StatType} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as ConditionType} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editHealth ? <EditHealth data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.upgradeHealth ? <UpgradeHealth data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editWallet ? <EditWallet data={modal.data} /> : null}

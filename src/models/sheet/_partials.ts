@@ -10,6 +10,13 @@ export type Conditions = {
   disturbed: number;
 };
 
+export enum ConditionType {
+  slowed = 'slowed',
+  agony = 'agony',
+  injured = 'injured',
+  disturbed = 'disturbed',
+}
+
 export type Stat = {
   die: number;
 };

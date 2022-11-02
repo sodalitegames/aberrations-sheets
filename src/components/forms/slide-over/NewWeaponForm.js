@@ -9,7 +9,7 @@ import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 import { useResource } from '../../../hooks/useResource';
 
 import { capitalize } from '../../../utils/helpers/strings';
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType } from '../../../models/resource';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -27,7 +27,7 @@ const NewWeaponForm = ({ data }) => {
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const fetchedWeapons = useResource(ResourceType.Weapons);
+  const fetchedWeapons = useResource(FetchedResourceType.Weapons);
 
   const [weapon, setWeapon] = useState(null);
   const [weaponsList, setWeaponsList] = useState([]);

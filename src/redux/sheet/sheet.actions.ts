@@ -2,9 +2,8 @@ import { SheetActionTypes } from './sheet.types';
 
 import { AppError } from '../../models/app';
 
-import { Sheet, SheetResource, SheetType, SheetPermissions, SheetConfig, SheetResourceType } from '../../models/sheet';
+import { Sheet, SheetResource, SheetType, SheetPermissions, SheetConfig, SheetResourceType, Campaign } from '../../models/sheet';
 import { Player } from '../../models/sheet/resources';
-import { Campaign } from '../../models/sheet/CharacterSheet';
 
 // Fetch Sheet
 export const fetchCurrentSheetStart = (sheetType: SheetType, sheetId: string) => ({

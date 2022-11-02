@@ -1,6 +1,5 @@
-import { ResourceType } from '../../models/enums';
 import { AppError } from '../../models/app';
-import { Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/resource';
+import { FetchedResourceType, Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/resource';
 
 // Action Types
 export enum ResourceActionTypes {
@@ -15,17 +14,17 @@ export type FetchResourceSuccessData = Species[] | Weapon[] | AugmentationGroup[
 // Interfaces
 export interface FetchResourceStartAction {
   type: ResourceActionTypes.FETCH_RESOURCE_START;
-  payload: { resourceType: ResourceType };
+  payload: { resourceType: FetchedResourceType };
 }
 
 interface FetchResourceSuccessAction {
   type: ResourceActionTypes.FETCH_RESOURCE_SUCCESS;
-  payload: { resourceType: ResourceType; data: FetchResourceSuccessData };
+  payload: { resourceType: FetchedResourceType; data: FetchResourceSuccessData };
 }
 
 interface FetchResourceFailureAction {
   type: ResourceActionTypes.FETCH_RESOURCE_FAILURE;
-  payload: { resourceType: ResourceType; error: AppError };
+  payload: { resourceType: FetchedResourceType; error: AppError };
 }
 
 // Export Interface Types

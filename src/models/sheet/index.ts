@@ -16,6 +16,10 @@ import { Usable } from './resources/Usable';
 import { Weapon } from './resources/Weapon';
 import { Wearable } from './resources/Wearable';
 
+export * from './CharacterSheet';
+export * from './CampaignSheet';
+export * from './_partials';
+
 export type Sheet = CharacterSheet | CampaignSheet;
 
 export enum SheetType {

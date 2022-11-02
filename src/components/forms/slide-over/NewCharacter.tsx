@@ -7,8 +7,7 @@ import { createSheetForUserStart } from '../../../redux/user/user.actions';
 
 import { useResource } from '../../../hooks/useResource';
 
-import { ResourceType } from '../../../models/enums/ResourceType';
-import { Species } from '../../../models/resource';
+import { FetchedResourceType, Species } from '../../../models/resource';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -26,7 +25,7 @@ const NewCharacter: React.FC = () => {
 
   const currentUser = useSelector(selectCurrentUser);
 
-  const fetchedSpecies = useResource(ResourceType.Species) as Species[];
+  const fetchedSpecies = useResource(FetchedResourceType.Species) as Species[];
 
   const [speciesList, setSpeciesList] = useState<SelectOption[]>([]);
 

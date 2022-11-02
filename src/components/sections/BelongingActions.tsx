@@ -11,9 +11,9 @@ import { Weapon } from '../../models/sheet/resources';
 import equipBelonging from '../../utils/functions/equipBelonging';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
+import { getBelongingTypeCapitalized } from '../../utils/helpers/belongings';
 
 import Button from '../Button';
-import { getBelongingTypeCapitalized } from '../../utils/helpers/belongings';
 
 interface BelongingActionsProps {
   sheetType: SheetType;

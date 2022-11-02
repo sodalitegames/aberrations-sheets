@@ -3,9 +3,8 @@ import { AxiosResponse } from 'axios';
 
 import { fetchResourceSuccess, fetchResourceFailure } from './resource.actions';
 
-import { ResourceType } from '../../models/enums';
 import { AppError } from '../../models/app';
-import { Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/resource';
+import { FetchedResourceType, Species, Weapon, AugmentationGroup, ConsumableCategory, CreatureType, NpcType } from '../../models/resource';
 
 import { FetchResourceStartAction, ResourceActionTypes } from './resource.types';
 
@@ -18,27 +17,27 @@ export function* onFetchResourceStart() {
 export function* fetchResource({ payload: { resourceType } }: FetchResourceStartAction) {
   try {
     switch (resourceType) {
-      case ResourceType.Species:
+      case FetchedResourceType.Species:
         const { data: species }: AxiosResponse<Species[]> = yield fetchSpecies();
         yield put(fetchResourceSuccess(resourceType, species));
         break;
-      case ResourceType.Weapons:
+      case FetchedResourceType.Weapons:
         const { data: weapons }: AxiosResponse<Weapon[]> = yield fetchWeapons();
         yield put(fetchResourceSuccess(resourceType, weapons));
         break;
-      case ResourceType.AugmentationGroups:
+      case FetchedResourceType.AugmentationGroups:
         const { data: augmentationGroups }: AxiosResponse<AugmentationGroup[]> = yield fetchAugmentationGroups();
         yield put(fetchResourceSuccess(resourceType, augmentationGroups));
         break;
-      case ResourceType.ConsumableCategories:
+      case FetchedResourceType.ConsumableCategories:
         const { data: consumableCategories }: AxiosResponse<ConsumableCategory[]> = yield fetchConsumableCategories();
         yield put(fetchResourceSuccess(resourceType, consumableCategories));
         break;
-      case ResourceType.CreatureTypes:
+      case FetchedResourceType.CreatureTypes:
         const { data: creatureTypes }: AxiosResponse<CreatureType[]> = yield fetchCreatureTypes();
         yield put(fetchResourceSuccess(resourceType, creatureTypes));
         break;
-      case ResourceType.NpcTypes:
+      case FetchedResourceType.NpcTypes:
         const { data: npcTypes }: AxiosResponse<NpcType[]> = yield fetchNpcTypes();
         yield put(fetchResourceSuccess(resourceType, npcTypes));
         break;

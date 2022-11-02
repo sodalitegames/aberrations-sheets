@@ -7,6 +7,8 @@ import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selector
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+
 import { SlideOverForm } from '../SlideOver';
 
 import { UsableFormSchema } from '../../../utils/schemas/UsableFormSchema';
@@ -15,7 +17,6 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import Toggle from '../elements/Toggle';
-import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 interface UsableFormProps {
   id: string;

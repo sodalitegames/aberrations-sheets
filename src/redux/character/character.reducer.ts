@@ -2,9 +2,8 @@ import { SheetActionTypes, SheetAction } from '../sheet/sheet.types';
 
 import { replaceItemById, removeItemById } from '../../utils/helpers/arrays';
 
-import { CharacterResourceType, SheetPermissions } from '../../models/sheet';
+import { CharacterResourceType, SheetPermissions, CharacterSheet } from '../../models/sheet';
 import { AppError } from '../../models/app';
-import { CharacterSheet } from '../../models/sheet/CharacterSheet';
 import { Log } from '../../models/sheet/resources';
 
 export interface CharacterState {
