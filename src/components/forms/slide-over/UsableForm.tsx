@@ -15,7 +15,7 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import Toggle from '../elements/Toggle';
-import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
+import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
 
 interface UsableFormProps {
   id: string;
@@ -36,8 +36,8 @@ type FormValues = {
 const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [initialValues, setInitialValues] = useState<FormValues>({
     name: '',
@@ -51,31 +51,37 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
   useEffect(() => {
     if (data.sheetType === 'characters') {
       if (id && charSheet) {
-        const { name, type, description, equippable, quantity, units = 'units' } = charSheet.usables.find((usable: any) => usable._id === id);
+        const usable = charSheet.usables.find(usable => usable._id === id);
 
-        setInitialValues({
-          name,
-          type,
-          description,
-          equippable,
-          quantity,
-          units,
-        });
+        if (usable) {
+          const { name, type, description, equippable, quantity, units = 'units' } = usable;
+          setInitialValues({
+            name,
+            type,
+            description,
+            equippable,
+            quantity,
+            units,
+          });
+        }
       }
     }
 
     if (data.sheetType === 'campaigns') {
       if (id && campSheet) {
-        const { name, type, description, equippable, quantity, units = 'units' } = campSheet.usables.find((usable: any) => usable._id === id);
+        const usable = campSheet.usables.find(usable => usable._id === id);
 
-        setInitialValues({
-          name,
-          type,
-          description,
-          equippable,
-          quantity,
-          units,
-        });
+        if (usable) {
+          const { name, type, description, equippable, quantity, units = 'units' } = usable;
+          setInitialValues({
+            name,
+            type,
+            description,
+            equippable,
+            quantity,
+            units,
+          });
+        }
       }
     }
   }, [id, data.sheetType, charSheet, campSheet]);

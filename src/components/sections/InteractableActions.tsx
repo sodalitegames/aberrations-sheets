@@ -7,7 +7,7 @@ import SlideOverTypes from '../../utils/SlideOverTypes';
 
 import Button from '../Button';
 
-interface BelongingActionsProps {
+interface InteractableActionsProps {
   type: 'npc' | 'player' | 'creature';
   id: {
     prop: 'npcId' | 'playerId' | 'creatureId';
@@ -15,7 +15,7 @@ interface BelongingActionsProps {
   };
 }
 
-const InteractableActions: React.VFC<BelongingActionsProps> = ({ type, id }) => {
+const InteractableActions: React.VFC<InteractableActionsProps> = ({ type, id }) => {
   const { setModal, setSlideOver } = useActions();
 
   return (

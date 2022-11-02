@@ -57,7 +57,7 @@ import charSocket from '../../sockets/character';
 import campSocket from '../../sockets/campaign';
 
 import { Species } from '../../models/interfaces/data';
-import { SheetType } from '../../models/sheet-actions';
+import { SheetType } from '../../models/interfaces/sheet';
 
 const socket = {
   characters: charSocket,

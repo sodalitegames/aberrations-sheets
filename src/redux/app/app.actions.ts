@@ -2,7 +2,7 @@ import { AppActionTypes } from './app.types';
 
 import { Alert, Modal, SlideOver, Notification } from '../../models/interfaces/app';
 
-import { SheetNotification } from '../../models/sheet-actions';
+import { SheetNotification } from '../../models/interfaces/sheet';
 
 export const setModal = (modal: Modal) => ({
   type: AppActionTypes.SET_MODAL,

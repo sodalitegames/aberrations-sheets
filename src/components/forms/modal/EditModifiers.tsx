@@ -10,7 +10,7 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 import { ModalForm } from '../Modal';
 
 import List from '../elements/List';
-import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
+import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
 
 interface EditModifiersProps {
   data: {
@@ -29,8 +29,8 @@ type FormValues = {
 const EditModifiers: React.VFC<EditModifiersProps> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [initialValues] = useState<FormValues>({
     modifiers: data.resource.modifiers,

@@ -104,14 +104,7 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 pl-8 space-y-4">
-              <BelongingActions
-                sheetType={sheetType}
-                sheet={sheetType === 'characters' ? charSheet : campSheet}
-                belongingType="weapons"
-                belonging={weapon}
-                belongingKind="Weapon"
-                equippedBelongings={equippedWeapons}
-              />
+              <BelongingActions sheetType={sheetType} sheet={sheetType === 'characters' ? charSheet : campSheet} belongingType="weapons" belonging={weapon} equippedBelongings={equippedWeapons} />
             </div>
           </div>
         ) : (

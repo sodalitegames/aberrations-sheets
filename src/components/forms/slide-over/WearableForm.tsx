@@ -15,7 +15,7 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import List from '../elements/List';
-import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
+import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
 
 interface WearableFormProps {
   id: string;
@@ -37,8 +37,8 @@ type FormValues = {
 const WearableForm: React.FC<WearableFormProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [initialValues, setInitialValues] = useState<FormValues>({
     name: '',
@@ -53,33 +53,39 @@ const WearableForm: React.FC<WearableFormProps> = ({ id, data }) => {
   useEffect(() => {
     if (data.sheetType === 'characters') {
       if (id && charSheet) {
-        const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = charSheet.wearables.find((wearable: any) => wearable._id === id);
+        const wearable = charSheet.wearables.find(wearable => wearable._id === id);
 
-        setInitialValues({
-          name,
-          description,
-          bodyArea,
-          shieldValue,
-          speedAdjustment,
-          quantity,
-          modifiers: modifiers || [],
-        });
+        if (wearable) {
+          const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = wearable;
+          setInitialValues({
+            name,
+            description,
+            bodyArea,
+            shieldValue,
+            speedAdjustment,
+            quantity,
+            modifiers: modifiers || [],
+          });
+        }
       }
     }
 
     if (data.sheetType === 'campaigns') {
       if (id && campSheet) {
-        const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = campSheet.wearables.find((wearable: any) => wearable._id === id);
+        const wearable = campSheet.wearables.find(wearable => wearable._id === id);
 
-        setInitialValues({
-          name,
-          description,
-          bodyArea,
-          shieldValue,
-          speedAdjustment,
-          quantity,
-          modifiers: modifiers || [],
-        });
+        if (wearable) {
+          const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = wearable;
+          setInitialValues({
+            name,
+            description,
+            bodyArea,
+            shieldValue,
+            speedAdjustment,
+            quantity,
+            modifiers: modifiers || [],
+          });
+        }
       }
     }
   }, [id, data.sheetType, charSheet, campSheet]);

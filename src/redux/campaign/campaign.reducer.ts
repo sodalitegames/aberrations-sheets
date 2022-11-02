@@ -2,12 +2,13 @@ import { SheetActionTypes, SheetAction } from '../sheet/sheet.types';
 
 import { replaceItemById, removeItemById } from '../../utils/helpers/arrays';
 
-import { SheetPermissions } from '../../models/sheet-actions';
+import { PlayerResourceType, SheetPermissions } from '../../models/interfaces/sheet';
 import { AppError } from '../../models/interfaces/app';
-// import { CampaignSheet } from '../../models/interfaces/sheet/CampaignSheet';
+import { CampaignSheet } from '../../models/interfaces/sheet/CampaignSheet';
+import { Log } from '../../models/interfaces/sheet/resources';
 
 export interface CampaignState {
-  current: any | null;
+  current: CampaignSheet | null;
   loading: boolean;
   error: AppError | null;
   permissions: SheetPermissions | undefined;
@@ -39,18 +40,20 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
     case SheetActionTypes.FETCH_CURRENT_SHEET_SUCCESS:
       return {
         ...state,
-        current: action.payload.currentSheet,
+        current: action.payload.currentSheet as CampaignSheet,
         loading: false,
         error: null,
         reload: undefined,
       };
     case SheetActionTypes.UPDATE_SHEET_SUCCESS:
+      if (!state.current) return state;
+
       return {
         ...state,
         error: null,
         current: {
           ...state.current,
-          ...action.payload.updatedSheet,
+          ...(action.payload.updatedSheet as CampaignSheet),
         },
       };
     case SheetActionTypes.DELETE_SHEET_SUCCESS:
@@ -61,6 +64,8 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
         permissions: undefined,
       };
     case SheetActionTypes.CREATE_SHEET_RESOURCE_SUCCESS:
+      if (!state.current) return state;
+
       let { resourceType: createdResourceType, newResource } = action.payload;
 
       // If resource type is transaction, update the state accordingly
@@ -70,7 +75,7 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
           error: null,
           current: {
             ...state.current,
-            captainsLogs: [newResource, ...state.current.captainsLogs],
+            captainsLogs: [newResource as Log, ...state.current.captainsLogs],
           },
         };
       }
@@ -102,6 +107,8 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
         },
       };
     case SheetActionTypes.UPDATE_SHEET_RESOURCE_SUCCESS:
+      if (!state.current) return state;
+
       let { resourceType: updatedResourceType, updatedResource } = action.payload;
 
       // If resource type is transaction, update the state accordingly
@@ -143,6 +150,8 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
         },
       };
     case SheetActionTypes.DELETE_SHEET_RESOURCE_SUCCESS:
+      if (!state.current) return state;
+
       let { resourceType: deletedResourceType, resourceId } = action.payload;
 
       // If resource type is transaction, update the state accordingly
@@ -160,8 +169,7 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
       // If resource type is transaction, update the state accordingly
       if (deletedResourceType === 'transactions') {
         // Set transaction type
-        let transactionType = 'received';
-        if (state.current.transactions.sent.find((transac: any) => transac._id === resourceId)) transactionType = 'sent';
+        const transactionType = state.current.transactions.sent.find(transac => transac._id === resourceId) ? 'sent' : 'received';
 
         return {
           ...state,
@@ -191,6 +199,8 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
         reload: 'A new player has joined your campaign. Please refresh to get the latest data.',
       };
     case SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS:
+      if (!state.current) return state;
+
       return {
         ...state,
         error: null,
@@ -200,9 +210,11 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
         },
       };
     case SheetActionTypes.UPDATE_PLAYER_SUCCESS:
+      if (!state.current) return state;
+
       const { updatedPlayer } = action.payload;
 
-      const oldPlayer = state.current.players.find((player: any) => player._id === action.payload.updatedPlayer._id);
+      const oldPlayer = state.current.players.find(player => player._id === action.payload.updatedPlayer._id);
 
       return {
         ...state,
@@ -212,7 +224,13 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
         },
       };
     case SheetActionTypes.CREATE_PLAYER_RESOURCE_SUCCESS:
-      const oldPlayerCreate = state.current.players.find((player: any) => player._id === action.payload.playerId);
+      if (!state.current) return state;
+
+      const oldPlayerCreate = state.current.players.find(player => player._id === action.payload.playerId);
+
+      if (!oldPlayerCreate) {
+        return state;
+      }
 
       // Transactions are not kept track of in players array
       if (action.payload.resourceType === 'transactions') {
@@ -225,12 +243,18 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
           ...state.current,
           players: replaceItemById(state.current.players, action.payload.playerId, {
             ...oldPlayerCreate,
-            [action.payload.resourceType]: [action.payload.newResource, ...oldPlayerCreate[action.payload.resourceType]],
+            [action.payload.resourceType]: [action.payload.newResource, ...oldPlayerCreate[action.payload.resourceType as unknown as PlayerResourceType]],
           }),
         },
       };
     case SheetActionTypes.UPDATE_PLAYER_RESOURCE_SUCCESS:
-      const oldPlayerUpdate = state.current.players.find((player: any) => player._id === action.payload.playerId);
+      if (!state.current) return state;
+
+      const oldPlayerUpdate = state.current.players.find(player => player._id === action.payload.playerId);
+
+      if (!oldPlayerUpdate) {
+        return state;
+      }
 
       return {
         ...state,
@@ -238,12 +262,22 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
           ...state.current,
           players: replaceItemById(state.current.players, action.payload.playerId, {
             ...oldPlayerUpdate,
-            [action.payload.resourceType]: replaceItemById(oldPlayerUpdate[action.payload.resourceType], action.payload.updatedResource._id, action.payload.updatedResource),
+            [action.payload.resourceType]: replaceItemById(
+              oldPlayerUpdate[action.payload.resourceType as unknown as PlayerResourceType],
+              action.payload.updatedResource._id,
+              action.payload.updatedResource
+            ),
           }),
         },
       };
     case SheetActionTypes.DELETE_PLAYER_RESOURCE_SUCCESS:
-      const oldPlayerDelete = state.current.players.find((player: any) => player._id === action.payload.playerId);
+      if (!state.current) return state;
+
+      const oldPlayerDelete = state.current.players.find(player => player._id === action.payload.playerId);
+
+      if (!oldPlayerDelete) {
+        return state;
+      }
 
       return {
         ...state,
@@ -251,7 +285,7 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
           ...state.current,
           players: replaceItemById(state.current.players, action.payload.playerId, {
             ...oldPlayerDelete,
-            [action.payload.resourceType]: removeItemById(oldPlayerDelete[action.payload.resourceType], action.payload.resourceId),
+            [action.payload.resourceType]: removeItemById(oldPlayerDelete[action.payload.resourceType as unknown as PlayerResourceType], action.payload.resourceId),
           }),
         },
       };

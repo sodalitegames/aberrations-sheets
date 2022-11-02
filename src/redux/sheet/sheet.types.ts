@@ -1,6 +1,7 @@
-import { SheetType } from '../../models/enums';
 import { AppError } from '../../models/interfaces/app';
-import { SheetConfig, SheetPermissions, SheetResourceType } from '../../models/sheet-actions';
+import { Campaign } from '../../models/interfaces/sheet/CharacterSheet';
+import { Player } from '../../models/interfaces/sheet/resources';
+import { Sheet, SheetResource, SheetConfig, SheetPermissions, SheetResourceType, SheetType } from '../../models/interfaces/sheet';
 
 // Action Types
 export enum SheetActionTypes {
@@ -52,7 +53,7 @@ export interface FetchCurrentSheetStartAction {
 
 interface FetchCurrentSheetSuccessAction {
   type: SheetActionTypes.FETCH_CURRENT_SHEET_SUCCESS;
-  payload: { sheetType: SheetType; currentSheet: any; permissions: SheetPermissions };
+  payload: { sheetType: SheetType; currentSheet: Sheet; permissions: SheetPermissions };
 }
 
 interface FetchCurrentSheetFailureAction {
@@ -67,7 +68,7 @@ export interface UpdateSheetStartAction {
 
 interface UpdateSheetSuccessAction {
   type: SheetActionTypes.UPDATE_SHEET_SUCCESS;
-  payload: { sheetType: SheetType; updatedSheet: any };
+  payload: { sheetType: SheetType; updatedSheet: Sheet };
 }
 
 interface UpdateSheetFailureAction {
@@ -97,7 +98,7 @@ export interface FetchSheetResourcesStartAction {
 
 interface FetchSheetResourcesSuccessAction {
   type: SheetActionTypes.FETCH_SHEET_RESOURCES_SUCCESS;
-  payload: { sheetType: SheetType; fetchedResource: any };
+  payload: { sheetType: SheetType; fetchedResource: SheetResource };
 }
 
 interface FetchSheetResourcesFailureAction {
@@ -112,7 +113,7 @@ export interface CreateSheetResourceStartAction {
 
 interface CreateSheetResourceSuccessAction {
   type: SheetActionTypes.CREATE_SHEET_RESOURCE_SUCCESS;
-  payload: { sheetType: SheetType; resourceType: SheetResourceType; newResource: any };
+  payload: { sheetType: SheetType; resourceType: SheetResourceType; newResource: SheetResource };
 }
 
 interface CreateSheetResourceFailureAction {
@@ -127,7 +128,7 @@ export interface UpdateSheetResourceStartAction {
 
 interface UpdateSheetResourceSuccessAction {
   type: SheetActionTypes.UPDATE_SHEET_RESOURCE_SUCCESS;
-  payload: { sheetType: SheetType; resourceType: SheetResourceType; updatedResource: any };
+  payload: { sheetType: SheetType; resourceType: SheetResourceType; updatedResource: SheetResource };
 }
 
 interface UpdateSheetResourceFailureAction {
@@ -152,7 +153,7 @@ interface DeleteSheetResourceFailureAction {
 
 interface AddCampaignToCharacterSuccessAction {
   type: SheetActionTypes.ADD_CAMPAIGN_TO_CHARACTER_SUCCESS;
-  payload: { sheetType: SheetType; campaign: any };
+  payload: { sheetType: SheetType; campaign: Campaign };
 }
 
 export interface RemoveCharacterFromCampaignStartAction {
@@ -172,17 +173,17 @@ interface RemoveCharacterFromCampaignFailureAction {
 
 interface UpdatePlayerSuccessAction {
   type: SheetActionTypes.UPDATE_PLAYER_SUCCESS;
-  payload: { sheetType: SheetType; updatedPlayer: any };
+  payload: { sheetType: SheetType; updatedPlayer: Player };
 }
 
 interface CreatePlayerResourceSuccessAction {
   type: SheetActionTypes.CREATE_PLAYER_RESOURCE_SUCCESS;
-  payload: { sheetType: SheetType; playerId: string; resourceType: SheetResourceType; newResource: any };
+  payload: { sheetType: SheetType; playerId: string; resourceType: SheetResourceType; newResource: SheetResource };
 }
 
 interface UpdatePlayerResourceSuccessAction {
   type: SheetActionTypes.UPDATE_PLAYER_RESOURCE_SUCCESS;
-  payload: { sheetType: SheetType; playerId: string; resourceType: SheetResourceType; updatedResource: any };
+  payload: { sheetType: SheetType; playerId: string; resourceType: SheetResourceType; updatedResource: SheetResource };
 }
 
 interface DeletePlayerResourceSuccessAction {

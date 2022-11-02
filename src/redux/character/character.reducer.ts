@@ -2,12 +2,13 @@ import { SheetActionTypes, SheetAction } from '../sheet/sheet.types';
 
 import { replaceItemById, removeItemById } from '../../utils/helpers/arrays';
 
-import { SheetPermissions } from '../../models/sheet-actions';
+import { CharacterResourceType, SheetPermissions } from '../../models/interfaces/sheet';
 import { AppError } from '../../models/interfaces/app';
-// import { CharacterSheet } from '../../models/interfaces/sheet/CharacterSheet';
+import { CharacterSheet } from '../../models/interfaces/sheet/CharacterSheet';
+import { Log } from '../../models/interfaces/sheet/resources';
 
 export interface CharacterState {
-  current: any | null;
+  current: CharacterSheet | null;
   loading: boolean;
   error: AppError | null;
   permissions: SheetPermissions | undefined;
@@ -39,19 +40,21 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
     case SheetActionTypes.FETCH_CURRENT_SHEET_SUCCESS:
       return {
         ...state,
-        current: action.payload.currentSheet,
+        current: action.payload.currentSheet as CharacterSheet,
         loading: false,
         error: null,
         permissions: action.payload.permissions,
         reload: undefined,
       };
     case SheetActionTypes.UPDATE_SHEET_SUCCESS:
+      if (!state.current) return state;
+
       return {
         ...state,
         error: null,
         current: {
           ...state.current,
-          ...action.payload.updatedSheet,
+          ...(action.payload.updatedSheet as CharacterSheet),
         },
       };
     case SheetActionTypes.DELETE_SHEET_SUCCESS:
@@ -62,6 +65,8 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
         permissions: undefined,
       };
     case SheetActionTypes.CREATE_SHEET_RESOURCE_SUCCESS:
+      if (!state.current) return state;
+
       let { resourceType: createdResourceType, newResource } = action.payload;
 
       // If resource type is a log, update the state accordingly
@@ -71,7 +76,7 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
           error: null,
           current: {
             ...state.current,
-            characterLogs: [newResource, ...state.current.characterLogs],
+            characterLogs: [newResource as Log, ...state.current.characterLogs],
           },
         };
       }
@@ -99,10 +104,12 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
         error: null,
         current: {
           ...state.current,
-          [createdResourceType]: [newResource, ...state.current[createdResourceType]],
+          [createdResourceType]: [newResource, ...state.current[createdResourceType as unknown as CharacterResourceType]],
         },
       };
     case SheetActionTypes.UPDATE_SHEET_RESOURCE_SUCCESS:
+      if (!state.current) return state;
+
       let { resourceType: updatedResourceType, updatedResource } = action.payload;
 
       // If resource type is transaction, update the state accordingly
@@ -140,10 +147,12 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
         error: null,
         current: {
           ...state.current,
-          [updatedResourceType]: replaceItemById(state.current[updatedResourceType], updatedResource._id, updatedResource),
+          [updatedResourceType]: replaceItemById(state.current[updatedResourceType as unknown as CharacterResourceType], updatedResource._id, updatedResource),
         },
       };
     case SheetActionTypes.DELETE_SHEET_RESOURCE_SUCCESS:
+      if (!state.current) return state;
+
       let { resourceType: deletedResourceType, resourceId } = action.payload;
 
       // If resource type is transaction, update the state accordingly
@@ -161,8 +170,7 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
       // If resource type is transaction, update the state accordingly
       if (deletedResourceType === 'transactions') {
         // Set transaction type
-        let transactionType = 'received';
-        if (state.current.transactions.sent.find((transac: any) => transac._id === resourceId)) transactionType = 'sent';
+        const transactionType = state.current.transactions.sent.find(transac => transac._id === resourceId) ? 'sent' : 'received';
 
         return {
           ...state,
@@ -171,7 +179,7 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
             ...state.current,
             transactions: {
               ...state.current.transactions,
-              [transactionType]: removeItemById(state.current[deletedResourceType][transactionType], resourceId),
+              [transactionType]: removeItemById(state.current.transactions[transactionType], resourceId),
             },
           },
         };
@@ -183,10 +191,12 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
         error: null,
         current: {
           ...state.current,
-          [deletedResourceType]: removeItemById(state.current[deletedResourceType], resourceId),
+          [deletedResourceType]: removeItemById(state.current[deletedResourceType as unknown as CharacterResourceType], resourceId),
         },
       };
     case SheetActionTypes.ADD_CAMPAIGN_TO_CHARACTER_SUCCESS:
+      if (!state.current) return state;
+
       return {
         ...state,
         error: null,
@@ -196,12 +206,14 @@ const characterReducer = (state: CharacterState = INITIAL_STATE, action: SheetAc
         },
       };
     case SheetActionTypes.REMOVE_CHARACTER_FROM_CAMPAIGN_SUCCESS:
+      if (!state.current) return state;
+
       return {
         ...state,
         error: null,
         current: {
           ...state.current,
-          campaign: undefined,
+          campaign: null,
         },
       };
     case SheetActionTypes.FETCH_CURRENT_SHEET_FAILURE:

@@ -114,7 +114,6 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
                 sheet={sheetType === 'characters' ? charSheet : campSheet}
                 belongingType="consumables"
                 belonging={consumable}
-                belongingKind="Consumable"
                 equippedBelongings={equippedConsumables}
               />
             </div>

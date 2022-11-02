@@ -5,15 +5,16 @@ import { setModal, setNestedModal } from '../../redux/app/app.actions';
 
 import ModalTypes from '../ModalTypes';
 import { getBelongingTypeCapitalized } from '../helpers/belongings';
-import { BelongingType, SheetType } from '../../models/enums';
-import { SheetResourceType } from '../../models/sheet-actions';
+import { SheetResourceType } from '../../models/interfaces/sheet';
+import { Belonging, Sheet, BelongingType, SheetType } from '../../models/interfaces/sheet';
+import { Usable, Weapon, Wearable } from '../../models/interfaces/sheet/resources';
 
 interface Data {
   sheetType: SheetType;
-  sheet: any;
+  sheet: Sheet;
   belongingType: BelongingType;
-  belonging: any;
-  equippedList: any[];
+  belonging: Belonging;
+  equippedList: Belonging[];
   nested?: boolean;
   forPlayer?: boolean;
 }
@@ -31,7 +32,7 @@ export const correctStatMod = (mod: number) => {
 const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedList, nested, forPlayer }: Data, config?: Object): void => {
   if (sheetType !== 'characters') return;
 
-  if (belonging.unequippable) return alert('This belonging is unequippable');
+  if ((belonging as Usable).equippable) return alert('This belonging is unequippable');
 
   // If unequipping belonging
   if (belonging.equipped === true) {
@@ -47,7 +48,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
           notification: {
             status: 'success',
             heading: `${getBelongingTypeCapitalized(belongingType)} Unequipped`,
-            message: `You have successfully unequipped ${belonging.nickname || belonging.name}.`,
+            message: `You have successfully unequipped ${(belonging as Weapon).nickname || belonging.name}.`,
           },
         }
       )
@@ -71,7 +72,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
       break;
 
     case 'wearables':
-      if (equippedList.find(wear => wear.bodyArea === belonging.bodyArea)) {
+      if ((equippedList as Wearable[]).find(wear => wear.bodyArea === (belonging as Wearable).bodyArea)) {
         if (nested) {
           store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging } }));
           return;
@@ -113,7 +114,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
         notification: {
           status: 'success',
           heading: `${getBelongingTypeCapitalized(belongingType)} Equipped`,
-          message: `You have successfully equipped ${belonging.nickname || belonging.name}.`,
+          message: `You have successfully equipped ${(belonging as Weapon).nickname || belonging.name}.`,
         },
       }
     )

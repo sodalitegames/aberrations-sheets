@@ -12,7 +12,7 @@ import { ModalForm } from '../Modal';
 
 import Input from '../elements/Input';
 import { Condition } from '../../../models/enums';
-import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
+import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
 
 interface EditConditionProps {
   id: Condition;
@@ -33,8 +33,8 @@ interface EditConditionProps {
 const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [points, setPoints] = useState(data.resource.conditions[id]);
 

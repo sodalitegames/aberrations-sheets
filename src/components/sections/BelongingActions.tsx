@@ -5,23 +5,22 @@ import { updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
 
 import { useActions } from '../../hooks/useActions';
 
-import { BelongingKind, BelongingType, SheetType } from '../../models/enums';
+import { Belonging, Sheet, SheetType, SheetResourceType, BelongingType } from '../../models/interfaces/sheet';
+import { Weapon } from '../../models/interfaces/sheet/resources';
 
 import equipBelonging from '../../utils/functions/equipBelonging';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
 import Button from '../Button';
-import { SheetResourceType } from '../../models/sheet-actions';
+import { getBelongingTypeCapitalized } from '../../utils/helpers/belongings';
 
 interface BelongingActionsProps {
   sheetType: SheetType;
-  sheet: any;
+  sheet: Sheet;
   belongingType: BelongingType;
-  belonging: any;
-  equippedBelongings: any[];
-  equipmentMods?: any;
-  belongingKind: BelongingKind;
+  belonging: Belonging;
+  equippedBelongings: Belonging[];
 }
 
 const editForm = {
@@ -31,7 +30,7 @@ const editForm = {
   usables: SlideOverTypes.usableForm,
 };
 
-const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, belongingType, belonging, equippedBelongings, belongingKind }) => {
+const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, belongingType, belonging, equippedBelongings }) => {
   const dispatch = useDispatch();
   const { setModal, setSlideOver } = useActions();
 
@@ -62,7 +61,13 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                       belongingType as unknown as SheetResourceType,
                       belonging._id,
                       { npcId: null },
-                      { notification: { status: 'success', heading: `${belongingKind} Unassigned`, message: `You have successfully unassigned ${belonging.nickname || belonging.name}.` } }
+                      {
+                        notification: {
+                          status: 'success',
+                          heading: `${getBelongingTypeCapitalized(belongingType)} Unassigned`,
+                          message: `You have successfully unassigned ${(belonging as Weapon).nickname || belonging.name}.`,
+                        },
+                      }
                     )
                   )
                 }
@@ -89,8 +94,8 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                     {
                       notification: {
                         status: 'success',
-                        heading: `${belongingKind} ${belonging.active ? 'Deactivated' : 'Activated'}`,
-                        message: `You have successfully ${belonging.active ? 'deactivated' : 'activated'} ${belonging.nickname || belonging.name}.`,
+                        heading: `${getBelongingTypeCapitalized(belongingType)} ${belonging.active ? 'Deactivated' : 'Activated'}`,
+                        message: `You have successfully ${belonging.active ? 'deactivated' : 'activated'} ${(belonging as Weapon).nickname || belonging.name}.`,
                       },
                     }
                   )
@@ -130,8 +135,8 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
               {
                 notification: {
                   status: 'success',
-                  heading: `${belongingKind} ${belonging.archived ? 'Restored' : 'Archived'}`,
-                  message: `You have successfully ${belonging.archived ? 'restored' : 'archived'} ${belonging.nickname || belonging.name}.`,
+                  heading: `${getBelongingTypeCapitalized(belongingType)} ${belonging.archived ? 'Restored' : 'Archived'}`,
+                  message: `You have successfully ${belonging.archived ? 'restored' : 'archived'} ${(belonging as Weapon).nickname || belonging.name}.`,
                 },
               }
             )
@@ -154,10 +159,10 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
               data: {
                 sheetType: sheetType,
                 resourceType: belongingType,
-                title: `Are you sure you want to delete ${belonging.nickname || belonging.name}?`,
-                submitText: `Yes, delete ${belonging.nickname || belonging.name}`,
+                title: `Are you sure you want to delete ${(belonging as Weapon).nickname || belonging.name}?`,
+                submitText: `Yes, delete ${(belonging as Weapon).nickname || belonging.name}`,
                 equipped: belonging.equipped,
-                notification: { heading: `${belongingKind} Deleted`, message: `You have successfully deleted ${belonging.name}.` },
+                notification: { heading: `${getBelongingTypeCapitalized(belongingType)} Deleted`, message: `You have successfully deleted ${belonging.name}.` },
               },
             })
           }

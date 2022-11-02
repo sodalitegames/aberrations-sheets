@@ -13,7 +13,7 @@ import { ModalForm } from '../Modal';
 import Select from '../elements/Select';
 
 import { Stat } from '../../../models/enums';
-import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
+import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
 
 interface EditStatProps {
   id: Stat;
@@ -40,8 +40,8 @@ interface EditStatProps {
 const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [die, setDie] = useState<string | number>(data.resource[id].die);
 

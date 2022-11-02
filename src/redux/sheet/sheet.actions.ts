@@ -2,7 +2,9 @@ import { SheetActionTypes } from './sheet.types';
 
 import { AppError } from '../../models/interfaces/app';
 
-import { SheetType, SheetPermissions, SheetConfig, SheetResourceType } from '../../models/sheet-actions';
+import { Sheet, SheetResource, SheetType, SheetPermissions, SheetConfig, SheetResourceType } from '../../models/interfaces/sheet';
+import { Player } from '../../models/interfaces/sheet/resources';
+import { Campaign } from '../../models/interfaces/sheet/CharacterSheet';
 
 // Fetch Sheet
 export const fetchCurrentSheetStart = (sheetType: SheetType, sheetId: string) => ({
@@ -10,7 +12,7 @@ export const fetchCurrentSheetStart = (sheetType: SheetType, sheetId: string) =>
   payload: { sheetType, sheetId },
 });
 
-export const fetchCurrentSheetSuccess = (sheetType: SheetType, currentSheet: any, permissions?: SheetPermissions) => ({
+export const fetchCurrentSheetSuccess = (sheetType: SheetType, currentSheet: Sheet, permissions?: SheetPermissions) => ({
   type: SheetActionTypes.FETCH_CURRENT_SHEET_SUCCESS,
   payload: { sheetType, currentSheet, permissions },
 });
@@ -26,7 +28,7 @@ export const updateSheetStart = (sheetType: SheetType, sheetId: string, body: an
   payload: { sheetType, sheetId, body, config },
 });
 
-export const updateSheetSuccess = (sheetType: SheetType, updatedSheet: any) => ({
+export const updateSheetSuccess = (sheetType: SheetType, updatedSheet: Sheet) => ({
   type: SheetActionTypes.UPDATE_SHEET_SUCCESS,
   payload: { sheetType, updatedSheet },
 });
@@ -58,7 +60,7 @@ export const fetchSheetResourcesStart = (sheetType: SheetType, sheetId: string, 
   payload: { sheetType, sheetId, resourceType },
 });
 
-export const fetchSheetResourcesSuccess = (sheetType: SheetType, fetchedResource: any) => ({
+export const fetchSheetResourcesSuccess = (sheetType: SheetType, fetchedResource: SheetResource) => ({
   type: SheetActionTypes.FETCH_SHEET_RESOURCES_SUCCESS,
   payload: { sheetType, fetchedResource },
 });
@@ -74,7 +76,7 @@ export const createSheetResourceStart = (sheetType: SheetType, sheetId: string, 
   payload: { sheetType, sheetId, resourceType, body, config },
 });
 
-export const createSheetResourceSuccess = (sheetType: SheetType, resourceType: SheetResourceType, newResource: any) => ({
+export const createSheetResourceSuccess = (sheetType: SheetType, resourceType: SheetResourceType, newResource: SheetResource) => ({
   type: SheetActionTypes.CREATE_SHEET_RESOURCE_SUCCESS,
   payload: { sheetType, resourceType, newResource },
 });
@@ -90,7 +92,7 @@ export const updateSheetResourceStart = (sheetType: SheetType, sheetId: string, 
   payload: { sheetType, sheetId, resourceType, resourceId, body, config },
 });
 
-export const updateSheetResourceSuccess = (sheetType: SheetType, resourceType: SheetResourceType, updatedResource: any) => ({
+export const updateSheetResourceSuccess = (sheetType: SheetType, resourceType: SheetResourceType, updatedResource: SheetResource) => ({
   type: SheetActionTypes.UPDATE_SHEET_RESOURCE_SUCCESS,
   payload: { sheetType, resourceType, updatedResource },
 });
@@ -117,7 +119,7 @@ export const deleteSheetResourceFailure = (sheetType: SheetType, error: AppError
 });
 
 // Add Campaign to Character
-export const addCampaignToCharacterSuccess = (sheetType: SheetType, campaign: any) => ({
+export const addCampaignToCharacterSuccess = (sheetType: SheetType, campaign: Campaign) => ({
   type: SheetActionTypes.ADD_CAMPAIGN_TO_CHARACTER_SUCCESS,
   payload: { sheetType, campaign },
 });
@@ -139,17 +141,17 @@ export const removeCharacterFromCampaignFailure = (sheetType: SheetType, error: 
 });
 
 // Update Player and Player Resources
-export const updatePlayerSuccess = (sheetType: SheetType, updatedPlayer: any) => ({
+export const updatePlayerSuccess = (sheetType: SheetType, updatedPlayer: Player) => ({
   type: SheetActionTypes.UPDATE_PLAYER_SUCCESS,
   payload: { sheetType, updatedPlayer },
 });
 
-export const createPlayerResourceSuccess = (sheetType: SheetType, playerId: string, resourceType: SheetResourceType, newResource: any) => ({
+export const createPlayerResourceSuccess = (sheetType: SheetType, playerId: string, resourceType: SheetResourceType, newResource: SheetResource) => ({
   type: SheetActionTypes.CREATE_PLAYER_RESOURCE_SUCCESS,
   payload: { sheetType, playerId, resourceType, newResource },
 });
 
-export const updatePlayerResourceSuccess = (sheetType: SheetType, playerId: string, resourceType: SheetResourceType, updatedResource: any) => ({
+export const updatePlayerResourceSuccess = (sheetType: SheetType, playerId: string, resourceType: SheetResourceType, updatedResource: SheetResource) => ({
   type: SheetActionTypes.UPDATE_PLAYER_RESOURCE_SUCCESS,
   payload: { sheetType, playerId, resourceType, updatedResource },
 });

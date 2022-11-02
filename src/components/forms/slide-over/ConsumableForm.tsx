@@ -22,7 +22,7 @@ import CheckboxGroup, { FormikCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 import { ConsumableCategory } from '../../../models/interfaces/data';
-import { SheetResourceType, SheetType } from '../../../models/sheet-actions';
+import { SheetResourceType, SheetType } from '../../../models/interfaces/sheet';
 
 type SheetConsumableCategory = {
   universalId: string;
@@ -50,8 +50,8 @@ type FormValues = {
 const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const fetchedCategories = useResource(ResourceType.ConsumableCategories);
 
@@ -84,33 +84,39 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
   useEffect(() => {
     if (data.sheetType === 'characters') {
       if (id && charSheet) {
-        const { name, level, uses, categories, associatedStat, quantity, description } = charSheet.consumables.find((consumable: any) => consumable._id === id);
+        const consumable = charSheet.consumables.find(consumable => consumable._id === id);
 
-        setInitialValues({
-          name,
-          level,
-          uses,
-          categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
-          associatedStat,
-          quantity,
-          description,
-        });
+        if (consumable) {
+          const { name, level, uses, categories, associatedStat, quantity, description } = consumable;
+          setInitialValues({
+            name,
+            level,
+            uses,
+            categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
+            associatedStat,
+            quantity,
+            description,
+          });
+        }
       }
     }
 
     if (data.sheetType === 'campaigns') {
       if (id && campSheet) {
-        const { name, level, uses, categories, associatedStat, quantity, description } = campSheet.consumables.find((consumable: any) => consumable._id === id);
+        const consumable = campSheet.consumables.find(consumable => consumable._id === id);
 
-        setInitialValues({
-          name,
-          level,
-          uses,
-          categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
-          associatedStat,
-          quantity,
-          description,
-        });
+        if (consumable) {
+          const { name, level, uses, categories, associatedStat, quantity, description } = consumable;
+          setInitialValues({
+            name,
+            level,
+            uses,
+            categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
+            associatedStat,
+            quantity,
+            description,
+          });
+        }
       }
     }
   }, [id, data.sheetType, charSheet, campSheet]);
