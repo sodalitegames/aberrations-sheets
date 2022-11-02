@@ -101,9 +101,20 @@ export function* updateSheet({ payload: { sheetType, sheetId, body, config } }: 
 
     if (config.forPlayer) {
       yield put(updatePlayerSuccess(SheetType.campaigns, response.data.data.sheet));
+
+      // TODO: Emit socket changes to connected campaign sheets
+
+      // Emit changes to connected character sheet clients
+      socket['characters'].emit('changes', { sheet: 'characters', type: ChangesTypes.updateSheet, room: sheetId, args: ['characters', response.data.data.sheet] });
     } else {
       // Emit changes to connected clients
       socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.updateSheet, room: sheetId, args: [sheetType, response.data.data.sheet] });
+
+      if (sheetType === 'characters') {
+        // Emit changes to connected campaign sheet clients
+        // AKA campaigns that have this character as one of its players
+        socket['campaigns'].emit('changes', { sheet: 'campaigns', type: ChangesTypes.updatePlayer, room: sheetId, args: ['campaigns', response.data.data.sheet] });
+      }
 
       yield put(updateSheetSuccess(sheetType, response.data.data.sheet));
     }
@@ -196,9 +207,20 @@ export function* createSheetResource({ payload: { sheetType, sheetId, resourceTy
 
     if (config?.forPlayer) {
       yield put(createPlayerResourceSuccess(SheetType.campaigns, sheetId, resourceType, response.data.data.doc));
+
+      // TODO: Emit socket changes to connected campaign sheets
+
+      // Emit changes to connected character sheet clients
+      socket['characters'].emit('changes', { sheet: 'characters', type: ChangesTypes.createSheetResource, room: sheetId, args: ['characters', resourceType, response.data.data.doc] });
     } else {
       // Emit changes to connected clients
       socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.createSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
+
+      if (sheetType === 'characters') {
+        // Emit changes to connected campaign sheet clients
+        // AKA campaigns that have this character as one of its players
+        socket['campaigns'].emit('changes', { sheet: 'campaigns', type: ChangesTypes.createPlayerResource, room: sheetId, args: ['campaigns', sheetId, resourceType, response.data.data.doc] });
+      }
 
       yield put(createSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
     }
@@ -333,9 +355,20 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
 
     if (config?.forPlayer) {
       yield put(updatePlayerResourceSuccess(SheetType.campaigns, sheetId, resourceType, response.data.data.doc));
+
+      // TODO: Emit socket changes to connected campaign sheets
+
+      // Emit changes to connected character sheet clients
+      socket['characters'].emit('changes', { sheet: 'characters', type: ChangesTypes.updateSheetResource, room: sheetId, args: ['characters', resourceType, response.data.data.doc] });
     } else {
       // Emit changes to connected clients
       socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.updateSheetResource, room: sheetId, args: [sheetType, resourceType, response.data.data.doc] });
+
+      if (sheetType === 'characters') {
+        // Emit changes to connected campaign sheet clients
+        // AKA campaigns that have this character as one of its players
+        socket['campaigns'].emit('changes', { sheet: 'campaigns', type: ChangesTypes.updatePlayerResource, room: sheetId, args: ['campaigns', sheetId, resourceType, response.data.data.doc] });
+      }
 
       yield put(updateSheetResourceSuccess(sheetType, resourceType, response.data.data.doc));
     }
@@ -387,9 +420,20 @@ export function* deleteSheetResource({ payload: { sheetType, sheetId, resourceTy
 
     if (config?.forPlayer) {
       yield put(deletePlayerResourceSuccess(SheetType.campaigns, sheetId, resourceType, resourceId, response.data.data));
+
+      // TODO: Emit socket changes to connected campaign sheets
+
+      // Emit changes to connected character sheet clients
+      socket['characters'].emit('changes', { sheet: 'characters', type: ChangesTypes.deleteSheetResource, room: sheetId, args: ['characters', resourceType, resourceId, response.data.data] });
     } else {
       // Emit changes to connected clients
       socket[sheetType].emit('changes', { sheet: sheetType, type: ChangesTypes.deleteSheetResource, room: sheetId, args: [sheetType, resourceType, resourceId, response.data.data] });
+
+      if (sheetType === 'characters') {
+        // Emit changes to connected campaign sheet clients
+        // AKA campaigns that have this character as one of its players
+        socket['campaigns'].emit('changes', { sheet: 'campaigns', type: ChangesTypes.deletePlayerResource, room: sheetId, args: ['campaigns', sheetId, resourceType, resourceId, response.data.data] });
+      }
 
       yield put(deleteSheetResourceSuccess(sheetType, resourceType, resourceId, response.data.data));
     }

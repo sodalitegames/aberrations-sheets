@@ -6,7 +6,6 @@ import { selectCurrentCampaign, selectCampaignError, selectLoading, selectReload
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
-// import charSocket from '../sockets/character';
 import campSocket from '../sockets/campaign';
 
 import Loading from '../components/Loading';
@@ -35,13 +34,23 @@ export default function CharacterSheet() {
       campSocket.emit('joinRoom', campId);
     }
 
-    // if (campSheet) {
-    //   // Join room for each player's character sheet
-    //   campSheet.players.forEach(character => {
-    //     charSocket.emit('joinRoom', character._id);
-    //   });
-    // }
-  });
+    if (campSheet) {
+      // Join room for each player's character sheet
+      campSheet.players.forEach(character => {
+        campSocket.emit('joinRoom', character._id);
+      });
+    }
+
+    return () => {
+      campSocket.emit('leaveRoom', campId);
+
+      if (campSheet) {
+        campSheet.players.forEach(character => {
+          campSocket.emit('leaveRoom', character._id);
+        });
+      }
+    };
+  }, [campId, campSheet]);
 
   useEffect(() => {
     if (loading) return;
@@ -60,7 +69,7 @@ export default function CharacterSheet() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col justify-between">
+    <div className="flex flex-col justify-between min-h-screen">
       <div>
         {reload ? <Banner icon="info" theme="neutral" message={reload} button={{ text: 'Reload', custom: () => dispatch(fetchCurrentSheetStart('campaigns', campId)) }} /> : null}
         <div>
@@ -69,7 +78,7 @@ export default function CharacterSheet() {
             transactions={{ pending: pendingTransactions, resolved: resolvedTransactions }}
             type="campaigns"
           />
-          <main className="-mt-24 pb-8">
+          <main className="pb-8 -mt-24">
             {!loading && campSheet ? (
               <React.Suspense fallback={<Loading />}>
                 <Outlet />

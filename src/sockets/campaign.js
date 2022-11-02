@@ -12,6 +12,10 @@ import {
   deleteSheetResourceSuccess,
   addCampaignToCharacterSuccess,
   removeCharacterFromCampaignSuccess,
+  updatePlayerSuccess,
+  createPlayerResourceSuccess,
+  updatePlayerResourceSuccess,
+  deletePlayerResourceSuccess,
 } from '../redux/sheet/sheet.actions';
 
 let campSocket = io.connect(`${process.env.REACT_APP_SOCKET_SERVER}/campaigns`, {
@@ -55,6 +59,22 @@ campSocket.on('updates', ({ sheet, room, type, args }) => {
 
     case ChangesTypes.removeCharacterFromCampaign:
       store.dispatch(removeCharacterFromCampaignSuccess(...args));
+      return;
+
+    case ChangesTypes.updatePlayer:
+      store.dispatch(updatePlayerSuccess(...args));
+      return;
+
+    case ChangesTypes.createPlayerResource:
+      store.dispatch(createPlayerResourceSuccess(...args));
+      return;
+
+    case ChangesTypes.updatePlayerResource:
+      store.dispatch(updatePlayerResourceSuccess(...args));
+      return;
+
+    case ChangesTypes.deletePlayerResource:
+      store.dispatch(deletePlayerResourceSuccess(...args));
       return;
 
     default:
