@@ -1,12 +1,14 @@
 import { createSelector } from 'reselect';
 
-const calculateInitiative = entity => {
+import { RootState } from '../root-reducer';
+
+const calculateInitiative = (entity: any) => {
   const die = entity.agility.die > entity.persona.die ? entity.agility.die : entity.persona.die;
   const roll = Math.ceil(Math.random() * die);
   return roll;
 };
 
-const selectCampaign = state => state.campaign;
+const selectCampaign = (state: RootState) => state.campaign;
 
 export const selectCurrentCampaign = createSelector([selectCampaign], campaign => campaign.current);
 
@@ -15,9 +17,9 @@ export const selectLoading = createSelector([selectCampaign], campaign => campai
 export const selectPermissions = createSelector([selectCampaign], campaign => campaign.reload);
 export const selectReload = createSelector([selectCampaign], campaign => campaign.reload);
 
-export const selectCompletedSessions = createSelector([selectCurrentCampaign], current => current.sessions.filter(session => session.completed));
-export const selectFutureSessions = createSelector([selectCurrentCampaign], current => current.sessions.filter(session => !session.completed && !session.active));
-export const selectActiveSessions = createSelector([selectCurrentCampaign], current => current.sessions.filter(session => session.active));
+export const selectCompletedSessions = createSelector([selectCurrentCampaign], current => (current ? current.sessions.filter(session => session.completed) : []));
+export const selectFutureSessions = createSelector([selectCurrentCampaign], current => (current ? current.sessions.filter(session => !session.completed && !session.active) : []));
+export const selectActiveSessions = createSelector([selectCurrentCampaign], current => (current ? current.sessions.filter(session => session.active) : []));
 
 export const selectWeapons = createSelector([selectCurrentCampaign], current => (current ? current.weapons.filter(weapon => !weapon.archived) : []));
 export const selectWearables = createSelector([selectCurrentCampaign], current => (current ? current.wearables.filter(wearable => !wearable.archived) : []));

@@ -13,7 +13,7 @@ import { useResource } from '../../../hooks/useResource';
 import ModalTypes from '../../../utils/ModalTypes';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import classNames from '../../../utils/classNames';
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType } from '../../../models/resource';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -33,7 +33,7 @@ const CampaignPlayersPage = () => {
 
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const species = useResource(ResourceType.Species);
+  const species = useResource(FetchedResourceType.Species);
 
   const [player, setPlayer] = useState(campSheet.players.length ? campSheet.players[0] : null);
   const [id, setId] = useState(campSheet.players.length ? campSheet.players[0]._id : null);

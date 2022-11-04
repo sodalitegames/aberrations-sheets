@@ -10,7 +10,7 @@ import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { useResource } from '../../../hooks/useResource';
 
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType } from '../../../models/resource';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
@@ -38,7 +38,7 @@ const CampaignCombatPage = () => {
 
   const { setSlideOver, setModal } = useActions();
 
-  const species = useResource(ResourceType.Species);
+  const species = useResource(FetchedResourceType.Species);
 
   const [combatants, setCombatants] = useState([]);
 

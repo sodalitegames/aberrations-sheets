@@ -114,7 +114,6 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
                 sheet={sheetType === 'characters' ? charSheet : campSheet}
                 belongingType="wearables"
                 belonging={wearable}
-                belongingKind="Wearable"
                 equippedBelongings={equippedWearables}
               />
             </div>

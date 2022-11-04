@@ -7,6 +7,8 @@ import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selector
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+
 import { SlideOverForm } from '../SlideOver';
 
 import { UsableFormSchema } from '../../../utils/schemas/UsableFormSchema';
@@ -19,7 +21,7 @@ import Toggle from '../elements/Toggle';
 interface UsableFormProps {
   id: string;
   data: {
-    sheetType: 'characters' | 'campaigns';
+    sheetType: SheetType;
   };
 }
 
@@ -35,8 +37,8 @@ type FormValues = {
 const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [initialValues, setInitialValues] = useState<FormValues>({
     name: '',
@@ -50,31 +52,37 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
   useEffect(() => {
     if (data.sheetType === 'characters') {
       if (id && charSheet) {
-        const { name, type, description, equippable, quantity, units = 'units' } = charSheet.usables.find((usable: any) => usable._id === id);
+        const usable = charSheet.usables.find(usable => usable._id === id);
 
-        setInitialValues({
-          name,
-          type,
-          description,
-          equippable,
-          quantity,
-          units,
-        });
+        if (usable) {
+          const { name, type, description, equippable, quantity, units = 'units' } = usable;
+          setInitialValues({
+            name,
+            type,
+            description,
+            equippable,
+            quantity,
+            units,
+          });
+        }
       }
     }
 
     if (data.sheetType === 'campaigns') {
       if (id && campSheet) {
-        const { name, type, description, equippable, quantity, units = 'units' } = campSheet.usables.find((usable: any) => usable._id === id);
+        const usable = campSheet.usables.find(usable => usable._id === id);
 
-        setInitialValues({
-          name,
-          type,
-          description,
-          equippable,
-          quantity,
-          units,
-        });
+        if (usable) {
+          const { name, type, description, equippable, quantity, units = 'units' } = usable;
+          setInitialValues({
+            name,
+            type,
+            description,
+            equippable,
+            quantity,
+            units,
+          });
+        }
       }
     }
   }, [id, data.sheetType, charSheet, campSheet]);
@@ -89,7 +97,7 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
         updateSheetResourceStart(
           data.sheetType,
           sheetId,
-          'usables',
+          SheetResourceType.usables,
           id,
           { name, type, description, equippable, quantity, units },
           { slideOver: true, notification: { status: 'success', heading: 'Usable Updated', message: `You have successfully updated ${name}.` } }
@@ -102,7 +110,7 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
       createSheetResourceStart(
         data.sheetType,
         sheetId,
-        'usables',
+        SheetResourceType.usables,
         { name, type, description, equippable, quantity, units },
         { slideOver: true, notification: { status: 'success', heading: 'Usable Created', message: `You have successfully created ${name}.` } }
       )

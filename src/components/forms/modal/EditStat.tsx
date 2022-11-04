@@ -8,14 +8,14 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 
 import { capitalize } from '../../../utils/helpers/strings';
 
+import { SheetResourceType, SheetType, StatType } from '../../../models/sheet';
+
 import { ModalForm } from '../Modal';
 
 import Select from '../elements/Select';
 
-import { Stat } from '../../../models/enums';
-
 interface EditStatProps {
-  id: Stat;
+  id: StatType;
   data: {
     type: 'character' | 'player' | 'npc' | 'creature';
     resource: {
@@ -39,8 +39,8 @@ interface EditStatProps {
 const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [die, setDie] = useState<string | number>(data.resource[id].die);
 
@@ -54,7 +54,7 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
     switch (data.type) {
       case 'character':
         dispatch(
-          updateSheetStart('characters', charSheet._id, body, {
+          updateSheetStart(SheetType.characters, charSheet._id, body, {
             modal: true,
             notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your ${id.toLowerCase()} stat.` },
           })
@@ -62,7 +62,7 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
         return;
       case 'player':
         dispatch(
-          updateSheetStart('characters', data.resource._id, body, {
+          updateSheetStart(SheetType.characters, data.resource._id, body, {
             forPlayer: true,
             modal: true,
             notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your player's ${id.toLowerCase()} stat.` },
@@ -71,7 +71,7 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
         return;
       case 'npc':
         dispatch(
-          updateSheetResourceStart('campaigns', campSheet._id, 'npcs', data.resource._id, body, {
+          updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.npcs, data.resource._id, body, {
             modal: true,
             notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your npcs's ${id.toLowerCase()} stat.` },
           })
@@ -79,7 +79,7 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
         return;
       case 'creature':
         dispatch(
-          updateSheetResourceStart('campaigns', campSheet._id, 'creatures', data.resource._id, body, {
+          updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.creatures, data.resource._id, body, {
             modal: true,
             notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your creature's ${id.toLowerCase()} stat.` },
           })

@@ -1,5 +1,5 @@
-import ModalTypes from '../../../utils/ModalTypes';
-import SlideOverTypes from '../../../utils/SlideOverTypes';
+import ModalTypes from '../../utils/ModalTypes';
+import SlideOverTypes from '../../utils/SlideOverTypes';
 
 export interface Modal {
   type: ModalTypes;

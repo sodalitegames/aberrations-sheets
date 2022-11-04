@@ -5,8 +5,7 @@ import resourceReducer from '../resource/resource.reducer';
 // import campaignReducer from '../campaign/campaign.reducer';
 
 import { ResourceActionTypes } from '../resource/resource.types';
-import { ResourceType } from '../../models/enums';
-import { ConsumableCategory } from '../../models/interfaces/data';
+import { FetchedResourceType, ConsumableCategory } from '../../models/resource';
 
 describe('resource reducer', () => {
   const initialStateMock = {
@@ -39,7 +38,7 @@ describe('resource reducer', () => {
       },
     ];
 
-    expect(resourceReducer(undefined, { type: ResourceActionTypes.FETCH_RESOURCE_SUCCESS, payload: { resourceType: ResourceType.ConsumableCategories, data: mockCategories } })).toEqual({
+    expect(resourceReducer(undefined, { type: ResourceActionTypes.FETCH_RESOURCE_SUCCESS, payload: { resourceType: FetchedResourceType.ConsumableCategories, data: mockCategories } })).toEqual({
       ...initialStateMock,
       consumableCategories: mockCategories,
     });

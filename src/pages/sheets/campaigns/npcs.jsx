@@ -12,7 +12,7 @@ import { useResource } from '../../../hooks/useResource';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType } from '../../../models/resource';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -35,7 +35,7 @@ const CampaignNpcsPage = () => {
   const npcs = useSelector(selectNpcs);
   const archivedNpcs = useSelector(selectArchivedNpcs);
 
-  const species = useResource(ResourceType.Species);
+  const species = useResource(FetchedResourceType.Species);
 
   const [npc, setNpc] = useState(null);
   const [id, setId] = useState(null);

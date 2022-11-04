@@ -104,14 +104,7 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
             </div>
 
             <div className="col-span-1 pl-8 space-y-4">
-              <BelongingActions
-                sheetType={sheetType}
-                sheet={sheetType === 'characters' ? charSheet : campSheet}
-                belongingType="usables"
-                belonging={usable}
-                belongingKind="Usable"
-                equippedBelongings={equippedUsables}
-              />
+              <BelongingActions sheetType={sheetType} sheet={sheetType === 'characters' ? charSheet : campSheet} belongingType="usables" belonging={usable} equippedBelongings={equippedUsables} />
             </div>
           </div>
         ) : (

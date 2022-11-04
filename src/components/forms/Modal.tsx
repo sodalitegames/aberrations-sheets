@@ -7,17 +7,17 @@ import { XIcon, ExclamationIcon } from '@heroicons/react/outline';
 
 import { selectModal, selectNestedModal } from '../../redux/app/app.selectors';
 import { selectResourceError } from '../../redux/resource/resource.selectors';
-import { selectCharacterError } from '../../redux/character/character.selectors';
-import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
+// import { selectCharacterError } from '../../redux/character/character.selectors';
+// import { selectCampaignError } from '../../redux/campaign/campaign.selectors';
 
 import { useActions } from '../../hooks/useActions';
 
 import classNames from '../../utils/classNames';
 import ModalTypes from '../../utils/ModalTypes';
-import { formatValidationErrors } from '../../utils/helpers/errors';
+// import { formatValidationErrors } from '../../utils/helpers/errors';
 
-import { Modal as IModal } from '../../models/interfaces/app';
-import { Stat, Condition } from '../../models/enums';
+import { Modal as IModal } from '../../models/app';
+import { StatType, ConditionType } from '../../models/sheet';
 
 import Notice, { NoticeStatus } from '../Notice';
 
@@ -92,9 +92,9 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editExperience ? <EditExperience data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editMortality ? <EditMortality data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id as Stat} data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.upgradeStat ? <UpgradeStat id={modal.id as Stat} data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as Condition} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editStat ? <EditStat id={modal.id as StatType} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.upgradeStat ? <UpgradeStat id={modal.id as StatType} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as ConditionType} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editHealth ? <EditHealth data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.upgradeHealth ? <UpgradeHealth data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editWallet ? <EditWallet data={modal.data} /> : null}
@@ -107,8 +107,8 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
 export const ModalForm: React.FC<ModalFormProps> = ({ type, title, submitText, cancelText, submitHandler, submitDisabled, children, nested, initialValues, validationSchema, formik }) => {
   const { closeModal, closeNestedModal } = useActions();
 
-  const characterError = useSelector(selectCharacterError);
-  const campaignError = useSelector(selectCampaignError);
+  // const characterError = useSelector(selectCharacterError);
+  // const campaignError = useSelector(selectCampaignError);
   const resourceError = useSelector(selectResourceError);
 
   if (formik) {
@@ -133,8 +133,8 @@ export const ModalForm: React.FC<ModalFormProps> = ({ type, title, submitText, c
               </div>
             </div>
 
-            {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
-            {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+            {/* {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+            {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null} */}
             {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
             {/* Action buttons panel */}
@@ -186,8 +186,8 @@ export const ModalForm: React.FC<ModalFormProps> = ({ type, title, submitText, c
         </div>
       </div>
 
-      {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
-      {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null}
+      {/* {characterError ? <Notice status={characterError.status} heading={characterError.err._message} message={formatValidationErrors(characterError.err.errors)} /> : null}
+      {campaignError ? <Notice status={campaignError.status} heading={campaignError.err._message} message={formatValidationErrors(campaignError.err.errors)} /> : null} */}
       {resourceError ? <Notice status={NoticeStatus.Error} heading={resourceError.heading} message="An error occured fetching additional resource data. Please try again later." /> : null}
 
       {/* Action buttons panel */}

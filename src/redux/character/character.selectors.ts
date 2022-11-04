@@ -1,6 +1,8 @@
 import { createSelector } from 'reselect';
 
-const selectCharacter = state => state.character;
+import { RootState } from '../root-reducer';
+
+const selectCharacter = (state: RootState) => state.character;
 
 export const selectCurrentCharacter = createSelector([selectCharacter], character => character.current);
 
@@ -25,12 +27,14 @@ export const selectEquippedConsumables = createSelector([selectCurrentCharacter]
 export const selectEquippedUsables = createSelector([selectCurrentCharacter], current => (current ? current.usables.filter(usable => usable.equipped && !usable.archived) : []));
 
 export const selectShieldValue = createSelector([selectEquippedWearables], equippedWearables =>
-  equippedWearables.length ? equippedWearables.reduce((shieldValue, wearable) => wearable.shieldValue || 0 + shieldValue, 0) : 0
+  equippedWearables.length ? equippedWearables.reduce((shieldValue: number, wearable) => wearable.shieldValue || 0 + shieldValue, 0) : 0
 );
 export const selectSpeedAdjustment = createSelector([selectEquippedWearables], equippedWearables =>
-  equippedWearables.length ? equippedWearables.reduce((speedAdjustment, wearable) => wearable.speedAdjustment || 0 + speedAdjustment, 0) : 0
+  equippedWearables.length ? equippedWearables.reduce((speedAdjustment: number, wearable) => wearable.speedAdjustment || 0 + speedAdjustment, 0) : 0
 );
 export const selectModifiers = createSelector([selectCurrentCharacter, selectEquippedWearables], (current, equippedWearables) => {
+  if (!current) return [];
+
   const characterModifiers = current.modifiers || [];
   const wearableModifiers = equippedWearables.map(wearable => wearable.modifiers || []).flat();
 

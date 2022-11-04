@@ -101,17 +101,6 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                                 belongingType: 'wearables',
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
-                                equipmentMods: belongings
-                                  .filter(wearable => wearable.equipped)
-                                  .reduce(
-                                    (mods, wearable) => ({
-                                      fortitude: mods.fortitude + wearable.statMods.fortitude,
-                                      agility: mods.agility + wearable.statMods.agility,
-                                      persona: mods.persona + wearable.statMods.persona,
-                                      aptitude: mods.aptitude + wearable.statMods.aptitude,
-                                    }),
-                                    { fortitude: 0, agility: 0, persona: 0, aptitude: 0 }
-                                  ),
                                 nested: true,
                                 forPlayer: type === 'players' ? true : false,
                               }),

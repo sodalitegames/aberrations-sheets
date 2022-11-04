@@ -7,7 +7,7 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../red
 
 import { useResource } from '../../../hooks/useResource';
 
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType } from '../../../models/resource';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -27,8 +27,8 @@ const NpcForm = ({ id }) => {
 
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const fetchedSpecies = useResource(ResourceType.Species);
-  const fetchedTypes = useResource(ResourceType.NpcTypes);
+  const fetchedSpecies = useResource(FetchedResourceType.Species);
+  const fetchedTypes = useResource(FetchedResourceType.NpcTypes);
 
   const [speciesList, setSpeciesList] = useState(null);
   const [typesList, setTypesList] = useState(null);

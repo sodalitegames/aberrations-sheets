@@ -7,7 +7,7 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../red
 
 import { useResource } from '../../../hooks/useResource';
 
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType } from '../../../models/resource';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -23,7 +23,7 @@ const CreatureForm = ({ id }) => {
 
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const creatureTypes = useResource(ResourceType.CreatureTypes);
+  const creatureTypes = useResource(FetchedResourceType.CreatureTypes);
 
   const [typesList, setTypesList] = useState([]);
 

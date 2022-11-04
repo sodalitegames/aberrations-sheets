@@ -6,7 +6,7 @@ import { XIcon } from '@heroicons/react/solid';
 
 import { useActions } from '../../../hooks/useActions';
 
-import { Notification } from '../../../models/interfaces/app';
+import { Notification } from '../../../models/app';
 
 interface NotificationsProps {
   notifications: Notification[];

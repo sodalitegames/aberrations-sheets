@@ -8,13 +8,14 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 
 import { capitalize } from '../../../utils/helpers/strings';
 
+import { SheetResourceType, SheetType, ConditionType } from '../../../models/sheet';
+
 import { ModalForm } from '../Modal';
 
 import Input from '../elements/Input';
-import { Condition } from '../../../models/enums';
 
 interface EditConditionProps {
-  id: Condition;
+  id: ConditionType;
   data: {
     type: 'character' | 'player' | 'npc' | 'creature';
     resource: {
@@ -32,8 +33,8 @@ interface EditConditionProps {
 const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [points, setPoints] = useState(data.resource.conditions[id]);
 
@@ -44,7 +45,7 @@ const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
       case 'character':
         dispatch(
           updateSheetStart(
-            'characters',
+            SheetType.characters,
             charSheet._id,
             { conditions: { ...charSheet.conditions, [id]: points } },
             { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your ${id.toLowerCase()} condition.` } }
@@ -54,7 +55,7 @@ const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
       case 'player':
         dispatch(
           updateSheetStart(
-            'characters',
+            SheetType.characters,
             data.resource._id,
             { conditions: { ...data.resource.conditions, [id]: points } },
             { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your player's ${id.toLowerCase()} condition.` } }
@@ -64,9 +65,9 @@ const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
       case 'npc':
         dispatch(
           updateSheetResourceStart(
-            'campaigns',
+            SheetType.campaigns,
             campSheet._id,
-            'npcs',
+            SheetResourceType.npcs,
             data.resource._id,
             { conditions: { ...data.resource.conditions, [id]: points } },
             { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your npc's ${id.toLowerCase()} condition.` } }
@@ -76,9 +77,9 @@ const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
       case 'creature':
         dispatch(
           updateSheetResourceStart(
-            'campaigns',
+            SheetType.campaigns,
             campSheet._id,
-            'creatures',
+            SheetResourceType.creatures,
             data.resource._id,
             { conditions: { ...data.resource.conditions, [id]: points } },
             { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your creature's ${id.toLowerCase()} condition.` } }

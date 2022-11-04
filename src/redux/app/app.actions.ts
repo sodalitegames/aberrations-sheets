@@ -1,6 +1,8 @@
 import { AppActionTypes } from './app.types';
 
-import { Alert, Modal, SlideOver, Notification } from '../../models/interfaces/app';
+import { Alert, Modal, SlideOver, Notification } from '../../models/app';
+
+import { SheetNotification } from '../../models/sheet';
 
 export const setModal = (modal: Modal) => ({
   type: AppActionTypes.SET_MODAL,
@@ -29,7 +31,7 @@ export const closeSlideOver = () => ({
   type: AppActionTypes.CLOSE_SLIDE_OVER,
 });
 
-export const addNotification = (notification: Notification) => ({
+export const addNotification = (notification: SheetNotification) => ({
   type: AppActionTypes.ADD_NOTIFICATION,
   payload: notification,
 });

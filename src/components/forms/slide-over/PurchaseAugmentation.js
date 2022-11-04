@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { updateSheetStart, createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType } from '../../../models/resource';
 import { SlideOverForm } from '../SlideOver';
 
 import Select from '../elements/Select';
@@ -15,7 +15,7 @@ import { useResource } from '../../../hooks/useResource';
 const PurchaseAugmentation = ({ data }) => {
   const dispatch = useDispatch();
 
-  const augmentationGroups = useResource(ResourceType.AugmentationGroups);
+  const augmentationGroups = useResource(FetchedResourceType.AugmentationGroups);
 
   const [augmentation, setAugmentation] = useState(null);
   const [augsList, setAugsList] = useState([]);

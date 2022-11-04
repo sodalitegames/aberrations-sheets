@@ -5,9 +5,9 @@ import { selectSpecies, selectAugmentationGroups, selectWeapons, selectConsumabl
 
 import { useActions } from './useActions';
 
-import { ResourceType } from '../models/enums';
+import { FetchedResourceType } from '../models/resource';
 
-export const useResource = (resource: ResourceType) => {
+export const useResource = (resource: FetchedResourceType) => {
   const { fetchResourceStart } = useActions();
 
   const species = useSelector(selectSpecies);
@@ -19,42 +19,42 @@ export const useResource = (resource: ResourceType) => {
 
   useEffect(() => {
     switch (resource) {
-      case ResourceType.Species:
-        if (!species) fetchResourceStart(ResourceType.Species);
+      case FetchedResourceType.Species:
+        if (!species) fetchResourceStart(FetchedResourceType.Species);
         return;
-      case ResourceType.AugmentationGroups:
-        if (!augmentationGroups) fetchResourceStart(ResourceType.AugmentationGroups);
+      case FetchedResourceType.AugmentationGroups:
+        if (!augmentationGroups) fetchResourceStart(FetchedResourceType.AugmentationGroups);
         return;
-      case ResourceType.Weapons:
-        if (!weapons) fetchResourceStart(ResourceType.Weapons);
+      case FetchedResourceType.Weapons:
+        if (!weapons) fetchResourceStart(FetchedResourceType.Weapons);
         return;
-      case ResourceType.ConsumableCategories:
-        if (!consumableCategories) fetchResourceStart(ResourceType.ConsumableCategories);
+      case FetchedResourceType.ConsumableCategories:
+        if (!consumableCategories) fetchResourceStart(FetchedResourceType.ConsumableCategories);
         return;
-      case ResourceType.CreatureTypes:
-        if (!creatureTypes) fetchResourceStart(ResourceType.CreatureTypes);
+      case FetchedResourceType.CreatureTypes:
+        if (!creatureTypes) fetchResourceStart(FetchedResourceType.CreatureTypes);
         return;
-      case ResourceType.NpcTypes:
-        if (!npcTypes) fetchResourceStart(ResourceType.NpcTypes);
+      case FetchedResourceType.NpcTypes:
+        if (!npcTypes) fetchResourceStart(FetchedResourceType.NpcTypes);
         return;
       default:
         return;
     }
   }, [fetchResourceStart, resource, species, augmentationGroups, weapons, consumableCategories, creatureTypes, npcTypes]);
 
-  const getRequestedResource = (resource: ResourceType) => {
+  const getRequestedResource = (resource: FetchedResourceType) => {
     switch (resource) {
-      case ResourceType.Species:
+      case FetchedResourceType.Species:
         return species;
-      case ResourceType.AugmentationGroups:
+      case FetchedResourceType.AugmentationGroups:
         return augmentationGroups;
-      case ResourceType.Weapons:
+      case FetchedResourceType.Weapons:
         return weapons;
-      case ResourceType.ConsumableCategories:
+      case FetchedResourceType.ConsumableCategories:
         return consumableCategories;
-      case ResourceType.CreatureTypes:
+      case FetchedResourceType.CreatureTypes:
         return creatureTypes;
-      case ResourceType.NpcTypes:
+      case FetchedResourceType.NpcTypes:
         return npcTypes;
       default:
         return null;

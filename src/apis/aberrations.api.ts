@@ -1,6 +1,6 @@
 import Axios from 'axios';
 
-import { Species, AugmentationGroup, Weapon, ConsumableCategory, CreatureType, NpcType } from '../models/interfaces/data';
+import { Species, AugmentationGroup, Weapon, ConsumableCategory, CreatureType, NpcType } from '../models/resource';
 
 const apiUrl = process.env.REACT_APP_ABERRATIONS_API;
 

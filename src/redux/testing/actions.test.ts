@@ -5,8 +5,7 @@ import * as resourceActions from '../resource/resource.actions';
 
 import { ResourceAction, ResourceActionTypes } from '../resource/resource.types';
 
-import { ResourceType } from '../../models/enums';
-import { CreatureType } from '../../models/interfaces/data';
+import { FetchedResourceType, CreatureType } from '../../models/resource';
 
 describe('resource actions', () => {
   // USE A MOCK REDUX STORE FOR THIS
@@ -14,11 +13,11 @@ describe('resource actions', () => {
     const expectedAction: ResourceAction = {
       type: ResourceActionTypes.FETCH_RESOURCE_START,
       payload: {
-        resourceType: ResourceType.CreatureTypes,
+        resourceType: FetchedResourceType.CreatureTypes,
       },
     };
 
-    expect(resourceActions.fetchResourceStart(ResourceType.CreatureTypes)).toEqual(expectedAction);
+    expect(resourceActions.fetchResourceStart(FetchedResourceType.CreatureTypes)).toEqual(expectedAction);
   });
 
   // USE A MOCK API FOR THIS
@@ -43,11 +42,11 @@ describe('resource actions', () => {
     const expectedAction: ResourceAction = {
       type: ResourceActionTypes.FETCH_RESOURCE_SUCCESS,
       payload: {
-        resourceType: ResourceType.CreatureTypes,
+        resourceType: FetchedResourceType.CreatureTypes,
         data: mockCreatures,
       },
     };
 
-    expect(resourceActions.fetchResourceSuccess(ResourceType.CreatureTypes, mockCreatures)).toEqual(expectedAction);
+    expect(resourceActions.fetchResourceSuccess(FetchedResourceType.CreatureTypes, mockCreatures)).toEqual(expectedAction);
   });
 });

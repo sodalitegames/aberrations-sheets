@@ -9,7 +9,8 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../red
 
 import { useResource } from '../../../hooks/useResource';
 
-import { ResourceType } from '../../../models/enums';
+import { FetchedResourceType, ConsumableCategory } from '../../../models/resource';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -21,7 +22,6 @@ import Select from '../elements/Select';
 import CheckboxGroup, { FormikCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
-import { ConsumableCategory } from '../../../models/interfaces/data';
 
 type SheetConsumableCategory = {
   universalId: string;
@@ -32,7 +32,7 @@ type SheetConsumableCategory = {
 interface ConsumableFormProps {
   id: string;
   data: {
-    sheetType: 'characters' | 'campaigns';
+    sheetType: SheetType;
   };
 }
 
@@ -49,10 +49,10 @@ type FormValues = {
 const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const charSheet = useSelector(selectCurrentCharacter)!;
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
-  const fetchedCategories = useResource(ResourceType.ConsumableCategories);
+  const fetchedCategories = useResource(FetchedResourceType.ConsumableCategories);
 
   const [categoriesList, setCategoriesList] = useState<SheetConsumableCategory[]>([]);
 
@@ -83,33 +83,39 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
   useEffect(() => {
     if (data.sheetType === 'characters') {
       if (id && charSheet) {
-        const { name, level, uses, categories, associatedStat, quantity, description } = charSheet.consumables.find((consumable: any) => consumable._id === id);
+        const consumable = charSheet.consumables.find(consumable => consumable._id === id);
 
-        setInitialValues({
-          name,
-          level,
-          uses,
-          categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
-          associatedStat,
-          quantity,
-          description,
-        });
+        if (consumable) {
+          const { name, level, uses, categories, associatedStat, quantity, description } = consumable;
+          setInitialValues({
+            name,
+            level,
+            uses,
+            categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
+            associatedStat,
+            quantity,
+            description,
+          });
+        }
       }
     }
 
     if (data.sheetType === 'campaigns') {
       if (id && campSheet) {
-        const { name, level, uses, categories, associatedStat, quantity, description } = campSheet.consumables.find((consumable: any) => consumable._id === id);
+        const consumable = campSheet.consumables.find(consumable => consumable._id === id);
 
-        setInitialValues({
-          name,
-          level,
-          uses,
-          categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
-          associatedStat,
-          quantity,
-          description,
-        });
+        if (consumable) {
+          const { name, level, uses, categories, associatedStat, quantity, description } = consumable;
+          setInitialValues({
+            name,
+            level,
+            uses,
+            categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
+            associatedStat,
+            quantity,
+            description,
+          });
+        }
       }
     }
   }, [id, data.sheetType, charSheet, campSheet]);
@@ -131,7 +137,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
 
     if (id) {
       dispatch(
-        updateSheetResourceStart(data.sheetType, sheetId, 'consumables', id, body, {
+        updateSheetResourceStart(data.sheetType, sheetId, SheetResourceType.consumables, id, body, {
           slideOver: true,
           notification: { status: 'success', heading: 'Consumabled Updated', message: `You have successfully updated ${name}.` },
         })
@@ -140,7 +146,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
     }
 
     dispatch(
-      createSheetResourceStart(data.sheetType, sheetId, 'consumables', body, {
+      createSheetResourceStart(data.sheetType, sheetId, SheetResourceType.consumables, body, {
         slideOver: true,
         notification: { status: 'success', heading: 'Consumable Created', message: `You have successfully created ${name}.` },
       })
