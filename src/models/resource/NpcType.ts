@@ -1,13 +1,12 @@
 interface NpcTableLevel {
   id: string;
   level: number;
-  fortitude: number;
+  strength: number;
   agility: number;
   persona: number;
   aptitude: number;
-  power: number;
-  powerAdded: number;
-  totalPower: number;
+  milestone: number;
+  experience: number;
 }
 
 interface NpcTable {
