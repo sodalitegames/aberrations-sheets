@@ -16,7 +16,6 @@ import TextArea from '../elements/TextArea';
 import Row from '../elements/Row';
 import { BasicSelect } from '../elements/Select';
 import { LoadingSpinner } from '../elements/SubmitButton';
-import Detail from '../elements/Detail';
 import Select from '../elements/Select';
 
 import DisplaySpecies from '../../display/DisplaySpecies';
@@ -34,8 +33,8 @@ const NpcForm = ({ id }) => {
   const [typesList, setTypesList] = useState(null);
 
   const [name, setName] = useState('');
-  const [diplomacy, setDiplomacy] = useState('');
-  const [temperament, setTemperament] = useState('');
+  const [diplomacy, setDiplomacy] = useState('Neutral');
+  const [temperament, setTemperament] = useState('Earth');
 
   // Only needed if creating
   const [description, setDescription] = useState('');
@@ -125,31 +124,33 @@ const NpcForm = ({ id }) => {
 
     // Check for species, type, and level
     if (!species) return alert('Must select a species');
-    if (!type) return alert('Must select a type');
-    if (!levelId) return alert('Must select a levelId');
 
     // Get level data based on the type and the saved id
-    // const levelData = type.level.find(lev => lev.id === levelId);
+    const levelData = levelId ? type.level.find(lev => lev.id === levelId) : null;
 
     let body = {
       name,
       diplomacy,
       temperament,
+      type: type ? type.npcType : undefined,
+      levelId: levelId ? levelId : undefined,
     };
 
     if (id) {
       // Get the current npc data
       const currentNpc = campSheet.npcs.find(npc => npc._id === id);
 
-      if (levelId !== currentNpc.levelId) {
+      if (levelData && levelId !== currentNpc.levelId) {
         body = {
           ...body,
-          // fortitude: { ...currentNpc.fortitude, points: species.stats.fortitude + levelData.fortitude },
-          // agility: { ...currentNpc.agility, points: species.stats.agility + levelData.agility },
-          // persona: { ...currentNpc.persona, points: species.stats.persona + levelData.persona },
-          // aptitude: { ...currentNpc.aptitude, points: species.stats.aptitude + levelData.aptitude },
-          // // calculate currentHp and stats based on the type and level
-          // currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
+          strength: { ...currentNpc.strength, die: levelData.strength },
+          agility: { ...currentNpc.agility, die: levelData.agility },
+          persona: { ...currentNpc.persona, die: levelData.persona },
+          aptitude: { ...currentNpc.aptitude, die: levelData.aptitude },
+          currentHp: levelData.health,
+          maxHp: levelData.health,
+          experience: levelData.experience,
+          milestones: levelData.milestone,
         };
       }
 
@@ -167,10 +168,8 @@ const NpcForm = ({ id }) => {
 
     body = {
       ...body,
-      type: type.npcType,
       speciesId: species.id,
       speciesName: species.name,
-      levelId,
       description,
       background,
       currentHp: species.health,
@@ -179,13 +178,21 @@ const NpcForm = ({ id }) => {
       agility: { die: species.stats.agility },
       persona: { die: species.stats.persona },
       aptitude: { die: species.stats.aptitude },
-      // fortitude: { points: species.stats.fortitude + levelData.fortitude },
-      // agility: { points: species.stats.agility + levelData.agility },
-      // persona: { points: species.stats.persona + levelData.persona },
-      // aptitude: { points: species.stats.aptitude + levelData.aptitude },
-      // // calculate currentHp and stats based on the type and level
-      // currentHp: (species.stats.fortitude + levelData.fortitude) * 10,
     };
+
+    if (levelData) {
+      body = {
+        ...body,
+        strength: { die: levelData.strength },
+        agility: { die: levelData.agility },
+        persona: { die: levelData.persona },
+        aptitude: { die: levelData.aptitude },
+        currentHp: levelData.health,
+        maxHp: levelData.health,
+        experience: levelData.experience,
+        milestones: levelData.milestone,
+      };
+    }
 
     dispatch(
       createSheetResourceStart('campaigns', campSheet._id, 'npcs', body, {
@@ -256,33 +263,32 @@ const NpcForm = ({ id }) => {
         </Row>
       )}
 
-      {id ? (
-        <Detail slideOver label="Type" detail={type.npcType} />
-      ) : (
-        <Row slideOver name="type" label="Type">
-          {fetchedTypes && typesList ? (
-            <>
-              <BasicSelect name="type" value={type ? type.id : ''} options={typesList} changeHandler={selectCurrentType} />
-            </>
-          ) : (
-            <Row slideOver label="Type" name="type">
-              <LoadingSpinner dark />
-            </Row>
-          )}
-        </Row>
-      )}
+      <Row slideOver name="type" label="Type (Opt.)">
+        {fetchedTypes && typesList ? (
+          <>
+            <BasicSelect name="type" value={type ? type.id : ''} options={typesList} changeHandler={selectCurrentType} />
+          </>
+        ) : (
+          <Row slideOver label="Type" name="type">
+            <LoadingSpinner dark />
+          </Row>
+        )}
+      </Row>
 
       <Select
         slideOver
-        label="Level &amp; Power"
+        label="Level (Opt.)"
         name="level"
         value={levelId || ''}
-        options={type ? type.level.map(level => ({ name: `${level.totalPower} Power (Base + ${level.powerAdded})`, id: level._id })) : []}
+        options={
+          type
+            ? type.level.map(level => ({ name: `Milestone ${level.milestone} - D${level.strength} / D${level.agility} / D${level.persona} / D${level.aptitude} / ${level.health} HP`, id: level._id }))
+            : []
+        }
         changeHandler={selectLevel}
-        required
       />
 
-      {id && <Notice status="warn" message="Note: Changing your npc's level &amp; power will reset their stats" />}
+      {id && <Notice status="warn" message="Note: Changing your npc's level will reset their stats" />}
 
       {!id && (
         <>
