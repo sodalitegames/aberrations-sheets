@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { updateSheetStart, createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
+import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { FetchedResourceType } from '../../../models/resource';
 import { SlideOverForm } from '../SlideOver';
@@ -11,12 +11,14 @@ import Detail from '../elements/Detail';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 import { useResource } from '../../../hooks/useResource';
+import { calculateAugmentationPoints } from '../../../utils/functions/calculations';
 
 const PurchaseAugmentation = ({ data }) => {
   const dispatch = useDispatch();
 
   const augmentationGroups = useResource(FetchedResourceType.AugmentationGroups);
 
+  const [augmentationPoints] = useState(calculateAugmentationPoints(data.entity.milestones, data.entity.augmentations));
   const [augmentation, setAugmentation] = useState(null);
   const [augsList, setAugsList] = useState([]);
 
@@ -72,7 +74,7 @@ const PurchaseAugmentation = ({ data }) => {
 
     if (!augmentation) return alert('Must provide augmentation');
 
-    if (data.entity.upgradePoints < augmentation.pointCost) return alert('You cannot afford this ability');
+    if (augmentationPoints < augmentation.pointCost) return alert('You cannot afford this augmentation');
 
     const { name, pointCost, description, universalId } = augmentation;
 
@@ -85,14 +87,6 @@ const PurchaseAugmentation = ({ data }) => {
         { forPlayer: data.entityType === 'player' ? true : false, notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` } }
       )
     );
-
-    if (data.sheetType === 'characters') {
-      dispatch(updateSheetStart(data.sheetType, data.sheetId, { experience: data.entity.experience - pointCost }, { slideOver: true, forPlayer: data.entityType === 'player' ? true : false }));
-    }
-
-    if (data.sheetType === 'campaigns') {
-      dispatch(updateSheetResourceStart(data.sheetType, data.sheetId, 'npcs', data.entity._id, { experience: data.entity.experience - pointCost }, { slideOver: true }));
-    }
   };
 
   return (
@@ -103,7 +97,7 @@ const PurchaseAugmentation = ({ data }) => {
       submitDisabled={!!(!augmentation || (augmentation && data.entity.upgradePoints < augmentation.pointCost))}
       submitHandler={submitHandler}
     >
-      <Detail slideOver label="Experience Available" detail={data.entity.experience} />
+      <Detail slideOver label="Augmentation Points" detail={augmentationPoints} />
       {augmentationGroups && augsList ? (
         <>
           <Select slideOver label="Choose an Augmentation" name="augmentations" options={augsList} changeHandler={selectAugmentation} />
@@ -111,7 +105,7 @@ const PurchaseAugmentation = ({ data }) => {
           {augmentation ? (
             <>
               <Detail slideOver label="Name" detail={augmentation.name} />
-              <Detail status={data.entity.experience < augmentation.pointCost ? 'error' : ''} slideOver label="Experience Cost" detail={augmentation.pointCost} />
+              <Detail status={augmentationPoints < augmentation.pointCost ? 'error' : ''} slideOver label="Cost" detail={augmentation.pointCost} />
               <Detail slideOver label="Description" detail={augmentation.description} />
             </>
           ) : null}

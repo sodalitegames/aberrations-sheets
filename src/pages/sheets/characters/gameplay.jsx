@@ -11,6 +11,7 @@ import {
   selectEquippedUsables,
   selectShieldValue,
   selectSpeedAdjustment,
+  selectAugmentationPoints,
   selectModifiers,
 } from '../../../redux/character/character.selectors';
 
@@ -37,6 +38,7 @@ import DisplayWearable from '../../../components/display/DisplayWearable';
 import DisplayConsumable from '../../../components/display/DisplayConsumable';
 import DisplayUsable from '../../../components/display/DisplayUsable';
 import NewlineText from '../../../components/NewlineText';
+import Chip from '../../../components/Chip';
 
 const CharacterGameplayPage = () => {
   const { setModal, setSlideOver } = useActions();
@@ -50,6 +52,7 @@ const CharacterGameplayPage = () => {
 
   const speedAdjustment = useSelector(selectSpeedAdjustment);
   const shieldValue = useSelector(selectShieldValue);
+  const augmentationPoints = useSelector(selectAugmentationPoints);
   const modifiers = useSelector(selectModifiers);
 
   return (
@@ -198,9 +201,6 @@ const CharacterGameplayPage = () => {
             <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'character' } })} classes="mt-2">
               Heal Damage
             </Button>
-            <Button classes="mt-2" onClick={() => setModal({ type: ModalTypes.upgradeHealth, data: { type: 'character', entity: charSheet } })}>
-              Upgrade Health
-            </Button>
           </div>
         </SheetPagePanel>
 
@@ -336,6 +336,7 @@ const CharacterGameplayPage = () => {
       <SheetPagePanel>
         <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
+          <Chip color={augmentationPoints < 0 ? 'red' : augmentationPoints === 0 ? 'yellow' : 'green'}>Augmentation Points: {augmentationPoints}</Chip>
         </div>
         <div className="flow-root mt-6">
           <ListContainer

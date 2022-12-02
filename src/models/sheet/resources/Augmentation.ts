@@ -5,5 +5,5 @@ export interface Augmentation {
   universalId: string;
   name: string;
   description: string;
-  pointCost: string;
+  pointCost: number;
 }
