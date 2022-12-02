@@ -24,7 +24,6 @@ enum ModalTypes {
   upgradeStat = 'UPGRADE_STAT',
   editCondition = 'EDIT_CONDITION',
   editHealth = 'EDIT_HEALTH',
-  upgradeHealth = 'UPGRADE_HEALTH',
   editWallet = 'EDIT_WALLET',
   reachMilestone = 'REACH_MILESTONE',
   editModifiers = 'EDIT_MODIFIERS',

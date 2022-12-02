@@ -46,7 +46,6 @@ import EditStat from './modal/EditStat';
 import UpgradeStat from './modal/UpgradeStat';
 import EditCondition from './modal/EditCondition';
 import EditHealth from './modal/EditHealth';
-import UpgradeHealth from './modal/UpgradeHealth';
 import EditWallet from './modal/EditWallet';
 import ReachMilestone from './modal/ReachMilestone';
 import EditModifiers from './modal/EditModifiers';
@@ -96,7 +95,6 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.upgradeStat ? <UpgradeStat id={modal.id as StatType} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editCondition ? <EditCondition id={modal.id as ConditionType} data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editHealth ? <EditHealth data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.upgradeHealth ? <UpgradeHealth data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editWallet ? <EditWallet data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.reachMilestone ? <ReachMilestone data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editModifiers ? <EditModifiers data={modal.data} /> : null}

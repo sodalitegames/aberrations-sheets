@@ -26,5 +26,6 @@ export interface Species {
   appearance: string;
   stats: Stats;
   health: number;
+  healthIncrement: number;
   lore: Lore;
 }

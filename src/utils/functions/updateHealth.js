@@ -5,14 +5,6 @@ export const correctCurrentHp = (newCurrent, newMax) => {
   return newCurrent;
 };
 
-export const calculateNewCurrentHp = (current, max, newMax) => {
-  // Add the difference between newMax and old max to the currentHp
-  const newCurrent = current + (newMax - max);
-
-  // Calculate and return new current hp
-  return correctCurrentHp(newCurrent, newMax);
-};
-
 export const takeDamage = (current, updated, max) => {
   let results = {
     currentHp: updated,
@@ -36,13 +28,6 @@ export const takeDamage = (current, updated, max) => {
   if (current >= max / 5) {
     if (updated < max / 5) {
       results.justMauled = true;
-      results.injured = results.injured + 1;
-    }
-  }
-
-  // Check if they are already mauled
-  if (current < max / 5 && current > 0) {
-    if (updated < max / 5) {
       results.injured = results.injured + 1;
     }
   }

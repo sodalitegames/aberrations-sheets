@@ -6,7 +6,7 @@ export const getHealthMessage = (current, max) => {
     : current === 1
     ? `You are as good as dead`
     : current < max / 5
-    ? `You are mauled and will gain 1 injured each time you take damage`
+    ? `You are mauled`
     : current < max / 2
     ? `You are bloodied`
     : current >= (max / 4) * 3

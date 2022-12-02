@@ -77,9 +77,11 @@ export function* fetchCurrentSheet({ payload: { sheetType, sheetId } }: FetchCur
       // If it is a character sheet, fetch the species data and append it to the sheet data
       const resourceResponse: AxiosResponse<Species[]> = yield fetchSpecies(`?_id=${response.data.data.sheet.speciesId}`);
 
-      const { id, name, abilities, appearance, basicInfo, stats, health } = resourceResponse.data[0];
+      const { id, name, abilities, appearance, basicInfo, stats, health, healthIncrement } = resourceResponse.data[0];
 
-      yield put(fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, abilities, appearance, basicInfo, stats, health } }, response.data.data.permissions));
+      yield put(
+        fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, abilities, appearance, basicInfo, stats, health, healthIncrement } }, response.data.data.permissions)
+      );
 
       return;
     }
