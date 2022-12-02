@@ -79,16 +79,24 @@ export const getRolledDiceNotificationMessage = (rollData, stat) => {
   // If not rolling for a stat
   if (!stat) {
     if (rollData.critical.success) {
-      return `You rolled ${rollData.results.rolls.length} ${rollData.results.rolls.length > 1 ? 'dice' : 'die'} and got a critical success (${rollData.successes} successes)`;
+      return `You rolled a D${rollData.die} and got a critical success (${rollData.total}).`;
     }
 
-    return `You rolled ${rollData.results.rolls.length} ${rollData.results.rolls.length > 1 ? 'dice' : 'die'} and got ${rollData.successes} / ${rollData.results.rolls.length} successess.`;
+    if (rollData.critical.failure) {
+      return `You rolled a D${rollData.die} and got a critical failure (${rollData.total}).`;
+    }
+
+    return `You rolled a D${rollData.die} and got ${rollData.total}.`;
   }
 
   // If rolling for a stat
   if (rollData.critical.success) {
-    return `You rolled for ${stat} (${rollData.results.rolls.length} ${rollData.results.rolls.length > 1 ? 'dice' : 'die'}) and got a critical success (${rollData.successes} successes)`;
+    return `You rolled for ${stat} (D${rollData.die}) and got a critical success (${rollData.total}).`;
   }
 
-  return `You rolled for ${stat} (${rollData.results.rolls.length} ${rollData.results.rolls.length > 1 ? 'dice' : 'die'}) and got ${rollData.successes} / ${rollData.results.rolls.length} successess.`;
+  if (rollData.critical.failure) {
+    return `You rolled for ${stat} (D${rollData.die}) and got a critical failure (${rollData.total}).`;
+  }
+
+  return `You rolled for ${stat} (D${rollData.die}) and got ${rollData.total}.`;
 };

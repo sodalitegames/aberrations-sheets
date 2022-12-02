@@ -6,10 +6,10 @@ import { roll } from '@aberrations-rpg/functions';
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
-// import { useActions } from '../../../hooks/useActions';
+import { useActions } from '../../../hooks/useActions';
 
 import { capitalize } from '../../../utils/helpers/strings';
-// import { getRolledDiceNotificationMessage } from '../../../utils/helpers/messages';
+import { getRolledDiceNotificationMessage } from '../../../utils/helpers/messages';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -18,8 +18,7 @@ import Select from '../elements/Select';
 import Detail from '../elements/Detail';
 
 const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) => {
-  // const dispatch = useDispatch();
-  // const { addNotification } = useActions();
+  const { addNotification } = useActions();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
@@ -66,17 +65,17 @@ const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) 
     }
   }, [rollingStat, sheet]);
 
-  const calcAdvantage = () => {
+  const calcModifier = () => {
     if (sheet?.conditions) {
-      return +advantage + (statKey === 'strength' || statKey === 'agility' ? -sheet.conditions.injured : -sheet.conditions.disturbed);
+      return +modifier + -sheet.conditions.injured + -sheet.conditions.disturbed;
     }
 
-    return +advantage;
+    return +modifier;
   };
 
   const getSubmitText = () => {
     if (stat) {
-      return `Roll for ${capitalize(statKey)} (D${stat.die}) with ${calcAdvantage()} Advantage.`;
+      return `Roll for ${capitalize(statKey)} (D${stat.die}) with ${+advantage} Advantage.`;
     }
 
     if (!die) {
@@ -102,32 +101,30 @@ const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) 
     // If not empty or none, set the stat key and stat
     setStatKey(e.target.value);
     setStat(sheet[e.target.value]);
-
-    // Clear all other state
-    setDie(2);
-    setAdvantage(0);
   };
 
   const submitHandler = async e => {
     e.preventDefault();
 
     if (!stat) {
-      const results = roll(die, calcAdvantage(), +modifier);
+      const results = roll(+die, +advantage, +modifier);
+
+      console.log(results);
 
       setResults(results);
 
       // Add a notification with a message about your results
-      // addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(data) });
+      addNotification({ status: 'success', heading: 'Rolled Dice', message: getRolledDiceNotificationMessage(results) });
 
       return;
     }
 
-    const results = roll(stat.die, calcAdvantage(), +modifier);
+    const results = roll(stat.die, +advantage, calcModifier());
 
     setResults(results);
 
     // Add a notification with a message about your results
-    // addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(data, statKey) });
+    addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(results, statKey) });
   };
 
   const selectDie = e => {
@@ -160,11 +157,7 @@ const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) 
       {stat && sheet?.conditions ? (
         <>
           <Detail slideOver label="Die" detail={'D' + stat.die} />
-          {statKey === 'strength' || statKey === 'agility' ? (
-            <Detail slideOver label="Injured Disadvantage" detail={-sheet.conditions.injured} />
-          ) : statKey === 'persona' || statKey === 'aptitude' ? (
-            <Detail slideOver label="Disturbed Disadvantage" detail={-sheet.conditions.disturbed} />
-          ) : null}
+          <Detail slideOver label="Injured/Disturbed" detail={`${-sheet.conditions.injured + -sheet.conditions.disturbed} Modifier`} />
         </>
       ) : (
         <>
