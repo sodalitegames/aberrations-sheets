@@ -109,10 +109,8 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
     }
 
     if (rest === 'nap') {
-      let newInjured = sheet.conditions.injured - 1;
-      let newDisturbed = sheet.conditions.disturbed - 1;
-
-      // Hardcore mode: correctCurrentHp(sheet.currentHp + Math.floor((sheet.fortitude.points + sheet.fortitude.modifier) / 2), sheet.maxHp)
+      let injured = sheet.conditions.injured === 0 ? 0 : sheet.conditions.injured - 1;
+      let disturbed = sheet.conditions.disturbed === 0 ? 0 : sheet.conditions.disturbed - 1;
 
       switch (type) {
         case 'player':
@@ -122,11 +120,7 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               playerId,
               {
                 currentHp: correctCurrentHp(sheet.currentHp + Math.floor(sheet.maxHp / 2), sheet.maxHp),
-                conditions: { ...sheet.conditions, injured: newInjured < 0 ? 0 : newInjured, disturbed: newDisturbed < 0 ? 0 : newDisturbed },
-                fortitude: { ...sheet.fortitude, advantage: 0 },
-                agility: { ...sheet.agility, advantage: 0 },
-                persona: { ...sheet.persona, advantage: 0 },
-                aptitude: { ...sheet.aptitude, advantage: 0 },
+                conditions: { ...sheet.conditions, injured, disturbed },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -140,11 +134,7 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               charSheet._id,
               {
                 currentHp: correctCurrentHp(charSheet.currentHp + Math.floor(charSheet.maxHp / 2), charSheet.maxHp),
-                conditions: { ...charSheet.conditions, injured: newInjured < 0 ? 0 : newInjured, disturbed: newDisturbed < 0 ? 0 : newDisturbed },
-                fortitude: { ...charSheet.fortitude, advantage: 0 },
-                agility: { ...charSheet.agility, advantage: 0 },
-                persona: { ...charSheet.persona, advantage: 0 },
-                aptitude: { ...charSheet.aptitude, advantage: 0 },
+                conditions: { ...charSheet.conditions, injured, disturbed },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -160,11 +150,7 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               npcId,
               {
                 currentHp: correctCurrentHp(sheet.currentHp + Math.floor(sheet.maxHp / 2), sheet.maxHp),
-                conditions: { ...sheet.conditions, injured: newInjured < 0 ? 0 : newInjured, disturbed: newDisturbed < 0 ? 0 : newDisturbed },
-                fortitude: { ...sheet.fortitude, advantage: 0 },
-                agility: { ...sheet.agility, advantage: 0 },
-                persona: { ...sheet.persona, advantage: 0 },
-                aptitude: { ...sheet.aptitude, advantage: 0 },
+                conditions: { ...sheet.conditions, injured, disturbed },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
