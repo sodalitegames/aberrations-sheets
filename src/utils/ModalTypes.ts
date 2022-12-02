@@ -26,6 +26,7 @@ enum ModalTypes {
   editHealth = 'EDIT_HEALTH',
   editWallet = 'EDIT_WALLET',
   reachMilestone = 'REACH_MILESTONE',
+  editMilestones = 'EDIT_MILESTONES',
   editModifiers = 'EDIT_MODIFIERS',
 }
 

@@ -10,14 +10,18 @@ import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
 import Button from '../Button';
+import Chip from '../Chip';
 
-const Stats = ({ stats }) => {
+const Stats = ({ stats, experience }) => {
   const { setModal, setSlideOver } = useActions();
   const charSheet = useSelector(selectCurrentCharacter);
   return (
     <div>
       <div className="flex flex-wrap justify-between mx-2 space-y-2">
         <h3 className="text-lg font-medium text-gray-900">Stats</h3>
+        <Chip color={experience === 0 ? 'yellow' : 'green'} editable={{ type: ModalTypes.editExperience, data: { type: 'character', entity: charSheet } }}>
+          Experience: {experience}
+        </Chip>
       </div>
 
       <dl className="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 md:grid-cols-4">
