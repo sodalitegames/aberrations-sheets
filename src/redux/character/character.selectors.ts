@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { calculateAugmentationPoints, calculateModifiers, calculateShieldValue, calculateSpeedAdjustment } from '../../utils/functions/calculations';
 
 import { RootState } from '../root-reducer';
 
@@ -26,23 +27,16 @@ export const selectEquippedWearables = createSelector([selectCurrentCharacter], 
 export const selectEquippedConsumables = createSelector([selectCurrentCharacter], current => (current ? current.consumables.filter(consumable => consumable.equipped && !consumable.archived) : []));
 export const selectEquippedUsables = createSelector([selectCurrentCharacter], current => (current ? current.usables.filter(usable => usable.equipped && !usable.archived) : []));
 
-export const selectShieldValue = createSelector([selectEquippedWearables], equippedWearables =>
-  equippedWearables.length ? equippedWearables.reduce((shieldValue: number, wearable) => wearable.shieldValue || 0 + shieldValue, 0) : 0
-);
-export const selectSpeedAdjustment = createSelector([selectEquippedWearables], equippedWearables =>
-  equippedWearables.length ? equippedWearables.reduce((speedAdjustment: number, wearable) => wearable.speedAdjustment || 0 + speedAdjustment, 0) : 0
-);
+export const selectAugmentationPoints = createSelector([selectCurrentCharacter], current => {
+  if (!current) return 0;
+  return calculateAugmentationPoints(current.milestones, current.augmentations);
+});
+
+export const selectShieldValue = createSelector([selectEquippedWearables], equippedWearables => calculateShieldValue(equippedWearables));
+export const selectSpeedAdjustment = createSelector([selectEquippedWearables], equippedWearables => calculateSpeedAdjustment(equippedWearables));
 export const selectModifiers = createSelector([selectCurrentCharacter, selectEquippedWearables], (current, equippedWearables) => {
   if (!current) return [];
-
-  const characterModifiers = current.modifiers || [];
-  const wearableModifiers = equippedWearables.map(wearable => wearable.modifiers || []).flat();
-
-  const modifiers = [...characterModifiers, ...wearableModifiers];
-
-  // TODO: Check if any modifers are the same and combine them if so
-
-  return modifiers;
+  return calculateModifiers(current.modifiers, equippedWearables);
 });
 
 export const selectPendingTransactions = createSelector([selectCurrentCharacter], current =>

@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
 import { PencilIcon } from '@heroicons/react/solid';
-import { InformationCircleIcon } from '@heroicons/react/outline';
+// import { InformationCircleIcon } from '@heroicons/react/outline';
 
 import {
   selectCurrentCharacter,
@@ -11,6 +11,7 @@ import {
   selectEquippedUsables,
   selectShieldValue,
   selectSpeedAdjustment,
+  selectAugmentationPoints,
   selectModifiers,
 } from '../../../redux/character/character.selectors';
 
@@ -37,6 +38,7 @@ import DisplayWearable from '../../../components/display/DisplayWearable';
 import DisplayConsumable from '../../../components/display/DisplayConsumable';
 import DisplayUsable from '../../../components/display/DisplayUsable';
 import NewlineText from '../../../components/NewlineText';
+import Chip from '../../../components/Chip';
 
 const CharacterGameplayPage = () => {
   const { setModal, setSlideOver } = useActions();
@@ -50,6 +52,7 @@ const CharacterGameplayPage = () => {
 
   const speedAdjustment = useSelector(selectSpeedAdjustment);
   const shieldValue = useSelector(selectShieldValue);
+  const augmentationPoints = useSelector(selectAugmentationPoints);
   const modifiers = useSelector(selectModifiers);
 
   return (
@@ -102,6 +105,7 @@ const CharacterGameplayPage = () => {
               { name: 'Persona', ...charSheet.persona },
               { name: 'Aptitude', ...charSheet.aptitude },
             ]}
+            experience={charSheet.experience}
           />
           <div className="mt-8">
             <div className="mx-2">
@@ -112,10 +116,8 @@ const CharacterGameplayPage = () => {
               {/* Shield Value */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-                  <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" />
-                  <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
-                    Shield Value
-                  </h4>
+                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
+                  <h4 className="flex items-center uppercase text-md">Shield Value</h4>
                   <p className="text-lg font-bold">{charSheet.shieldValue + shieldValue}</p>
                 </div>
               </div>
@@ -123,36 +125,34 @@ const CharacterGameplayPage = () => {
               {/* Movement Speed */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-                  <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" />
-                  <h4 className="flex items-center uppercase text-md" title="Take this much damage at the start of each of your turns">
-                    Movement Speed
-                  </h4>
+                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
+                  <h4 className="flex items-center uppercase text-md">Movement Speed</h4>
                   <p className="text-lg font-bold">{charSheet.speed + speedAdjustment}</p>
                 </div>
               </div>
 
-              {/* Experience */}
+              {/* Milestones */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-                  <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" />
-                  <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
-                    Experience
-                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editExperience, data: { type: 'character', entity: charSheet } })}>
+                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
+                  <h4 className="flex items-center uppercase text-md">
+                    Milestones
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMilestones, data: { type: 'character', entity: charSheet } })}>
                       <PencilIcon
                         className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"
                       />
                     </span>
                   </h4>
-                  <p className="text-lg font-bold">{charSheet.experience}</p>
+                  <p className="text-lg font-bold">{charSheet.milestones}</p>
                 </div>
               </div>
 
               {/* Mortality */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
-                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-                  <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" />
-                  <h4 className="flex items-center uppercase text-md" title="Reduce your movement speed and shield value by this amount">
+                <div className="flex flex-col items-center w-full py-3 rounded-md bg-gray-50">
+                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
+                  <h4 className="flex items-center uppercase text-md">
                     Mortality
                     <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMortality, data: { type: 'character', entity: charSheet } })}>
                       <PencilIcon
@@ -197,9 +197,6 @@ const CharacterGameplayPage = () => {
             <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'character' } })}>Take Damage</Button>
             <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'character' } })} classes="mt-2">
               Heal Damage
-            </Button>
-            <Button classes="mt-2" onClick={() => setModal({ type: ModalTypes.upgradeHealth, data: { type: 'character', entity: charSheet } })}>
-              Upgrade Health
             </Button>
           </div>
         </SheetPagePanel>
@@ -336,6 +333,7 @@ const CharacterGameplayPage = () => {
       <SheetPagePanel>
         <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
+          <Chip color={augmentationPoints < 0 ? 'red' : augmentationPoints === 0 ? 'yellow' : 'green'}>Augmentation Points: {augmentationPoints}</Chip>
         </div>
         <div className="flow-root mt-6">
           <ListContainer

@@ -48,79 +48,19 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
     setRest(e.target.value);
 
     if (e.target.value === 'slumber') {
-      let actionsArr = [`You'll Recover all your health points`, `All points in Injured and Disturbed will be removed`, `All temporary stat advantages will be reset to 0`];
-
-      if (sheet.fortitude.experience >= sheet.fortitude.points) {
-        actionsArr.push(`Foritude stat leveled up (and extra experience will be added to your pool)`);
-      }
-      if (sheet.agility.experience >= sheet.agility.points) {
-        actionsArr.push(`Agility stat leveled up (and extra experience will be added to your pool)`);
-      }
-      if (sheet.persona.experience >= sheet.persona.points) {
-        actionsArr.push(`Persona stat leveled up (and extra experience will be added to your pool)`);
-      }
-      if (sheet.aptitude.experience >= sheet.aptitude.points) {
-        actionsArr.push(`Aptitude stat leveled up (and extra experience will be added to your pool)`);
-      }
-
+      let actionsArr = [`You'll Recover all your health points`, `All points in Injured and Disturbed will be removed`];
       setActions(actionsArr);
     }
 
     if (e.target.value === 'nap') {
-      setActions([`You will recover ${Math.floor(sheet.maxHp / 2)} health`, `1 point in Injured and 1 point in Disturbed will be removed`, `All temporary stat advantages will be reset to 0`]);
+      setActions([`You will recover ${Math.floor(sheet.maxHp / 2)} health`, `1 point in Injured and 1 point in Disturbed will be removed`]);
     }
   };
 
   const submitHandler = async e => {
     e.preventDefault();
 
-    let fortitude = JSON.parse(JSON.stringify(sheet.fortitude));
-    let agility = JSON.parse(JSON.stringify(sheet.agility));
-    let persona = JSON.parse(JSON.stringify(sheet.persona));
-    let aptitude = JSON.parse(JSON.stringify(sheet.aptitude));
-
     if (rest === 'slumber') {
-      let upgradedFortitude = false;
-
-      if (fortitude.experience >= fortitude.points) {
-        upgradedFortitude = true;
-        fortitude = {
-          ...fortitude,
-          points: fortitude.points + 1,
-          experience: 0,
-          pool: fortitude.pool + (fortitude.experience - fortitude.points),
-        };
-      }
-
-      if (agility.experience >= agility.points) {
-        agility = {
-          ...agility,
-          points: agility.points + 1,
-          experience: 0,
-          pool: agility.pool + (agility.experience - agility.points),
-        };
-      }
-
-      if (persona.experience >= persona.points) {
-        persona = {
-          ...persona,
-          points: persona.points + 1,
-          experience: 0,
-          pool: persona.pool + (persona.experience - persona.points),
-        };
-      }
-
-      if (aptitude.experience >= aptitude.points) {
-        aptitude = {
-          ...aptitude,
-          points: aptitude.points + 1,
-          experience: 0,
-          pool: aptitude.pool + (aptitude.experience - aptitude.points),
-        };
-      }
-
-      // Hardcore mode: correctCurrentHp(charSheet.currentHp + (charSheet.fortitude.points + charSheet.fortitude.modifier) + (upgradedFortitude ? 10 : 0), charSheet.maxHp + (upgradedFortitude ? 10 : 0))
-
       switch (type) {
         case 'player':
           dispatch(
@@ -128,12 +68,8 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               'characters',
               playerId,
               {
-                currentHp: sheet.maxHp + (upgradedFortitude ? 10 : 0),
+                currentHp: sheet.maxHp,
                 conditions: { ...sheet.conditions, injured: 0, disturbed: 0 },
-                fortitude: { ...fortitude, advantage: 0 },
-                agility: { ...agility, advantage: 0 },
-                persona: { ...persona, advantage: 0 },
-                aptitude: { ...aptitude, advantage: 0 },
               },
               { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -145,12 +81,8 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               'characters',
               charSheet._id,
               {
-                currentHp: charSheet.maxHp + (upgradedFortitude ? 10 : 0),
+                currentHp: charSheet.maxHp,
                 conditions: { ...charSheet.conditions, injured: 0, disturbed: 0 },
-                fortitude: { ...fortitude, advantage: 0 },
-                agility: { ...agility, advantage: 0 },
-                persona: { ...persona, advantage: 0 },
-                aptitude: { ...aptitude, advantage: 0 },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -164,12 +96,8 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               'npcs',
               npcId,
               {
-                currentHp: sheet.maxHp + (upgradedFortitude ? 10 : 0),
+                currentHp: sheet.maxHp,
                 conditions: { ...sheet.conditions, injured: 0, disturbed: 0 },
-                fortitude: { ...fortitude, advantage: 0 },
-                agility: { ...agility, advantage: 0 },
-                persona: { ...persona, advantage: 0 },
-                aptitude: { ...aptitude, advantage: 0 },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -181,10 +109,8 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
     }
 
     if (rest === 'nap') {
-      let newInjured = sheet.conditions.injured - 1;
-      let newDisturbed = sheet.conditions.disturbed - 1;
-
-      // Hardcore mode: correctCurrentHp(sheet.currentHp + Math.floor((sheet.fortitude.points + sheet.fortitude.modifier) / 2), sheet.maxHp)
+      let injured = sheet.conditions.injured === 0 ? 0 : sheet.conditions.injured - 1;
+      let disturbed = sheet.conditions.disturbed === 0 ? 0 : sheet.conditions.disturbed - 1;
 
       switch (type) {
         case 'player':
@@ -194,11 +120,7 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               playerId,
               {
                 currentHp: correctCurrentHp(sheet.currentHp + Math.floor(sheet.maxHp / 2), sheet.maxHp),
-                conditions: { ...sheet.conditions, injured: newInjured < 0 ? 0 : newInjured, disturbed: newDisturbed < 0 ? 0 : newDisturbed },
-                fortitude: { ...sheet.fortitude, advantage: 0 },
-                agility: { ...sheet.agility, advantage: 0 },
-                persona: { ...sheet.persona, advantage: 0 },
-                aptitude: { ...sheet.aptitude, advantage: 0 },
+                conditions: { ...sheet.conditions, injured, disturbed },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -212,11 +134,7 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               charSheet._id,
               {
                 currentHp: correctCurrentHp(charSheet.currentHp + Math.floor(charSheet.maxHp / 2), charSheet.maxHp),
-                conditions: { ...charSheet.conditions, injured: newInjured < 0 ? 0 : newInjured, disturbed: newDisturbed < 0 ? 0 : newDisturbed },
-                fortitude: { ...charSheet.fortitude, advantage: 0 },
-                agility: { ...charSheet.agility, advantage: 0 },
-                persona: { ...charSheet.persona, advantage: 0 },
-                aptitude: { ...charSheet.aptitude, advantage: 0 },
+                conditions: { ...charSheet.conditions, injured, disturbed },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -232,11 +150,7 @@ const TakeARest = ({ data: { type, playerId, npcId } }) => {
               npcId,
               {
                 currentHp: correctCurrentHp(sheet.currentHp + Math.floor(sheet.maxHp / 2), sheet.maxHp),
-                conditions: { ...sheet.conditions, injured: newInjured < 0 ? 0 : newInjured, disturbed: newDisturbed < 0 ? 0 : newDisturbed },
-                fortitude: { ...sheet.fortitude, advantage: 0 },
-                agility: { ...sheet.agility, advantage: 0 },
-                persona: { ...sheet.persona, advantage: 0 },
-                aptitude: { ...sheet.aptitude, advantage: 0 },
+                conditions: { ...sheet.conditions, injured, disturbed },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )

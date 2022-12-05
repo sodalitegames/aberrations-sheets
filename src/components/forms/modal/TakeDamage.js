@@ -60,10 +60,6 @@ const TakeDamage = ({ data: { type, playerId, npcId, creatureId } }) => {
         actionsArr.push(`You will become Mauled and gain 1 injured.`);
       }
 
-      if (!results.justBloodied && !results.justMauled && results.injured) {
-        actionsArr.push(`You will gain ${results.injured} injured because you are Mauled.`);
-      }
-
       if (results.nearlyDead) {
         actionsArr.push(`You will become Nearly Dead and gain 1 Mortality.`);
       }
