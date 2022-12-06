@@ -12,6 +12,7 @@ interface DescriptionListItem {
   name: string;
   values: (string | number)[] | ValuesListItem[];
   half?: boolean;
+  columns?: number;
 }
 
 interface DescriptionListProps {
@@ -27,31 +28,29 @@ const DescriptionList: React.VFC<DescriptionListProps> = ({ list, classes }) => 
           item && (
             <div key={index} className={classNames(item.half ? 'sm:col-span-1' : 'sm:col-span-2')}>
               <dt className="text-xs text-gray-500 font-base">{item.name}</dt>
-              {item.values.map((value, index) => {
-                if (value === undefined) {
-                  return (
-                    <dd key={index} className="mt-1 text-sm text-gray-900">
-                      [undefined]
-                    </dd>
-                  );
-                }
+              <dd key={index} className={classNames(item.columns === 2 ? 'grid grid-cols-2' : item.columns === 3 ? 'grid grid-cols-3' : '', 'mt-1 text-sm text-gray-900')}>
+                {item.values.map((value, index) => {
+                  if (value === undefined) {
+                    return <span key={index}>[undefined]</span>;
+                  }
 
-                if (typeof value === 'string' || typeof value === 'number') {
-                  return (
-                    <dd key={index} className="mt-1 text-sm text-gray-900">
-                      <NewlineText text={String(value)} />
-                    </dd>
-                  );
-                }
+                  if (typeof value === 'string' || typeof value === 'number') {
+                    return (
+                      <span key={index} className="">
+                        <NewlineText text={String(value)} />
+                      </span>
+                    );
+                  }
 
-                return (
-                  <Tooltip key={index} message={value.tooltip || []}>
-                    <dd key={index} className="mt-1 text-sm text-gray-900">
-                      <NewlineText text={String(value.value)} />
-                    </dd>
-                  </Tooltip>
-                );
-              })}
+                  return (
+                    <Tooltip key={index} message={value.tooltip || []}>
+                      <span>
+                        <NewlineText text={String(value.value)} />
+                      </span>
+                    </Tooltip>
+                  );
+                })}
+              </dd>
             </div>
           )
       )}
