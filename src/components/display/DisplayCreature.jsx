@@ -3,6 +3,7 @@ import { useActions } from '../../hooks/useActions';
 import SlideOverTypes from '../../utils/SlideOverTypes';
 import ModalTypes from '../../utils/ModalTypes';
 import { capitalize } from '../../utils/helpers/strings';
+import { displayModifier } from '../../utils/helpers/modifiers';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -23,6 +24,7 @@ const CreatureDetails = ({ creature }) => {
         { name: 'Mortality', values: [creature.mortality], half: true },
         { name: 'Speed', values: [creature.speed], half: true },
         { name: 'Health', values: [`${creature.currentHp}/${creature.maxHp}`], half: true },
+        { name: 'Modifiers', values: creature.modifiers.length ? creature.modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
       ]}
       classes="mt-2"
     />
@@ -76,6 +78,10 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
             {
               text: 'Health',
               click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'creature', entity: creature } }),
+            },
+            {
+              text: 'Modifiers',
+              click: () => setModal({ type: ModalTypes.editModifiers, data: { type: 'creature', resource: creature } }),
             },
           ],
         }}

@@ -21,6 +21,7 @@ import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import { getHealthMessage, getWalletMessage } from '../../../utils/helpers/messages';
+import { displayModifier } from '../../../utils/helpers/modifiers';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -77,7 +78,7 @@ const CharacterGameplayPage = () => {
 
           <h3 className="flex items-center text-lg font-medium text-gray-900">
             Modifiers
-            <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editModifiers, id: 'slowed', data: { type: 'character', resource: charSheet } })}>
+            <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editModifiers, data: { type: 'character', resource: charSheet } })}>
               <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
             </span>
           </h3>
@@ -85,7 +86,7 @@ const CharacterGameplayPage = () => {
             <div className="space-y-1 columns-4">
               {modifiers.map(({ modifier, amount }) => (
                 <p key={modifier + '_' + amount} className="text-sm">
-                  {modifier} {amount > 0 ? `+${amount}` : amount}
+                  {displayModifier({ modifier, amount })}
                 </p>
               ))}
             </div>

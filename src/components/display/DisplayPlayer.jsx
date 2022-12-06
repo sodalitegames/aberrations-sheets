@@ -3,6 +3,8 @@ import { useActions } from '../../hooks/useActions';
 import { getSpeciesAbility } from '../../utils/helpers/species';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
+import { calculateModifiers, calculateShieldValue, calculateSpeedAdjustment } from '../../utils/functions/calculations';
+import { displayModifier } from '../../utils/helpers/modifiers';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -17,30 +19,34 @@ import DisplayUsable from './DisplayUsable';
 import Heading from '../Heading';
 
 const PlayerDetails = ({ player, species }) => {
+  const modifiers = calculateModifiers(player.modifiers, player.wearables);
+  const abilities = getSpeciesAbility(player.speciesId, species);
+
   return (
     <DescriptionList
       list={[
         { name: 'Player Name', values: [player.playerNickname ? `${player.playerNickname} (${player.playerName})` : player.playerName], half: true },
-        { name: 'Shield Value', values: [player.shieldValue], half: true },
+        { name: 'Shield Value', values: [calculateShieldValue(player.wearables)], half: true },
         { name: 'Species', values: [player.speciesName], half: true },
         { name: 'Mortality', values: [player.mortality], half: true },
         { name: 'Experience', values: [player.experience], half: true },
         { name: 'Wallet', values: [player.wallet], half: true },
         { name: 'Active', values: [player.active ? 'Yes' : 'No'], half: true },
         { name: 'Milestones', values: [player.milestones], half: true },
-        { name: 'Speed', values: [player.speed], half: true },
+        { name: 'Speed', values: [player.speed + calculateSpeedAdjustment(player.wearables)], half: true },
         { name: 'Health', values: [`${player.currentHp}/${player.maxHp}`], half: true },
+        { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
         {
           name: 'Activated Ability',
-          values: [getSpeciesAbility(player.speciesId, species).activated],
+          values: [abilities.activated],
         },
         {
           name: 'Passive Abilities',
-          values: [getSpeciesAbility(player.speciesId, species).passive],
+          values: [abilities.passive],
         },
         {
           name: 'Detraction',
-          values: [getSpeciesAbility(player.speciesId, species).detraction],
+          values: [abilities.detraction],
         },
       ]}
       classes="my-2"
@@ -87,6 +93,14 @@ const DisplayPlayer = ({ player, species, condensed, listItem }) => {
             {
               text: 'Health',
               click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'player', entity: player } }),
+            },
+            {
+              text: 'Milestones',
+              click: () => setModal({ type: ModalTypes.editMilestones, data: { type: 'player', entity: player } }),
+            },
+            {
+              text: 'Modifiers',
+              click: () => setModal({ type: ModalTypes.editModifiers, data: { type: 'player', resource: player } }),
             },
           ],
         }}
