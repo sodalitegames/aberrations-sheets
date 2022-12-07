@@ -33,6 +33,8 @@ const CreatureForm = ({ id }) => {
   const [types, setTypes] = useState([]);
   const [attackingStat, setAttackingStat] = useState('');
   const [health, setHealth] = useState(10);
+  const [shieldValue, setShieldValue] = useState(0);
+  const [speed, setSpeed] = useState(3);
 
   // Only needed if creating
   const [strength, setStrength] = useState(2);
@@ -63,6 +65,8 @@ const CreatureForm = ({ id }) => {
       setDamageLevel(currentCreature.damageLevel);
       setTypes(currentCreature.types);
       setAttackingStat(currentCreature.attackingStat);
+      setShieldValue(currentCreature.shieldValue);
+      setSpeed(currentCreature.speed);
     }
   }, [id, campSheet]);
 
@@ -97,6 +101,8 @@ const CreatureForm = ({ id }) => {
       attackingStat,
       types,
       maxHp: health,
+      shieldValue,
+      speed,
     };
 
     if (id) {
@@ -176,6 +182,9 @@ const CreatureForm = ({ id }) => {
 
       <Input slideOver label="Damage Level" name="damageLevel" type="number" min="1" max="10" value={damageLevel} changeHandler={setDamageLevel} required />
       <Input slideOver label="Health (Max)" name="health" type="number" value={health} changeHandler={setHealth} required />
+
+      <Input slideOver label="Shield Value" name="shieldValue" type="number" value={shieldValue} changeHandler={setShieldValue} required />
+      <Input slideOver label="Speed" name="speed" type="number" value={speed} changeHandler={setSpeed} required />
 
       {!id && (
         <>

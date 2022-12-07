@@ -5,6 +5,8 @@ import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 import { getSpeciesAbility } from '../../utils/helpers/species';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
+import { calculateShieldValue, calculateSpeedAdjustment, calculateModifiers } from '../../utils/functions/calculations';
+import { displayModifier } from '../../utils/helpers/modifiers';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -20,11 +22,14 @@ import Heading from '../Heading';
 import { useActions } from '../../hooks/useActions';
 
 const NpcDetails = ({ npc, species }) => {
+  const modifiers = calculateModifiers(npc.modifiers, npc.wearables);
+  const abilities = getSpeciesAbility(npc.speciesId, species);
+
   return (
     <DescriptionList
       list={[
         { name: 'Species', values: [npc.speciesName], half: true },
-        { name: 'Shield Value', values: [npc.shieldValue], half: true },
+        { name: 'Shield Value', values: [calculateShieldValue(npc.wearables)], half: true },
         { name: 'Diplomacy', values: [npc.diplomacy], half: true },
         { name: 'Type', values: [npc.type], half: true },
         { name: 'Temperament', values: [npc.temperament], half: true },
@@ -33,19 +38,20 @@ const NpcDetails = ({ npc, species }) => {
         { name: 'Milestones', values: [npc.milestones], half: true },
         { name: 'Wallet', values: [npc.wallet], half: true },
         { name: 'Active', values: [npc.active ? 'Yes' : 'No'], half: true },
-        { name: 'Speed', values: [npc.speed], half: true },
+        { name: 'Speed', values: [npc.speed + calculateSpeedAdjustment(npc.wearables)], half: true },
         { name: 'Health', values: [`${npc.currentHp}/${npc.maxHp}`], half: true },
+        { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
         {
           name: 'Activated Ability',
-          values: [getSpeciesAbility(npc.speciesId, species).activated],
+          values: [abilities.activated],
         },
         {
           name: 'Passive Abilities',
-          values: [getSpeciesAbility(npc.speciesId, species).passive],
+          values: [abilities.passive],
         },
         {
           name: 'Detraction',
-          values: [getSpeciesAbility(npc.speciesId, species).detraction],
+          values: [abilities.detraction],
         },
       ]}
       classes="mt-2"
@@ -94,6 +100,14 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
             {
               text: 'Health',
               click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'npc', entity: npc } }),
+            },
+            {
+              text: 'Milestones',
+              click: () => setModal({ type: ModalTypes.editMilestones, data: { type: 'npc', entity: npc } }),
+            },
+            {
+              text: 'Modifiers',
+              click: () => setModal({ type: ModalTypes.editModifiers, data: { type: 'npc', resource: npc } }),
             },
           ],
         }}

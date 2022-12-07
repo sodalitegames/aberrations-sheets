@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 
 import { useActions } from '../../hooks/useActions';
+import { Creature, Npc, Player } from '../../models/sheet/resources';
 
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
@@ -13,9 +14,10 @@ interface InteractableActionsProps {
     prop: 'npcId' | 'playerId' | 'creatureId';
     value: string;
   };
+  entity: Player | Npc | Creature;
 }
 
-const InteractableActions: React.VFC<InteractableActionsProps> = ({ type, id }) => {
+const InteractableActions: React.VFC<InteractableActionsProps> = ({ type, id, entity }) => {
   const { setModal, setSlideOver } = useActions();
 
   return (
@@ -29,6 +31,7 @@ const InteractableActions: React.VFC<InteractableActionsProps> = ({ type, id }) 
           <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: type, [id.prop]: id.value } })}>Pay Money</Button>
           <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: type, [id.prop]: id.value } })}>Recieve Money</Button>
           <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: type, [id.prop]: id.value } })}>Take A Rest</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.reachMilestone, data: { type: type, [id.prop]: id.value, entity } })}>Reach Milestone</Button>
         </Fragment>
       )}
     </Fragment>
