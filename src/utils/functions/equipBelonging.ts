@@ -32,7 +32,7 @@ export const correctStatMod = (mod: number) => {
 const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedList, nested, forPlayer }: Data, config?: Object): void => {
   if (sheetType !== 'characters') return;
 
-  if (!(belonging as Usable).equippable) return alert('This belonging is unequippable');
+  if (belongingType === 'usables' && !(belonging as Usable).equippable) return alert('This belonging is unequippable');
 
   // If unequipping belonging
   if (belonging.equipped === true) {
