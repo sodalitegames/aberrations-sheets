@@ -39,6 +39,7 @@ import CampaignPlayersPage from './pages/sheets/campaigns/players';
 import CampaignNpcsPage from './pages/sheets/campaigns/npcs';
 import CampaignCreaturesPage from './pages/sheets/campaigns/creatures';
 import CampaignBelongingsPage from './pages/sheets/campaigns/belongings';
+import CampaignBelongingsConsumablesPage from './pages/sheets/campaigns/belongings/consumables';
 
 // Shared Sheet Pages
 import SheetNotesPage from './pages/sheets/shared/notes';
@@ -95,7 +96,7 @@ ReactDOM.render(
                     <Route index element={<Navigate to="weapons" />} />
                     <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType="campaigns" />} />
                     <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType="campaigns" />} />
-                    <Route path="consumables" element={<SheetBelongingsConsumablesPage sheetType="campaigns" />} />
+                    <Route path="consumables" element={<CampaignBelongingsConsumablesPage />} />
                     <Route path="usables" element={<SheetBelongingsUsablesPage sheetType="campaigns" />} />
                   </Route>
                   <Route path="notes" element={<SheetNotesPage sheetType="campaigns" />} />
