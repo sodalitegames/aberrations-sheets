@@ -1,28 +1,43 @@
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { selectCurrentCampaign, selectConsumables, selectArchivedConsumables } from '../../../../redux/campaign/campaign.selectors';
+import { selectCurrentCharacter, selectConsumables as selectCharConsumables, selectArchivedConsumables as selectCharArchivedConsumables } from '../../../../redux/character/character.selectors';
+import { selectCurrentCampaign, selectConsumables as selectCampConsumables, selectArchivedConsumables as selectCampArchivedConsumables } from '../../../../redux/campaign/campaign.selectors';
 
 import BelongingActions from '../../../../components/sections/BelongingActions';
 import DisplayConsumable from '../../../../components/display/DisplayConsumable';
 
 import InteractablesPageContent from '../../shared/content/InteractablesPageContent';
 
-const CampaignBelongingsConsumablesPage = () => {
+const CampaignBelongingsConsumablesPage = ({ sheetType }) => {
   const [searchParams] = useSearchParams();
 
+  const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
-  const consumables = useSelector(selectConsumables);
-  const archivedConsumables = useSelector(selectArchivedConsumables);
+
+  const sheets = {
+    characters: charSheet,
+    campaigns: campSheet,
+  };
+
+  const charConsumables = useSelector(selectCharConsumables);
+  const campConsumables = useSelector(selectCampConsumables);
+  const charArchivedConsumables = useSelector(selectCharArchivedConsumables);
+  const campArchivedConsumables = useSelector(selectCampArchivedConsumables);
 
   const show = searchParams.get('show');
   const id = searchParams.get('id');
 
-  const list = searchParams.get('show') === 'archived' ? archivedConsumables : consumables;
+  const getList = () => {
+    if (sheetType === 'characters') return searchParams.get('show') === 'archived' ? charArchivedConsumables : charConsumables;
+    if (sheetType === 'campaigns') return searchParams.get('show') === 'archived' ? campArchivedConsumables : campConsumables;
+  };
+
+  const list = getList();
   const consumable = list.find(cons => cons._id === id);
 
   const Display = () => <DisplayConsumable consumable={consumable} sheetType="campaigns" />;
-  const Actions = () => <BelongingActions sheetType="campaigns" sheet={campSheet} belongingType="consumables" belonging={consumable} />;
+  const Actions = () => <BelongingActions sheetType="campaigns" sheet={sheets[sheetType]} belongingType="consumables" belonging={consumable} />;
 
   return <InteractablesPageContent sheetType="campaigns" show={show} id={id} list={list} type="consumables" label="Consumable" interactable={consumable} Display={Display} Actions={Actions} />;
 };
