@@ -1,21 +1,12 @@
-import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import {
-  selectCurrentCharacter,
-  selectEquippedWearables,
-  selectWearables as selectCharWearables,
-  selectArchivedWearables as selectCharArchivedWearables,
-} from '../../../../redux/character/character.selectors';
+import { selectCurrentCharacter, selectWearables as selectCharWearables, selectArchivedWearables as selectCharArchivedWearables } from '../../../../redux/character/character.selectors';
 import { selectCurrentCampaign, selectWearables as selectCampWearables, selectArchivedWearables as selectCampArchivedWearables } from '../../../../redux/campaign/campaign.selectors';
 
-import SheetPageContent from '../../../../layouts/components/sheet/SheetPageContent';
+import InteractablesPageContent from '../../../../components/content/InteractablesPageContent';
 
-import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
-import BelongingActions from '../../../../components/sections/BelongingActions';
-import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
-
+import BelongingActions from '../../../../components/content/BelongingActions';
 import DisplayWearable from '../../../../components/display/DisplayWearable';
 
 const SheetBelongingsWearablesPage = ({ sheetType }) => {
@@ -23,107 +14,33 @@ const SheetBelongingsWearablesPage = ({ sheetType }) => {
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
-  const equippedWearables = useSelector(selectEquippedWearables);
+
+  const sheets = {
+    characters: charSheet,
+    campaigns: campSheet,
+  };
 
   const charWearables = useSelector(selectCharWearables);
   const campWearables = useSelector(selectCampWearables);
   const charArchivedWearables = useSelector(selectCharArchivedWearables);
   const campArchivedWearables = useSelector(selectCampArchivedWearables);
 
-  const [wearable, setWearable] = useState(null);
-  const [id, setId] = useState(null);
+  const show = searchParams.get('show');
+  const id = searchParams.get('id');
 
-  const [wearablesList, setWearablesList] = useState([]);
+  const getList = () => {
+    if (sheetType === 'characters') return show === 'archived' ? charArchivedWearables : charWearables;
+    if (sheetType === 'campaigns') return show === 'archived' ? campArchivedWearables : campWearables;
+    return [];
+  };
 
-  useEffect(() => {
-    // First, clear out currently selected
-    setWearable(null);
-    setId(null);
+  const list = getList();
+  const wearable = list.find(wear => wear._id === id) || list[0];
 
-    if (sheetType === 'characters') {
-      switch (searchParams.get('show')) {
-        case 'archived':
-          setWearablesList(charArchivedWearables);
-          return;
+  const Display = () => <DisplayWearable wearable={wearable} sheetType={sheetType} />;
+  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]} belongingType="wearables" belonging={wearable} />;
 
-        default:
-          setWearablesList(charWearables);
-          return;
-      }
-    }
-
-    if (sheetType === 'campaigns') {
-      switch (searchParams.get('show')) {
-        case 'archived':
-          setWearablesList(campArchivedWearables);
-          return;
-
-        case 'active':
-          setWearablesList(campWearables.filter(weap => weap.active));
-          return;
-
-        case 'inactive':
-          setWearablesList(campWearables.filter(weap => !weap.active));
-          return;
-
-        default:
-          setWearablesList(campWearables);
-          return;
-      }
-    }
-  }, [sheetType, searchParams, charArchivedWearables, campArchivedWearables, charWearables, campWearables]);
-
-  useEffect(() => {
-    const id = searchParams.get('id');
-
-    if (wearablesList.length) {
-      if (id) {
-        setId(id);
-        setWearable(wearablesList.find(wear => wear._id === id));
-        return;
-      }
-
-      setWearable(wearablesList[0]);
-      setId(wearablesList[0]._id);
-    }
-  }, [searchParams, id, wearablesList]);
-
-  return (
-    <SheetPageContent title="Wearables" columns={4}>
-      {/* Showing Archived Wearables Notice */}
-      <ListInteractablesMessage show={searchParams.get('show')} interactableType="wearables" />
-
-      {/* Wearables List */}
-      <SheetPagePanel title="Manage Wearables">
-        <div className="flow-root mt-2">
-          <ListInteractables sheetType={sheetType} interactableType="wearables" id={id} interactablesList={wearablesList} label="Wearable" show={searchParams.get('show')} />
-        </div>
-      </SheetPagePanel>
-
-      {/* Selected Wearable */}
-      <SheetPagePanel title="Selected Wearable" colSpan={3}>
-        {wearable ? (
-          <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
-            <div className="col-span-2">
-              <DisplayWearable wearable={wearable} sheetType={sheetType} />
-            </div>
-
-            <div className="col-span-1 pl-8 space-y-4">
-              <BelongingActions
-                sheetType={sheetType}
-                sheet={sheetType === 'characters' ? charSheet : campSheet}
-                belongingType="wearables"
-                belonging={wearable}
-                equippedBelongings={equippedWearables}
-              />
-            </div>
-          </div>
-        ) : (
-          <p className="text-sm italic text-gray-400">Please create or select a wearable to get started.</p>
-        )}
-      </SheetPagePanel>
-    </SheetPageContent>
-  );
+  return <InteractablesPageContent sheetType={sheetType} show={show} id={wearable._id} list={list} type="wearables" label="Wearable" interactable={wearable} Display={Display} Actions={Actions} />;
 };
 
 export default SheetBelongingsWearablesPage;

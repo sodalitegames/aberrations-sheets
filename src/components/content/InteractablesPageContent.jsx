@@ -1,18 +1,18 @@
-import SheetPageContent from '../../../../layouts/components/sheet/SheetPageContent';
-import SheetPagePanel from '../../../../layouts/components/sheet/SheetPagePanel';
+import SheetPageContent from '../../layouts/components/sheet/SheetPageContent';
+import SheetPagePanel from '../../layouts/components/sheet/SheetPagePanel';
 
-import ListInteractables, { ListInteractablesMessage } from '../../../../components/sections/ListInteractables';
+import ListInteractables, { ListInteractablesMessage } from './ListInteractables';
 
-const InteractablesPageContent = ({ sheetType, show, id, list, type, label, interactable, Display, Actions }) => {
+const InteractablesPageContent = ({ sheetType, show, id, list, type, label, interactable, Display, Actions, List }) => {
   return (
     <SheetPageContent title={`${label}s`} columns={4}>
       {/* Showing Archived Interactables Notice */}
       <ListInteractablesMessage show={show} interactableType={type} />
 
       {/* Interactables List */}
-      <SheetPagePanel title={`Manage ${label}s`}>
+      <SheetPagePanel title={`Manage ${label}s`} classes="col-span-2 lg:col-span-1">
         <div className="flow-root mt-2">
-          <ListInteractables sheetType={sheetType} interactableType={type} id={id} interactablesList={list} label={label} show={show} />
+          {List !== undefined ? <List /> : <ListInteractables sheetType={sheetType} interactableType={type} id={id} interactablesList={list} label={label} show={show} />}
         </div>
       </SheetPagePanel>
 
