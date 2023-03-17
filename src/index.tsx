@@ -29,7 +29,6 @@ import PrivacyPage from './pages/home/privacy';
 
 // Character Pages
 import CharacterGameplayPage from './pages/sheets/characters/gameplay';
-import CharacterBelongingsPage from './pages/sheets/characters/belongings';
 import CharacterCharacterPage from './pages/sheets/characters/character';
 
 // Campaign Pages
@@ -38,10 +37,9 @@ import CampaignCombatPage from './pages/sheets/campaigns/combat';
 import CampaignPlayersPage from './pages/sheets/campaigns/players';
 import CampaignNpcsPage from './pages/sheets/campaigns/npcs';
 import CampaignCreaturesPage from './pages/sheets/campaigns/creatures';
-import CampaignBelongingsPage from './pages/sheets/campaigns/belongings';
-import CampaignBelongingsConsumablesPage from './pages/sheets/campaigns/belongings/consumables';
 
 // Shared Sheet Pages
+import SheetBelongingsPage from './pages/sheets/shared/belongings';
 import SheetNotesPage from './pages/sheets/shared/notes';
 import SheetResourcesPage from './pages/sheets/shared/resources';
 
@@ -75,7 +73,7 @@ ReactDOM.render(
                   <Route index element={<Navigate to="gameplay" />} />
                   <Route path="gameplay" element={<CharacterGameplayPage />} />
                   <Route path="character" element={<CharacterCharacterPage />} />
-                  <Route path="belongings" element={<CharacterBelongingsPage />}>
+                  <Route path="belongings" element={<SheetBelongingsPage sheetType="characters" />}>
                     <Route index element={<Navigate to="weapons" />} />
                     <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType="characters" />} />
                     <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType="characters" />} />
@@ -92,11 +90,11 @@ ReactDOM.render(
                   <Route path="players" element={<CampaignPlayersPage />} />
                   <Route path="npcs" element={<CampaignNpcsPage />} />
                   <Route path="creatures" element={<CampaignCreaturesPage />} />
-                  <Route path="belongings" element={<CampaignBelongingsPage />}>
+                  <Route path="belongings" element={<SheetBelongingsPage sheetType="campaigns" />}>
                     <Route index element={<Navigate to="weapons" />} />
                     <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType="campaigns" />} />
                     <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType="campaigns" />} />
-                    <Route path="consumables" element={<CampaignBelongingsConsumablesPage />} />
+                    <Route path="consumables" element={<SheetBelongingsConsumablesPage sheetType="campaigns" />} />
                     <Route path="usables" element={<SheetBelongingsUsablesPage sheetType="campaigns" />} />
                   </Route>
                   <Route path="notes" element={<SheetNotesPage sheetType="campaigns" />} />
