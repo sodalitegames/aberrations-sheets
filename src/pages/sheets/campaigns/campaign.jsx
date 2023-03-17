@@ -15,7 +15,7 @@ import ListContainer from '../../../components/data/ListContainer';
 import Button from '../../../components/Button';
 
 import DisplayLog from '../../../components/display/DisplayLog';
-import ListSessions from '../../../components/sections/ListSessions';
+import Sessions from '../../../components/sections/Sessions';
 
 const CampaignCampaignPage = () => {
   const { setSlideOver } = useActions();
@@ -76,21 +76,21 @@ const CampaignCampaignPage = () => {
         {/* Active Session */}
         <SheetPagePanel title="Active Sessions">
           <div className="flow-root">
-            <ListSessions sessions={activeSessions} status="active" />
+            <Sessions sessions={activeSessions} status="active" />
           </div>
         </SheetPagePanel>
 
         {/* Future Sessions */}
         <SheetPagePanel title="Future Sessions">
           <div className="flow-root">
-            <ListSessions sessions={futureSessions} status="future" />
+            <Sessions sessions={futureSessions} status="future" />
           </div>
         </SheetPagePanel>
 
         {/* Completed Sessions */}
         <SheetPagePanel title="Completed Sessions">
           <div className="flow-root">
-            <ListSessions sessions={completedSessions} status="completed" />
+            <Sessions sessions={completedSessions} status="completed" />
           </div>
         </SheetPagePanel>
       </div>
