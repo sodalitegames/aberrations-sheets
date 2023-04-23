@@ -21,7 +21,7 @@ describe('resource actions', () => {
   });
 
   // USE A MOCK API FOR THIS
-  it('handles fetching data from aberrations api', () => {});
+  it('handles fetching data from database api', () => {});
 
   it('should create an action to successfully add a fetched resource', () => {
     const mockCreatures: CreatureType[] = [
