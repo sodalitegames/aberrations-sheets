@@ -11,7 +11,7 @@ import { formatDate } from '../../utils/helpers/dates';
 import Button from '../Button';
 import NewlineText from '../NewlineText';
 
-const ListSessions = ({ sessions, status }) => {
+const Sessions = ({ sessions, status }) => {
   const { setSlideOver, setModal } = useActions();
 
   return (
@@ -68,4 +68,4 @@ const ListSessions = ({ sessions, status }) => {
   );
 };
 
-export default ListSessions;
+export default Sessions;

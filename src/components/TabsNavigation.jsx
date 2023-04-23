@@ -1,40 +1,13 @@
-import { useSelector } from 'react-redux';
-import { NavLink, useLocation, useSearchParams } from 'react-router-dom';
-
-import { selectCurrentCharacter } from '../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../redux/campaign/campaign.selectors';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import classNames from '../utils/classNames';
 
-const TabsNavigation = ({ tabs, sheetType }) => {
+const TabsNavigation = ({ tabs }) => {
   const { search } = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
 
   return (
     <>
-      <div className="sm:hidden">
-        <label htmlFor="tabs" className="sr-only">
-          Select a tab
-        </label>
-        {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
-        <select
-          id="tabs"
-          name="tabs"
-          className="block w-full py-2 pl-3 pr-10 text-base border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          defaultValue={tabs[0].name}
-          onChange={e => setSearchParams({ show: e.target.value })}
-        >
-          {tabs.map(tab => (
-            <option key={tab.name} value={tab.href}>
-              {tab.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="hidden sm:block">
+      <div>
         <div>
           <nav className="flex flex-wrap -mb-px space-x-4" aria-label="Tabs">
             {tabs.map(tab => (
@@ -46,15 +19,11 @@ const TabsNavigation = ({ tabs, sheetType }) => {
                 }
               >
                 {tab.name}
-                <span className={classNames(tab.current ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900', 'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block')}>
-                  {sheetType === 'characters'
-                    ? charSheet[tab.href]
-                        .filter(el => (searchParams.get('show') === 'active' ? el.active === true : searchParams.get('show') === 'inactive' ? el.active === false : true))
-                        .filter(el => (searchParams.get('show') === 'archived' ? el.archived : !el.archived)).length
-                    : campSheet[tab.href]
-                        .filter(el => (searchParams.get('show') === 'active' ? el.active === true : searchParams.get('show') === 'inactive' ? el.active === false : true))
-                        .filter(el => (searchParams.get('show') === 'archived' ? el.archived : !el.archived)).length}
-                </span>
+                {tab.count !== undefined ? (
+                  <span className={classNames(false ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900', 'hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block')}>
+                    {tab.count}
+                  </span>
+                ) : null}
               </NavLink>
             ))}
           </nav>

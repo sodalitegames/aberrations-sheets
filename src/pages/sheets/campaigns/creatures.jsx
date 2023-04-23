@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -11,15 +10,11 @@ import { useActions } from '../../../hooks/useActions';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 
-import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
-
-import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
-import ListInteractables, { ListInteractablesMessage } from '../../../components/sections/ListInteractables';
-
 import Button from '../../../components/Button';
 
-import InteractableActions from '../../../components/sections/InteractableActions';
+import InteractablesPageContent from '../../../components/content/InteractablesPageContent';
 
+import InteractableActions from '../../../components/content/InteractableActions';
 import DisplayCreature from '../../../components/display/DisplayCreature';
 
 const CampaignCreaturesPage = () => {
@@ -32,163 +27,103 @@ const CampaignCreaturesPage = () => {
   const creatures = useSelector(selectCreatures);
   const archivedCreatures = useSelector(selectArchivedCreatures);
 
-  const [creature, setCreature] = useState(null);
-  const [id, setId] = useState(null);
+  const show = searchParams.get('show');
+  const id = searchParams.get('id');
 
-  const [creaturesList, setCreaturesList] = useState([]);
+  const list = show === 'archived' ? archivedCreatures : creatures;
+  const creature = list.find(crea => crea._id === id) || list[0];
 
-  useEffect(() => {
-    // First, clear out currently selected
-    setCreature(null);
-    setId(null);
+  const Display = () => <DisplayCreature creature={creature} />;
+  const Actions = () => (
+    <>
+      {/* Edit */}
+      <div className="pb-4 mb-4 border-b border-gray-200">
+        <Button onClick={() => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id })}>Edit</Button>
+      </div>
 
-    switch (searchParams.get('show')) {
-      case 'archived':
-        setCreaturesList(archivedCreatures);
-        return;
+      {/* Creature Actions */}
+      <InteractableActions type="creature" id={{ prop: 'creatureId', value: creature._id }} />
 
-      case 'active':
-        setCreaturesList(creatures.filter(envir => envir.active));
-        return;
-
-      case 'inactive':
-        setCreaturesList(creatures.filter(envir => !envir.active));
-        return;
-
-      default:
-        setCreaturesList(creatures);
-        return;
-    }
-  }, [searchParams, archivedCreatures, creatures]);
-
-  useEffect(() => {
-    const id = searchParams.get('id');
-
-    if (creaturesList.length) {
-      if (id) {
-        setId(id);
-        setCreature(creaturesList.find(crea => crea._id === id));
-        return;
-      }
-
-      setCreature(creaturesList[0]);
-      setId(creaturesList[0]._id);
-    }
-  }, [searchParams, id, creaturesList]);
-
-  return (
-    <SheetPageContent title="Creatures" columns={4}>
-      {/* Showing Archived Creatures Notice */}
-      <ListInteractablesMessage show={searchParams.get('show')} interactableType="creatures" />
-
-      {/* Creatures List */}
-      <SheetPagePanel title="Manage Creatures">
-        <div className="flow-root mt-2">
-          <ListInteractables sheetType="campaigns" interactableType="creatures" id={id} interactablesList={creaturesList} label="Creature" show={searchParams.get('show')} />
-        </div>
-      </SheetPagePanel>
-
-      {/* Selected Creature */}
-      <SheetPagePanel title="Selected Creature" colSpan={3}>
-        {creature ? (
-          <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
-            <div className="col-span-2">
-              <DisplayCreature creature={creature} />
-            </div>
-
-            <div className="col-span-1 pl-8 space-y-4">
-              {/* Edit */}
-              <div className="pb-4 mb-4 border-b border-gray-200">
-                <Button onClick={() => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id })}>Edit</Button>
-              </div>
-
-              {/* Creature Actions */}
-              <InteractableActions type="creature" id={{ prop: 'creatureId', value: creature._id }} />
-
-              {/* Activate or Deactivate */}
-              {!creature.archived && (
-                <div className="pt-4 mt-4 border-t border-gray-200">
-                  <Button
-                    dark={creature.active}
-                    onClick={() =>
-                      dispatch(
-                        updateSheetResourceStart(
-                          'campaigns',
-                          campSheet._id,
-                          'creatures',
-                          creature._id,
-                          { active: !creature.active },
-                          {
-                            notification: {
-                              status: 'success',
-                              heading: `Creature ${creature.active ? 'Deactivated' : 'Activated'}`,
-                              message: `You have successfully ${creature.active ? 'deactivated' : 'activated'} ${creature.name}.`,
-                            },
-                          }
-                        )
-                      )
-                    }
-                  >
-                    {creature.active ? 'Deactivate' : 'Activate'}
-                  </Button>
-                </div>
-              )}
-
-              {/* Archive or Restore */}
-              <div className="pt-4 mt-4 space-y-4 border-t border-gray-200">
-                <Button
-                  onClick={() =>
-                    dispatch(
-                      updateSheetResourceStart(
-                        'campaigns',
-                        campSheet._id,
-                        'creatures',
-                        creature._id,
-                        { archived: !creature.archived, active: false },
-                        {
-                          notification: {
-                            status: 'success',
-                            heading: `Creature ${creature.archived ? 'Restored' : 'Archived'}`,
-                            message: `You have successfully ${creature.archived ? 'restored' : 'archived'} ${creature.name}.`,
-                          },
-                        }
-                      )
-                    )
+      {/* Activate or Deactivate */}
+      {!creature.archived && (
+        <div className="pt-4 mt-4 border-t border-gray-200">
+          <Button
+            dark={creature.active}
+            onClick={() =>
+              dispatch(
+                updateSheetResourceStart(
+                  'campaigns',
+                  campSheet._id,
+                  'creatures',
+                  creature._id,
+                  { active: !creature.active },
+                  {
+                    notification: {
+                      status: 'success',
+                      heading: `Creature ${creature.active ? 'Deactivated' : 'Activated'}`,
+                      message: `You have successfully ${creature.active ? 'deactivated' : 'activated'} ${creature.name}.`,
+                    },
                   }
-                >
-                  {creature.archived ? 'Restore' : 'Archive'}
-                </Button>
+                )
+              )
+            }
+          >
+            {creature.active ? 'Deactivate' : 'Activate'}
+          </Button>
+        </div>
+      )}
 
-                {/* Delete */}
-                {creature.archived ? (
-                  <Button
-                    alert
-                    onClick={() =>
-                      setModal({
-                        type: ModalTypes.deleteResource,
-                        id: creature._id,
-                        data: {
-                          sheetType: 'campaigns',
-                          resourceType: 'creatures',
-                          title: `Are you sure you want to delete ${creature.name}?`,
-                          submitText: `Yes, delete ${creature.name}`,
-                          notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
-                        },
-                      })
-                    }
-                  >
-                    Delete
-                  </Button>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        ) : (
-          <p className="text-sm italic text-gray-400">Please create or select a creature to get started.</p>
-        )}
-      </SheetPagePanel>
-    </SheetPageContent>
+      {/* Archive or Restore */}
+      <div className="pt-4 mt-4 space-y-4 border-t border-gray-200">
+        <Button
+          onClick={() =>
+            dispatch(
+              updateSheetResourceStart(
+                'campaigns',
+                campSheet._id,
+                'creatures',
+                creature._id,
+                { archived: !creature.archived, active: false },
+                {
+                  notification: {
+                    status: 'success',
+                    heading: `Creature ${creature.archived ? 'Restored' : 'Archived'}`,
+                    message: `You have successfully ${creature.archived ? 'restored' : 'archived'} ${creature.name}.`,
+                  },
+                }
+              )
+            )
+          }
+        >
+          {creature.archived ? 'Restore' : 'Archive'}
+        </Button>
+
+        {/* Delete */}
+        {creature.archived ? (
+          <Button
+            alert
+            onClick={() =>
+              setModal({
+                type: ModalTypes.deleteResource,
+                id: creature._id,
+                data: {
+                  sheetType: 'campaigns',
+                  resourceType: 'creatures',
+                  title: `Are you sure you want to delete ${creature.name}?`,
+                  submitText: `Yes, delete ${creature.name}`,
+                  notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
+                },
+              })
+            }
+          >
+            Delete
+          </Button>
+        ) : null}
+      </div>
+    </>
   );
+
+  return <InteractablesPageContent sheetType="campaigns" show={show} id={creature._id} list={list} type="creatures" label="Creature" interactable={creature} Display={Display} Actions={Actions} />;
 };
 
 export default CampaignCreaturesPage;
