@@ -51,7 +51,7 @@ import {
   updateResource,
   updateSheet as updateSheetCall,
 } from '../../apis/sheets.api';
-import { fetchSpecies } from '../../apis/aberrations.api';
+import { fetchSingleSpecies } from '../../apis/database.api';
 
 import charSocket from '../../sockets/character';
 import campSocket from '../../sockets/campaign';
@@ -75,13 +75,11 @@ export function* fetchCurrentSheet({ payload: { sheetType, sheetId } }: FetchCur
 
     if (sheetType === 'characters') {
       // If it is a character sheet, fetch the species data and append it to the sheet data
-      const resourceResponse: AxiosResponse<Species[]> = yield fetchSpecies(`?_id=${response.data.data.sheet.speciesId}`);
+      const resource: AxiosResponse<Species> = yield fetchSingleSpecies(response.data.data.sheet.speciesId);
 
-      const { id, name, abilities, appearance, basicInfo, stats, health, healthIncrement } = resourceResponse.data[0];
+      const { id, name, abilities, appearance, stats, health } = resource.data;
 
-      yield put(
-        fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, abilities, appearance, basicInfo, stats, health, healthIncrement } }, response.data.data.permissions)
-      );
+      yield put(fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, abilities, appearance, stats, health } }, response.data.data.permissions));
 
       return;
     }
