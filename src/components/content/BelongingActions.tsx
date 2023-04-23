@@ -20,7 +20,7 @@ interface BelongingActionsProps {
   sheet: Sheet;
   belongingType: BelongingType;
   belonging: Belonging;
-  equippedBelongings: Belonging[];
+  equippedBelongings?: Belonging[];
 }
 
 const editForm = {
@@ -42,7 +42,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
           {sheetType === 'characters' ? (
             <Button
               dark={belonging.equipped}
-              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings })}
+              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings! })}
             >
               {belonging.equipped ? 'Unequip' : 'Equip'}
             </Button>

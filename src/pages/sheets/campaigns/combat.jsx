@@ -19,7 +19,7 @@ import CombatCard from '../../../components/CombatCard';
 import Button from '../../../components/Button';
 import SelectButton from '../../../components/SelectButton';
 
-import InteractableActions from '../../../components/sections/InteractableActions';
+import InteractableActions from '../../../components/content/InteractableActions';
 
 import classNames from '../../../utils/classNames';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
