@@ -10,7 +10,16 @@ import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
-const ConsumableDetails = ({ consumable, sheetType }) => {
+import { Consumable } from '../../models/sheet/resources';
+import { EntityType, SheetType } from '../../models/sheet';
+import { DisplayBelongingProps, DisplayProps } from './display.types';
+
+interface ConsumableDetailsProps {
+  consumable: Consumable;
+  sheetType: SheetType | EntityType;
+}
+
+const ConsumableDetails: React.FC<ConsumableDetailsProps> = ({ consumable, sheetType }) => {
   const campSheet = useSelector(selectCurrentCampaign);
 
   return (
@@ -22,7 +31,7 @@ const ConsumableDetails = ({ consumable, sheetType }) => {
         sheetType === 'characters' ? { name: 'Equipped', values: [consumable.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [consumable.active ? 'Yes' : 'No'], half: true } : null,
         consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? getNpcName(consumable.npcId, campSheet.npcs) : 'Unassigned'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? getNpcName(consumable.npcId, campSheet?.npcs) : 'Unassigned'], half: true } : null,
         { name: 'Categories', values: [{ value: consumable.categories.map(cat => cat.name).join(', '), tooltip: consumable.categories.map(cat => `${cat.name} - ${cat.description}`) }] },
         consumable.description ? { name: 'Description', values: [consumable.description] } : null,
         consumable.metadata?.givenBy ? { name: 'Received From', values: [consumable.metadata.givenBy], half: true } : null,
@@ -33,7 +42,12 @@ const ConsumableDetails = ({ consumable, sheetType }) => {
   );
 };
 
-const DisplayConsumable = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
+interface DisplayConsumableProps extends DisplayProps, DisplayBelongingProps {
+  consumable: Consumable;
+  sheetType: SheetType | EntityType;
+}
+
+const DisplayConsumable: React.FC<DisplayConsumableProps> = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (

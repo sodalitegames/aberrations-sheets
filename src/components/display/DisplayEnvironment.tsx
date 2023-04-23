@@ -5,7 +5,14 @@ import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
-const EnvironmentDetails = ({ environment }) => {
+import { Environment } from '../../models/sheet/resources';
+import { DisplayProps } from './display.types';
+
+interface EnvironmentDetailsProps {
+  environment: Environment;
+}
+
+const EnvironmentDetails: React.FC<EnvironmentDetailsProps> = ({ environment }) => {
   return (
     <DescriptionList
       list={[
@@ -17,7 +24,11 @@ const EnvironmentDetails = ({ environment }) => {
   );
 };
 
-const DisplayEnvironment = ({ environment, condensed, noButtonPanel, listItem }) => {
+interface DisplayEnvironmentProps extends DisplayProps {
+  environment: Environment;
+}
+
+const DisplayEnvironment: React.FC<DisplayEnvironmentProps> = ({ environment, condensed, noButtonPanel, listItem }) => {
   if (listItem) {
     if (condensed) {
       return (

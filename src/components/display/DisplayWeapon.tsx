@@ -9,15 +9,24 @@ import { getNpcName } from '../../utils/helpers/npcs';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
-import InfoList from '../data/InfoList';
+import InfoList, { InfoListItem } from '../data/InfoList';
 
-const createWeaponList = (stat, range, ability) => {
-  const weapon = [`${capitalize(stat)} | ${range} Range`];
+import { Weapon } from '../../models/sheet/resources';
+import { EntityType, SheetType, StatType } from '../../models/sheet';
+import { DisplayBelongingProps, DisplayProps } from './display.types';
+
+const createWeaponList = (stat: StatType, range: string, ability: string): (InfoListItem | string)[] => {
+  const weapon: (InfoListItem | string)[] = [`${capitalize(stat)} | ${range} Range`];
   if (ability) weapon.push({ tooltip: [ability], value: ability.replace('"', '') });
   return weapon;
 };
 
-const WeaponDetails = ({ weapon, sheetType }) => {
+interface WeaponDetailsProps {
+  weapon: Weapon;
+  sheetType: SheetType | EntityType;
+}
+
+const WeaponDetails: React.FC<WeaponDetailsProps> = ({ weapon, sheetType }) => {
   const campSheet = useSelector(selectCurrentCampaign);
 
   return (
@@ -30,7 +39,7 @@ const WeaponDetails = ({ weapon, sheetType }) => {
         sheetType === 'characters' ? { name: 'Equipped', values: [weapon.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [weapon.active ? 'Yes' : 'No'], half: true } : null,
         { name: 'Quantity', values: [weapon.quantity], half: true },
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [weapon.npcId ? getNpcName(weapon.npcId, campSheet.npcs) : 'Unassigned'] } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [weapon.npcId ? getNpcName(weapon.npcId, campSheet?.npcs) : 'Unassigned'] } : null,
         weapon.ability ? { name: 'Ability', values: [weapon.ability] } : null,
         weapon.description ? { name: 'Description', values: [weapon.description] } : null,
         weapon.metadata?.givenBy ? { name: 'Received From', values: [weapon.metadata.givenBy], half: true } : null,
@@ -41,7 +50,12 @@ const WeaponDetails = ({ weapon, sheetType }) => {
   );
 };
 
-const DisplayWeapon = ({ weapon, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
+interface DisplayWeaponProps extends DisplayProps, DisplayBelongingProps {
+  weapon: Weapon;
+  sheetType: SheetType | EntityType;
+}
+
+const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (

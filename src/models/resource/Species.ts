@@ -1,4 +1,4 @@
-type Abilities = {
+export type Abilities = {
   activated: string;
   passive: string;
   detraction: string;

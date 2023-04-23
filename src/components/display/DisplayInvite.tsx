@@ -7,7 +7,16 @@ import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
 import Button from '../Button';
 
-const DisplayInvite = ({ invite, noActions, sheetType }) => {
+import { Invite } from '../../models/sheet/resources';
+import { SheetType } from '../../models/sheet';
+
+interface Props {
+  invite: Invite;
+  noActions: boolean;
+  sheetType: SheetType;
+}
+
+const DisplayInvite: React.FC<Props> = ({ invite, noActions, sheetType }) => {
   const { setModal, setNestedModal } = useActions();
 
   return (

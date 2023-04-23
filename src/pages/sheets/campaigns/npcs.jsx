@@ -38,6 +38,8 @@ const CampaignNpcsPage = () => {
 
   const species = useResource(FetchedResourceType.Species);
 
+  console.log(species);
+
   const [npc, setNpc] = useState(null);
   const [id, setId] = useState(null);
 

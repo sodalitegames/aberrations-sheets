@@ -27,6 +27,12 @@ export enum SheetType {
   campaigns = 'campaigns',
 }
 
+export enum EntityType {
+  characters = 'characters',
+  campaigns = 'campaigns',
+  players = 'players',
+}
+
 export type SheetResource = Augmentation | Combat | Consumable | Creature | Environment | Invite | Log | Note | Npc | Session | Transaction | Usable | Weapon | Wearable;
 
 export enum SheetResourceType {

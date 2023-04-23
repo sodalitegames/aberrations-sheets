@@ -21,7 +21,17 @@ import DisplayUsable from './DisplayUsable';
 import Heading from '../Heading';
 import { useActions } from '../../hooks/useActions';
 
-const NpcDetails = ({ npc, species }) => {
+import { Npc } from '../../models/sheet/resources';
+import { Species } from '../../models/resource';
+import { DisplayProps } from './display.types';
+import { EntityType } from '../../models/sheet';
+
+interface NpcDetailsProps {
+  npc: Npc;
+  species: Species[];
+}
+
+const NpcDetails: React.FC<NpcDetailsProps> = ({ npc, species }) => {
   const modifiers = calculateModifiers(npc.modifiers, npc.wearables);
   const abilities = getSpeciesAbility(npc.speciesId, species);
 
@@ -59,10 +69,15 @@ const NpcDetails = ({ npc, species }) => {
   );
 };
 
-const DisplayNpc = ({ npc, species, condensed, listItem }) => {
+interface DisplayNpcProps extends DisplayProps {
+  npc: Npc;
+  species: Species[];
+}
+
+const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listItem }) => {
   const { setModal, setSlideOver } = useActions();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   if (listItem) {
     if (condensed) {
@@ -75,7 +90,7 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
 
     return (
       <ListItem heading={npc.name}>
-        <NpcDetails npc={npc} />
+        <NpcDetails npc={npc} species={species} />
       </ListItem>
     );
   }
@@ -189,7 +204,7 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         {campSheet.weapons
           .filter(weap => weap.npcId === npc._id)
           .map(weapon => (
-            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="campaigns" listItem condensed="view" />
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={EntityType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
@@ -205,7 +220,7 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         {campSheet.wearables
           .filter(wear => wear.npcId === npc._id)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType="campaigns" listItem condensed="view" />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={EntityType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
@@ -221,7 +236,7 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         {campSheet.consumables
           .filter(cons => cons.npcId === npc._id)
           .map(consumable => (
-            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="campaigns" listItem condensed="view" />
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={EntityType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
@@ -237,7 +252,7 @@ const DisplayNpc = ({ npc, species, condensed, listItem }) => {
         {campSheet.usables
           .filter(usab => usab.npcId === npc._id)
           .map(usable => (
-            <DisplayUsable key={usable._id} usable={usable} sheetType="campaigns" listItem condensed="view" />
+            <DisplayUsable key={usable._id} usable={usable} sheetType={EntityType.campaigns} listItem condensed="view" />
           ))}
       </ul>
     </div>

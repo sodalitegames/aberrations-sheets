@@ -1,8 +1,16 @@
 import { useActions } from '../../hooks/useActions';
+import { Modal, SlideOver } from '../../models/app';
 
 import Button from '../Button';
 
-export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
+interface ButtonPanelProps {
+  editable?: SlideOver;
+  deletable?: Modal;
+  editText?: string;
+  deleteText?: string;
+}
+
+export const ButtonPanel: React.FC<ButtonPanelProps> = ({ editable, deletable, editText, deleteText }) => {
   const { setModal, setSlideOver } = useActions();
 
   return (
@@ -29,7 +37,20 @@ export const ButtonPanel = ({ editable, deletable, editText, deleteText }) => {
   );
 };
 
-const ListItem = ({ heading, editable, deletable, editText, deleteText, actions, view, noButtonPanel, children }) => {
+export type ListItemAction = {
+  text: string;
+  dark?: boolean;
+  click: () => void;
+};
+
+interface ListItemProps extends ButtonPanelProps {
+  heading: string;
+  noButtonPanel?: boolean;
+  view?: Modal;
+  actions?: ListItemAction[];
+}
+
+const ListItem: React.FC<ListItemProps> = ({ heading, editable, deletable, editText, deleteText, actions, view, noButtonPanel, children }) => {
   const { setModal } = useActions();
 
   if (view) {

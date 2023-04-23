@@ -11,19 +11,28 @@ import DisplayWearable from './DisplayWearable';
 import DisplayConsumable from './DisplayConsumable';
 import DisplayUsable from './DisplayUsable';
 
-export const DisplayTransactionDocument = ({ document, documentType, sheetType }) => {
+import { Consumable, Transaction, TransactionDocument, TransactionDocumentType, Usable, Wallet, Weapon, Wearable } from '../../models/sheet/resources';
+import { SheetType } from '../../models/sheet';
+
+interface DisplayTransactionDocumentProps {
+  sheetType: SheetType;
+  document: TransactionDocument;
+  documentType: TransactionDocumentType;
+}
+
+export const DisplayTransactionDocument: React.FC<DisplayTransactionDocumentProps> = ({ document, documentType, sheetType }) => {
   return (
     <>
       {documentType === 'weapons' ? (
-        <DisplayWeapon weapon={document} sheetType={sheetType} />
+        <DisplayWeapon weapon={document as Weapon} sheetType={sheetType} />
       ) : documentType === 'wearables' ? (
-        <DisplayWearable wearable={document} sheetType={sheetType} />
+        <DisplayWearable wearable={document as Wearable} sheetType={sheetType} />
       ) : documentType === 'consumables' ? (
-        <DisplayConsumable consumable={document} sheetType={sheetType} />
+        <DisplayConsumable consumable={document as Consumable} sheetType={sheetType} />
       ) : documentType === 'usables' ? (
-        <DisplayUsable usable={document} sheetType={sheetType} />
+        <DisplayUsable usable={document as Usable} sheetType={sheetType} />
       ) : documentType === 'wallet' ? (
-        <p className="mb-4 text-sm text-gray-900">{document.amount} monies</p>
+        <p className="mb-4 text-sm text-gray-900">{(document as Wallet).amount} monies</p>
       ) : (
         <p>No document type was provided</p>
       )}
@@ -31,7 +40,14 @@ export const DisplayTransactionDocument = ({ document, documentType, sheetType }
   );
 };
 
-const DisplayTransaction = ({ transaction, sheetType, sent, resolved }) => {
+interface DisplayTransactionProps {
+  transaction: Transaction;
+  sheetType: SheetType;
+  sent: boolean;
+  resolved: boolean;
+}
+
+const DisplayTransaction: React.FC<DisplayTransactionProps> = ({ transaction, sheetType, sent, resolved }) => {
   const { setModal } = useActions();
 
   return (

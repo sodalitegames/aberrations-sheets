@@ -9,7 +9,16 @@ import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
-const UsableDetails = ({ usable, sheetType }) => {
+import { Usable } from '../../models/sheet/resources';
+import { EntityType, SheetType } from '../../models/sheet';
+import { DisplayBelongingProps, DisplayProps } from './display.types';
+
+interface UsableDetailsProps {
+  usable: Usable;
+  sheetType: SheetType | EntityType;
+}
+
+const UsableDetails: React.FC<UsableDetailsProps> = ({ usable, sheetType }) => {
   const campSheet = useSelector(selectCurrentCampaign);
 
   return (
@@ -20,7 +29,7 @@ const UsableDetails = ({ usable, sheetType }) => {
         { name: 'Equippable', values: [usable.equippable ? 'Yes' : 'No'], half: true },
         sheetType === 'characters' ? { name: 'Equipped', values: [usable.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [usable.active ? 'Yes' : 'No'], half: true } : null,
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [usable.npcId ? getNpcName(usable.npcId, campSheet.npcs) : 'Unassigned'] } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [usable.npcId ? getNpcName(usable.npcId, campSheet?.npcs) : 'Unassigned'] } : null,
         { name: 'Description', values: [usable.description] },
         usable.metadata?.givenBy ? { name: 'Received From', values: [usable.metadata.givenBy], half: true } : null,
         usable.metadata?.givenTo ? { name: 'Given To', values: [usable.metadata.givenTo], half: true } : null,
@@ -30,7 +39,12 @@ const UsableDetails = ({ usable, sheetType }) => {
   );
 };
 
-const DisplayUsable = ({ usable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
+interface DisplayUsableProps extends DisplayProps, DisplayBelongingProps {
+  usable: Usable;
+  sheetType: SheetType | EntityType;
+}
+
+const DisplayUsable: React.FC<DisplayUsableProps> = ({ usable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (

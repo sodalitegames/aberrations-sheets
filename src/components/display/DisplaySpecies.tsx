@@ -1,6 +1,12 @@
 import DescriptionList from '../data/DescriptionList';
 
-const DisplaySpecies = ({ species }) => {
+import { Species } from '../../models/resource';
+
+interface Props {
+  species: Species;
+}
+
+const DisplaySpecies: React.FC<Props> = ({ species }) => {
   return (
     <DescriptionList
       list={[

@@ -27,3 +27,9 @@ export enum StatType {
   persona = 'persona',
   aptitude = 'aptitude',
 }
+
+export interface Document {
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+}

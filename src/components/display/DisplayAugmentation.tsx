@@ -1,9 +1,15 @@
+import { Augmentation } from '../../models/sheet/resources';
 import ModalTypes from '../../utils/ModalTypes';
 import InfoList from '../data/InfoList';
 
 import ListItem from '../data/ListItem';
 
-const DisplayAugmentation = ({ aug, noButtonPanel }) => {
+interface Props {
+  aug: Augmentation;
+  noButtonPanel: boolean;
+}
+
+const DisplayAugmentation: React.FC<Props> = ({ aug, noButtonPanel }) => {
   return (
     <ListItem
       heading={aug.name}

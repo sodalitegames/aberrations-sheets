@@ -6,7 +6,23 @@ import classNames from '../utils/classNames';
 
 import Button from './Button';
 
-const Heading = ({ edit, children, secondary }) => {
+type EditButton = {
+  text: string;
+  click: () => void;
+};
+
+type Edit = {
+  text?: string;
+  menu?: EditButton[];
+  click?: () => void;
+};
+
+interface Props {
+  edit: Edit;
+  secondary?: string;
+}
+
+const Heading: React.FC<Props> = ({ edit, children, secondary }) => {
   return (
     <h3 className="flex items-center justify-between mt-8 mb-4 text-lg font-semibold text-gray-800 border-b border-gray-200">
       {children}

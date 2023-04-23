@@ -11,7 +11,14 @@ import InfoList from '../data/InfoList';
 
 import Heading from '../Heading';
 
-const CreatureDetails = ({ creature }) => {
+import { Creature } from '../../models/sheet/resources';
+import { DisplayProps } from './display.types';
+
+interface CreatureDetailsProps {
+  creature: Creature;
+}
+
+const CreatureDetails: React.FC<CreatureDetailsProps> = ({ creature }) => {
   return (
     <DescriptionList
       list={[
@@ -31,7 +38,11 @@ const CreatureDetails = ({ creature }) => {
   );
 };
 
-const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
+interface DisplayCreatureProps extends DisplayProps {
+  creature: Creature;
+}
+
+const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, noButtonPanel, listItem }) => {
   const { setModal } = useActions();
 
   if (listItem) {
@@ -56,12 +67,11 @@ const DisplayCreature = ({ creature, condensed, noButtonPanel, listItem }) => {
             resourceType: 'creatures',
             title: `Are you sure you want to delete ${creature.name}?`,
             submitText: `Yes, delete ${creature.name}`,
-            equipped: creature.equipped,
             notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
           },
         }}
       >
-        <CreatureDetails creature={creature} showStats />
+        <CreatureDetails creature={creature} />
       </ListItem>
     );
   }

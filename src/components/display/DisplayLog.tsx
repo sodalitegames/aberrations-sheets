@@ -5,7 +5,15 @@ import { formatDate } from '../../utils/helpers/dates';
 import ListItem from '../data/ListItem';
 import InfoList from '../data/InfoList';
 
-const DisplayLog = ({ sheetType, log }) => {
+import { Log } from '../../models/sheet/resources';
+import { SheetType } from '../../models/sheet';
+
+interface Props {
+  log: Log;
+  sheetType: SheetType;
+}
+
+const DisplayLog: React.FC<Props> = ({ sheetType, log }) => {
   return (
     <ListItem
       heading={formatDate(log.date)}

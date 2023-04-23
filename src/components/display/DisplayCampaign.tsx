@@ -4,7 +4,13 @@ import DescriptionList from '../data/DescriptionList';
 import Button from '../Button';
 import ModalTypes from '../../utils/ModalTypes';
 
-const DisplayCampaign = ({ campaign }) => {
+import { Campaign } from '../../models/sheet';
+
+interface Props {
+  campaign: Campaign;
+}
+
+const DisplayCampaign: React.FC<Props> = ({ campaign }) => {
   const { setModal } = useActions();
 
   return (
