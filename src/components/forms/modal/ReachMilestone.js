@@ -17,7 +17,7 @@ const ReachMilestone = ({ data }) => {
   const [experienceToGain] = useState((data.entity.milestones + 1) * 5);
   const [currentHp] = useState(data.entity.currentHp);
   const [maxHp] = useState(data.entity.maxHp);
-  const [healthToIncrease] = useState(data.entity.species.healthIncrement);
+  const [healthToIncrease] = useState(data.entity.species.health.increment);
 
   const submitHandler = async e => {
     e.preventDefault();

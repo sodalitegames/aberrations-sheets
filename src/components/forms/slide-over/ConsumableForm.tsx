@@ -70,7 +70,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
     if (fetchedCategories) {
       const newCategoriesList = (fetchedCategories as ConsumableCategory[]).map(categ => {
         return {
-          universalId: categ._id,
+          universalId: categ.id,
           name: categ.name,
           description: categ.description,
         };

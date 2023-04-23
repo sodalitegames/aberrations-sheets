@@ -46,7 +46,7 @@ const CreatureForm = ({ id }) => {
     if (creatureTypes) {
       const newTypesList = creatureTypes.map(type => {
         return {
-          universalId: type._id,
+          universalId: type.id,
           name: type.name,
           description: type.summary,
         };

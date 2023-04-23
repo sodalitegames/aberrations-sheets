@@ -25,7 +25,7 @@ const PurchaseAugmentation = ({ data }) => {
   useEffect(() => {
     if (data.entity && augmentationGroups) {
       const newAugsList = augmentationGroups.map(group => {
-        const children = [group.augmentation1, group.augmentation2, group.augmentation3, group.augmentation4, group.augmentation5].map(aug => {
+        const children = group.augmentations.map(aug => {
           let purchased = false;
 
           data.entity.augmentations.forEach(charsAug => {
@@ -33,20 +33,20 @@ const PurchaseAugmentation = ({ data }) => {
           });
 
           return {
-            id: aug._id,
-            universalId: aug._id,
+            id: aug.id,
+            universalId: aug.id,
             name: aug.name,
-            displayName: `${aug.name} (${aug.pointCost})`,
-            groupName: group.groupName,
+            displayName: `${aug.name} (${aug.cost})`,
+            groupName: group.name,
             description: aug.description,
-            pointCost: aug.pointCost,
+            pointCost: aug.cost,
             disabled: purchased,
           };
         });
 
         return {
-          id: group._id,
-          name: group.groupName,
+          id: group.id,
+          name: group.name,
           children,
         };
       });
