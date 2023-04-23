@@ -17,12 +17,14 @@ import InteractablesPageContent from '../../../components/content/InteractablesP
 import InteractableActions from '../../../components/content/InteractableActions';
 import DisplayCreature from '../../../components/display/DisplayCreature';
 
+import { InteractableType, SheetResourceType, SheetType } from '../../../models/sheet';
+
 const CampaignCreaturesPage = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const { setModal, setSlideOver } = useActions();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const creatures = useSelector(selectCreatures);
   const archivedCreatures = useSelector(selectArchivedCreatures);
@@ -42,7 +44,7 @@ const CampaignCreaturesPage = () => {
       </div>
 
       {/* Creature Actions */}
-      <InteractableActions type="creature" id={{ prop: 'creatureId', value: creature._id }} />
+      <InteractableActions type="creature" id={{ prop: 'creatureId', value: creature._id }} entity={creature} />
 
       {/* Activate or Deactivate */}
       {!creature.archived && (
@@ -52,9 +54,9 @@ const CampaignCreaturesPage = () => {
             onClick={() =>
               dispatch(
                 updateSheetResourceStart(
-                  'campaigns',
+                  SheetType.campaigns,
                   campSheet._id,
-                  'creatures',
+                  SheetResourceType.creatures,
                   creature._id,
                   { active: !creature.active },
                   {
@@ -79,9 +81,9 @@ const CampaignCreaturesPage = () => {
           onClick={() =>
             dispatch(
               updateSheetResourceStart(
-                'campaigns',
+                SheetType.campaigns,
                 campSheet._id,
-                'creatures',
+                SheetResourceType.creatures,
                 creature._id,
                 { archived: !creature.archived, active: false },
                 {
@@ -123,7 +125,19 @@ const CampaignCreaturesPage = () => {
     </>
   );
 
-  return <InteractablesPageContent sheetType="campaigns" show={show} id={creature._id} list={list} type="creatures" label="Creature" interactable={creature} Display={Display} Actions={Actions} />;
+  return (
+    <InteractablesPageContent
+      sheetType={SheetType.campaigns}
+      show={show}
+      id={creature._id}
+      list={list}
+      type={InteractableType.creatures}
+      label="Creature"
+      interactable={creature}
+      Display={Display}
+      Actions={Actions}
+    />
+  );
 };
 
 export default CampaignCreaturesPage;

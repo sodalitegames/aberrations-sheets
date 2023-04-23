@@ -9,7 +9,13 @@ import InteractablesPageContent from '../../../../components/content/Interactabl
 import BelongingActions from '../../../../components/content/BelongingActions';
 import DisplayUsable from '../../../../components/display/DisplayUsable';
 
-const SheetBelongingsUsablesPage = ({ sheetType }) => {
+import { BelongingType, InteractableType, SheetType } from '../../../../models/sheet';
+
+interface Props {
+  sheetType: SheetType;
+}
+
+const SheetBelongingsUsablesPage: React.FC<Props> = ({ sheetType }) => {
   const [searchParams] = useSearchParams();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -38,9 +44,11 @@ const SheetBelongingsUsablesPage = ({ sheetType }) => {
   const usable = list.find(usab => usab._id === id) || list[0];
 
   const Display = () => <DisplayUsable usable={usable} sheetType={sheetType} />;
-  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]} belongingType="usables" belonging={usable} />;
+  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]!} belongingType={BelongingType.usables} belonging={usable} />;
 
-  return <InteractablesPageContent sheetType={sheetType} show={show} id={usable._id} list={list} type="usables" label="Usable" interactable={usable} Display={Display} Actions={Actions} />;
+  return (
+    <InteractablesPageContent sheetType={sheetType} show={show} id={usable._id} list={list} type={InteractableType.usables} label="Usable" interactable={usable} Display={Display} Actions={Actions} />
+  );
 };
 
 export default SheetBelongingsUsablesPage;

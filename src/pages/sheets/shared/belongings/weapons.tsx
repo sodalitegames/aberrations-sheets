@@ -9,7 +9,13 @@ import InteractablesPageContent from '../../../../components/content/Interactabl
 import BelongingActions from '../../../../components/content/BelongingActions';
 import DisplayWeapon from '../../../../components/display/DisplayWeapon';
 
-const SheetBelongingsWeaponsPage = ({ sheetType }) => {
+import { BelongingType, InteractableType, SheetType } from '../../../../models/sheet';
+
+interface Props {
+  sheetType: SheetType;
+}
+
+const SheetBelongingsWeaponsPage: React.FC<Props> = ({ sheetType }) => {
   const [searchParams] = useSearchParams();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -38,9 +44,11 @@ const SheetBelongingsWeaponsPage = ({ sheetType }) => {
   const weapon = list.find(weap => weap._id === id) || list[0];
 
   const Display = () => <DisplayWeapon weapon={weapon} sheetType={sheetType} />;
-  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]} belongingType="weapons" belonging={weapon} />;
+  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]!} belongingType={BelongingType.weapons} belonging={weapon} />;
 
-  return <InteractablesPageContent sheetType={sheetType} show={show} id={weapon._id} list={list} type="weapons" label="Weapon" interactable={weapon} Display={Display} Actions={Actions} />;
+  return (
+    <InteractablesPageContent sheetType={sheetType} show={show} id={weapon._id} list={list} type={InteractableType.weapons} label="Weapon" interactable={weapon} Display={Display} Actions={Actions} />
+  );
 };
 
 export default SheetBelongingsWeaponsPage;

@@ -9,7 +9,7 @@ import { Invite } from './resources/Invite';
 import { Log } from './resources/Log';
 import { Note } from './resources/Note';
 import { Npc } from './resources/Npc';
-// import { Player } from './resources/Player';
+import { Player } from './resources/Player';
 import { Session } from './resources/Session';
 import { Transaction } from './resources/Transaction';
 import { Usable } from './resources/Usable';
@@ -113,3 +113,16 @@ export type SheetNotification = {
   message: string;
   heading: string;
 };
+
+export type Interactable = Weapon | Wearable | Consumable | Usable | Creature | Npc | Environment | Player;
+
+export enum InteractableType {
+  weapons = 'weapons',
+  wearables = 'wearables',
+  consumables = 'consumables',
+  usables = 'usables',
+  npcs = 'npcs',
+  creatures = 'creatures',
+  environments = 'environments',
+  players = 'players',
+}

@@ -11,7 +11,13 @@ import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
 
 import TabsNavigation from '../../../components/TabsNavigation';
 
-const SheetBelongingsPage = ({ sheetType }) => {
+import { SheetType } from '../../../models/sheet';
+
+interface Props {
+  sheetType: SheetType;
+}
+
+const SheetBelongingsPage: React.FC<Props> = ({ sheetType }) => {
   const [searchParams] = useSearchParams();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -25,10 +31,10 @@ const SheetBelongingsPage = ({ sheetType }) => {
   const show = searchParams.get('show');
 
   const tabs = [
-    { name: 'Weapons', count: sheets[sheetType].weapons.filter(el => (show === 'archived' ? el.archived : !el.archived)).length, href: 'weapons' },
-    { name: 'Wearables', count: sheets[sheetType].wearables.filter(el => (show === 'archived' ? el.archived : !el.archived)).length, href: 'wearables' },
-    { name: 'Consumables', count: sheets[sheetType].consumables.filter(el => (show === 'archived' ? el.archived : !el.archived)).length, href: 'consumables' },
-    { name: 'Usables', count: sheets[sheetType].usables.filter(el => (show === 'archived' ? el.archived : !el.archived)).length, href: 'usables' },
+    { name: 'Weapons', count: sheets[sheetType]!.weapons.filter(el => (show === 'archived' ? el.archived : !el.archived)).length, href: 'weapons' },
+    { name: 'Wearables', count: sheets[sheetType]!.wearables.filter(el => (show === 'archived' ? el.archived : !el.archived)).length, href: 'wearables' },
+    { name: 'Consumables', count: sheets[sheetType]!.consumables.filter(el => (show === 'archived' ? el.archived : !el.archived)).length, href: 'consumables' },
+    { name: 'Usables', count: sheets[sheetType]!.usables.filter(el => (show === 'archived' ? el.archived : !el.archived)).length, href: 'usables' },
   ];
 
   return (

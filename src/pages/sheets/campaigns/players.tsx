@@ -15,7 +15,9 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 import classNames from '../../../utils/classNames';
 import { getSpecies } from '../../../utils/helpers/species';
 
-import { FetchedResourceType } from '../../../models/resource';
+import { FetchedResourceType, Species } from '../../../models/resource';
+import { InteractableType, SheetType } from '../../../models/sheet';
+import { Player } from '../../../models/sheet/resources';
 
 import ListContainer from '../../../components/data/ListContainer';
 
@@ -31,9 +33,9 @@ const CampaignPlayersPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { setModal, setSlideOver } = useActions();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
-  const species = useResource(FetchedResourceType.Species);
+  const species = useResource(FetchedResourceType.Species) as Species[];
 
   const show = searchParams.get('show');
   const id = searchParams.get('id');
@@ -54,7 +56,7 @@ const CampaignPlayersPage = () => {
       </div>
 
       {/* Player Actions */}
-      <InteractableActions type="player" id={{ prop: 'playerId', value: player._id }} entity={{ ...player, species: getSpecies(player.speciesId, species) }} />
+      <InteractableActions type="player" id={{ prop: 'playerId', value: player._id }} entity={{ ...player, species: getSpecies(player.speciesId, species) } as Player} />
 
       {/* Activate or Deactivate */}
       <div className="pt-4 mt-4 border-t border-gray-200">
@@ -63,7 +65,7 @@ const CampaignPlayersPage = () => {
           onClick={() =>
             dispatch(
               updateSheetStart(
-                'characters',
+                SheetType.characters,
                 player._id,
                 { active: !player.active },
                 {
@@ -111,9 +113,10 @@ const CampaignPlayersPage = () => {
           <div
             key={plyr._id}
             className={classNames('flex justify-between items-center px-2 cursor-pointer', player._id === plyr._id ? 'bg-gray-100' : 'hover:bg-gray-50')}
+            // @ts-expect-error //
             onClick={() => setSearchParams({ ...Object.fromEntries([...searchParams]), id: plyr._id })}
           >
-            <DisplayPlayer key={plyr._id} player={plyr} condensed listItem />
+            <DisplayPlayer key={plyr._id} player={plyr} species={species} condensed listItem />
             {plyr.active ? (
               <div className="ml-2 shrink-0" title="Equipped">
                 <CheckCircleIcon className="w-6 h-6 text-green-600" aria-hidden="true" />
@@ -130,7 +133,20 @@ const CampaignPlayersPage = () => {
     </>
   );
 
-  return <InteractablesPageContent sheetType="campaigns" show={show} id={player._id} list={list} type="players" label="Player" interactable={player} Display={Display} Actions={Actions} List={List} />;
+  return (
+    <InteractablesPageContent
+      sheetType={SheetType.campaigns}
+      show={show}
+      id={player._id}
+      list={list}
+      type={InteractableType.players}
+      label="Player"
+      interactable={player}
+      Display={Display}
+      Actions={Actions}
+      List={List}
+    />
+  );
 };
 
 export default CampaignPlayersPage;

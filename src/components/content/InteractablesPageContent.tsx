@@ -3,7 +3,22 @@ import SheetPagePanel from '../../layouts/components/sheet/SheetPagePanel';
 
 import ListInteractables, { ListInteractablesMessage } from './ListInteractables';
 
-const InteractablesPageContent = ({ sheetType, show, id, list, type, label, interactable, Display, Actions, List }) => {
+import { Interactable, InteractableType, SheetType } from '../../models/sheet';
+
+interface Props {
+  sheetType: SheetType;
+  list: Interactable[];
+  interactable: Interactable;
+  type: InteractableType;
+  label: string;
+  show: string | null;
+  id: string;
+  Display: React.FC;
+  Actions: React.FC;
+  List?: React.FC;
+}
+
+const InteractablesPageContent: React.FC<Props> = ({ sheetType, show, id, list, type, label, interactable, Display, Actions, List }) => {
   return (
     <SheetPageContent title={`${label}s`} columns={4}>
       {/* Showing Archived Interactables Notice */}

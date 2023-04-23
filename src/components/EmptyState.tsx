@@ -2,7 +2,18 @@ import { PlusIcon } from '@heroicons/react/solid';
 
 import Button from './Button';
 
-const EmptyState = ({ heading, message, button, children }) => {
+type ESButton = {
+  text: string;
+  click: () => void;
+};
+
+interface Props {
+  heading: string;
+  message: string;
+  button: ESButton;
+}
+
+const EmptyState: React.FC<Props> = ({ heading, message, button, children }) => {
   return (
     <div className="relative block w-full px-3 py-5 text-center border-2 border-gray-300 border-dashed rounded-lg">
       <h3 className="text-sm font-medium text-gray-900">{heading}</h3>

@@ -1,8 +1,13 @@
 import classNames from '../../../utils/classNames';
 
-const SheetPageContent = ({ title, columns, children }) => {
+interface Props {
+  title: string;
+  columns?: 1 | 2 | 3 | 4;
+}
+
+const SheetPageContent: React.FC<Props> = ({ title, columns, children }) => {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div className="max-w-3xl px-4 mx-auto sm:px-6 lg:max-w-7xl lg:px-8">
       <h1 className="sr-only">{title}</h1>
       {/* Main grid */}
       <div

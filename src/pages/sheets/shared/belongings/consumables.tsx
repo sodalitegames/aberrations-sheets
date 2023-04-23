@@ -9,7 +9,13 @@ import InteractablesPageContent from '../../../../components/content/Interactabl
 import BelongingActions from '../../../../components/content/BelongingActions';
 import DisplayConsumable from '../../../../components/display/DisplayConsumable';
 
-const SheetBelongingsConsumablesPage = ({ sheetType }) => {
+import { BelongingType, InteractableType, SheetType } from '../../../../models/sheet';
+
+interface Props {
+  sheetType: SheetType;
+}
+
+const SheetBelongingsConsumablesPage: React.FC<Props> = ({ sheetType }) => {
   const [searchParams] = useSearchParams();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -37,10 +43,20 @@ const SheetBelongingsConsumablesPage = ({ sheetType }) => {
   const consumable = list.find(cons => cons._id === id) || list[0];
 
   const Display = () => <DisplayConsumable consumable={consumable} sheetType={sheetType} />;
-  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]} belongingType="consumables" belonging={consumable} />;
+  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]!} belongingType={BelongingType.consumables} belonging={consumable} />;
 
   return (
-    <InteractablesPageContent sheetType={sheetType} show={show} id={consumable._id} list={list} type="consumables" label="Consumable" interactable={consumable} Display={Display} Actions={Actions} />
+    <InteractablesPageContent
+      sheetType={sheetType}
+      show={show}
+      id={consumable._id}
+      list={list}
+      type={InteractableType.consumables}
+      label="Consumable"
+      interactable={consumable}
+      Display={Display}
+      Actions={Actions}
+    />
   );
 };
 

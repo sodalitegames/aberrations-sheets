@@ -11,27 +11,30 @@ import { useResource } from '../../../hooks/useResource';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
-import { FetchedResourceType } from '../../../models/resource';
+import { FetchedResourceType, Species } from '../../../models/resource';
 import { getSpecies } from '../../../utils/helpers/species';
 
 import Button from '../../../components/Button';
 
 import InteractablesPageContent from '../../../components/content/InteractablesPageContent';
-
 import InteractableActions from '../../../components/content/InteractableActions';
+
 import DisplayNpc from '../../../components/display/DisplayNpc';
+
+import { Npc } from '../../../models/sheet/resources';
+import { InteractableType, SheetResourceType, SheetType } from '../../../models/sheet';
 
 const CampaignNpcsPage = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const { setModal, setSlideOver } = useActions();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const npcs = useSelector(selectNpcs);
   const archivedNpcs = useSelector(selectArchivedNpcs);
 
-  const species = useResource(FetchedResourceType.Species);
+  const species = useResource(FetchedResourceType.Species) as Species[];
 
   const show = searchParams.get('show');
   const id = searchParams.get('id');
@@ -48,7 +51,7 @@ const CampaignNpcsPage = () => {
       </div>
 
       {/* Npc Actions */}
-      <InteractableActions type="npc" id={{ prop: 'npcId', value: npc._id }} entity={{ ...npc, species: getSpecies(npc.speciesId, species) }} />
+      <InteractableActions type="npc" id={{ prop: 'npcId', value: npc._id }} entity={{ ...npc, species: getSpecies(npc.speciesId, species) } as Npc} />
 
       {/* Activate or Deactivate */}
       {!npc.archived && (
@@ -58,9 +61,9 @@ const CampaignNpcsPage = () => {
             onClick={() =>
               dispatch(
                 updateSheetResourceStart(
-                  'campaigns',
+                  SheetType.campaigns,
                   campSheet._id,
-                  'npcs',
+                  SheetResourceType.npcs,
                   npc._id,
                   { active: !npc.active },
                   {
@@ -85,9 +88,9 @@ const CampaignNpcsPage = () => {
           onClick={() =>
             dispatch(
               updateSheetResourceStart(
-                'campaigns',
+                SheetType.campaigns,
                 campSheet._id,
-                'npcs',
+                SheetResourceType.npcs,
                 npc._id,
                 { archived: !npc.archived, active: false },
                 {
@@ -129,7 +132,9 @@ const CampaignNpcsPage = () => {
     </>
   );
 
-  return <InteractablesPageContent sheetType="campaigns" show={show} id={npc._id} list={list} type="npcs" label="Npc" interactable={npc} Display={Display} Actions={Actions} />;
+  return (
+    <InteractablesPageContent sheetType={SheetType.campaigns} show={show} id={npc._id} list={list} type={InteractableType.npcs} label="Npc" interactable={npc} Display={Display} Actions={Actions} />
+  );
 };
 
 export default CampaignNpcsPage;

@@ -18,15 +18,22 @@ import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent
 
 import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
 import Button from '../../../components/Button';
-import Notice from '../../../components/Notice';
+import Notice, { NoticeStatus } from '../../../components/Notice';
 import ListContainer from '../../../components/data/ListContainer';
 
-const unescapeHtml = content => {
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { Note } from '../../../models/sheet/resources';
+
+const unescapeHtml = (content: string) => {
   if (!content) return '';
   return content.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
 };
 
-const SheetNotesPage = ({ sheetType }) => {
+interface Props {
+  sheetType: SheetType;
+}
+
+const SheetNotesPage: React.FC<Props> = ({ sheetType }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -38,19 +45,19 @@ const SheetNotesPage = ({ sheetType }) => {
     campaigns: campSheet,
   };
 
-  const [openNote, setOpenNote] = useState(null);
+  const [openNote, setOpenNote] = useState<Note | null>(null);
   const [content, setContent] = useState('');
   const [plainText, setPlainText] = useState('');
   const [saved, setSaved] = useState(true);
 
   useEffect(() => {
     if (!openNote) {
-      if (sheetType === 'characters' && charSheet.notes.length) selectNote(charSheet.notes[0]);
-      if (sheetType === 'campaigns' && campSheet.notes.length) selectNote(campSheet.notes[0]);
+      if (sheetType === 'characters' && charSheet?.notes.length) selectNote(charSheet.notes[0]);
+      if (sheetType === 'campaigns' && campSheet?.notes.length) selectNote(campSheet.notes[0]);
     }
   }, [sheetType, charSheet, campSheet, openNote]);
 
-  const selectNote = note => {
+  const selectNote = (note: Note) => {
     setOpenNote(note);
     // Unescape the escaped HTML coming from the database
     setContent(unescapeHtml(note.content));
@@ -59,22 +66,21 @@ const SheetNotesPage = ({ sheetType }) => {
   };
 
   const createNote = () => {
-    dispatch(createSheetResourceStart(sheetType, sheets[sheetType]._id, 'notes', {}));
+    dispatch(createSheetResourceStart(sheetType, sheets[sheetType]!._id, SheetResourceType.notes, {}, {}));
   };
 
   const saveNote = () => {
-    dispatch(updateSheetResourceStart(sheetType, sheets[sheetType]._id, 'notes', openNote._id, { plainText: plainText, content: content }));
+    dispatch(updateSheetResourceStart(sheetType, sheets[sheetType]!._id, SheetResourceType.notes, openNote!._id, { plainText: plainText, content: content }, {}));
     setSaved(true);
   };
 
-  const deleteNote = noteId => {
-    dispatch(deleteSheetResourceStart(sheetType, sheets[sheetType]._id, 'notes', noteId));
-
-    setOpenNote('deleted');
+  const deleteNote = (noteId: string) => {
+    dispatch(deleteSheetResourceStart(sheetType, sheets[sheetType]!._id, SheetResourceType.notes, noteId, {}));
+    setOpenNote(null);
     setContent('');
   };
 
-  const editorChange = (content, delta, source, editor) => {
+  const editorChange = (content: any, delta: any, source: any, editor: any) => {
     setContent(content);
 
     // get plain text
@@ -89,17 +95,17 @@ const SheetNotesPage = ({ sheetType }) => {
       <SheetPageContent title="Notes">
         {/* No Permissions Panel */}
         <SheetPagePanel>
-          <div className="sm:flex py-8 px-2 justify-between items-center">
-            <div className="sm:flex items-center">
+          <div className="items-center justify-between px-2 py-8 sm:flex">
+            <div className="items-center sm:flex">
               <div>
-                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl">No Permission</h1>
-                <p className="mt-1 text-base text-gray-500">You do not have permission to view {charSheet.characterName}'s notes.</p>
+                <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">No Permission</h1>
+                <p className="mt-1 text-base text-gray-500">You do not have permission to view {charSheet!.characterName}'s notes.</p>
               </div>
             </div>
             <div className="space-x-3 sm:pl-6">
               <Link
                 to="/about"
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 bg-accent2-deep hover:bg-accent2-dark focus:ring-accent2-deep"
+                className="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 bg-accent2-deep hover:bg-accent2-dark focus:ring-accent2-deep"
               >
                 Learn More
               </Link>
@@ -116,7 +122,7 @@ const SheetNotesPage = ({ sheetType }) => {
       <SheetPagePanel>
         <div className="flow-root mt-2">
           <ListContainer
-            list={sheets[sheetType].notes}
+            list={sheets[sheetType]!.notes}
             button={{ click: createNote, text: 'Create a new Note' }}
             empty={{
               heading: 'No Notes',
@@ -125,7 +131,7 @@ const SheetNotesPage = ({ sheetType }) => {
             }}
             classes="mb-4"
           >
-            {sheets[sheetType].notes.map(note => (
+            {sheets[sheetType]!.notes.map(note => (
               <li
                 key={note._id}
                 className={classNames(note._id === openNote?._id ? 'bg-gray-50' : '', 'py-3 px-2 border-b border-gray-200 hover:bg-gray-50 cursor-pointer')}
@@ -142,25 +148,23 @@ const SheetNotesPage = ({ sheetType }) => {
       <SheetPagePanel colSpan={2}>
         <div className="flow-root">
           {!openNote ? (
-            <p className="text-sm italic text-gray-400 text-center">Once a you have created a note, you will be able to see and edit it here.</p>
-          ) : openNote === 'deleted' ? (
-            <p className="text-sm italic text-gray-400 text-center">This note has been deleted. Please select a new one.</p>
+            <p className="text-sm italic text-center text-gray-400">Once a you have created a note, you will be able to see and edit it here.</p>
           ) : (
             <>
               {!saved ? (
                 <Notice
-                  status="warn"
+                  status={NoticeStatus.Warn}
                   heading="You have unsaved changes..."
                   message="If you do not save your changes before navigating away from this note, you will lose all your edits."
                   classes="mb-4"
                 />
               ) : (
-                <Notice status="success" message="Your note is saved and up to date." classes="mb-4" />
+                <Notice status={NoticeStatus.Success} message="Your note is saved and up to date." classes="mb-4" />
               )}
               <ReactQuill
                 theme="bubble"
                 placeholder="You can select any text that you have typed to bring up formatting options."
-                className="rounded-lg border border-gray-200"
+                className="border border-gray-200 rounded-lg"
                 value={content}
                 onChange={editorChange}
               />

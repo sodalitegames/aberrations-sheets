@@ -50,6 +50,7 @@ import SheetBelongingsConsumablesPage from './pages/sheets/shared/belongings/con
 import SheetBelongingsUsablesPage from './pages/sheets/shared/belongings/usables';
 
 import './index.css';
+import { SheetType } from './models/sheet';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -73,15 +74,15 @@ ReactDOM.render(
                   <Route index element={<Navigate to="gameplay" />} />
                   <Route path="gameplay" element={<CharacterGameplayPage />} />
                   <Route path="character" element={<CharacterCharacterPage />} />
-                  <Route path="belongings" element={<SheetBelongingsPage sheetType="characters" />}>
+                  <Route path="belongings" element={<SheetBelongingsPage sheetType={SheetType.characters} />}>
                     <Route index element={<Navigate to="weapons" />} />
-                    <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType="characters" />} />
-                    <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType="characters" />} />
-                    <Route path="consumables" element={<SheetBelongingsConsumablesPage sheetType="characters" />} />
-                    <Route path="usables" element={<SheetBelongingsUsablesPage sheetType="characters" />} />
+                    <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType={SheetType.characters} />} />
+                    <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType={SheetType.characters} />} />
+                    <Route path="consumables" element={<SheetBelongingsConsumablesPage sheetType={SheetType.characters} />} />
+                    <Route path="usables" element={<SheetBelongingsUsablesPage sheetType={SheetType.characters} />} />
                   </Route>
-                  <Route path="notes" element={<SheetNotesPage sheetType="characters" />} />
-                  <Route path="resources" element={<SheetResourcesPage sheetType="characters" />} />
+                  <Route path="notes" element={<SheetNotesPage sheetType={SheetType.characters} />} />
+                  <Route path="resources" element={<SheetResourcesPage sheetType={SheetType.characters} />} />
                 </Route>
                 <Route path="campaigns/:campId" element={<CampaignSheet />}>
                   <Route index element={<Navigate to="campaign" />} />
@@ -90,15 +91,15 @@ ReactDOM.render(
                   <Route path="players" element={<CampaignPlayersPage />} />
                   <Route path="npcs" element={<CampaignNpcsPage />} />
                   <Route path="creatures" element={<CampaignCreaturesPage />} />
-                  <Route path="belongings" element={<SheetBelongingsPage sheetType="campaigns" />}>
+                  <Route path="belongings" element={<SheetBelongingsPage sheetType={SheetType.campaigns} />}>
                     <Route index element={<Navigate to="weapons" />} />
-                    <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType="campaigns" />} />
-                    <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType="campaigns" />} />
-                    <Route path="consumables" element={<SheetBelongingsConsumablesPage sheetType="campaigns" />} />
-                    <Route path="usables" element={<SheetBelongingsUsablesPage sheetType="campaigns" />} />
+                    <Route path="weapons" element={<SheetBelongingsWeaponsPage sheetType={SheetType.campaigns} />} />
+                    <Route path="wearables" element={<SheetBelongingsWearablesPage sheetType={SheetType.campaigns} />} />
+                    <Route path="consumables" element={<SheetBelongingsConsumablesPage sheetType={SheetType.campaigns} />} />
+                    <Route path="usables" element={<SheetBelongingsUsablesPage sheetType={SheetType.campaigns} />} />
                   </Route>
-                  <Route path="notes" element={<SheetNotesPage sheetType="campaigns" />} />
-                  <Route path="resources" element={<SheetResourcesPage sheetType="campaigns" />} />
+                  <Route path="notes" element={<SheetNotesPage sheetType={SheetType.campaigns} />} />
+                  <Route path="resources" element={<SheetResourcesPage sheetType={SheetType.campaigns} />} />
                 </Route>
               </Route>
             </Routes>
