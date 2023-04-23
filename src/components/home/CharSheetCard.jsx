@@ -12,7 +12,7 @@ export default function CharSheetCard({ charSheet }) {
       <DescriptionList
         list={[
           { name: 'Species', values: [charSheet.speciesName], half: true },
-          { name: 'Power', values: [charSheet.power], half: true },
+          { name: 'Milestones', values: [charSheet.milestones], half: true },
           { name: 'Description', values: [charSheet.charDescription] },
         ]}
       />
