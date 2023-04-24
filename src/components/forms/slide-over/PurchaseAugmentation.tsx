@@ -1,26 +1,58 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
-import { FetchedResourceType } from '../../../models/resource';
+import { useResource } from '../../../hooks/useResource';
+
+import { AugmentationGroup, FetchedResourceType } from '../../../models/resource';
+import { CharacterSheet, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Npc, Player } from '../../../models/sheet/resources';
+
 import { SlideOverForm } from '../SlideOver';
 
 import Select from '../elements/Select';
 import Detail from '../elements/Detail';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
-import { useResource } from '../../../hooks/useResource';
+
 import { calculateAugmentationPoints } from '../../../utils/functions/calculations';
 
-const PurchaseAugmentation = ({ data }) => {
+type AugmentationOption = {
+  id: string;
+  universalId: string;
+  name: string;
+  displayName: string;
+  groupName: string;
+  description: string;
+  pointCost: number;
+  disabled: boolean;
+};
+
+type AugmentationGroupOption = {
+  id: string;
+  name: string;
+  children: AugmentationOption[];
+};
+
+interface Props {
+  data: {
+    sheetType: SheetType;
+    sheetId: string;
+    entityType: 'player' | 'npc' | 'character';
+    entity: CharacterSheet | Player | Npc;
+  };
+}
+
+const PurchaseAugmentation: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const augmentationGroups = useResource(FetchedResourceType.AugmentationGroups);
+  const augmentationGroups = useResource(FetchedResourceType.AugmentationGroups) as AugmentationGroup[];
 
   const [augmentationPoints] = useState(calculateAugmentationPoints(data.entity.milestones, data.entity.augmentations));
-  const [augmentation, setAugmentation] = useState(null);
-  const [augsList, setAugsList] = useState([]);
+
+  const [augmentation, setAugmentation] = useState<AugmentationOption | null>(null);
+  const [augsList, setAugsList] = useState<AugmentationGroupOption[]>([]);
 
   useEffect(() => {
     if (data.entity && augmentationGroups) {
@@ -29,7 +61,7 @@ const PurchaseAugmentation = ({ data }) => {
           let purchased = false;
 
           data.entity.augmentations.forEach(charsAug => {
-            if (charsAug.universalId === aug._id) purchased = true;
+            if (charsAug.universalId === aug.id) purchased = true;
           });
 
           return {
@@ -55,10 +87,10 @@ const PurchaseAugmentation = ({ data }) => {
     }
   }, [data.entity, augmentationGroups]);
 
-  const selectAugmentation = e => {
+  const selectAugmentation = (e: any) => {
     if (!e.target.value) setAugmentation(null);
 
-    let ungrouped = [];
+    let ungrouped: AugmentationOption[] = [];
 
     augsList.forEach(list => {
       ungrouped = [...ungrouped, ...list.children];
@@ -66,10 +98,12 @@ const PurchaseAugmentation = ({ data }) => {
 
     const currAug = ungrouped.find(aug => aug.universalId === e.target.value);
 
+    if (!currAug) return setAugmentation(null);
+
     setAugmentation(currAug);
   };
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!augmentation) return alert('Must provide augmentation');
@@ -82,7 +116,7 @@ const PurchaseAugmentation = ({ data }) => {
       createSheetResourceStart(
         data.sheetType,
         data.sheetId,
-        'augmentations',
+        SheetResourceType.augmentations,
         { name, pointCost, description, universalId, npcId: data.sheetType === 'campaigns' ? data.entity._id : undefined },
         { forPlayer: data.entityType === 'player' ? true : false, notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` } }
       )
@@ -94,7 +128,7 @@ const PurchaseAugmentation = ({ data }) => {
       title="Purchase an Augmentation"
       description={`Select an augmentation below and purchase it to add it to your ${data.sheetType === 'characters' ? 'character' : 'npc'}.`}
       submitText={`Purchase Augmentation`}
-      submitDisabled={!!(!augmentation || (augmentation && data.entity.upgradePoints < augmentation.pointCost))}
+      submitDisabled={!!(!augmentation || (augmentation && augmentationPoints < augmentation.pointCost))}
       submitHandler={submitHandler}
     >
       <Detail slideOver label="Augmentation Points" detail={augmentationPoints} />
@@ -105,7 +139,7 @@ const PurchaseAugmentation = ({ data }) => {
           {augmentation ? (
             <>
               <Detail slideOver label="Name" detail={augmentation.name} />
-              <Detail status={augmentationPoints < augmentation.pointCost ? 'error' : ''} slideOver label="Cost" detail={augmentation.pointCost} />
+              <Detail status={augmentationPoints < augmentation.pointCost ? 'error' : undefined} slideOver label="Cost" detail={augmentation.pointCost} />
               <Detail slideOver label="Description" detail={augmentation.description} />
             </>
           ) : null}

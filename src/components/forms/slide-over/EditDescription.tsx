@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
@@ -10,7 +10,17 @@ import { SlideOverForm } from '../SlideOver';
 
 import TextArea from '../elements/TextArea';
 
-const EditDescription = ({ data }) => {
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+
+interface Props {
+  data: {
+    type: 'character' | 'player' | 'npc';
+    description: string;
+    resourceId: string;
+  };
+}
+
+const EditDescription: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
@@ -18,7 +28,7 @@ const EditDescription = ({ data }) => {
 
   const [description, setDescription] = useState(data.description);
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!description) return alert('Must provide description');
@@ -27,8 +37,8 @@ const EditDescription = ({ data }) => {
       case 'character':
         dispatch(
           updateSheetStart(
-            'characters',
-            charSheet._id,
+            SheetType.characters,
+            charSheet!._id,
             { charDescription: description },
             { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Updated', message: 'You have successfully updated your character description.' } }
           )
@@ -37,7 +47,7 @@ const EditDescription = ({ data }) => {
       case 'player':
         dispatch(
           updateSheetStart(
-            'characters',
+            SheetType.characters,
             data.resourceId,
             { charDescription: description },
             { forPlayer: true, slideOver: true, notification: { status: 'success', heading: 'Player Updated', message: "You have successfully updated your player's character description." } }
@@ -47,9 +57,9 @@ const EditDescription = ({ data }) => {
       case 'npc':
         dispatch(
           updateSheetResourceStart(
-            'campaigns',
-            campSheet._id,
-            'npcs',
+            SheetType.campaigns,
+            campSheet!._id,
+            SheetResourceType.npcs,
             data.resourceId,
             { description },
             { slideOver: true, notification: { status: 'success', heading: 'Npc Updated', message: "You have successfully updated your npc's description." } }

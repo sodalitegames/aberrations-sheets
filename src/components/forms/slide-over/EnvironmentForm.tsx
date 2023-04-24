@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
@@ -10,10 +10,16 @@ import { SlideOverForm } from '../SlideOver';
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 
-const EnvironmentForm = ({ id }) => {
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+
+interface Props {
+  id: string;
+}
+
+const EnvironmentForm: React.FC<Props> = ({ id }) => {
   const dispatch = useDispatch();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -22,12 +28,14 @@ const EnvironmentForm = ({ id }) => {
     if (id && campSheet) {
       const currentEnvironment = campSheet.environments.find(envir => envir._id === id);
 
-      setName(currentEnvironment.name);
-      setDescription(currentEnvironment.description);
+      if (currentEnvironment) {
+        setName(currentEnvironment.name);
+        setDescription(currentEnvironment.description);
+      }
     }
   }, [id, campSheet]);
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!name) return alert('Must provide a name');
@@ -36,9 +44,9 @@ const EnvironmentForm = ({ id }) => {
     if (id) {
       dispatch(
         updateSheetResourceStart(
-          'campaigns',
+          SheetType.campaigns,
           campSheet._id,
-          'environments',
+          SheetResourceType.environments,
           id,
           { name, description },
           { slideOver: true, notification: { status: 'success', heading: 'Environment Updated', message: `You have successfully updated ${name}.` } }
@@ -49,9 +57,9 @@ const EnvironmentForm = ({ id }) => {
 
     dispatch(
       createSheetResourceStart(
-        'campaigns',
+        SheetType.campaigns,
         campSheet._id,
-        'environments',
+        SheetResourceType.environments,
         { name, description },
         { slideOver: true, notification: { status: 'success', heading: 'Environment Created', message: `You have successfully created ${name}.` } }
       )

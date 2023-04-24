@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
@@ -7,7 +7,9 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../red
 
 import { useResource } from '../../../hooks/useResource';
 
-import { FetchedResourceType } from '../../../models/resource';
+import { CreatureType, FetchedResourceType } from '../../../models/resource';
+import { Type } from '../../../models/sheet/resources';
+import { SheetResourceType, SheetType, StatType } from '../../../models/sheet';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -18,20 +20,24 @@ import CheckboxGroup, { BasicCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 
-const CreatureForm = ({ id }) => {
+interface Props {
+  id: string;
+}
+
+const CreatureForm: React.FC<Props> = ({ id }) => {
   const dispatch = useDispatch();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
-  const creatureTypes = useResource(FetchedResourceType.CreatureTypes);
+  const creatureTypes = useResource(FetchedResourceType.CreatureTypes) as CreatureType[];
 
-  const [typesList, setTypesList] = useState([]);
+  const [typesList, setTypesList] = useState<Type[]>([]);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [damageLevel, setDamageLevel] = useState(1);
-  const [types, setTypes] = useState([]);
-  const [attackingStat, setAttackingStat] = useState('');
+  const [types, setTypes] = useState<Type[]>([]);
+  const [attackingStat, setAttackingStat] = useState<StatType | ''>('');
   const [health, setHealth] = useState(10);
   const [shieldValue, setShieldValue] = useState(0);
   const [speed, setSpeed] = useState(3);
@@ -60,27 +66,30 @@ const CreatureForm = ({ id }) => {
     if (id && campSheet) {
       const currentCreature = campSheet.creatures.find(creature => creature._id === id);
 
-      setName(currentCreature.name);
-      setDescription(currentCreature.description);
-      setDamageLevel(currentCreature.damageLevel);
-      setTypes(currentCreature.types);
-      setAttackingStat(currentCreature.attackingStat);
-      setShieldValue(currentCreature.shieldValue);
-      setSpeed(currentCreature.speed);
+      if (currentCreature) {
+        setName(currentCreature.name);
+        setDescription(currentCreature.description);
+        setDamageLevel(currentCreature.damageLevel);
+        setTypes(currentCreature.types);
+        setAttackingStat(currentCreature.attackingStat);
+        setShieldValue(currentCreature.shieldValue);
+        setSpeed(currentCreature.speed);
+      }
     }
   }, [id, campSheet]);
 
-  const selectStat = e => {
-    if (!e.target.value) return setAttackingStat(null);
+  const selectStat = (e: any) => {
+    if (!e.target.value) return setAttackingStat('');
     setAttackingStat(e.target.value);
   };
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    let types = [];
+    let types: Type[] = [];
 
     typesList.forEach(type => {
+      // @ts-ignore
       if (e.target[type.universalId].checked) {
         types.push(type);
       }
@@ -94,7 +103,7 @@ const CreatureForm = ({ id }) => {
     if (!attackingStat) return alert('Must provide an attackingStat');
     if (!health) return alert('Must provide a health');
 
-    let body = {
+    let body: any = {
       name,
       description,
       damageLevel,
@@ -107,7 +116,7 @@ const CreatureForm = ({ id }) => {
 
     if (id) {
       dispatch(
-        updateSheetResourceStart('campaigns', campSheet._id, 'creatures', id, body, {
+        updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.creatures, id, body, {
           slideOver: true,
           notification: { status: 'success', heading: 'Creature Updated', message: `You have successfully updated ${name}.` },
         })
@@ -130,7 +139,7 @@ const CreatureForm = ({ id }) => {
     };
 
     dispatch(
-      createSheetResourceStart('campaigns', campSheet._id, 'creatures', body, {
+      createSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.creatures, body, {
         slideOver: true,
         notification: { status: 'success', heading: 'Creature Created', message: `You have successfully created ${name}.` },
       })
@@ -160,7 +169,7 @@ const CreatureForm = ({ id }) => {
           ))}
         </CheckboxGroup>
       ) : (
-        <Row slideOver label="Types">
+        <Row slideOver name="types" label="Types">
           <LoadingSpinner dark />
         </Row>
       )}

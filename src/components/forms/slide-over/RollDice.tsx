@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { roll } from '@aberrations-rpg/functions';
@@ -17,42 +17,56 @@ import Input from '../elements/Input';
 import Select from '../elements/Select';
 import Detail from '../elements/Detail';
 
-const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) => {
+import { CharacterSheet, Stat, StatType } from '../../../models/sheet';
+import { Creature, Npc, Player } from '../../../models/sheet/resources';
+import { RollResults } from '@aberrations-rpg/functions/lib/roll/roll';
+
+interface Props {
+  data: {
+    rollingStat: StatType;
+    type: 'player' | 'character' | 'npc' | 'creature' | 'campaign';
+    playerId?: string;
+    npcId?: string;
+    creatureId?: string;
+  };
+}
+
+const RollDice: React.FC<Props> = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) => {
   const { addNotification } = useActions();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [statKey, setStatKey] = useState('');
-  const [stat, setStat] = useState('');
+  const [statKey, setStatKey] = useState<StatType | null>(null);
+  const [stat, setStat] = useState<Stat | null>(null);
   const [die, setDie] = useState(0);
   const [advantage, setAdvantage] = useState(0);
   const [modifier, setModifier] = useState(0);
 
-  const [results, setResults] = useState(null);
+  const [results, setResults] = useState<RollResults | null>(null);
 
-  const [sheet, setSheet] = useState(null);
+  const [sheet, setSheet] = useState<CharacterSheet | Creature | Npc | Player | null>(null);
 
   useEffect(() => {
     switch (type) {
       case 'player':
-        const player = campSheet.players.find(player => player._id === playerId);
-        setSheet(player);
+        const player = campSheet!.players.find(player => player._id === playerId);
+        if (player) setSheet(player);
         return;
       case 'character':
-        setSheet(charSheet);
+        if (charSheet) setSheet(charSheet);
         return;
       case 'npc':
-        const npc = campSheet.npcs.find(npc => npc._id === npcId);
-        setSheet(npc);
+        const npc = campSheet!.npcs.find(npc => npc._id === npcId);
+        if (npc) setSheet(npc);
         return;
       case 'creature':
-        const creature = campSheet.creatures.find(creature => creature._id === creatureId);
-        setSheet(creature);
+        const creature = campSheet!.creatures.find(creature => creature._id === creatureId);
+        if (creature) setSheet(creature);
         return;
-      case 'campaign':
-        setSheet(campSheet);
-        return;
+      // case 'campaign':
+      //   if (campSheet) setSheet(campSheet);
+      //   return;
       default:
         return;
     }
@@ -75,7 +89,7 @@ const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) 
 
   const getSubmitText = () => {
     if (stat) {
-      return `Roll for ${capitalize(statKey)} (D${stat.die}) with ${+advantage} Advantage.`;
+      return `Roll for ${capitalize(statKey || '')} (D${stat.die}) with ${+advantage} Advantage.`;
     }
 
     if (!die) {
@@ -85,25 +99,25 @@ const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) 
     return `Roll D${die} with ${advantage} Advantage.`;
   };
 
-  const selectStat = e => {
-    if (!e.target.value) {
-      setStat('');
-      setStatKey('');
+  const selectStat = (e: any) => {
+    if (!e.target.value || !sheet) {
+      setStat(null);
+      setStatKey(null);
       return;
     }
 
     if (e.target.value === 'none') {
-      setStat('');
+      setStat(null);
       setStatKey(e.target.value);
       return;
     }
 
     // If not empty or none, set the stat key and stat
     setStatKey(e.target.value);
-    setStat(sheet[e.target.value]);
+    setStat(sheet[e.target.value as StatType]);
   };
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!stat) {
@@ -124,11 +138,11 @@ const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) 
     setResults(results);
 
     // Add a notification with a message about your results
-    addNotification({ status: 'success', heading: `${capitalize(statKey)} Stat Test`, message: getRolledDiceNotificationMessage(results, statKey) });
+    addNotification({ status: 'success', heading: `${capitalize(statKey || '')} Stat Test`, message: getRolledDiceNotificationMessage(results, statKey || undefined) });
   };
 
-  const selectDie = e => {
-    if (!e.target.value) return setDie('');
+  const selectDie = (e: any) => {
+    if (!e.target.value) return setDie(0);
     setDie(e.target.value);
   };
 
@@ -142,7 +156,7 @@ const RollDice = ({ data: { rollingStat, type, playerId, npcId, creatureId } }) 
             slideOver
             label="Which Stat?"
             name="stat"
-            value={statKey}
+            value={statKey ? statKey : 'none'}
             options={[
               { name: 'Strength', id: 'strength' },
               { name: 'Agility', id: 'agility' },

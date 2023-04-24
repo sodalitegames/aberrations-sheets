@@ -18,7 +18,7 @@ import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import Toggle from '../elements/Toggle';
 
-interface UsableFormProps {
+interface Props {
   id: string;
   data: {
     sheetType: SheetType;
@@ -34,7 +34,7 @@ type FormValues = {
   units: string;
 };
 
-const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
+const UsableForm: React.FC<Props> = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter)!;

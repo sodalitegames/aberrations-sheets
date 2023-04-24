@@ -15,9 +15,10 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import List from '../elements/List';
+
 import { SheetResourceType, SheetType } from '../../../models/sheet';
 
-interface WearableFormProps {
+interface Props {
   id: string;
   data: {
     sheetType: SheetType;
@@ -34,7 +35,7 @@ type FormValues = {
   modifiers: { modifier: string; amount: number }[];
 };
 
-const WearableForm: React.FC<WearableFormProps> = ({ id, data }) => {
+const WearableForm: React.FC<Props> = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter)!;

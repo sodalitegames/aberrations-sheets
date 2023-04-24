@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
@@ -9,7 +9,11 @@ import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 import { useResource } from '../../../hooks/useResource';
 
 import { capitalize } from '../../../utils/helpers/strings';
-import { FetchedResourceType } from '../../../models/resource';
+import { getWeaponRangeString } from '../../../utils/helpers/belongings';
+
+import { FetchedResourceType, Weapon } from '../../../models/resource';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { Range } from '../../../models/sheet/resources';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -19,19 +23,40 @@ import Select from '../elements/Select';
 import Detail from '../elements/Detail';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
-import { getWeaponRangeString } from '../../../utils/helpers/belongings';
 
-const NewWeaponForm = ({ data }) => {
+type WeaponSelectOption = {
+  name: string;
+  id: string;
+  children?: WeaponOption[];
+};
+
+type WeaponOption = {
+  id: string;
+  universalId: string;
+  name: string;
+  ability: string;
+  type: string;
+  associatedStat: string;
+  range: string;
+};
+
+interface Props {
+  data: {
+    sheetType: SheetType;
+  };
+}
+
+const NewWeaponForm: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const fetchedWeapons = useResource(FetchedResourceType.Weapons);
+  const fetchedWeapons = useResource(FetchedResourceType.Weapons) as Weapon[];
 
-  const [weapon, setWeapon] = useState(null);
-  const [weaponsList, setWeaponsList] = useState([]);
-  const [weaponsSelectList, setWeaponsSelectList] = useState([]);
+  const [weapon, setWeapon] = useState<WeaponOption | 'Custom' | 'Improvised' | null>(null);
+  const [weaponsList, setWeaponsList] = useState<WeaponOption[]>([]);
+  const [weaponsSelectList, setWeaponsSelectList] = useState<WeaponSelectOption[]>([]);
 
   const [nickname, setNickname] = useState('');
   const [damageModifier, setDamageModifier] = useState(1);
@@ -45,22 +70,22 @@ const NewWeaponForm = ({ data }) => {
 
   useEffect(() => {
     if (fetchedWeapons) {
-      const mappedWeaponsList = fetchedWeapons.map(weap => {
+      const mappedWeaponsList: WeaponOption[] = fetchedWeapons.map(weap => {
         return {
           id: weap.id,
           universalId: weap.id,
           name: weap.name,
           ability: weap.ability,
           type: weap.type,
-          associatedStat: weap.associatedStat.toLowerCase(),
+          associatedStat: weap.stat.toLowerCase(),
           range: weap.range,
         };
       });
 
-      let STR = [];
-      let AGL = [];
-      let PER = [];
-      let APT = [];
+      let STR: WeaponOption[] = [];
+      let AGL: WeaponOption[] = [];
+      let PER: WeaponOption[] = [];
+      let APT: WeaponOption[] = [];
 
       mappedWeaponsList.forEach(weap => {
         switch (weap.associatedStat) {
@@ -92,18 +117,22 @@ const NewWeaponForm = ({ data }) => {
         },
         {
           name: 'Strength',
+          id: 'Strength',
           children: STR,
         },
         {
           name: 'Agility',
+          id: 'Agility',
           children: AGL,
         },
         {
           name: 'Persona',
+          id: 'Persona',
           children: PER,
         },
         {
           name: 'Aptitude',
+          id: 'Aptitude',
           children: APT,
         },
       ];
@@ -113,27 +142,29 @@ const NewWeaponForm = ({ data }) => {
     }
   }, [fetchedWeapons]);
 
-  const selectWeapon = e => {
+  const selectWeapon = (e: any) => {
     if (!e.target.value) return setWeapon(null);
 
     if (e.target.value === 'Custom' || e.target.value === 'Improvised') return setWeapon(e.target.value);
 
     const currWeapon = weaponsList.find(weapon => weapon.id === e.target.value);
 
+    if (!currWeapon) return setWeapon(null);
+
     setWeapon(currWeapon);
   };
 
-  const selectStat = e => {
+  const selectStat = (e: any) => {
     if (!e.target.value) return setAssociatedStat('');
     setAssociatedStat(e.target.value);
   };
 
-  const selectRange = e => {
+  const selectRange = (e: any) => {
     if (!e.target.value) return setRange('');
     setRange(e.target.value);
   };
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!weapon) return alert('Must provide a weapon');
@@ -141,7 +172,7 @@ const NewWeaponForm = ({ data }) => {
     if (!damageModifier) return alert('Must provide damageModifier');
     if (!quantity) return alert('Must provide a quantity');
 
-    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
+    const sheetId = data.sheetType === 'campaigns' ? campSheet!._id : charSheet!._id;
 
     if (weapon === 'Custom' || weapon === 'Improvised') {
       if (!name) return alert('Must provide a name');
@@ -152,7 +183,7 @@ const NewWeaponForm = ({ data }) => {
         createSheetResourceStart(
           data.sheetType,
           sheetId,
-          'weapons',
+          SheetResourceType.weapons,
           { type: weapon, name, nickname, associatedStat, damageModifier, range, ability, quantity, description },
           { slideOver: true, notification: { status: 'success', heading: 'Weapon Created', message: `You have successfully created ${nickname || name}.` } }
         )
@@ -164,14 +195,14 @@ const NewWeaponForm = ({ data }) => {
       createSheetResourceStart(
         data.sheetType,
         sheetId,
-        'weapons',
+        SheetResourceType.weapons,
         {
-          type: weapon.type,
+          type: capitalize(weapon.type),
           name: weapon.name,
           nickname,
           associatedStat: weapon.associatedStat,
           damageModifier,
-          range: weapon.range,
+          range: capitalize(weapon.range),
           ability: weapon.ability,
           quantity,
           description,
@@ -228,12 +259,12 @@ const NewWeaponForm = ({ data }) => {
             </>
           ) : weapon ? (
             <>
-              <Detail slideOver label="Type" detail={weapon.type} />
+              <Detail slideOver label="Type" detail={capitalize(weapon.type)} />
               <Detail slideOver label="Name" detail={weapon.name} />
               <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
               <Detail slideOver label="Associated Stat" detail={capitalize(weapon.associatedStat)} />
               <Input slideOver label="Damage Modifier" name="damageModifier" type="number" value={damageModifier} changeHandler={setDamageModifier} required />
-              <Detail slideOver label="Range" detail={getWeaponRangeString(weapon.range)} />
+              <Detail slideOver label="Range" detail={getWeaponRangeString(capitalize(weapon.range) as Range)} />
               <Detail slideOver label="Ability" detail={weapon.ability} />
               <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
               <TextArea slideOver label="Description (Opt.)" name="description" rows={5} value={description} changeHandler={setDescription} />

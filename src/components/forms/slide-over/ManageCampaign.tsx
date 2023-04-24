@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
@@ -18,12 +18,14 @@ import Row from '../elements/Row';
 import Detail from '../elements/Detail';
 import Button from '../../Button';
 
+import { SheetType } from '../../../models/sheet';
+
 const ManageCampaign = () => {
   const dispatch = useDispatch();
   const { setNestedModal } = useActions();
 
   const currentUser = useSelector(selectCurrentUser);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [ccNickname, setCcNickname] = useState('');
   const [name, setName] = useState('');
@@ -39,7 +41,7 @@ const ManageCampaign = () => {
     }
   }, [campSheet]);
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!ccNickname) return alert('Must provide a ccNickname');
@@ -49,7 +51,7 @@ const ManageCampaign = () => {
 
     dispatch(
       updateSheetStart(
-        'campaigns',
+        SheetType.campaigns,
         campSheet._id,
         {
           ccNickname,
@@ -70,7 +72,7 @@ const ManageCampaign = () => {
       {/* <TextArea slideOver label="Campaign Overview" name="overview" rows={4} value={overview} changeHandler={setOverview} />
       <TextArea slideOver label="Campaign Details" name="details" rows={8} value={details} changeHandler={setDetails} /> */}
       <Row slideOver name="deleteCharacter" label="Delete Character">
-        <Button alert type="button" onClick={() => setNestedModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'campaigns' } }, { nestedModal: true, slideOver: true })}>
+        <Button alert onClick={() => setNestedModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'campaigns' } })}>
           Permanently Delete {campSheet?.name}
         </Button>
       </Row>

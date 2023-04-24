@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
@@ -13,10 +13,16 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Toggle from '../elements/Toggle';
 
-const SessionForm = ({ id }) => {
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+
+interface Props {
+  id: string;
+}
+
+const SessionForm: React.FC<Props> = ({ id }) => {
   const dispatch = useDispatch();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [name, setName] = useState('');
   const [dateScheduled, setDateScheduled] = useState('');
@@ -29,24 +35,26 @@ const SessionForm = ({ id }) => {
     if (id && campSheet) {
       const currentSession = campSheet.sessions.find(session => session._id === id);
 
-      setName(currentSession.name);
-      setDateScheduled(currentSession.dateScheduled ? isoStringDate(currentSession.dateScheduled) : '');
-      setDatePlayed(currentSession.datePlayed ? isoStringDate(currentSession.datePlayed) : '');
-      setActive(currentSession.active);
-      setCompleted(currentSession.completed);
-      setContent(currentSession.content);
+      if (currentSession) {
+        setName(currentSession.name);
+        setDateScheduled(currentSession.dateScheduled ? isoStringDate(currentSession.dateScheduled) : '');
+        setDatePlayed(currentSession.datePlayed ? isoStringDate(currentSession.datePlayed) : '');
+        setActive(currentSession.active);
+        setCompleted(currentSession.completed);
+        setContent(currentSession.content);
+      }
     }
   }, [id, campSheet]);
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (id) {
       dispatch(
         updateSheetResourceStart(
-          'campaigns',
+          SheetType.campaigns,
           campSheet._id,
-          'sessions',
+          SheetResourceType.sessions,
           id,
           { name, dateScheduled, datePlayed, active, completed, content },
           { slideOver: true, notification: { status: 'success', heading: 'Session Updated', message: `You have successfully updated ${name}.` } }
@@ -57,9 +65,9 @@ const SessionForm = ({ id }) => {
 
     dispatch(
       createSheetResourceStart(
-        'campaigns',
+        SheetType.campaigns,
         campSheet._id,
-        'sessions',
+        SheetResourceType.sessions,
         { name, dateScheduled, datePlayed, active, completed, content },
         { slideOver: true, notification: { status: 'success', heading: 'Session Created', message: `You have successfully created ${name}.` } }
       )

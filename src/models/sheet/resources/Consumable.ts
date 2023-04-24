@@ -1,6 +1,6 @@
 import { StatType } from '../_partials';
 
-type Category = {
+export type Category = {
   universalId: string;
   name: string;
   description: string;

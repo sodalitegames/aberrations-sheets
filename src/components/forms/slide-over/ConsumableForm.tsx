@@ -11,6 +11,7 @@ import { useResource } from '../../../hooks/useResource';
 
 import { FetchedResourceType, ConsumableCategory } from '../../../models/resource';
 import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { Category } from '../../../models/sheet/resources';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -23,13 +24,7 @@ import CheckboxGroup, { FormikCheckbox } from '../elements/CheckboxGroup';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 
-type SheetConsumableCategory = {
-  universalId: string;
-  name: string;
-  description: string;
-};
-
-interface ConsumableFormProps {
+interface Props {
   id: string;
   data: {
     sheetType: SheetType;
@@ -46,15 +41,15 @@ type FormValues = {
   description?: string;
 };
 
-const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
+const ConsumableForm: React.FC<Props> = ({ id, data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter)!;
   const campSheet = useSelector(selectCurrentCampaign)!;
 
-  const fetchedCategories = useResource(FetchedResourceType.ConsumableCategories);
+  const fetchedCategories = useResource(FetchedResourceType.ConsumableCategories) as ConsumableCategory[];
 
-  const [categoriesList, setCategoriesList] = useState<SheetConsumableCategory[]>([]);
+  const [categoriesList, setCategoriesList] = useState<Category[]>([]);
 
   const [initialValues, setInitialValues] = useState<FormValues>({
     name: '',
@@ -68,7 +63,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
 
   useEffect(() => {
     if (fetchedCategories) {
-      const newCategoriesList = (fetchedCategories as ConsumableCategory[]).map(categ => {
+      const newCategoriesList = fetchedCategories.map(categ => {
         return {
           universalId: categ.id,
           name: categ.name,
@@ -91,7 +86,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
             name,
             level,
             uses,
-            categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
+            categories: categories.map((categ: Category) => categ.universalId),
             associatedStat,
             quantity,
             description,
@@ -110,7 +105,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
             name,
             level,
             uses,
-            categories: categories.map((categ: SheetConsumableCategory) => categ.universalId),
+            categories: categories.map((categ: Category) => categ.universalId),
             associatedStat,
             quantity,
             description,
@@ -123,7 +118,7 @@ const ConsumableForm: React.FC<ConsumableFormProps> = ({ id, data }) => {
   const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     const { name, level, uses, categories, associatedStat, quantity, description } = values;
 
-    let detailedCategories: SheetConsumableCategory[] = [];
+    let detailedCategories: Category[] = [];
 
     categoriesList.forEach(categ => {
       if (categories.includes(categ.universalId)) {

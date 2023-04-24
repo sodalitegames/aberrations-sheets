@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
@@ -20,7 +20,7 @@ const NewCampaign = () => {
   const [overview, setOverview] = useState('');
   const [details, setDetails] = useState('');
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!name) return alert('Must provide a name');

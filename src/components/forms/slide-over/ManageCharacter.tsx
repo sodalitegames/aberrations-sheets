@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
@@ -22,14 +22,17 @@ import Button from '../../Button';
 import DisplaySpecies from '../../display/DisplaySpecies';
 import ModalTypes from '../../../utils/ModalTypes';
 
+import { FetchedResourceType, Species } from '../../../models/resource';
+import { SheetType } from '../../../models/sheet';
+
 const ManageCharacter = () => {
   const dispatch = useDispatch();
   const { setNestedModal } = useActions();
 
   const currentUser = useSelector(selectCurrentUser);
-  const charSheet = useSelector(selectCurrentCharacter);
+  const charSheet = useSelector(selectCurrentCharacter)!;
 
-  const species = useResource('species');
+  const species = useResource(FetchedResourceType.Species) as Species[];
 
   const charSpecies = getSpecies(charSheet.speciesId, species);
 
@@ -47,7 +50,7 @@ const ManageCharacter = () => {
     }
   }, [charSheet]);
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!characterName) return alert('Must provide a characterName');
@@ -56,7 +59,7 @@ const ManageCharacter = () => {
 
     dispatch(
       updateSheetStart(
-        'characters',
+        SheetType.characters,
         charSheet._id,
         {
           playerNickname,
@@ -80,7 +83,7 @@ const ManageCharacter = () => {
       {/* <TextArea slideOver label="Character Description" name="charDescription" rows={6} value={charDescription} changeHandler={setCharDescription} />
       <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} /> */}
       <Row slideOver name="deleteCharacter" label="Delete Character">
-        <Button alert type="button" onClick={() => setNestedModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'characters' } }, { nestedModal: true, slideOver: true })}>
+        <Button alert onClick={() => setNestedModal({ type: ModalTypes.deleteSheet, data: { sheetType: 'characters' } })}>
           Permanently Delete {charSheet?.characterName}
         </Button>
       </Row>

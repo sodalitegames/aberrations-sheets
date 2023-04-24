@@ -78,7 +78,7 @@ export const getTransactionHeading = ({ senderName, recipientName, sellPrice, do
   return 'error_generating_transaction_heading';
 };
 
-export const getRolledDiceNotificationMessage = (rollData: RollResults, stat: StatType): string => {
+export const getRolledDiceNotificationMessage = (rollData: RollResults, stat?: StatType): string => {
   // If not rolling for a stat
   if (!stat) {
     if (rollData.critical.success) {

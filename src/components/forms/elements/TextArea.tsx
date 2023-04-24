@@ -10,10 +10,11 @@ interface BasicTextAreaProps {
   name: string;
   rows: number;
   changeHandler: Function;
+  required?: boolean;
 }
 
-export const BasicTextArea: React.FC<BasicTextAreaProps> = ({ name, value, rows, changeHandler }) => {
-  return <textarea className={TEXT_AREA_STYLES} name={name} value={value} rows={rows} onChange={e => changeHandler(e.target.value)} />;
+export const BasicTextArea: React.FC<BasicTextAreaProps> = ({ name, value, rows, changeHandler, required }) => {
+  return <textarea className={TEXT_AREA_STYLES} name={name} value={value} rows={rows} onChange={e => changeHandler(e.target.value)} required={required} />;
 };
 
 interface FormikTextAreaProps {
@@ -41,12 +42,13 @@ interface TextAreaProps {
   slideOver?: boolean;
   formik?: boolean;
   rows: number;
+  required?: boolean;
 }
 
-const TextArea: React.FC<TextAreaProps> = ({ label, changeHandler, value, name, slideOver, formik, rows = 4 }) => {
+const TextArea: React.FC<TextAreaProps> = ({ label, changeHandler, value, name, slideOver, formik, rows = 4, required }) => {
   return (
     <Row name={name} label={label} slideOver={slideOver}>
-      {formik ? <FormikTextArea name={name} rows={rows} /> : <BasicTextArea name={name} value={value!} changeHandler={changeHandler!} rows={rows} />}
+      {formik ? <FormikTextArea name={name} rows={rows} /> : <BasicTextArea name={name} value={value!} changeHandler={changeHandler!} rows={rows} required={required} />}
     </Row>
   );
 };

@@ -20,7 +20,7 @@ import Detail from '../elements/Detail';
 
 import DisplaySpecies from '../../display/DisplaySpecies';
 
-const NewCharacter: React.FC = () => {
+const NewCharacter = () => {
   const dispatch = useDispatch();
 
   const currentUser = useSelector(selectCurrentUser);

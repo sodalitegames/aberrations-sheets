@@ -1,7 +1,13 @@
-const Row = ({ name, label, children, slideOver }) => {
+interface Props {
+  name: string;
+  label: string;
+  slideOver?: boolean;
+}
+
+const Row: React.FC<Props> = ({ name, label, children, slideOver }) => {
   if (slideOver) {
     return (
-      <div className="space-y-1 px-4 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
+      <div className="px-4 space-y-1 sm:space-y-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6 sm:py-5">
         <div>
           <label htmlFor={name} className="block text-sm font-medium text-gray-900 sm:mt-px sm:pt-2">
             {label}

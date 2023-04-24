@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
@@ -7,7 +7,7 @@ import { createSheetResourceStart, updateSheetResourceStart } from '../../../red
 
 import { useResource } from '../../../hooks/useResource';
 
-import { FetchedResourceType } from '../../../models/resource';
+import { FetchedResourceType, NpcType, Species } from '../../../models/resource';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -19,18 +19,34 @@ import { LoadingSpinner } from '../elements/SubmitButton';
 import Select from '../elements/Select';
 
 import DisplaySpecies from '../../display/DisplaySpecies';
-import Notice from '../../Notice';
+import Notice, { NoticeStatus } from '../../Notice';
+import { getSpecies } from '../../../utils/helpers/species';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
-const NpcForm = ({ id }) => {
+type SpeciesMin = {
+  id: string;
+  name: string;
+};
+
+type NpcTypeMin = {
+  id: string;
+  name: string;
+};
+
+interface Props {
+  id: string;
+}
+
+const NpcForm: React.FC<Props> = ({ id }) => {
   const dispatch = useDispatch();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
-  const fetchedSpecies = useResource(FetchedResourceType.Species);
-  const fetchedTypes = useResource(FetchedResourceType.NpcTypes);
+  const fetchedSpecies = useResource(FetchedResourceType.Species) as Species[];
+  const fetchedTypes = useResource(FetchedResourceType.NpcTypes) as NpcType[];
 
-  const [speciesList, setSpeciesList] = useState(null);
-  const [typesList, setTypesList] = useState(null);
+  const [speciesList, setSpeciesList] = useState<SpeciesMin[] | null>(null);
+  const [typesList, setTypesList] = useState<NpcTypeMin[] | null>(null);
 
   const [name, setName] = useState('');
   const [diplomacy, setDiplomacy] = useState('Neutral');
@@ -40,10 +56,10 @@ const NpcForm = ({ id }) => {
   const [description, setDescription] = useState('');
   const [background, setBackground] = useState('');
 
-  const [levelId, setLevelId] = useState(null);
+  const [levelId, setLevelId] = useState('');
 
-  const [species, setSpecies] = useState('');
-  const [type, setType] = useState('');
+  const [species, setSpecies] = useState<Species | null>(null);
+  const [type, setType] = useState<NpcType | null>(null);
 
   useEffect(() => {
     if (fetchedSpecies) {
@@ -60,10 +76,10 @@ const NpcForm = ({ id }) => {
 
     if (fetchedTypes) {
       // Format the types list for the select component
-      const newTypesList = fetchedTypes.npcTable.map(type => {
+      const newTypesList = fetchedTypes.map(type => {
         return {
           id: type.id,
-          name: type.npcType,
+          name: type.name,
         };
       });
 
@@ -75,47 +91,49 @@ const NpcForm = ({ id }) => {
     if (id && campSheet) {
       const currentNpc = campSheet.npcs.find(npc => npc._id === id);
 
-      setName(currentNpc.name);
-      setDiplomacy(currentNpc.diplomacy);
-      setTemperament(currentNpc.temperament);
-      setSpecies(fetchedSpecies ? fetchedSpecies.find(spec => spec.id === currentNpc.speciesId) : '');
-      setType(fetchedTypes ? fetchedTypes.npcTable.find(type => type.npcType === currentNpc.type) : '');
-      setLevelId(currentNpc.levelId);
+      if (currentNpc) {
+        setName(currentNpc.name);
+        setDiplomacy(currentNpc.diplomacy);
+        setTemperament(currentNpc.temperament);
+        setSpecies(fetchedSpecies ? getSpecies(currentNpc.speciesId, fetchedSpecies) || null : null);
+        setType(fetchedTypes ? fetchedTypes.find(type => type.name === currentNpc.type) || null : null);
+        setLevelId(currentNpc.levelId);
+      }
     }
   }, [id, campSheet, fetchedTypes, fetchedSpecies]);
 
-  const selectCurrentSpecies = e => {
-    if (!e.target.value) setSpecies('');
+  const selectCurrentSpecies = (e: any) => {
+    if (!e.target.value) return setSpecies(null);
 
     const currSpec = fetchedSpecies.find(spec => spec.id === e.target.value);
-
+    if (!currSpec) return setSpecies(null);
     setSpecies(currSpec);
   };
 
-  const selectCurrentType = e => {
-    if (!e.target.value) setType('');
+  const selectCurrentType = (e: any) => {
+    if (!e.target.value) return setType(null);
 
-    const currType = fetchedTypes.npcTable.find(type => type.id === e.target.value);
-
+    const currType = fetchedTypes.find(type => type.id === e.target.value);
+    if (!currType) return setSpecies(null);
     setType(currType);
   };
 
-  const selectLevel = e => {
+  const selectLevel = (e: any) => {
     if (!e.target.value) return setLevelId('');
     setLevelId(e.target.value);
   };
 
-  const selectDiplomacy = e => {
-    if (!e.target.value) return setDiplomacy(null);
+  const selectDiplomacy = (e: any) => {
+    if (!e.target.value) return setDiplomacy('');
     setDiplomacy(e.target.value);
   };
 
-  const selectTemperament = e => {
-    if (!e.target.value) return setTemperament(null);
+  const selectTemperament = (e: any) => {
+    if (!e.target.value) return setTemperament('');
     setTemperament(e.target.value);
   };
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!name) return alert('Must provide a name');
@@ -126,19 +144,21 @@ const NpcForm = ({ id }) => {
     if (!species) return alert('Must select a species');
 
     // Get level data based on the type and the saved id
-    const levelData = levelId ? type.level.find(lev => lev.id === levelId) : null;
+    const levelData = levelId && type ? type.levels.find(lev => lev.id === levelId) : null;
 
-    let body = {
+    let body: any = {
       name,
       diplomacy,
       temperament,
-      type: type ? type.npcType : undefined,
+      type: type ? type.name : undefined,
       levelId: levelId ? levelId : undefined,
     };
 
     if (id) {
       // Get the current npc data
       const currentNpc = campSheet.npcs.find(npc => npc._id === id);
+
+      if (!currentNpc) return alert('Something went wrong');
 
       if (levelData && levelId !== currentNpc.levelId) {
         body = {
@@ -147,15 +167,15 @@ const NpcForm = ({ id }) => {
           agility: { ...currentNpc.agility, die: levelData.agility },
           persona: { ...currentNpc.persona, die: levelData.persona },
           aptitude: { ...currentNpc.aptitude, die: levelData.aptitude },
-          currentHp: levelData.health,
-          maxHp: levelData.health,
-          experience: levelData.experience,
+          // currentHp: levelData.health,
+          // maxHp: levelData.health,
+          // experience: levelData.experience,
           milestones: levelData.milestone,
         };
       }
 
       dispatch(
-        updateSheetResourceStart('campaigns', campSheet._id, 'npcs', id, body, {
+        updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.npcs, id, body, {
           slideOver: true,
           notification: { status: 'success', heading: 'Npc Updated', message: `You have successfully updated ${name}.` },
         })
@@ -187,15 +207,15 @@ const NpcForm = ({ id }) => {
         agility: { die: levelData.agility },
         persona: { die: levelData.persona },
         aptitude: { die: levelData.aptitude },
-        currentHp: levelData.health,
-        maxHp: levelData.health,
-        experience: levelData.experience,
+        // currentHp: levelData.health,
+        // maxHp: levelData.health,
+        // experience: levelData.experience,
         milestones: levelData.milestone,
       };
     }
 
     dispatch(
-      createSheetResourceStart('campaigns', campSheet._id, 'npcs', body, {
+      createSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.npcs, body, {
         slideOver: true,
         notification: { status: 'success', heading: 'Npc Created', message: `You have successfully created ${name}.` },
       })
@@ -280,15 +300,11 @@ const NpcForm = ({ id }) => {
         label="Level (Opt.)"
         name="level"
         value={levelId || ''}
-        options={
-          type
-            ? type.level.map(level => ({ name: `Milestone ${level.milestone} - D${level.strength} / D${level.agility} / D${level.persona} / D${level.aptitude} / ${level.health} HP`, id: level._id }))
-            : []
-        }
+        options={type ? type.levels.map(level => ({ name: `Milestone ${level.milestone} - D${level.strength} / D${level.agility} / D${level.persona} / D${level.aptitude}`, id: level.id })) : []}
         changeHandler={selectLevel}
       />
 
-      {id && <Notice status="warn" message="Note: Changing your npc's level will reset their stats" />}
+      {id && <Notice status={NoticeStatus.Warn} message="Note: Changing your npc's level will reset their stats" />}
 
       {!id && (
         <>
