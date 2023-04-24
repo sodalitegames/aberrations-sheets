@@ -16,8 +16,8 @@ type Empty = {
 
 interface Props {
   list: any[];
-  button: LCButton;
-  empty: Empty;
+  button?: LCButton;
+  empty?: Empty;
   classes?: string;
 }
 

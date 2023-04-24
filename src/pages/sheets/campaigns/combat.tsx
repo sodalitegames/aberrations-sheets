@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
@@ -10,7 +10,9 @@ import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { useResource } from '../../../hooks/useResource';
 
-import { FetchedResourceType } from '../../../models/resource';
+import { FetchedResourceType, Species } from '../../../models/resource';
+import { Combat, Combatant, Creature, Npc, Player } from '../../../models/sheet/resources';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
@@ -29,105 +31,75 @@ import DisplayPlayer from '../../../components/display/DisplayPlayer';
 import DisplayNpc from '../../../components/display/DisplayNpc';
 import DisplayCreature from '../../../components/display/DisplayCreature';
 
+interface CombatantEntity extends Combatant {
+  doc: (Player | Npc | Creature) | null;
+}
+
+const createOption = (combat: Combat) => {
+  return { id: combat._id, title: combat.description, href: `?id=${combat._id}`, description: combat.combatants.map(combatant => combatant.name).join(', ') };
+};
+
 const CampaignCombatPage = () => {
   const dispatch = useDispatch();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const combats = useSelector(selectCombats);
   const potentialCombatants = useSelector(selectPotentialCombatants);
 
   const { setSlideOver, setModal } = useActions();
 
-  const species = useResource(FetchedResourceType.Species);
+  const species = useResource(FetchedResourceType.Species) as Species[];
 
-  const [combatants, setCombatants] = useState([]);
+  const combatId = searchParams.get('combat');
+  const entityId = searchParams.get('combatant');
 
-  const [combatOptions, setCombatOptions] = useState([]);
+  const combat = combats.find(comb => comb._id === combatId) || combats[0];
 
-  const [combat, setCombat] = useState(null);
-  const [entity, setEntity] = useState(null);
+  const combatants: CombatantEntity[] = combat.combatants.map(comba => {
+    const entity = potentialCombatants.find(ent => ent._id === comba._id);
+    console.log('combatants mapped');
+    return {
+      ...comba,
+      doc: entity ? entity : null,
+    };
+  });
 
-  useEffect(() => {
-    if (combats.length) {
-      setCombatOptions(
-        combats.map(combat => ({
-          ...combat,
-          title: combat.description,
-          href: `?id=${combat._id}`,
-          description: combat.combatants.map(combatant => combatant.name).join(', '),
-        }))
-      );
-    } else {
-      setCombatOptions([]);
-    }
-  }, [combats]);
+  const entity: CombatantEntity = combatants.find(ent => ent._id === entityId) || combatants[0];
 
-  useEffect(() => {
-    if (combatOptions.length) {
-      const id = searchParams.get('id');
-      setCombat(id ? combatOptions.find(combat => combat._id === id) : combatOptions[0]);
-      setEntity(null);
-    } else {
-      setCombat(null);
-      setEntity(null);
-    }
-  }, [combatOptions, searchParams]);
-
-  useEffect(() => {
-    if (potentialCombatants.length && combat) {
-      const combatants = combat.combatants
-        .map(comba => {
-          const entity = potentialCombatants.find(ent => ent._id === comba._id);
-
-          if (entity) {
-            return {
-              ...entity,
-              ...comba,
-            };
-          }
-
-          return null;
-        })
-        .filter(comba => comba);
-
-      setCombatants(combatants);
-    }
-  }, [potentialCombatants, combat]);
-
-  useEffect(() => {
-    if (combat && combatants.length) {
-      if (!entity) {
-        // const currentTurn = combatants.find(combatant => combatant._id === combat.activeTurn);
-        // setEntity(currentTurn);
-        setEntity(combatants[0]);
-      }
-    }
-  }, [combatants, combat, entity]);
-
-  const endTurn = entId => {
+  const endTurn = (entId: string) => {
     const index = combatants.findIndex(comb => comb._id === entId);
 
     if (index + 1 === combatants.length) {
-      setEntity(combatants[0]);
+      setEntity(combatants[0]._id);
       return;
     }
 
-    setEntity(combatants[index + 1]);
+    setEntity(combatants[index + 1]._id);
   };
 
-  const leaveCombat = entId => {
+  const setCombat = (id: string) => {
+    // @ts-expect-error
+    setSearchParams({ ...Object.fromEntries([...searchParams]), combat: id });
+  };
+
+  const setEntity = (id: string) => {
+    // @ts-expect-error
+    setSearchParams({ ...Object.fromEntries([...searchParams]), combatant: id });
+  };
+
+  const leaveCombat = (entId: string) => {
     dispatch(
       updateSheetResourceStart(
-        'campaigns',
+        SheetType.campaigns,
         combat.sheetId,
-        'combats',
+        SheetResourceType.combats,
         combat._id,
         { combatants: combat.combatants.filter(com => com._id !== entId) },
         {
           notification: {
             status: 'success',
-            heading: `${entity.name || entity.characterName} Left Combat`,
-            message: `You have successfully taken ${entity.name || entity.characterName} out of combat.`,
+            heading: `${(entity.doc as Npc | Creature).name || (entity.doc as Player).characterName} Left Combat`,
+            message: `You have successfully taken ${(entity.doc as Npc | Creature).name || (entity.doc as Player).characterName} out of combat.`,
           },
         }
       )
@@ -141,7 +113,7 @@ const CampaignCombatPage = () => {
           <div className="space-y-4">
             <SheetPagePanel title="Select Combat">
               <div className="flow-root w-full mt-2">
-                {combatOptions.length && <SelectButton value={combatOptions.find(comb => comb._id === searchParams.get('id')) || combatOptions[0]} onChange={setCombat} options={combatOptions} />}
+                <SelectButton value={createOption(combat)} onChange={setCombat} options={combats.map(createOption)} />
               </div>
             </SheetPagePanel>
 
@@ -154,7 +126,7 @@ const CampaignCombatPage = () => {
               </div>
               <div className="mt-6 space-y-4">
                 {combatants.map((ent, index) => (
-                  <div key={ent._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')} onClick={() => setEntity(ent)}>
+                  <div key={ent._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')} onClick={() => setEntity(ent._id)}>
                     <CombatCard entity={ent} index={index} active={entity?._id === ent._id} inCombat />
                   </div>
                 ))}
@@ -188,11 +160,11 @@ const CampaignCombatPage = () => {
               <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
                 <div className="col-span-2">
                   {entity.type === 'players' ? (
-                    <DisplayPlayer player={entity} species={species} />
+                    <DisplayPlayer player={entity.doc as Player} species={species} />
                   ) : entity.type === 'npcs' ? (
-                    <DisplayNpc npc={entity} species={species} />
+                    <DisplayNpc npc={entity.doc as Npc} species={species} />
                   ) : entity.type === 'creatures' ? (
-                    <DisplayCreature creature={entity} />
+                    <DisplayCreature creature={entity.doc as Creature} />
                   ) : null}
                 </div>
 
@@ -206,11 +178,11 @@ const CampaignCombatPage = () => {
 
                   {/* Actions */}
                   {entity.type === 'players' ? (
-                    <InteractableActions type="player" id={{ prop: 'playerId', value: entity._id }} />
+                    <InteractableActions type="player" id={{ prop: 'playerId', value: entity._id }} entity={entity.doc!} />
                   ) : entity.type === 'npcs' ? (
-                    <InteractableActions type="npc" id={{ prop: 'npcId', value: entity._id }} />
+                    <InteractableActions type="npc" id={{ prop: 'npcId', value: entity._id }} entity={entity.doc!} />
                   ) : entity.type === 'creatures' ? (
-                    <InteractableActions type="creature" id={{ prop: 'creatureId', value: entity._id }} />
+                    <InteractableActions type="creature" id={{ prop: 'creatureId', value: entity._id }} entity={entity.doc!} />
                   ) : null}
 
                   {/* Leave Combat */}

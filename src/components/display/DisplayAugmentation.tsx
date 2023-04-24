@@ -6,7 +6,7 @@ import ListItem from '../data/ListItem';
 
 interface Props {
   aug: Augmentation;
-  noButtonPanel: boolean;
+  noButtonPanel?: boolean;
 }
 
 const DisplayAugmentation: React.FC<Props> = ({ aug, noButtonPanel }) => {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { DocumentDuplicateIcon } from '@heroicons/react/outline';
@@ -6,8 +6,13 @@ import { DocumentDuplicateIcon } from '@heroicons/react/outline';
 import { selectCurrentCharacter, selectPermissions } from '../../../redux/character/character.selectors';
 
 import { useActions } from '../../../hooks/useActions';
+import { useResource } from '../../../hooks/useResource';
+
+import { FetchedResourceType, Species } from '../../../models/resource';
+import { SheetType } from '../../../models/sheet';
 
 import SlideOverTypes from '../../../utils/SlideOverTypes';
+import { getSpecies } from '../../../utils/helpers/species';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -26,18 +31,20 @@ import DisplayCampaign from '../../../components/display/DisplayCampaign';
 const CharacterCharacterPage = () => {
   const { setSlideOver } = useActions();
 
-  const charSheet = useSelector(selectCurrentCharacter);
+  const charSheet = useSelector(selectCurrentCharacter)!;
   const permissions = useSelector(selectPermissions);
 
+  const species = useResource(FetchedResourceType.Species) as Species[];
+
   const [copied, setCopied] = useState(false);
+
+  const charSpecies = getSpecies(charSheet.speciesId, species);
 
   return (
     <SheetPageContent title="Character" columns={4}>
       {/* Character Species */}
       <SheetPagePanel title="Character Species">
-        <div className="flow-root">
-          <DisplaySpecies species={charSheet.species} />
-        </div>
+        <div className="flow-root">{charSpecies ? <DisplaySpecies species={charSpecies} /> : 'Loading...'}</div>
       </SheetPagePanel>
 
       <div className="space-y-4">
@@ -74,7 +81,7 @@ const CharacterCharacterPage = () => {
               }}
             >
               {charSheet.characterLogs.map(log => (
-                <DisplayLog key={log._id} log={log} sheetType="characters" />
+                <DisplayLog key={log._id} log={log} sheetType={SheetType.characters} />
               ))}
             </ListContainer>
           )}
@@ -88,12 +95,14 @@ const CharacterCharacterPage = () => {
             <DisplayCampaign campaign={charSheet.campaign} />
           ) : charSheet.invites.filter(invite => invite.status === 'Pending').length ? (
             <>
-              <ListContainer>
-                {charSheet.invites
-                  .filter(invite => invite.status === 'Pending')
-                  .map(invite => (
-                    <DisplayInvite key={invite._id} invite={invite} sheetType="characters" />
-                  ))}
+              <ListContainer list={charSheet.invites.filter(invite => invite.status === 'Pending')}>
+                <Fragment>
+                  {charSheet.invites
+                    .filter(invite => invite.status === 'Pending')
+                    .map(invite => (
+                      <DisplayInvite key={invite._id} invite={invite} sheetType={SheetType.characters} />
+                    ))}
+                </Fragment>
               </ListContainer>
 
               <p className="pt-4 mt-4 mb-2 text-sm italic text-center text-gray-600 border-t border-gray-100">Need a new invite? Copy your Character Id below.</p>

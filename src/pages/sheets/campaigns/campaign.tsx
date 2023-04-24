@@ -17,10 +17,12 @@ import Button from '../../../components/Button';
 import DisplayLog from '../../../components/display/DisplayLog';
 import Sessions from '../../../components/sections/Sessions';
 
+import { SheetType } from '../../../models/sheet';
+
 const CampaignCampaignPage = () => {
   const { setSlideOver } = useActions();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
   const activeSessions = useSelector(selectActiveSessions);
   const futureSessions = useSelector(selectFutureSessions);
   const completedSessions = useSelector(selectCompletedSessions);
@@ -108,7 +110,7 @@ const CampaignCampaignPage = () => {
             }}
           >
             {campSheet.captainsLogs.map(log => (
-              <DisplayLog key={log._id} log={log} sheetType="campaigns" />
+              <DisplayLog key={log._id} log={log} sheetType={SheetType.campaigns} />
             ))}
           </ListContainer>
         </div>

@@ -16,12 +16,14 @@ import {
 } from '../../../redux/character/character.selectors';
 
 import { useActions } from '../../../hooks/useActions';
+import { useResource } from '../../../hooks/useResource';
 
 import classNames from '../../../utils/classNames';
 import ModalTypes from '../../../utils/ModalTypes';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import { getHealthMessage, getWalletMessage } from '../../../utils/helpers/messages';
 import { displayModifier } from '../../../utils/helpers/modifiers';
+import { getSpecies } from '../../../utils/helpers/species';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -39,12 +41,19 @@ import DisplayWearable from '../../../components/display/DisplayWearable';
 import DisplayConsumable from '../../../components/display/DisplayConsumable';
 import DisplayUsable from '../../../components/display/DisplayUsable';
 import NewlineText from '../../../components/NewlineText';
-import Chip from '../../../components/Chip';
+import Chip, { ChipColor } from '../../../components/Chip';
+
+import { SheetType } from '../../../models/sheet';
+import { FetchedResourceType, Species } from '../../../models/resource';
 
 const CharacterGameplayPage = () => {
   const { setModal, setSlideOver } = useActions();
 
-  const charSheet = useSelector(selectCurrentCharacter);
+  const species = useResource(FetchedResourceType.Species) as Species[];
+
+  const charSheet = useSelector(selectCurrentCharacter)!;
+
+  const charSpecies = getSpecies(charSheet.speciesId, species);
 
   const equippedWeapons = useSelector(selectEquippedWeapons);
   const equippedWearables = useSelector(selectEquippedWearables);
@@ -67,7 +76,7 @@ const CharacterGameplayPage = () => {
               <div className="mt-4 text-center sm:mt-0 sm:pt-1 sm:text-left">
                 <p className="text-xl font-bold text-gray-900 sm:text-2xl">{charSheet.characterName}</p>
                 <div className="text-sm font-medium text-gray-500">
-                  <NewlineText>{charSheet.species.name + ' Activated Ability: ' + charSheet.species.abilities.activated}</NewlineText>
+                  {charSpecies ? <NewlineText>{charSpecies.name + ' Activated Ability: ' + charSpecies.abilities.activated}</NewlineText> : 'Loading...'}
                 </div>
               </div>
             </div>
@@ -238,7 +247,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedWeapons.map(weapon => (
-                <DisplayWeapon key={weapon._id} weapon={weapon} sheetType="characters" condensed="view" listItem />
+                <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={SheetType.characters} condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -271,7 +280,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedWearables.map(wearable => (
-                <DisplayWearable key={wearable._id} wearable={wearable} sheetType="characters" condensed="view" listItem />
+                <DisplayWearable key={wearable._id} wearable={wearable} sheetType={SheetType.characters} condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -298,7 +307,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedConsumables.map(consumable => (
-                <DisplayConsumable key={consumable._id} consumable={consumable} sheetType="characters" condensed="view" listItem />
+                <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={SheetType.characters} condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -323,7 +332,7 @@ const CharacterGameplayPage = () => {
               }}
             >
               {equippedUsables.map(usable => (
-                <DisplayUsable key={usable._id} usable={usable} sheetType="characters" condensed="view" listItem />
+                <DisplayUsable key={usable._id} usable={usable} sheetType={SheetType.characters} condensed="view" listItem />
               ))}
             </ListContainer>
           </div>
@@ -334,7 +343,7 @@ const CharacterGameplayPage = () => {
       <SheetPagePanel>
         <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
           <h2 className="text-base font-medium text-gray-900">Augmentations</h2>
-          <Chip color={augmentationPoints < 0 ? 'red' : augmentationPoints === 0 ? 'yellow' : 'green'}>Augmentation Points: {augmentationPoints}</Chip>
+          <Chip color={augmentationPoints < 0 ? ChipColor.red : augmentationPoints === 0 ? ChipColor.yellow : ChipColor.green}>Augmentation Points: {augmentationPoints}</Chip>
         </div>
         <div className="flow-root mt-6">
           <ListContainer

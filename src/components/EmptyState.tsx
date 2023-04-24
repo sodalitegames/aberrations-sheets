@@ -10,7 +10,7 @@ type ESButton = {
 interface Props {
   heading: string;
   message: string;
-  button: ESButton;
+  button?: ESButton;
 }
 
 const EmptyState: React.FC<Props> = ({ heading, message, button, children }) => {

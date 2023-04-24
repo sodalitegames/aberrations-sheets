@@ -1,14 +1,25 @@
 import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
 
 import classNames from '../utils/classNames';
 
-const SelectButton = ({ value, onChange, options }) => {
+export type Option = {
+  id: string;
+  title: string;
+  description: string;
+};
+
+interface Props {
+  value: Option;
+  options: Option[];
+  onChange: (id: string) => void;
+}
+
+const SelectButton: React.FC<Props> = ({ value, onChange, options }) => {
   return (
-    <Listbox value={value} onChange={onChange}>
+    <Listbox value={value.id} onChange={onChange}>
       {({ open }) => (
         <>
           <Listbox.Label className="sr-only">Change button status</Listbox.Label>
@@ -32,22 +43,20 @@ const SelectButton = ({ value, onChange, options }) => {
                   <Listbox.Option
                     key={index}
                     className={({ active }) => classNames(active ? 'text-gray-900 bg-gray-50' : 'text-gray-900', 'cursor-pointer select-none relative p-4 text-sm')}
-                    value={option}
+                    value={option.id}
                   >
                     {({ selected, active }) => (
-                      <Link to={`${option.href}`}>
-                        <div className="flex flex-col">
-                          <div className="flex justify-between">
-                            <p className={selected ? 'font-semibold' : 'font-normal'}>{option.title}</p>
-                            {selected ? (
-                              <span className={active ? 'text-gray-700' : 'text-gray-800'}>
-                                <CheckIcon className="w-5 h-5" aria-hidden="true" />
-                              </span>
-                            ) : null}
-                          </div>
-                          <p className={classNames(active ? 'text-gray-800' : 'text-gray-500', 'mt-2')}>{option.description}</p>
+                      <div className="flex flex-col">
+                        <div className="flex justify-between">
+                          <p className={selected ? 'font-semibold' : 'font-normal'}>{option.title}</p>
+                          {selected ? (
+                            <span className={active ? 'text-gray-700' : 'text-gray-800'}>
+                              <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                            </span>
+                          ) : null}
                         </div>
-                      </Link>
+                        <p className={classNames(active ? 'text-gray-800' : 'text-gray-500', 'mt-2')}>{option.description}</p>
+                      </div>
                     )}
                   </Listbox.Option>
                 ))}

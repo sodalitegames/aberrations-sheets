@@ -12,7 +12,6 @@ import { useResource } from '../../../hooks/useResource';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 import { FetchedResourceType, Species } from '../../../models/resource';
-import { getSpecies } from '../../../utils/helpers/species';
 
 import Button from '../../../components/Button';
 
@@ -21,7 +20,6 @@ import InteractableActions from '../../../components/content/InteractableActions
 
 import DisplayNpc from '../../../components/display/DisplayNpc';
 
-import { Npc } from '../../../models/sheet/resources';
 import { InteractableType, SheetResourceType, SheetType } from '../../../models/sheet';
 
 const CampaignNpcsPage = () => {
@@ -51,7 +49,7 @@ const CampaignNpcsPage = () => {
       </div>
 
       {/* Npc Actions */}
-      <InteractableActions type="npc" id={{ prop: 'npcId', value: npc._id }} entity={{ ...npc, species: getSpecies(npc.speciesId, species) } as Npc} />
+      <InteractableActions type="npc" id={{ prop: 'npcId', value: npc._id }} entity={npc} />
 
       {/* Activate or Deactivate */}
       {!npc.archived && (

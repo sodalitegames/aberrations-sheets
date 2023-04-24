@@ -51,12 +51,10 @@ import {
   updateResource,
   updateSheet as updateSheetCall,
 } from '../../apis/sheets.api';
-import { fetchSingleSpecies } from '../../apis/database.api';
 
 import charSocket from '../../sockets/character';
 import campSocket from '../../sockets/campaign';
 
-import { Species } from '../../models/resource';
 import { SheetType } from '../../models/sheet';
 
 const socket = {
@@ -72,19 +70,7 @@ export function* onFetchCurrentSheetStart() {
 export function* fetchCurrentSheet({ payload: { sheetType, sheetId } }: FetchCurrentSheetStartAction) {
   try {
     const response: AxiosResponse<any> = yield getSheet(sheetType, sheetId);
-
-    if (sheetType === 'characters') {
-      // If it is a character sheet, fetch the species data and append it to the sheet data
-      const resource: AxiosResponse<Species> = yield fetchSingleSpecies(response.data.data.sheet.speciesId);
-
-      const { id, name, abilities, appearance, stats, health } = resource.data;
-
-      yield put(fetchCurrentSheetSuccess(sheetType, { ...response.data.data.sheet, species: { id, name, abilities, appearance, stats, health } }, response.data.data.permissions));
-
-      return;
-    }
-
-    yield put(fetchCurrentSheetSuccess(sheetType, response.data.data.sheet));
+    yield put(fetchCurrentSheetSuccess(sheetType, response.data.data.sheet, response.data.data.permissions));
   } catch (err: any) {
     yield put(fetchCurrentSheetFailure(sheetType, err.response || err));
   }

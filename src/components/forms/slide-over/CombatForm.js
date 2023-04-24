@@ -30,12 +30,14 @@ const StartCombat = ({ id }) => {
     id
       ? potentialCombatants
           .filter(combatant => combatant.active)
-          .map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, type: comba.type, initiative: calculateInitiative(comba) }))
+          .map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, type: comba.combatantType, initiative: calculateInitiative(comba) }))
           .filter(comba => {
             const combat = campSheet.combats.find(combat => combat._id === id);
             return !combat.combatants.map(({ _id }) => _id).includes(comba._id);
           })
-      : potentialCombatants.filter(combatant => combatant.active).map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, type: comba.type, initiative: calculateInitiative(comba) }))
+      : potentialCombatants
+          .filter(combatant => combatant.active)
+          .map(comba => ({ name: comba.characterName || comba.name, _id: comba._id, type: comba.combatantType, initiative: calculateInitiative(comba) }))
   );
 
   const enterCombat = entity => {

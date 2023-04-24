@@ -1,12 +1,19 @@
 import { createSelector } from 'reselect';
 
 import { RootState } from '../root-reducer';
+import { CombatantType, Creature, Npc, Player } from '../../models/sheet/resources';
 
-const calculateInitiative = (entity: any) => {
-  const die = entity.agility.die > entity.persona.die ? entity.agility.die : entity.persona.die;
-  const roll = Math.ceil(Math.random() * die);
-  return roll;
-};
+interface PlayerCombatant extends Player {
+  combatantType: CombatantType;
+}
+
+interface NpcCombatant extends Npc {
+  combatantType: CombatantType;
+}
+
+interface CreatureCombatant extends Creature {
+  combatantType: CombatantType;
+}
 
 const selectCampaign = (state: RootState) => state.campaign;
 
@@ -31,15 +38,14 @@ export const selectEnvironments = createSelector([selectCurrentCampaign], curren
 
 export const selectCombats = createSelector([selectCurrentCampaign], current => (current ? current.combats : []));
 
-export const selectPotentialCombatants = createSelector([selectCurrentCampaign], current =>
+export const selectPotentialCombatants = createSelector([selectCurrentCampaign], (current): (PlayerCombatant | CreatureCombatant | NpcCombatant)[] =>
   current
     ? [
-        ...current.players.map(player => ({ ...player, type: 'players', initiative: calculateInitiative(player) })),
-        ...current.npcs.map(npc => ({ ...npc, type: 'npcs', initiative: calculateInitiative(npc) })),
-        ...current.creatures.map(creature => ({ ...creature, type: 'creatures', initiative: calculateInitiative(creature) })),
+        ...current.players.map(player => ({ ...player, combatantType: CombatantType.players })),
+        ...current.npcs.map(npc => ({ ...npc, combatantType: CombatantType.npcs })),
+        ...current.creatures.map(creature => ({ ...creature, combatantType: CombatantType.creatures })),
       ].filter(combatant => !combatant.archived)
-    : // .sort((prev, curr) => (prev.initiative < curr.initiative ? 1 : -1))
-      []
+    : []
 );
 
 export const selectArchivedWeapons = createSelector([selectCurrentCampaign], current => (current ? current.weapons.filter(weapon => weapon.archived) : []));

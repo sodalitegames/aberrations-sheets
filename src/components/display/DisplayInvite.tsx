@@ -12,7 +12,7 @@ import { SheetType } from '../../models/sheet';
 
 interface Props {
   invite: Invite;
-  noActions: boolean;
+  noActions?: boolean;
   sheetType: SheetType;
 }
 

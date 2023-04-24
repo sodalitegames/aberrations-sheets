@@ -5,19 +5,26 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 
 import { ModalForm } from '../Modal';
 
+import { useResource } from '../../../hooks/useResource';
+
 import { correctCurrentHp } from '../../../utils/functions/updateHealth';
+import { getSpecies } from '../../../utils/helpers/species';
 
 import Detail from '../elements/Detail';
 
 const ReachMilestone = ({ data }) => {
   const dispatch = useDispatch();
 
+  const species = useResource('species');
+
+  const entSpecies = getSpecies(data.entity.speciesId, species);
+
   const [milestones] = useState(+data.entity.milestones);
   const [experience] = useState(data.entity.experience);
   const [experienceToGain] = useState((data.entity.milestones + 1) * 5);
   const [currentHp] = useState(data.entity.currentHp);
   const [maxHp] = useState(data.entity.maxHp);
-  const [healthToIncrease] = useState(data.entity.species.health.increment);
+  const [healthToIncrease] = useState(entSpecies ? entSpecies.health.increment : 0);
 
   const submitHandler = async e => {
     e.preventDefault();

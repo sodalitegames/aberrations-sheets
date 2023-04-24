@@ -1,7 +1,13 @@
+export enum CombatantType {
+  players = 'players',
+  npcs = 'npcs',
+  creatures = 'creatures',
+}
+
 export type Combatant = {
   _id: string;
   name: string;
-  type: 'players' | 'npcs' | 'creatures';
+  type: CombatantType;
   initiative: number;
 };
 
