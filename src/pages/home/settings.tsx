@@ -6,7 +6,7 @@ import classNames from '../../utils/classNames';
 import PageContent from '../../layouts/components/home/PageContent';
 import PagePanel from '../../layouts/components/home/PagePanel';
 
-import Notice from '../../components/Notice';
+import Notice, { NoticeStatus } from '../../components/Notice';
 
 const colors = [
   { name: 'Pink', bgColor: 'bg-pink-500', selectedColor: 'ring-pink-500' },
@@ -22,12 +22,12 @@ const SettingsPage = () => {
 
   return (
     <PageContent heading="Settings">
-      <Notice status="warn" heading="Under Construction" message="This page is under construction and does not work right now." />
+      <Notice status={NoticeStatus.Warn} heading="Under Construction" message="This page is under construction and does not work right now." />
       <PagePanel heading="Application" subheading="Manage application settings like dark mode and color themes.">
         <dl className="divide-y divide-gray-200">
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
             <dt className="text-sm font-medium text-gray-500">Color Theme</dt>
-            <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2 justify-end">
+            <dd className="flex justify-end mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <RadioGroup value={selectedColor} onChange={setSelectedColor}>
                 <div className="flex items-center space-x-3">
                   {colors.map(color => (
@@ -58,7 +58,7 @@ const SettingsPage = () => {
             <Switch.Label as="dt" className="text-sm font-medium text-gray-500" passive>
               Dark Mode
             </Switch.Label>
-            <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <dd className="flex mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <Switch
                 checked={darkMode}
                 onChange={setDarkMode}

@@ -12,10 +12,12 @@ import PageContent from '../../layouts/components/home/PageContent';
 
 import CharSheetCard from '../../components/home/CharSheetCard';
 
+import { CharacterSheet } from '../../models/sheet';
+
 const CharactersPage = () => {
   const dispatch = useDispatch();
 
-  const characters = useSelector(selectUsersCharacters);
+  const characters = useSelector(selectUsersCharacters) as CharacterSheet[];
   const fetched = useSelector(selectUsersCharactersFetched);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const CharactersPage = () => {
 
   return (
     <PageContent heading="My Characters" primary={{ text: 'Create New Character', slideOver: { type: SlideOverTypes.newCharacter } }}>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">{fetched ? characters.map(charSheet => <CharSheetCard key={charSheet._id} charSheet={charSheet} />) : <Loading />}</div>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">{fetched ? characters.map(charSheet => <CharSheetCard key={charSheet._id} charSheet={charSheet} />) : <Loading />}</div>
     </PageContent>
   );
 };

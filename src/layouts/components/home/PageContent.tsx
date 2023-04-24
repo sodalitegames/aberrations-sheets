@@ -1,7 +1,20 @@
 import { useActions } from '../../../hooks/useActions';
 
-const ContentHeader = ({ heading, primary, secondary }) => {
-  const { setSlideOver } = useActions();
+import { Modal, SlideOver } from '../../../models/app';
+
+type CHButton<T> = {
+  text: string;
+  slideOver: T;
+};
+
+interface ContentHeaderProps {
+  heading: string;
+  primary?: CHButton<SlideOver>;
+  secondary?: CHButton<Modal>;
+}
+
+const ContentHeader: React.FC<ContentHeaderProps> = ({ heading, primary, secondary }) => {
+  const { setSlideOver, setModal } = useActions();
 
   return (
     <div className="bg-white shadow">
@@ -20,8 +33,9 @@ const ContentHeader = ({ heading, primary, secondary }) => {
               <button
                 type="button"
                 className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                onClick={() => setModal(secondary.slideOver)}
               >
-                Secondary button
+                {secondary.text}
               </button>
             ) : null}
             {primary ? (
@@ -40,7 +54,9 @@ const ContentHeader = ({ heading, primary, secondary }) => {
   );
 };
 
-const PageContent = ({ heading, primary, secondary, children }) => {
+interface PageContentProps extends ContentHeaderProps {}
+
+const PageContent: React.FC<PageContentProps> = ({ heading, primary, secondary, children }) => {
   return (
     <>
       <ContentHeader heading={heading} primary={primary} secondary={secondary} />
