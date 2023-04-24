@@ -29,7 +29,7 @@ export enum StatType {
 }
 
 export interface Document {
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 }

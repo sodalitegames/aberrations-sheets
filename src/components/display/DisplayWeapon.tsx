@@ -39,7 +39,7 @@ const WeaponDetails: React.FC<WeaponDetailsProps> = ({ weapon, sheetType }) => {
         sheetType === 'characters' ? { name: 'Equipped', values: [weapon.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [weapon.active ? 'Yes' : 'No'], half: true } : null,
         { name: 'Quantity', values: [weapon.quantity], half: true },
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [weapon.npcId ? getNpcName(weapon.npcId, campSheet?.npcs) : 'Unassigned'] } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [weapon.npcId ? getNpcName(weapon.npcId, campSheet?.npcs || []) : 'Unassigned'] } : null,
         weapon.ability ? { name: 'Ability', values: [weapon.ability] } : null,
         weapon.description ? { name: 'Description', values: [weapon.description] } : null,
         weapon.metadata?.givenBy ? { name: 'Received From', values: [weapon.metadata.givenBy], half: true } : null,

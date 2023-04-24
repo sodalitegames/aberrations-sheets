@@ -29,7 +29,7 @@ const UsableDetails: React.FC<UsableDetailsProps> = ({ usable, sheetType }) => {
         { name: 'Equippable', values: [usable.equippable ? 'Yes' : 'No'], half: true },
         sheetType === 'characters' ? { name: 'Equipped', values: [usable.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [usable.active ? 'Yes' : 'No'], half: true } : null,
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [usable.npcId ? getNpcName(usable.npcId, campSheet?.npcs) : 'Unassigned'] } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [usable.npcId ? getNpcName(usable.npcId, campSheet?.npcs || []) : 'Unassigned'] } : null,
         { name: 'Description', values: [usable.description] },
         usable.metadata?.givenBy ? { name: 'Received From', values: [usable.metadata.givenBy], half: true } : null,
         usable.metadata?.givenTo ? { name: 'Given To', values: [usable.metadata.givenTo], half: true } : null,

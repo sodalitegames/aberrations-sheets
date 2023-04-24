@@ -29,7 +29,7 @@ const WearableDetails: React.FC<WearableDetailsProps> = ({ wearable, sheetType }
         sheetType === 'characters' ? { name: 'Equipped', values: [wearable.equipped ? 'Yes' : 'No'], half: true } : null,
         { name: 'Quantity', values: [wearable.quantity], half: true },
         sheetType === 'campaigns' ? { name: 'Active', values: [wearable.active ? 'Yes' : 'No'], half: true } : null,
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [wearable.npcId ? getNpcName(wearable.npcId, campSheet?.npcs) : 'Unassigned'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [wearable.npcId ? getNpcName(wearable.npcId, campSheet?.npcs || []) : 'Unassigned'], half: true } : null,
         { name: 'Description', values: [wearable.description] },
         { name: 'Shield Value', values: [wearable.shieldValue], half: true },
         { name: 'Speed Adjustment', values: [wearable.speedAdjustment], half: true },

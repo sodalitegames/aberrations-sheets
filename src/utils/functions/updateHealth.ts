@@ -1,12 +1,22 @@
-export const correctCurrentHp = (newCurrent, newMax) => {
+export const correctCurrentHp = (newCurrent: number, newMax: number): number => {
   // Current health cannot be more than max health
   if (newCurrent > newMax) return newMax;
 
   return newCurrent;
 };
 
-export const takeDamage = (current, updated, max) => {
-  let results = {
+type TakeDamageResults = {
+  currentHp: number;
+  injured: number;
+  alreadyDead?: boolean;
+  nearlyDead?: boolean;
+  totallyDead?: boolean;
+  justBloodied?: boolean;
+  justMauled?: boolean;
+};
+
+export const takeDamage = (current: number, updated: number, max: number): TakeDamageResults => {
+  let results: TakeDamageResults = {
     currentHp: updated,
     injured: 0,
   };

@@ -92,7 +92,7 @@ const appReducer = (state: AppState = INITIAL_STATE, action: AppAction): AppStat
     case AppActionTypes.DISMISS_NOTIFICATION:
       return {
         ...state,
-        notifications: replaceItemById(state.notifications, action.payload._id, { ...action.payload, dismissed: true }),
+        notifications: replaceItemById(state.notifications, action.payload._id.toString(), { ...action.payload, dismissed: true }),
       };
     case AppActionTypes.CLEAR_ALL_NOTIFICATIONS:
       return {

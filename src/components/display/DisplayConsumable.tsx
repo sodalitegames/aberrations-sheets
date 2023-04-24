@@ -31,7 +31,7 @@ const ConsumableDetails: React.FC<ConsumableDetailsProps> = ({ consumable, sheet
         sheetType === 'characters' ? { name: 'Equipped', values: [consumable.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [consumable.active ? 'Yes' : 'No'], half: true } : null,
         consumable.associatedStat ? { name: 'Associated Stat', values: [capitalize(consumable.associatedStat)], half: true } : null,
-        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? getNpcName(consumable.npcId, campSheet?.npcs) : 'Unassigned'], half: true } : null,
+        sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [consumable.npcId ? getNpcName(consumable.npcId, campSheet?.npcs || []) : 'Unassigned'], half: true } : null,
         { name: 'Categories', values: [{ value: consumable.categories.map(cat => cat.name).join(', '), tooltip: consumable.categories.map(cat => `${cat.name} - ${cat.description}`) }] },
         consumable.description ? { name: 'Description', values: [consumable.description] } : null,
         consumable.metadata?.givenBy ? { name: 'Received From', values: [consumable.metadata.givenBy], half: true } : null,
