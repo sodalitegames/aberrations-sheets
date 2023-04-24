@@ -128,6 +128,7 @@ const CampaignCreaturesPage = () => {
   return (
     <InteractablesPageContent
       sheetType={SheetType.campaigns}
+      sheetId={campSheet._id}
       show={show}
       id={creature._id}
       list={list}

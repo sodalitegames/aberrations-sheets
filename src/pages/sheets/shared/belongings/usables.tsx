@@ -47,7 +47,18 @@ const SheetBelongingsUsablesPage: React.FC<Props> = ({ sheetType }) => {
   const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]!} belongingType={BelongingType.usables} belonging={usable} />;
 
   return (
-    <InteractablesPageContent sheetType={sheetType} show={show} id={usable._id} list={list} type={InteractableType.usables} label="Usable" interactable={usable} Display={Display} Actions={Actions} />
+    <InteractablesPageContent
+      sheetType={sheetType}
+      sheetId={sheets[sheetType]!._id}
+      show={show}
+      id={usable._id}
+      list={list}
+      type={InteractableType.usables}
+      label="Usable"
+      interactable={usable}
+      Display={Display}
+      Actions={Actions}
+    />
   );
 };
 

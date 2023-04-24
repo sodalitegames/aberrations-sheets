@@ -75,7 +75,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: type, playerId, belongingType } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType, belonging } }),
                           },
                         ]}
                       />
@@ -107,7 +107,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: type, playerId, belongingType } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType, belonging } }),
                           },
                         ]}
                       />
@@ -139,7 +139,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: type, playerId, belongingType } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType, belonging } }),
                           },
                         ]}
                       />
@@ -171,7 +171,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: type, playerId, belongingType } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType, belonging } }),
                           },
                         ]}
                       />

@@ -48,6 +48,7 @@ const SheetBelongingsConsumablesPage: React.FC<Props> = ({ sheetType }) => {
   return (
     <InteractablesPageContent
       sheetType={sheetType}
+      sheetId={sheets[sheetType]!._id}
       show={show}
       id={consumable._id}
       list={list}

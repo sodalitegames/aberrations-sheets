@@ -49,6 +49,7 @@ const SheetBelongingsWearablesPage: React.FC<Props> = ({ sheetType }) => {
   return (
     <InteractablesPageContent
       sheetType={sheetType}
+      sheetId={sheets[sheetType]!._id}
       show={show}
       id={wearable._id}
       list={list}

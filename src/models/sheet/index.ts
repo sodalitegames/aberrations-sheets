@@ -27,12 +27,6 @@ export enum SheetType {
   campaigns = 'campaigns',
 }
 
-export enum EntityType {
-  characters = 'characters',
-  campaigns = 'campaigns',
-  players = 'players',
-}
-
 export type SheetResource = Augmentation | Combat | Consumable | Creature | Environment | Invite | Log | Note | Npc | Session | Transaction | Usable | Weapon | Wearable;
 
 export enum SheetResourceType {
@@ -114,7 +108,7 @@ export type SheetNotification = {
   heading: string;
 };
 
-export type Interactable = Weapon | Wearable | Consumable | Usable | Creature | Npc | Environment | Player;
+export type Interactable = Creature | Npc | Player | Weapon | Wearable | Consumable | Usable;
 
 export enum InteractableType {
   weapons = 'weapons',
@@ -123,6 +117,5 @@ export enum InteractableType {
   usables = 'usables',
   npcs = 'npcs',
   creatures = 'creatures',
-  environments = 'environments',
   players = 'players',
 }

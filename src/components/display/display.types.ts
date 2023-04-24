@@ -8,5 +8,4 @@ export interface DisplayProps {
 
 export interface DisplayBelongingProps {
   actions?: ListItemAction[];
-  playerId?: string;
 }

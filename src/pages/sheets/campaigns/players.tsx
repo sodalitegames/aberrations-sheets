@@ -136,6 +136,7 @@ const CampaignPlayersPage = () => {
   return (
     <InteractablesPageContent
       sheetType={SheetType.campaigns}
+      sheetId={campSheet._id}
       show={show}
       id={player._id}
       list={list}

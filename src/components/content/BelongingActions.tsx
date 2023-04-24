@@ -11,7 +11,7 @@ import { Weapon } from '../../models/sheet/resources';
 import equipBelonging from '../../utils/functions/equipBelonging';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
-import { getBelongingTypeCapitalized } from '../../utils/helpers/belongings';
+import { getBelongingType, getBelongingTypeCapitalized } from '../../utils/helpers/belongings';
 
 import Button from '../Button';
 
@@ -118,7 +118,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
       ) : null}
 
       {/* Edit */}
-      <Button onClick={() => setSlideOver({ type: editForm[belongingType], id: belonging._id, data: { sheetType: sheetType } })}>Edit</Button>
+      <Button onClick={() => setSlideOver({ type: editForm[belongingType], data: { sheetType, sheetId: sheet._id, [getBelongingType(belongingType)]: belonging } })}>Edit</Button>
 
       {/* Archive or Restore */}
       <Button

@@ -131,7 +131,18 @@ const CampaignNpcsPage = () => {
   );
 
   return (
-    <InteractablesPageContent sheetType={SheetType.campaigns} show={show} id={npc._id} list={list} type={InteractableType.npcs} label="Npc" interactable={npc} Display={Display} Actions={Actions} />
+    <InteractablesPageContent
+      sheetType={SheetType.campaigns}
+      sheetId={campSheet._id}
+      show={show}
+      id={npc._id}
+      list={list}
+      type={InteractableType.npcs}
+      label="Npc"
+      interactable={npc}
+      Display={Display}
+      Actions={Actions}
+    />
   );
 };
 

@@ -21,7 +21,7 @@ import Heading from '../Heading';
 import { Player } from '../../models/sheet/resources';
 import { Species } from '../../models/resource';
 import { DisplayProps } from './display.types';
-import { EntityType } from '../../models/sheet';
+import { SheetType } from '../../models/sheet';
 
 interface PlayerDetailsProps {
   player: Player;
@@ -209,7 +209,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.weapons
           .filter(weapon => weapon.equipped)
           .map(weapon => (
-            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={EntityType.players} playerId={player._id} listItem condensed="view" />
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={SheetType.characters} listItem condensed="view" />
           ))}
       </ul>
 
@@ -229,7 +229,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.wearables
           .filter(wearable => wearable.equipped)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={EntityType.players} playerId={player._id} listItem condensed="view" />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={SheetType.characters} listItem />
           ))}
       </ul>
 
@@ -249,7 +249,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.consumables
           .filter(consumable => consumable.equipped)
           .map(consumable => (
-            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={EntityType.players} playerId={player._id} listItem condensed="view" />
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={SheetType.characters} listItem condensed="view" />
           ))}
       </ul>
 
@@ -269,7 +269,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.usables
           .filter(usable => usable.equipped)
           .map(usable => (
-            <DisplayUsable key={usable._id} usable={usable} sheetType={EntityType.players} playerId={player._id} listItem condensed="view" />
+            <DisplayUsable key={usable._id} usable={usable} sheetType={SheetType.characters} listItem condensed="view" />
           ))}
       </ul>
     </div>

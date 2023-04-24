@@ -68,7 +68,7 @@ const ManageAssignedBelongings = ({ data }) => {
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', belongingType: 'weapons' } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType: 'weapons', belonging } }),
                           },
                         ]}
                       />
@@ -107,7 +107,7 @@ const ManageAssignedBelongings = ({ data }) => {
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', belongingType: 'wearables' } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType: 'wearables', belonging } }),
                           },
                         ]}
                       />
@@ -146,7 +146,7 @@ const ManageAssignedBelongings = ({ data }) => {
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', belongingType: 'consumables' } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType: 'consumables', belonging } }),
                           },
                         ]}
                       />
@@ -185,7 +185,7 @@ const ManageAssignedBelongings = ({ data }) => {
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, id: belonging._id, data: { sheetType: 'campaigns', belongingType: 'usables' } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType: 'usables', belonging } }),
                           },
                         ]}
                       />

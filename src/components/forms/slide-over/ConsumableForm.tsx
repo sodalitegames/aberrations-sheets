@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FormikHelpers } from 'formik';
-
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -11,7 +8,7 @@ import { useResource } from '../../../hooks/useResource';
 
 import { FetchedResourceType, ConsumableCategory } from '../../../models/resource';
 import { SheetResourceType, SheetType } from '../../../models/sheet';
-import { Category } from '../../../models/sheet/resources';
+import { Category, Consumable } from '../../../models/sheet/resources';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -25,9 +22,10 @@ import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 
 interface Props {
-  id: string;
   data: {
     sheetType: SheetType;
+    sheetId: string;
+    consumable?: Consumable;
   };
 }
 
@@ -41,15 +39,16 @@ type FormValues = {
   description?: string;
 };
 
-const ConsumableForm: React.FC<Props> = ({ id, data }) => {
+const ConsumableForm: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
-
-  const charSheet = useSelector(selectCurrentCharacter)!;
-  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const fetchedCategories = useResource(FetchedResourceType.ConsumableCategories) as ConsumableCategory[];
 
-  const [categoriesList, setCategoriesList] = useState<Category[]>([]);
+  const categories: Category[] = (fetchedCategories || []).map(categ => ({
+    universalId: categ.id,
+    name: categ.name,
+    description: categ.description,
+  }));
 
   const [initialValues, setInitialValues] = useState<FormValues>({
     name: '',
@@ -62,77 +61,30 @@ const ConsumableForm: React.FC<Props> = ({ id, data }) => {
   });
 
   useEffect(() => {
-    if (fetchedCategories) {
-      const newCategoriesList = fetchedCategories.map(categ => {
-        return {
-          universalId: categ.id,
-          name: categ.name,
-          description: categ.description,
-        };
+    if (data.consumable) {
+      const { name, level, uses, categories, associatedStat, quantity, description } = data.consumable;
+      setInitialValues({
+        name,
+        level,
+        uses,
+        categories: categories.map((categ: Category) => categ.universalId),
+        associatedStat,
+        quantity,
+        description,
       });
-
-      setCategoriesList(newCategoriesList);
     }
-  }, [fetchedCategories]);
-
-  useEffect(() => {
-    if (data.sheetType === 'characters') {
-      if (id && charSheet) {
-        const consumable = charSheet.consumables.find(consumable => consumable._id === id);
-
-        if (consumable) {
-          const { name, level, uses, categories, associatedStat, quantity, description } = consumable;
-          setInitialValues({
-            name,
-            level,
-            uses,
-            categories: categories.map((categ: Category) => categ.universalId),
-            associatedStat,
-            quantity,
-            description,
-          });
-        }
-      }
-    }
-
-    if (data.sheetType === 'campaigns') {
-      if (id && campSheet) {
-        const consumable = campSheet.consumables.find(consumable => consumable._id === id);
-
-        if (consumable) {
-          const { name, level, uses, categories, associatedStat, quantity, description } = consumable;
-          setInitialValues({
-            name,
-            level,
-            uses,
-            categories: categories.map((categ: Category) => categ.universalId),
-            associatedStat,
-            quantity,
-            description,
-          });
-        }
-      }
-    }
-  }, [id, data.sheetType, charSheet, campSheet]);
+  }, [data.consumable]);
 
   const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    const { name, level, uses, categories, associatedStat, quantity, description } = values;
+    const { name, level, uses, categories: cats, associatedStat, quantity, description } = values;
 
-    let detailedCategories: Category[] = [];
+    const selectedCategories = categories.filter(categ => cats.includes(categ.universalId));
 
-    categoriesList.forEach(categ => {
-      if (categories.includes(categ.universalId)) {
-        detailedCategories.push(categ);
-      }
-    });
+    let body = { name, level, uses, quantity, categories: selectedCategories, description, associatedStat: associatedStat ? associatedStat : undefined };
 
-    let body = { name, level, uses, quantity, categories: detailedCategories, description, associatedStat: associatedStat ? associatedStat : undefined };
-
-    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
-
-    if (id) {
+    if (data.consumable) {
       dispatch(
-        updateSheetResourceStart(data.sheetType, sheetId, SheetResourceType.consumables, id, body, {
+        updateSheetResourceStart(data.sheetType, data.sheetId, SheetResourceType.consumables, data.consumable._id, body, {
           slideOver: true,
           notification: { status: 'success', heading: 'Consumabled Updated', message: `You have successfully updated ${name}.` },
         })
@@ -141,7 +93,7 @@ const ConsumableForm: React.FC<Props> = ({ id, data }) => {
     }
 
     dispatch(
-      createSheetResourceStart(data.sheetType, sheetId, SheetResourceType.consumables, body, {
+      createSheetResourceStart(data.sheetType, data.sheetId, SheetResourceType.consumables, body, {
         slideOver: true,
         notification: { status: 'success', heading: 'Consumable Created', message: `You have successfully created ${name}.` },
       })
@@ -150,9 +102,9 @@ const ConsumableForm: React.FC<Props> = ({ id, data }) => {
 
   return (
     <SlideOverForm
-      title={id ? 'Edit Consumable' : 'New Consumable'}
-      description={id ? 'Update the information below to edit your consumable.' : 'Fill out the information below to create your new consumable.'}
-      submitText={id ? 'Save consumable' : 'Create consumable'}
+      title={data.consumable ? 'Edit Consumable' : 'New Consumable'}
+      description={data.consumable ? 'Update the information below to edit your consumable.' : 'Fill out the information below to create your new consumable.'}
+      submitText={data.consumable ? 'Save consumable' : 'Create consumable'}
       submitHandler={submitHandler}
       initialValues={initialValues}
       validationSchema={ConsumableFormSchema}
@@ -163,9 +115,9 @@ const ConsumableForm: React.FC<Props> = ({ id, data }) => {
       <Input slideOver label="Uses" name="uses" type="number" formik />
       <Input slideOver label="Quantity" name="quantity" type="number" formik />
 
-      {fetchedCategories && categoriesList ? (
+      {categories ? (
         <CheckboxGroup slideOver label="Categories">
-          {categoriesList.map(categ => (
+          {categories.map(categ => (
             <FormikCheckbox key={categ.universalId} heading={categ.name} value={categ.universalId} description={categ.description} name="categories" />
           ))}
         </CheckboxGroup>

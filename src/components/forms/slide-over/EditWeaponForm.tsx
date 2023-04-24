@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { FormEvent, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -16,11 +13,19 @@ import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import Detail from '../elements/Detail';
 
-const EditWeaponForm = ({ id, data }) => {
-  const dispatch = useDispatch();
+import { Range, Weapon } from '../../../models/sheet/resources';
+import { SheetResourceType, SheetType } from '../../../models/sheet';
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+interface Props {
+  data: {
+    sheetType: SheetType;
+    sheetId: string;
+    weapon: Weapon;
+  };
+}
+
+const EditWeaponForm: React.FC<Props> = ({ data }) => {
+  const dispatch = useDispatch();
 
   const [type, setType] = useState('');
   const [name, setName] = useState('');
@@ -33,56 +38,22 @@ const EditWeaponForm = ({ id, data }) => {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    if (data.sheetType === 'characters') {
-      if (id && charSheet) {
-        const currentWeapon = charSheet.weapons.find(weapon => weapon._id === id);
+    setType(data.weapon.type);
+    setName(data.weapon.name);
+    setNickname(data.weapon.nickname);
+    setAssociatedStat(data.weapon.associatedStat);
+    setDamageModifier(data.weapon.damageModifier);
+    setRange(data.weapon.range);
+    setAbility(data.weapon.ability);
+    setQuantity(data.weapon.quantity);
+    setDescription(data.weapon.description);
+  }, [data.weapon]);
 
-        setType(currentWeapon.type);
-        setName(currentWeapon.name);
-        setNickname(currentWeapon.nickname);
-        setAssociatedStat(currentWeapon.associatedStat);
-        setDamageModifier(currentWeapon.damageModifier);
-        setRange(currentWeapon.range);
-        setAbility(currentWeapon.ability);
-        setQuantity(currentWeapon.quantity);
-        setDescription(currentWeapon.description);
-      }
-    }
-
-    if (data.sheetType === 'campaigns') {
-      if (id && campSheet) {
-        const currentWeapon = campSheet.weapons.find(weapon => weapon._id === id);
-
-        setType(currentWeapon.type);
-        setName(currentWeapon.name);
-        setNickname(currentWeapon.nickname);
-        setAssociatedStat(currentWeapon.associatedStat);
-        setDamageModifier(currentWeapon.damageModifier);
-        setRange(currentWeapon.range);
-        setAbility(currentWeapon.ability);
-        setQuantity(currentWeapon.quantity);
-        setDescription(currentWeapon.description);
-      }
-    }
-  }, [id, data.sheetType, charSheet, campSheet]);
-
-  const selectStat = e => {
-    if (!e.target.value) return setAssociatedStat('');
-    setAssociatedStat(e.target.value);
-  };
-
-  const selectRange = e => {
-    if (!e.target.value) return setRange('');
-    setRange(e.target.value);
-  };
-
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!damageModifier) return alert('Must provide damageModifier');
     if (!quantity) return alert('Must provide a quantity');
-
-    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
 
     if (type === 'Custom' || type === 'Improvised') {
       if (!name) return alert('Must provide a name');
@@ -92,9 +63,9 @@ const EditWeaponForm = ({ id, data }) => {
       dispatch(
         updateSheetResourceStart(
           data.sheetType,
-          sheetId,
-          'weapons',
-          id,
+          data.sheetId,
+          SheetResourceType.weapons,
+          data.weapon._id,
           { name, nickname, associatedStat, damageModifier, range, ability, quantity, description },
           { slideOver: true, notification: { status: 'success', heading: 'Weapon Updated', message: `You have successfully updated ${nickname || name}.` } }
         )
@@ -105,9 +76,9 @@ const EditWeaponForm = ({ id, data }) => {
     dispatch(
       updateSheetResourceStart(
         data.sheetType,
-        sheetId,
-        'weapons',
-        id,
+        data.sheetId,
+        SheetResourceType.weapons,
+        data.weapon._id,
         {
           nickname,
           damageModifier,
@@ -137,7 +108,7 @@ const EditWeaponForm = ({ id, data }) => {
               { name: 'Persona', id: 'persona' },
               { name: 'Aptitude', id: 'aptitude' },
             ]}
-            changeHandler={selectStat}
+            changeHandler={setAssociatedStat}
             required
           />
           <Input slideOver label="Level" name="damageModifier" type="number" value={damageModifier} changeHandler={setDamageModifier} required />
@@ -152,7 +123,7 @@ const EditWeaponForm = ({ id, data }) => {
               { name: 'Long (4 - 6)', id: 'Long' },
               { name: 'Far (6 - 10)', id: 'Far' },
             ]}
-            changeHandler={selectRange}
+            changeHandler={setRange}
             required
           />
           <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
@@ -166,7 +137,7 @@ const EditWeaponForm = ({ id, data }) => {
           <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
           <Detail slideOver label="Associated Stat" detail={capitalize(associatedStat)} />
           <Input slideOver label="Damage Modifier" name="damageModifier" type="number" value={damageModifier} changeHandler={setDamageModifier} required />
-          <Detail slideOver label="Range" detail={getWeaponRangeString(range)} />
+          <Detail slideOver label="Range" detail={getWeaponRangeString(range as Range)} />
           <Detail slideOver label="Ability" detail={ability} />
           <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
           <TextArea slideOver label="Description (Opt.)" name="description" rows={5} value={description} changeHandler={setDescription} />

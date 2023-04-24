@@ -24,7 +24,7 @@ import { useActions } from '../../hooks/useActions';
 import { Npc } from '../../models/sheet/resources';
 import { Species } from '../../models/resource';
 import { DisplayProps } from './display.types';
-import { EntityType } from '../../models/sheet';
+import { SheetType } from '../../models/sheet';
 
 interface NpcDetailsProps {
   npc: Npc;
@@ -204,7 +204,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         {campSheet.weapons
           .filter(weap => weap.npcId === npc._id)
           .map(weapon => (
-            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={EntityType.campaigns} listItem condensed="view" />
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={SheetType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
@@ -220,7 +220,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         {campSheet.wearables
           .filter(wear => wear.npcId === npc._id)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={EntityType.campaigns} listItem condensed="view" />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={SheetType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
@@ -236,7 +236,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         {campSheet.consumables
           .filter(cons => cons.npcId === npc._id)
           .map(consumable => (
-            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={EntityType.campaigns} listItem condensed="view" />
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={SheetType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
@@ -252,7 +252,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         {campSheet.usables
           .filter(usab => usab.npcId === npc._id)
           .map(usable => (
-            <DisplayUsable key={usable._id} usable={usable} sheetType={EntityType.campaigns} listItem condensed="view" />
+            <DisplayUsable key={usable._id} usable={usable} sheetType={SheetType.campaigns} listItem condensed="view" />
           ))}
       </ul>
     </div>

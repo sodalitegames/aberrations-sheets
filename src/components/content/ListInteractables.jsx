@@ -44,7 +44,7 @@ export const ListInteractablesMessage = ({ show, interactableType }) => {
   );
 };
 
-const ListInteractables = ({ sheetType, id, interactablesList, show, interactableType, label }) => {
+const ListInteractables = ({ sheetType, sheetId, id, interactablesList, show, interactableType, label }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { setSlideOver } = useActions();
 
@@ -52,7 +52,7 @@ const ListInteractables = ({ sheetType, id, interactablesList, show, interactabl
     <>
       <ListContainer
         list={interactablesList}
-        button={show !== 'archived' ? { click: () => setSlideOver({ type: createForm[interactableType], data: { sheetType: sheetType } }), text: `Add a new ${label}` } : null}
+        button={show !== 'archived' ? { click: () => setSlideOver({ type: createForm[interactableType], data: { sheetType, sheetId } }), text: `Add a new ${label}` } : null}
         empty={{
           heading: `No ${label}s`,
           message:
@@ -63,7 +63,7 @@ const ListInteractables = ({ sheetType, id, interactablesList, show, interactabl
               : show === 'inactive'
               ? `You have no inactive ${interactableType}`
               : 'Get started by creating your first one now',
-          button: show !== 'archived' ? { click: () => setSlideOver({ type: createForm[interactableType], data: { sheetType: sheetType } }), text: `New ${label}` } : null,
+          button: show !== 'archived' ? { click: () => setSlideOver({ type: createForm[interactableType], data: { sheetType, sheetId } }), text: `New ${label}` } : null,
         }}
       >
         {interactablesList.map(interactable => (

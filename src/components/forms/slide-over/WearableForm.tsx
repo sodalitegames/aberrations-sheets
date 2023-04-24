@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { FormikHelpers } from 'formik';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -17,11 +14,12 @@ import Select from '../elements/Select';
 import List from '../elements/List';
 
 import { SheetResourceType, SheetType } from '../../../models/sheet';
-
+import { Wearable } from '../../../models/sheet/resources';
 interface Props {
-  id: string;
   data: {
     sheetType: SheetType;
+    sheetId: string;
+    wearable?: Wearable;
   };
 }
 
@@ -35,11 +33,10 @@ type FormValues = {
   modifiers: { modifier: string; amount: number }[];
 };
 
-const WearableForm: React.FC<Props> = ({ id, data }) => {
+const WearableForm: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter)!;
-  const campSheet = useSelector(selectCurrentCampaign)!;
+  console.log('data', data);
 
   const [initialValues, setInitialValues] = useState<FormValues>({
     name: '',
@@ -52,57 +49,30 @@ const WearableForm: React.FC<Props> = ({ id, data }) => {
   });
 
   useEffect(() => {
-    if (data.sheetType === 'characters') {
-      if (id && charSheet) {
-        const wearable = charSheet.wearables.find(wearable => wearable._id === id);
-
-        if (wearable) {
-          const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = wearable;
-          setInitialValues({
-            name,
-            description,
-            bodyArea,
-            shieldValue,
-            speedAdjustment,
-            quantity,
-            modifiers: modifiers || [],
-          });
-        }
-      }
+    if (data.wearable) {
+      const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = data.wearable;
+      setInitialValues({
+        name,
+        description,
+        bodyArea,
+        shieldValue,
+        speedAdjustment,
+        quantity,
+        modifiers: modifiers || [],
+      });
     }
-
-    if (data.sheetType === 'campaigns') {
-      if (id && campSheet) {
-        const wearable = campSheet.wearables.find(wearable => wearable._id === id);
-
-        if (wearable) {
-          const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = wearable;
-          setInitialValues({
-            name,
-            description,
-            bodyArea,
-            shieldValue,
-            speedAdjustment,
-            quantity,
-            modifiers: modifiers || [],
-          });
-        }
-      }
-    }
-  }, [id, data.sheetType, charSheet, campSheet]);
+  }, [data.wearable]);
 
   const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = values;
 
-    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
-
-    if (id) {
+    if (data.wearable) {
       dispatch(
         updateSheetResourceStart(
           data.sheetType,
-          sheetId,
+          data.sheetId,
           SheetResourceType.wearables,
-          id,
+          data.wearable._id,
           { name, bodyArea, description, shieldValue, speedAdjustment, quantity, modifiers },
           { slideOver: true, notification: { status: 'success', heading: 'Wearable Updated', message: `You have successfully updated ${name}.` } }
         )
@@ -113,7 +83,7 @@ const WearableForm: React.FC<Props> = ({ id, data }) => {
     dispatch(
       createSheetResourceStart(
         data.sheetType,
-        sheetId,
+        data.sheetId,
         SheetResourceType.wearables,
         { name, bodyArea, description, shieldValue, speedAdjustment, quantity, modifiers },
         { slideOver: true, notification: { status: 'success', heading: 'Wearable Created', message: `You have successfully created ${name}.` } }
@@ -123,9 +93,9 @@ const WearableForm: React.FC<Props> = ({ id, data }) => {
 
   return (
     <SlideOverForm
-      title={id ? 'Edit Wearable' : 'New Wearable'}
-      description={id ? 'Update the information below to edit your wearable.' : 'Fill out the information below to create your new wearable.'}
-      submitText={id ? 'Save wearable' : 'Create wearable'}
+      title={data.wearable ? 'Edit Wearable' : 'New Wearable'}
+      description={data.wearable ? 'Update the information below to edit your wearable.' : 'Fill out the information below to create your new wearable.'}
+      submitText={data.wearable ? 'Save wearable' : 'Create wearable'}
       submitHandler={submitHandler}
       initialValues={initialValues}
       validationSchema={WearableFormSchema}

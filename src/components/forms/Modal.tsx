@@ -85,7 +85,7 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.receiveMoney ? <ReceiveMoney data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.payMoney ? <PayMoney data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.deleteSheet ? <DeleteSheet data={modal.data} nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging id={modal.id} data={modal.data} nested={nested} /> : null}
+      {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus id={modal.id} data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.manageTransaction ? <ManageTransaction id={modal.id} data={modal.data} /> : null}

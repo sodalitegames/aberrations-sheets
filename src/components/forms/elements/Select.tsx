@@ -45,13 +45,13 @@ interface BasicSelectProps {
   name: string;
   value: string;
   options: SelectOption[];
-  changeHandler: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
+  changeHandler: Function;
   required?: boolean;
 }
 
 export const BasicSelect: React.FC<BasicSelectProps> = ({ name, value, options, changeHandler, required }) => {
   return (
-    <select className={SELECT_STYLES} name={name} value={value} onChange={(event: React.ChangeEvent<HTMLSelectElement>) => changeHandler(event)} required={required}>
+    <select className={SELECT_STYLES} name={name} value={value} onChange={e => changeHandler(e.target.value)} required={required}>
       <SelectOptions options={options} />
     </select>
   );
@@ -81,7 +81,7 @@ interface SelectProps {
   name: string;
   value?: string;
   options: SelectOption[];
-  changeHandler?: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
+  changeHandler?: Function;
   slideOver?: boolean;
   formik?: boolean;
   required?: boolean;
