@@ -28,7 +28,7 @@ const DisplayCampaign: React.FC<Props> = ({ campaign }) => {
         ]}
       />
       <div className="mt-6">
-        <Button text onClick={() => setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'characters' } })}>
+        <Button text onClick={() => setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'characters', campaignName: campaign.name } })}>
           Leave Campaign
         </Button>
       </div>

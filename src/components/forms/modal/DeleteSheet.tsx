@@ -1,3 +1,4 @@
+import { FormEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
@@ -8,26 +9,35 @@ import { deleteSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../Modal';
 
-const DeleteSheet = ({ data, nested }) => {
+import { SheetType } from '../../../models/sheet';
+
+interface Props {
+  nested?: boolean;
+  data: {
+    sheetType: SheetType;
+  };
+}
+
+const DeleteSheet: React.FC<Props> = ({ data, nested }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (data.sheetType === 'characters') {
-      if (charSheet.campaign) {
+      if (charSheet!.campaign) {
         return alert('You cannot delete this character until you leave the campaign you are in.');
       }
 
       dispatch(
-        deleteSheetStart('characters', charSheet._id, {
+        deleteSheetStart(SheetType.characters, charSheet!._id, {
           modal: nested ? false : true,
           nestedModal: nested ? true : false,
-          notification: { status: 'alert', heading: 'Character Sheet Deleted', message: `You have successfully deleted ${charSheet.characterName}.` },
+          notification: { status: 'alert', heading: 'Character Sheet Deleted', message: `You have successfully deleted ${charSheet!.characterName}.` },
         })
       );
 
@@ -35,15 +45,15 @@ const DeleteSheet = ({ data, nested }) => {
     }
 
     if (data.sheetType === 'campaigns') {
-      if (campSheet.players.length) {
+      if (campSheet!.players.length) {
         return alert('You cannot delete this campaign until you remove all the players that are in it.');
       }
 
       dispatch(
-        deleteSheetStart('campaigns', campSheet._id, {
+        deleteSheetStart(SheetType.campaigns, campSheet!._id, {
           modal: nested ? false : true,
           nestedModal: nested ? true : false,
-          notification: { status: 'alert', heading: 'Campaign Sheet Deleted', message: `You have successfully deleted ${campSheet.name}.` },
+          notification: { status: 'alert', heading: 'Campaign Sheet Deleted', message: `You have successfully deleted ${campSheet!.name}.` },
         })
       );
 

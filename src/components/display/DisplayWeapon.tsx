@@ -80,13 +80,12 @@ const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, action
         editable={{ type: SlideOverTypes.editWeaponForm, data: { sheetType, sheetId: weapon.sheetId, weapon } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: weapon._id,
           data: {
             sheetType: sheetType,
             resourceType: 'weapons',
+            resource: weapon,
             title: `Are you sure you want to delete ${weapon.nickname || weapon.name}?`,
             submitText: `Yes, delete ${weapon.nickname || weapon.name}`,
-            equipped: weapon.equipped,
             notification: { heading: 'Weapon Deleted', message: `You have successfully deleted ${weapon.name}.` },
           },
         }}

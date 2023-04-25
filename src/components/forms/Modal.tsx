@@ -76,7 +76,7 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.errorEquippingBelonging ? <ErrorEquippingBelonging data={modal.data} nested={nested} /> : null}
       {/* Campaign Sheet */}
       {modal && modal.type === ModalTypes.sendInvite ? <SendInvite /> : null}
-      {modal && modal.type === ModalTypes.assignBelonging ? <AssignBelonging id={modal.id} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.assignBelonging ? <AssignBelonging data={modal.data} /> : null}
       {/* Shared */}
       {modal && modal.type === ModalTypes.takeARest ? <TakeARest data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.takeDamage ? <TakeDamage data={modal.data} /> : null}
@@ -85,9 +85,9 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.payMoney ? <PayMoney data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.deleteSheet ? <DeleteSheet data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.showBelonging ? <ShowBelonging data={modal.data} nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource id={modal.id} data={modal.data} nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus id={modal.id} data={modal.data} nested={nested} /> : null}
-      {modal && modal.type === ModalTypes.manageTransaction ? <ManageTransaction id={modal.id} data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.deleteResource ? <DeleteResource data={modal.data} nested={nested} /> : null}
+      {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus data={modal.data} nested={nested} /> : null}
+      {modal && modal.type === ModalTypes.manageTransaction ? <ManageTransaction data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editExperience ? <EditExperience data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editMortality ? <EditMortality data={modal.data} /> : null}

@@ -96,13 +96,12 @@ const DisplayWearable: React.FC<DisplayWearableProps> = ({ wearable, condensed, 
         editable={{ type: SlideOverTypes.wearableForm, data: { sheetType, sheetId: wearable.sheetId, wearable } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: wearable._id,
           data: {
             sheetType: sheetType,
             resourceType: 'wearables',
+            resource: wearable,
             title: `Are you sure you want to delete ${wearable.name}?`,
             submitText: `Yes, delete ${wearable.name}`,
-            equipped: wearable.equipped,
             notification: { heading: 'Wearable Deleted', message: `You have successfully deleted ${wearable.name}.` },
           },
         }}

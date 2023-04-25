@@ -69,13 +69,12 @@ const DisplayUsable: React.FC<DisplayUsableProps> = ({ usable, condensed, action
         editable={{ type: SlideOverTypes.usableForm, data: { sheetType, sheetId: usable.sheetId, usable } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: usable._id,
           data: {
             sheetType: sheetType,
             resourceType: 'usables',
+            resource: usable,
             title: `Are you sure you want to delete ${usable.name}?`,
             submitText: `Yes, delete ${usable.name}`,
-            equipped: usable.equipped,
             notification: { heading: 'Usable Deleted', message: `You have successfully deleted ${usable.name}.` },
           },
         }}

@@ -68,10 +68,10 @@ const DisplayTransaction: React.FC<DisplayTransactionProps> = ({ transaction, sh
                       onClick={() =>
                         setModal({
                           type: ModalTypes.deleteResource,
-                          id: transaction._id,
                           data: {
                             sheetType: sheetType,
                             resourceType: 'transactions',
+                            resource: transaction,
                             title: `Are you sure you want to delete this resolved transaction with ${transaction.recipientName}?`,
                             submitText: `Yes, delete resolved transaction with ${transaction.recipientName}`,
                             notification: { heading: 'Resolved Transaction Deleted', message: `You have successfully deleted your resolved transaction with ${transaction.recipientName}.` },
@@ -101,10 +101,10 @@ const DisplayTransaction: React.FC<DisplayTransactionProps> = ({ transaction, sh
                       onClick={() =>
                         setModal({
                           type: ModalTypes.deleteResource,
-                          id: transaction._id,
                           data: {
                             sheetType: sheetType,
                             resourceType: 'transactions',
+                            resource: transaction,
                             title: `Are you sure you want to delete this transaction with ${transaction.recipientName}?`,
                             submitText: `Yes, delete transaction with ${transaction.recipientName}`,
                             notification: { heading: 'Transaction Deleted', message: `You have successfully deleted your transaction with ${transaction.recipientName}.` },

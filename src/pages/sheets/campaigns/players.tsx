@@ -87,7 +87,10 @@ const CampaignPlayersPage = () => {
         <Button
           alert
           onClick={() =>
-            setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'campaigns', playerName: player.playerNickname || player.playerName, body: { charId: player._id } } })
+            setModal({
+              type: ModalTypes.removeCharacterFromCampaign,
+              data: { sheetType: 'campaigns', campaignName: campSheet.name, characterName: player.playerNickname || player.playerName, characterId: player._id },
+            })
           }
         >
           Remove From Campaign

@@ -153,10 +153,10 @@ const CampaignCombatPage = () => {
                 onClick={() =>
                   setModal({
                     type: ModalTypes.deleteResource,
-                    id: combat._id,
                     data: {
                       sheetType: 'campaigns',
                       resourceType: 'combats',
+                      resource: combat,
                       title: `Are you sure you want to end this combat?`,
                       submitText: `Yes, end combat`,
                       notification: { heading: 'Combat Ended', message: `You have successfully ended combat.` },

@@ -107,10 +107,10 @@ const CampaignCreaturesPage = () => {
             onClick={() =>
               setModal({
                 type: ModalTypes.deleteResource,
-                id: creature._id,
                 data: {
                   sheetType: 'campaigns',
                   resourceType: 'creatures',
+                  resource: creature,
                   title: `Are you sure you want to delete ${creature.name}?`,
                   submitText: `Yes, delete ${creature.name}`,
                   notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },

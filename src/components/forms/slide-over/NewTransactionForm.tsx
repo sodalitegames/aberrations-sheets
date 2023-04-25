@@ -54,8 +54,6 @@ const NewTransactionForm: React.FC<Props> = ({ data }) => {
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (data.documentType === 'wearables' && (data.document as Belonging).equipped) return alert('You cannot offer this wearable to anybody until you have unequipped it.');
-
     if (!senderName) return alert('Must provide a senderName');
     if (!recipientId) return alert('Must provide a recipientId');
 
@@ -119,11 +117,7 @@ const NewTransactionForm: React.FC<Props> = ({ data }) => {
         <Notice
           noIcon
           status={NoticeStatus.Warn}
-          message={
-            data.documentType === 'wearables'
-              ? `If sent and accepted, transferring this wearable will unequip it from your person, and will remove any modifiers it may be adding to your stats.`
-              : `If sent and accepted, transferring this ${getBelongingType(data.documentType as unknown as BelongingType)} will unequip it from your person.`
-          }
+          message={`If sent and accepted, transferring this ${getBelongingType(data.documentType as unknown as BelongingType)} will unequip it from your person.`}
         />
       ) : null}
     </SlideOverForm>

@@ -112,10 +112,10 @@ const CampaignNpcsPage = () => {
             onClick={() =>
               setModal({
                 type: ModalTypes.deleteResource,
-                id: npc._id,
                 data: {
                   sheetType: 'campaigns',
                   resourceType: 'npcs',
+                  resource: npc,
                   title: `Are you sure you want to delete ${npc.name}?`,
                   submitText: `Yes, delete ${npc.name}`,
                   notification: { heading: 'Npc Deleted', message: `You have successfully deleted ${npc.name}.` },

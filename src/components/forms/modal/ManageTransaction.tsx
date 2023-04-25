@@ -1,8 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { useState, FormEvent } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -13,39 +10,36 @@ import { ModalForm } from '../Modal';
 import Select from '../elements/Select';
 import Row from '../elements/Row';
 import Detail from '../elements/Detail';
-import Notice from '../../Notice';
+import Notice, { NoticeStatus } from '../../Notice';
 
 import { DisplayTransactionDocument } from '../../display/DisplayTransaction';
 
-const ManageTransaction = ({ id, data }) => {
+import { Transaction, Wallet } from '../../../models/sheet/resources';
+import { Belonging, BelongingType, SheetResourceType, SheetType } from '../../../models/sheet';
+
+interface Props {
+  data: {
+    status: 'Accepted' | 'Declined' | 'Revoked';
+    transaction: Transaction;
+    sheetType: SheetType;
+    sent: boolean;
+  };
+}
+
+const ManageTransaction: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const [status, setStatus] = useState(data.status);
 
-  const [status, setStatus] = useState('');
-
-  useEffect(() => {
-    // Set the status based on the button that opened this modal
-    setStatus(data.status);
-  }, [data.status]);
-
-  const selectStatus = e => {
-    if (!e.target.value) return setStatus('');
-    setStatus(e.target.value);
-  };
-
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-
-    const sheetId = data.sheetType === 'characters' ? charSheet._id : campSheet._id;
 
     dispatch(
       updateSheetResourceStart(
         data.sheetType,
-        sheetId,
-        'transactions',
-        id,
+        data.sent ? data.transaction.sheetId : data.transaction.receivingSheetId,
+        SheetResourceType.transactions,
+        data.transaction._id,
         { status: status },
         {
           modal: true,
@@ -73,7 +67,9 @@ const ManageTransaction = ({ id, data }) => {
       submitText={
         status === 'Accepted'
           ? `${data.transaction.sellPrice ? 'Purchase' : 'Accept'} ${
-              data.transaction.documentType === 'wallet' ? `${data.transaction.document.amount} Monies` : getBelongingTypeCapitalized(data.transaction.documentType)
+              data.transaction.documentType === 'wallet'
+                ? `${(data.transaction.document as Wallet).amount} Monies`
+                : getBelongingTypeCapitalized(data.transaction.documentType as unknown as BelongingType)
             } ${data.transaction.sellPrice ? `for ${data.transaction.sellPrice} Monies` : ''}`
           : status === 'Declined'
           ? 'Yes, I want to decline this transaction'
@@ -85,7 +81,7 @@ const ManageTransaction = ({ id, data }) => {
       submitDisabled={!status}
     >
       {data.sent ? (
-        <Select label="Update Status" name="status" value={status} options={[{ name: 'Revoke', id: 'Revoked' }]} changeHandler={selectStatus} required />
+        <Select label="Update Status" name="status" value={status} options={[{ name: 'Revoke', id: 'Revoked' }]} changeHandler={setStatus} required />
       ) : (
         <Select
           label="Update Status"
@@ -95,7 +91,7 @@ const ManageTransaction = ({ id, data }) => {
             { name: 'Accept', id: 'Accepted' },
             { name: 'Decline', id: 'Declined' },
           ]}
-          changeHandler={selectStatus}
+          changeHandler={setStatus}
           required
         />
       )}
@@ -108,7 +104,7 @@ const ManageTransaction = ({ id, data }) => {
 
       {/* Display Document Being Sent */}
       {data.transaction.document ? (
-        <Row label={`${data.transaction.documentType === 'wallet' ? 'Amount' : getBelongingTypeCapitalized(data.transaction.documentType)} Being Offered`} name="document">
+        <Row label={`${data.transaction.documentType === 'wallet' ? 'Amount' : getBelongingTypeCapitalized(data.transaction.documentType as unknown as BelongingType)} Being Offered`} name="document">
           <DisplayTransactionDocument document={data.transaction.document} documentType={data.transaction.documentType} sheetType={data.sheetType} />
         </Row>
       ) : (
@@ -117,20 +113,18 @@ const ManageTransaction = ({ id, data }) => {
         </Row>
       )}
 
-      {data.sent && data.transaction.document.equipped ? (
+      {data.sent && (data.transaction.document as Belonging).equipped ? (
         <Notice
           noIcon
-          status="warn"
-          message={
-            data.transaction.documentType === 'wearables'
-              ? `If ${data.transaction.recipientName} accepts, transferring this wearable will also unequip it from your person, and will remove any modifiers it may be adding to your stats.`
-              : `If ${data.transaction.recipientName} accepts, transferring this ${getBelongingType(data.transaction.documentType)} will also unequip it from your person.`
-          }
+          status={NoticeStatus.Warn}
+          message={`If ${data.transaction.recipientName} accepts, transferring this ${getBelongingType(
+            data.transaction.documentType as unknown as BelongingType
+          )} will also unequip it from your person.`}
         />
       ) : null}
 
       {status === 'Declined' || status === 'Revoked' ? (
-        <Notice noIcon status="error" message={`You will not be able to change your decision once you have ${status === 'Declined' ? 'declined' : 'revoked'} this transaction.`} />
+        <Notice noIcon status={NoticeStatus.Error} message={`You will not be able to change your decision once you have ${status === 'Declined' ? 'declined' : 'revoked'} this transaction.`} />
       ) : null}
     </ModalForm>
   );

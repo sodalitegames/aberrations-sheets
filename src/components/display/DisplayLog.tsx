@@ -20,10 +20,10 @@ const DisplayLog: React.FC<Props> = ({ sheetType, log }) => {
       editable={{ type: SlideOverTypes.logForm, data: { sheetType: sheetType, sheetId: log.sheetId, log } }}
       deletable={{
         type: ModalTypes.deleteResource,
-        id: log._id,
         data: {
           sheetType: sheetType,
           resourceType: 'logs',
+          resource: log,
           title: `Are you sure you want to delete this ${sheetType === 'campaigns' ? `captain's` : 'character'} log?`,
           submitText: `Yes, delete this ${sheetType === 'campaigns' ? `captain's` : 'character'} log`,
           notification: {

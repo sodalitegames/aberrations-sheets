@@ -77,13 +77,12 @@ const DisplayConsumable: React.FC<DisplayConsumableProps> = ({ consumable, conde
         editable={{ type: SlideOverTypes.consumableForm, data: { sheetType, sheetId: consumable.sheetId, consumable } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: consumable._id,
           data: {
             sheetType: sheetType,
             resourceType: 'consumables',
+            resource: consumable,
             title: `Are you sure you want to delete ${consumable.name}?`,
             submitText: `Yes, delete ${consumable.name}`,
-            equipped: consumable.equipped,
             notification: { heading: 'Consumable Deleted', message: `You have successfully deleted ${consumable.name}.` },
           },
         }}

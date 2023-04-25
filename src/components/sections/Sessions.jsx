@@ -41,10 +41,10 @@ const Sessions = ({ sessions, status }) => {
                       onClick={() =>
                         setModal({
                           type: ModalTypes.deleteResource,
-                          id: session._id,
                           data: {
                             sheetType: 'campaigns',
                             resourceType: 'sessions',
+                            resource: session,
                             title: `Are you sure you want to delete this session?`,
                             submitText: `Yes, delete this session`,
                             notification: {

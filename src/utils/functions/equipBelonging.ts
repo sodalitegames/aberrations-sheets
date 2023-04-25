@@ -6,11 +6,11 @@ import { setModal, setNestedModal } from '../../redux/app/app.actions';
 import ModalTypes from '../ModalTypes';
 import { getBelongingTypeCapitalized } from '../helpers/belongings';
 
-import { CharacterSheet, Belonging, BelongingType, SheetType, SheetResourceType } from '../../models/sheet';
+import { CharacterSheet, Belonging, BelongingType, SheetResourceType, SheetType } from '../../models/sheet';
 import { Usable, Weapon, Wearable, Player } from '../../models/sheet/resources';
 
 interface Data {
-  sheetType: SheetType;
+  sheetType: 'characters' | 'players';
   sheet: CharacterSheet | Player;
   belongingType: BelongingType;
   belonging: Belonging;
@@ -19,32 +19,20 @@ interface Data {
   forPlayer?: boolean;
 }
 
-export const correctStatMod = (mod: number): number => {
-  // Maximum modifier amount is five
-  if (mod > 5) return 5;
-
-  // Minimum modifier amount if negative five
-  if (mod < -5) return -5;
-
-  return mod;
-};
-
-const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedList, nested, forPlayer }: Data, config?: Object): void => {
-  if (sheetType !== 'characters') return;
-
+const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedList, nested }: Data, config?: Object): void => {
   if (belongingType === 'usables' && !(belonging as Usable).equippable) return alert('This belonging is unequippable');
 
   // If unequipping belonging
   if (belonging.equipped === true) {
     store.dispatch(
       updateSheetResourceStart(
-        sheetType,
+        SheetType.characters,
         sheet._id,
-        belongingType as unknown as SheetResourceType,
+        SheetResourceType[belongingType],
         belonging._id,
         { equipped: false },
         {
-          forPlayer,
+          forPlayer: sheetType === 'players' ? true : false,
           notification: {
             status: 'success',
             heading: `${getBelongingTypeCapitalized(belongingType)} Unequipped`,
@@ -61,11 +49,11 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
     case 'weapons':
       if (equippedList.length >= 2) {
         if (nested) {
-          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging } }));
+          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
           return;
         }
 
-        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging } }));
+        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
         return;
       }
 
@@ -74,11 +62,11 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
     case 'wearables':
       if ((equippedList as Wearable[]).find(wear => wear.bodyArea === (belonging as Wearable).bodyArea)) {
         if (nested) {
-          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging } }));
+          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
           return;
         }
 
-        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging } }));
+        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
         return;
       }
 
@@ -88,11 +76,11 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
     case 'usables':
       if (equippedList.length >= 3) {
         if (nested) {
-          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging } }));
+          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
           return;
         }
 
-        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging } }));
+        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
         return;
       }
       break;
@@ -103,14 +91,14 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
 
   store.dispatch(
     updateSheetResourceStart(
-      sheetType,
+      SheetType.characters,
       sheet._id,
-      belongingType as unknown as SheetResourceType,
+      SheetResourceType[belongingType],
       belonging._id,
       { equipped: true },
       {
         ...config,
-        forPlayer,
+        forPlayer: sheetType === 'players' ? true : false,
         notification: {
           status: 'success',
           heading: `${getBelongingTypeCapitalized(belongingType)} Equipped`,

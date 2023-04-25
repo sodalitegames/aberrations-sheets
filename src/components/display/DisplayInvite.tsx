@@ -33,24 +33,24 @@ const DisplayInvite: React.FC<Props> = ({ invite, noActions, sheetType }) => {
       {!noActions && invite.status === 'Pending' ? (
         sheetType === 'characters' ? (
           <div className="mt-4">
-            <Button onClick={() => setModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Accepted' } })}>Accept Invite</Button>
-            <Button text classes="mt-2" onClick={() => setModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Declined' } })}>
+            <Button onClick={() => setModal({ type: ModalTypes.updateInviteStatus, data: { sheetType: sheetType, status: 'Accepted', invite } })}>Accept Invite</Button>
+            <Button text classes="mt-2" onClick={() => setModal({ type: ModalTypes.updateInviteStatus, data: { sheetType: sheetType, status: 'Declined', invite } })}>
               Decline Invite
             </Button>
           </div>
         ) : (
           <div className="mt-4">
-            <Button onClick={() => setNestedModal({ type: ModalTypes.updateInviteStatus, id: invite._id, data: { sheetType: sheetType, status: 'Revoked' } })}>Revoke Invite</Button>
+            <Button onClick={() => setNestedModal({ type: ModalTypes.updateInviteStatus, data: { sheetType: sheetType, status: 'Revoked', invite } })}>Revoke Invite</Button>
             <Button
               text
               classes="mt-2"
               onClick={() =>
                 setNestedModal({
                   type: ModalTypes.deleteResource,
-                  id: invite._id,
                   data: {
                     sheetType: sheetType,
                     resourceType: 'invites',
+                    resource: invite,
                     title: 'Are you sure you want to delete this invite?',
                     submitText: 'Yes, delete this invite',
                     notification: { heading: 'Invite Deleted', message: `You have successfully deleted invite to Character #${invite.charSheetId}.` },
@@ -69,10 +69,10 @@ const DisplayInvite: React.FC<Props> = ({ invite, noActions, sheetType }) => {
             onClick={() =>
               setNestedModal({
                 type: ModalTypes.deleteResource,
-                id: invite._id,
                 data: {
                   sheetType: sheetType,
                   resourceType: 'invites',
+                  resource: invite,
                   title: 'Are you sure you want to delete this invite?',
                   submitText: 'Yes, delete this invite',
                   notification: { heading: 'Invite Deleted', message: `You have successfully deleted invite to Character #${invite.charSheetId}.` },

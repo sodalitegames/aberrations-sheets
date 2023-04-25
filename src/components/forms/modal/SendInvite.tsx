@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
@@ -10,10 +10,12 @@ import { ModalForm } from '../Modal';
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+
 const SendInvite = () => {
   const dispatch = useDispatch();
 
-  const campSheet = useSelector(selectCurrentCampaign);
+  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [campaignName, setCampaignName] = useState('');
   const [ccName, setCcName] = useState('');
@@ -25,14 +27,14 @@ const SendInvite = () => {
     setCcName(campSheet.ccNickname || campSheet.ccName);
   }, [campSheet]);
 
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     dispatch(
       createSheetResourceStart(
-        'campaigns',
+        SheetType.campaigns,
         campSheet._id,
-        'invites',
+        SheetResourceType.invites,
         { campaignName, ccName, charSheetId: charId, message },
         { modal: true, notification: { status: 'success', heading: 'Invite Sent', message: `You have successfully sent an invite to character #${charId}` } }
       )

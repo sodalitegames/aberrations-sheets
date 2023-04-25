@@ -75,7 +75,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                 Unassign
               </Button>
             ) : (
-              <Button onClick={() => setModal({ type: ModalTypes.assignBelonging, id: belonging._id, data: { type: belongingType, name: belonging.name } })}>Assign</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.assignBelonging, id: belonging._id, data: { belongingType, belonging } })}>Assign</Button>
             )
           ) : null}
 
@@ -107,13 +107,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
           ) : null}
 
           {/* Give or Sell */}
-          <Button
-            disabled={belongingType === 'wearables' && (belonging.npcId || belonging.equipped) ? true : false}
-            disabledMessage={belongingType === 'wearables' ? `You must unequip/unassign this wearable before you can give or sell it to anybody.` : ''}
-            onClick={() => setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, sheet, documentType: belongingType, document: belonging } })}
-          >
-            Give or Sell
-          </Button>
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, sheet, documentType: belongingType, document: belonging } })}>Give or Sell</Button>
         </Fragment>
       ) : null}
 
@@ -122,8 +116,6 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
 
       {/* Archive or Restore */}
       <Button
-        disabled={belongingType === 'wearables' && (belonging.npcId || belonging.equipped) ? true : false}
-        disabledMessage={belongingType === 'wearables' ? `You must unequip/unassign this wearable before you can archive it.` : ''}
         onClick={() =>
           dispatch(
             updateSheetResourceStart(
@@ -150,18 +142,15 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
       {belonging.archived ? (
         <Button
           alert
-          disabled={belongingType === 'wearables' && (belonging.equipped || belonging.npcId) ? true : false}
-          disabledMessage={belongingType === 'wearables' ? 'You must unequip/unassign this wearable before you can delete it.' : ''}
           onClick={() =>
             setModal({
               type: ModalTypes.deleteResource,
-              id: belonging._id,
               data: {
                 sheetType: sheetType,
                 resourceType: belongingType,
+                resource: belonging,
                 title: `Are you sure you want to delete ${(belonging as Weapon).nickname || belonging.name}?`,
                 submitText: `Yes, delete ${(belonging as Weapon).nickname || belonging.name}`,
-                equipped: belonging.equipped,
                 notification: { heading: `${getBelongingTypeCapitalized(belongingType)} Deleted`, message: `You have successfully deleted ${belonging.name}.` },
               },
             })
