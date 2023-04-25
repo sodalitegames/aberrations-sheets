@@ -5,7 +5,6 @@ enum SlideOverTypes {
 
   // Character Forms
   manageCharacter = 'MANAGE_CHARACTER',
-  rollDice = 'ROLL_DICE',
   manageEquippedBelongings = 'MANAGE_EQUIPPED_BELONGINGS',
   purchaseAugmentation = 'PURCHASE_AUGMENTATION',
 
@@ -22,6 +21,8 @@ enum SlideOverTypes {
   manageAssignedBelongings = 'MANAGE_ASSIGNED_BELONGINGS',
 
   // Shared Forms
+  rollDice = 'ROLL_DICE',
+  rollStat = 'ROLL_STAT',
   newWeaponForm = 'NEW_WEAPON_FORM',
   editWeaponForm = 'EDIT_WEAPON_FORM',
   wearableForm = 'WEARABLE_FORM',

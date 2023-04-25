@@ -47,7 +47,12 @@ const Stats = ({ stats, experience }) => {
                   <Button rounded classes="justify-center" onClick={() => setModal({ type: ModalTypes.upgradeStat, id: stat.name.toLowerCase(), data: { type: 'character', resource: charSheet } })}>
                     Upgrade
                   </Button>
-                  <Button dark rounded classes="justify-center" onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character', rollingStat: stat.name.toLowerCase() } })}>
+                  <Button
+                    dark
+                    rounded
+                    classes="justify-center"
+                    onClick={() => setSlideOver({ type: SlideOverTypes.rollStat, data: { entityType: 'characters', entityId: charSheet._id, stat: stat.name.toLowerCase() } })}
+                  >
                     Roll
                   </Button>
                 </div>

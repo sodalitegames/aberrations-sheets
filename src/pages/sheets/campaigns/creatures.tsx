@@ -17,7 +17,7 @@ import InteractablesPageContent from '../../../components/content/InteractablesP
 import InteractableActions from '../../../components/content/InteractableActions';
 import DisplayCreature from '../../../components/display/DisplayCreature';
 
-import { InteractableType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { EntityType, InteractableType, SheetResourceType, SheetType } from '../../../models/sheet';
 
 const CampaignCreaturesPage = () => {
   const dispatch = useDispatch();
@@ -44,7 +44,7 @@ const CampaignCreaturesPage = () => {
       </div>
 
       {/* Creature Actions */}
-      <InteractableActions type="creature" id={{ prop: 'creatureId', value: creature._id }} entity={creature} />
+      <InteractableActions type={EntityType.creatures} entity={creature} />
 
       {/* Activate or Deactivate */}
       {!creature.archived && (

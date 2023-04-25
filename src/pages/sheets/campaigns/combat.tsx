@@ -11,8 +11,8 @@ import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 import { useResource } from '../../../hooks/useResource';
 
 import { FetchedResourceType, Species } from '../../../models/resource';
-import { Combat, Combatant, Creature, Npc, Player } from '../../../models/sheet/resources';
-import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { Combat, Combatant, CombatantType, Creature, Npc, Player } from '../../../models/sheet/resources';
+import { EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
@@ -37,6 +37,19 @@ interface CombatantEntity extends Combatant {
 
 const createOption = (combat: Combat) => {
   return { id: combat._id, title: combat.description, href: `?id=${combat._id}`, description: combat.combatants.map(combatant => combatant.name).join(', ') };
+};
+
+const getType = (type: CombatantType): EntityType | undefined => {
+  switch (type) {
+    case 'players':
+      return EntityType.players;
+    case 'npcs':
+      return EntityType.npcs;
+    case 'creatures':
+      return EntityType.creatures;
+    default:
+      break;
+  }
 };
 
 const CampaignCombatPage = () => {
@@ -177,13 +190,7 @@ const CampaignCombatPage = () => {
                   </div>
 
                   {/* Actions */}
-                  {entity.type === 'players' ? (
-                    <InteractableActions type="player" id={{ prop: 'playerId', value: entity._id }} entity={entity.doc!} />
-                  ) : entity.type === 'npcs' ? (
-                    <InteractableActions type="npc" id={{ prop: 'npcId', value: entity._id }} entity={entity.doc!} />
-                  ) : entity.type === 'creatures' ? (
-                    <InteractableActions type="creature" id={{ prop: 'creatureId', value: entity._id }} entity={entity.doc!} />
-                  ) : null}
+                  <InteractableActions type={getType(entity.type)!} entity={entity.doc!} />
 
                   {/* Leave Combat */}
                   <div className="pt-4 mt-4 border-t border-gray-200">

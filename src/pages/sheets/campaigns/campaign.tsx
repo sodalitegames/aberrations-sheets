@@ -32,7 +32,7 @@ const CampaignCampaignPage = () => {
       <div className="space-y-4">
         {/* Actions */}
         <SheetPagePanel title="Actions">
-          <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'campaign' } })} classes="mt-2">
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })} classes="mt-2">
             Roll Dice
           </Button>
           <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">

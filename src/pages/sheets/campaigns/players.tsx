@@ -13,11 +13,9 @@ import { useResource } from '../../../hooks/useResource';
 import ModalTypes from '../../../utils/ModalTypes';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import classNames from '../../../utils/classNames';
-import { getSpecies } from '../../../utils/helpers/species';
 
 import { FetchedResourceType, Species } from '../../../models/resource';
-import { InteractableType, SheetType } from '../../../models/sheet';
-import { Player } from '../../../models/sheet/resources';
+import { EntityType, InteractableType, SheetType } from '../../../models/sheet';
 
 import ListContainer from '../../../components/data/ListContainer';
 
@@ -56,7 +54,7 @@ const CampaignPlayersPage = () => {
       </div>
 
       {/* Player Actions */}
-      <InteractableActions type="player" id={{ prop: 'playerId', value: player._id }} entity={{ ...player, species: getSpecies(player.speciesId, species) } as Player} />
+      <InteractableActions type={EntityType.players} entity={player} />
 
       {/* Activate or Deactivate */}
       <div className="pt-4 mt-4 border-t border-gray-200">

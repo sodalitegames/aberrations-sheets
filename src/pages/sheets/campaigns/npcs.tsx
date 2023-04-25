@@ -20,7 +20,7 @@ import InteractableActions from '../../../components/content/InteractableActions
 
 import DisplayNpc from '../../../components/display/DisplayNpc';
 
-import { InteractableType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { EntityType, InteractableType, SheetResourceType, SheetType } from '../../../models/sheet';
 
 const CampaignNpcsPage = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const CampaignNpcsPage = () => {
       </div>
 
       {/* Npc Actions */}
-      <InteractableActions type="npc" id={{ prop: 'npcId', value: npc._id }} entity={npc} />
+      <InteractableActions type={EntityType.npcs} entity={npc} />
 
       {/* Activate or Deactivate */}
       {!npc.archived && (

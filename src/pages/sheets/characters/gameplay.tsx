@@ -81,7 +81,7 @@ const CharacterGameplayPage = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center mt-5 ml-5 space-y-2 shrink-0 sm:mt-0">
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character' } })}>Roll Dice</Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>Roll Dice</Button>
             </div>
           </div>
 

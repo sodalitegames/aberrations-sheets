@@ -6,7 +6,7 @@ import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 import { useResource } from '../../../hooks/useResource';
 
 import { AugmentationGroup, FetchedResourceType } from '../../../models/resource';
-import { Entity, EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { SheetEntity, SheetEntityType, SheetResourceType, SheetType } from '../../../models/sheet';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -21,8 +21,8 @@ interface Props {
   data: {
     sheetType: SheetType;
     sheetId: string;
-    entityType: EntityType;
-    entity: Entity;
+    entityType: SheetEntityType;
+    entity: SheetEntity;
   };
 }
 

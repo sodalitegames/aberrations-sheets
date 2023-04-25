@@ -7,7 +7,7 @@ import { SlideOverForm } from '../SlideOver';
 
 import TextArea from '../elements/TextArea';
 
-import { CharacterSheet, Entity, EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { CharacterSheet, SheetEntity, SheetEntityType, SheetResourceType, SheetType } from '../../../models/sheet';
 import { Npc, Player } from '../../../models/sheet/resources';
 
 import { capitalize } from '../../../utils/helpers/strings';
@@ -16,8 +16,8 @@ interface Props {
   data: {
     sheetType: SheetType;
     sheetId: string;
-    entityType: EntityType;
-    entity: Entity;
+    entityType: SheetEntityType;
+    entity: SheetEntity;
   };
 }
 

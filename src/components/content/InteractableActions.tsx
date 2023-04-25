@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
 
 import { useActions } from '../../hooks/useActions';
-import { Creature, Npc, Player } from '../../models/sheet/resources';
+
+import { Entity, EntityType } from '../../models/sheet';
 
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
@@ -9,29 +10,27 @@ import SlideOverTypes from '../../utils/SlideOverTypes';
 import Button from '../Button';
 
 interface InteractableActionsProps {
-  type: 'npc' | 'player' | 'creature';
-  id: {
-    prop: 'npcId' | 'playerId' | 'creatureId';
-    value: string;
-  };
-  entity: Player | Npc | Creature;
+  type: EntityType;
+  entity: Entity;
 }
 
-const InteractableActions: React.VFC<InteractableActionsProps> = ({ type, id, entity }) => {
+const InteractableActions: React.VFC<InteractableActionsProps> = ({ type, entity }) => {
   const { setModal, setSlideOver } = useActions();
 
   return (
     <Fragment>
-      <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: type, [id.prop]: id.value } })}>Roll Dice</Button>
-      <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: type, [id.prop]: id.value } })}>Take Damage</Button>
-      <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: type, [id.prop]: id.value } })}>Heal Damage</Button>
+      <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>Roll Dice</Button>
+      <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollStat, data: { entityType: type, entityId: entity._id } })}>Roll Stat</Button>
 
-      {(type === 'player' || type === 'npc') && (
+      <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: type, entity } })}>Take Damage</Button>
+      <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: type, entity } })}>Heal Damage</Button>
+
+      {(type === 'players' || type === 'npcs') && (
         <Fragment>
-          <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: type, [id.prop]: id.value } })}>Pay Money</Button>
-          <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: type, [id.prop]: id.value } })}>Recieve Money</Button>
-          <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: type, [id.prop]: id.value } })}>Take A Rest</Button>
-          <Button onClick={() => setModal({ type: ModalTypes.reachMilestone, data: { type: type, [id.prop]: id.value, entity } })}>Reach Milestone</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: type, entity } })}>Pay Money</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: type, entity } })}>Recieve Money</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: type, entity } })}>Take A Rest</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.reachMilestone, data: { type: type, entity } })}>Reach Milestone</Button>
         </Fragment>
       )}
     </Fragment>

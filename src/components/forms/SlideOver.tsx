@@ -25,7 +25,6 @@ import NewCampaign from './slide-over/NewCampaign';
 
 // Character Sheet
 import ManageCharacter from './slide-over/ManageCharacter';
-import RollDice from './slide-over/RollDice';
 import ManageEquippedBelongings from './slide-over/ManageEquippedBelongings';
 import PurchaseAugmentation from './slide-over/PurchaseAugmentation';
 
@@ -42,6 +41,8 @@ import EnvironmentForm from './slide-over/EnvironmentForm';
 import ManageAssignedBelongings from './slide-over/ManageAssignedBelongings';
 
 // Shared
+import RollDice from './slide-over/RollDice';
+import RollStat from './slide-over/RollStat';
 import LogForm from './slide-over/LogForm';
 import NewWeaponForm from './slide-over/NewWeaponForm';
 import EditWeaponForm from './slide-over/EditWeaponForm';
@@ -283,7 +284,8 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageAssignedBelongings ? <ManageAssignedBelongings data={slideOver.data} /> : null}
                 {/* Shared */}
-                {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.rollStat ? <RollStat data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <ManageEquippedBelongings data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editDescriptionForm ? <EditDescription data={slideOver.data} /> : null}
