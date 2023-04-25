@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { getBelongingType, getBelongingTypeCapitalized } from '../../../utils/helpers/belongings';
+import { getRecipientList } from '../../../utils/functions/getRecipientList';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -35,27 +36,7 @@ const NewTransactionForm: React.FC<Props> = ({ data }) => {
   const [sellPrice, setSellPrice] = useState(0);
   const [message, setMessage] = useState('');
 
-  const getRecipientList = () => {
-    if (data.sheetType === 'characters') {
-      const campaign = (data.sheet as CharacterSheet).campaign;
-
-      if (!campaign) return [];
-
-      const list = campaign.players.filter(player => player._id !== data.sheet._id).map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }));
-
-      list.push({ name: `${campaign.ccNickname || campaign.ccName} (CC)`, id: campaign._id, sheetType: 'campaigns' });
-
-      return list;
-    }
-
-    if (data.sheetType === 'campaigns') {
-      return (data.sheet as CampaignSheet).players.map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }));
-    }
-
-    return [];
-  };
-
-  const recipientList = getRecipientList();
+  const recipientList = getRecipientList(data.sheetType, data.sheet);
 
   useEffect(() => {
     if (data.sheetType === 'characters') {

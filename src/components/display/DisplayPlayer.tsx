@@ -95,27 +95,27 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           menu: [
             {
               text: 'Wallet',
-              click: () => setModal({ type: ModalTypes.editWallet, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editWallet, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Mortality',
-              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editMortality, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Experience',
-              click: () => setModal({ type: ModalTypes.editExperience, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editExperience, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Health',
-              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Milestones',
-              click: () => setModal({ type: ModalTypes.editMilestones, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Modifiers',
-              click: () => setModal({ type: ModalTypes.editModifiers, data: { type: 'player', resource: player } }),
+              click: () => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'players', entity: player } }),
             },
           ],
         }}
@@ -127,10 +127,10 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
       <Heading
         edit={{
           menu: [
-            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, id: 'strength', data: { type: 'player', resource: player } }) },
-            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'player', resource: player } }) },
-            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'player', resource: player } }) },
-            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'player', resource: player } }) },
+            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'strength', entityType: 'players', entity: player } }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'agility', entityType: 'players', entity: player } }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'persona', entityType: 'players', entity: player } }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'aptitude', entityType: 'players', entity: player } }) },
           ],
         }}
       >
@@ -150,10 +150,10 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'player', resource: player } }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'player', resource: player } }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'player', resource: player } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'player', resource: player } }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'slowed', entityType: 'players', entity: player } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'agony', entityType: 'players', entity: player } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'injured', entityType: 'players', entity: player } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'disturbed', entityType: 'players', entity: player } }) },
           ],
         }}
       >

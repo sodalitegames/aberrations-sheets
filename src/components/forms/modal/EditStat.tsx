@@ -8,80 +8,66 @@ import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet
 
 import { capitalize } from '../../../utils/helpers/strings';
 
-import { SheetResourceType, SheetType, StatType } from '../../../models/sheet';
+import { Entity, EntityType, SheetResourceType, SheetType, StatType } from '../../../models/sheet';
 
 import { ModalForm } from '../Modal';
 
 import Select from '../elements/Select';
 
-interface EditStatProps {
-  id: StatType;
+interface Props {
   data: {
-    type: 'character' | 'player' | 'npc' | 'creature';
-    resource: {
-      _id: string;
-      strength: {
-        die: number;
-      };
-      agility: {
-        die: number;
-      };
-      persona: {
-        die: number;
-      };
-      aptitude: {
-        die: number;
-      };
-    };
+    stat: StatType;
+    entityType: EntityType;
+    entity: Entity;
   };
 }
 
-const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
+const EditStat: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter)!;
   const campSheet = useSelector(selectCurrentCampaign)!;
 
-  const [die, setDie] = useState<string | number>(data.resource[id].die);
+  const [die, setDie] = useState<string | number>(data.entity[data.stat].die);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let body = {
-      [id]: { die },
+      [data.stat]: { die },
     };
 
-    switch (data.type) {
-      case 'character':
+    switch (data.entityType) {
+      case 'characters':
         dispatch(
           updateSheetStart(SheetType.characters, charSheet._id, body, {
             modal: true,
-            notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your ${id.toLowerCase()} stat.` },
+            notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your ${data.stat} stat.` },
           })
         );
         return;
-      case 'player':
+      case 'players':
         dispatch(
-          updateSheetStart(SheetType.characters, data.resource._id, body, {
+          updateSheetStart(SheetType.characters, data.entity._id, body, {
             forPlayer: true,
             modal: true,
-            notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your player's ${id.toLowerCase()} stat.` },
+            notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your player's ${data.stat} stat.` },
           })
         );
         return;
-      case 'npc':
+      case 'npcs':
         dispatch(
-          updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.npcs, data.resource._id, body, {
+          updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.npcs, data.entity._id, body, {
             modal: true,
-            notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your npcs's ${id.toLowerCase()} stat.` },
+            notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your npcs's ${data.stat} stat.` },
           })
         );
         return;
-      case 'creature':
+      case 'creatures':
         dispatch(
-          updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.creatures, data.resource._id, body, {
+          updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.creatures, data.entity._id, body, {
             modal: true,
-            notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your creature's ${id.toLowerCase()} stat.` },
+            notification: { status: 'success', heading: 'Stats Updated', message: `You have successfully updated your creature's ${data.stat} stat.` },
           })
         );
         return;
@@ -90,13 +76,8 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
     }
   };
 
-  const selectDie = (e: any) => {
-    if (!e.target.value) return setDie('');
-    setDie(e.target.value);
-  };
-
   return (
-    <ModalForm title={`Edit ${capitalize(id)} Stat`} submitText={`Save changes`} submitHandler={submitHandler}>
+    <ModalForm title={`Edit ${capitalize(data.stat)} Stat`} submitText={`Save changes`} submitHandler={submitHandler}>
       <Select
         label="Die"
         name="die"
@@ -113,7 +94,7 @@ const EditStat: React.FC<EditStatProps> = ({ id, data }) => {
           { name: 'D18', id: '18' },
           { name: 'D20', id: '20' },
         ]}
-        changeHandler={selectDie}
+        changeHandler={setDie}
       />
     </ModalForm>
   );

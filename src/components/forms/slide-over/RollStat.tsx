@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { roll } from '@aberrations-rpg/functions';
+import { RollResults } from '@aberrations-rpg/functions/lib/roll/roll';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
@@ -17,9 +18,7 @@ import Input from '../elements/Input';
 import Select from '../elements/Select';
 import Detail from '../elements/Detail';
 
-import { CharacterSheet, EntityType, Stat, StatType } from '../../../models/sheet';
-import { Creature, Npc, Player } from '../../../models/sheet/resources';
-import { RollResults } from '@aberrations-rpg/functions/lib/roll/roll';
+import { Entity, EntityType, Stat, StatType } from '../../../models/sheet';
 
 interface Props {
   data: {
@@ -41,7 +40,7 @@ const RollDice: React.FC<Props> = ({ data }) => {
 
   const [results, setResults] = useState<RollResults | null>(null);
 
-  const [entity, setEntity] = useState<CharacterSheet | Creature | Npc | Player | null>(null);
+  const [entity, setEntity] = useState<Entity | null>(null);
 
   const stat: Stat | null = entity && statType ? entity[statType] : null;
 

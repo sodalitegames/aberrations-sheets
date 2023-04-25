@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
@@ -12,76 +12,50 @@ import Input from '../elements/Input';
 import Select from '../elements/Select';
 import TextArea from '../elements/TextArea';
 
-const PayMoney = ({ data: { type, playerId, npcId } }) => {
+import { getRecipientList } from '../../../utils/functions/getRecipientList';
+
+import { SheetEntity, SheetEntityType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Npc } from '../../../models/sheet/resources';
+
+const getSheetType = (entityType: SheetEntityType) => {
+  switch (entityType) {
+    case 'characters':
+      return SheetType.characters;
+    case 'players':
+    case 'npcs':
+      return SheetType.campaigns;
+    default:
+      break;
+  }
+};
+
+interface Props {
+  data: {
+    entityType: SheetEntityType;
+    entity: SheetEntity;
+  };
+}
+
+const PayMoney: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
+
+  const sheet = {
+    characters: charSheet,
+    players: campSheet,
+    npcs: campSheet,
+  };
 
   const [senderName, setSenderName] = useState('');
   const [recipientId, setRecipientId] = useState('');
   const [amount, setAmount] = useState(0);
   const [message, setMessage] = useState('');
 
-  const [recipientList, setRecipientList] = useState([]);
+  const recipientList = getRecipientList(getSheetType(data.entityType)!, sheet[data.entityType]!);
 
-  const [sheet, setSheet] = useState(null);
-
-  useEffect(() => {
-    switch (type) {
-      case 'character':
-        setSheet(charSheet);
-        return;
-      case 'player':
-        const player = campSheet.players.find(player => player._id === playerId);
-        setSheet(player);
-        return;
-      case 'npc':
-        const npc = campSheet.npcs.find(npc => npc._id === npcId);
-        setSheet(npc);
-        return;
-      default:
-        return;
-    }
-  }, [charSheet, campSheet, type, playerId, npcId]);
-
-  useEffect(() => {
-    if (sheet) {
-      setSenderName(sheet.characterName || sheet.name);
-
-      let newRecipientList = [];
-
-      switch (type) {
-        case 'character':
-          newRecipientList = charSheet.campaign
-            ? charSheet.campaign.players.filter(player => player._id !== charSheet._id).map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }))
-            : [];
-
-          if (charSheet.campaign) newRecipientList.push({ name: `${charSheet.campaign.ccNickname || charSheet.campaign.ccName} (CC)`, id: charSheet.campaign._id, sheetType: 'campaigns' });
-          break;
-        case 'player':
-        case 'npc':
-          newRecipientList = campSheet.players.map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }));
-
-          newRecipientList.push({ name: `${campSheet.ccNickname || campSheet.ccName} (CC)`, id: campSheet._id, sheetType: 'campaigns' });
-
-          break;
-        default:
-          break;
-      }
-
-      newRecipientList.push({ name: 'None', id: '' });
-
-      setRecipientList(newRecipientList);
-    }
-  }, [campSheet, sheet, type, charSheet]);
-
-  const selectRecipient = e => {
-    if (!e.target.value) return setRecipientId('');
-    setRecipientId(e.target.value);
-  };
-
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (recipientId) {
@@ -89,13 +63,15 @@ const PayMoney = ({ data: { type, playerId, npcId } }) => {
 
       const recipientInfo = recipientList.find(recip => recip.id === recipientId);
 
-      switch (type) {
-        case 'player':
+      if (!recipientInfo) return alert('You must choose a recipient!');
+
+      switch (data.entityType) {
+        case 'players':
           dispatch(
             createSheetResourceStart(
-              'characters',
-              sheet._id,
-              'transactions',
+              SheetType.characters,
+              data.entity._id,
+              SheetResourceType.transactions,
               {
                 sheetType: 'characters',
                 senderName,
@@ -119,12 +95,12 @@ const PayMoney = ({ data: { type, playerId, npcId } }) => {
             )
           );
           return;
-        case 'character':
+        case 'characters':
           dispatch(
             createSheetResourceStart(
-              'characters',
-              charSheet._id,
-              'transactions',
+              SheetType.characters,
+              data.entity._id,
+              SheetResourceType.transactions,
               {
                 sheetType: 'characters',
                 senderName,
@@ -147,12 +123,12 @@ const PayMoney = ({ data: { type, playerId, npcId } }) => {
             )
           );
           return;
-        case 'npc':
+        case 'npcs':
           dispatch(
             createSheetResourceStart(
-              'campaigns',
-              campSheet._id,
-              'transactions',
+              SheetType.campaigns,
+              (data.entity as Npc).sheetId,
+              SheetResourceType.transactions,
               {
                 sheetType: 'campaigns',
                 senderName,
@@ -180,35 +156,35 @@ const PayMoney = ({ data: { type, playerId, npcId } }) => {
       }
     }
 
-    switch (type) {
-      case 'player':
+    switch (data.entityType) {
+      case 'players':
         dispatch(
           updateSheetStart(
-            'characters',
-            sheet._id,
-            { wallet: sheet.wallet - +amount },
+            SheetType.characters,
+            data.entity._id,
+            { wallet: data.entity.wallet - +amount },
             { modal: true, notification: { status: 'success', heading: 'Money Paid', message: `You have successfully paid ${amount} monies.` } }
           )
         );
         return;
-      case 'character':
+      case 'characters':
         dispatch(
           updateSheetStart(
-            'characters',
-            charSheet._id,
-            { wallet: charSheet.wallet - +amount },
+            SheetType.characters,
+            data.entity._id,
+            { wallet: data.entity.wallet - +amount },
             { modal: true, notification: { status: 'success', heading: 'Money Paid', message: `You have successfully paid ${amount} monies.` } }
           )
         );
         return;
-      case 'npc':
+      case 'npcs':
         dispatch(
           updateSheetResourceStart(
-            'campaigns',
-            campSheet._id,
-            'npcs',
-            npcId,
-            { wallet: sheet.wallet - +amount },
+            SheetType.campaigns,
+            (data.entity as Npc).sheetId,
+            SheetResourceType.npcs,
+            data.entity._id,
+            { wallet: data.entity.wallet - +amount },
             { modal: true, notification: { status: 'success', heading: 'Money Paid', message: `You have successfully paid ${amount} monies.` } }
           )
         );
@@ -221,7 +197,7 @@ const PayMoney = ({ data: { type, playerId, npcId } }) => {
   return (
     <ModalForm title="Pay Money" submitText={`Pay ${amount} monies`} submitHandler={submitHandler}>
       {recipientId ? <Input label="Sender Name" name="senderName" type="text" value={senderName} changeHandler={setSenderName} required /> : null}
-      <Select label="Recipient (Opt.)" name="recipientId" options={recipientList} changeHandler={selectRecipient} />
+      <Select label="Recipient (Opt.)" name="recipientId" options={recipientList} value={recipientId} changeHandler={setRecipientId} />
       <Input label="How much money?" name="amount" type="number" value={amount} changeHandler={setAmount} />
       {recipientId ? <TextArea label="Message (Opt.)" name="message" rows={4} value={message} changeHandler={setMessage} /> : null}
     </ModalForm>

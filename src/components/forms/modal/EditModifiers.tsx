@@ -1,24 +1,20 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FormikHelpers } from 'formik';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { ModalForm } from '../Modal';
 
 import List from '../elements/List';
-import { SheetResourceType, SheetType } from '../../../models/sheet';
 
-interface EditModifiersProps {
+import { Entity, EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Creature, Npc } from '../../../models/sheet/resources';
+
+interface Props {
   data: {
-    type: 'character' | 'player' | 'npc' | 'creature';
-    resource: {
-      _id: string;
-      modifiers: { modifier: string; amount: number }[];
-    };
+    entityType: EntityType;
+    entity: Entity;
   };
 }
 
@@ -26,59 +22,56 @@ type FormValues = {
   modifiers: { modifier: string; amount: number }[];
 };
 
-const EditModifiers: React.VFC<EditModifiersProps> = ({ data }) => {
+const EditModifiers: React.VFC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter)!;
-  const campSheet = useSelector(selectCurrentCampaign)!;
-
   const [initialValues] = useState<FormValues>({
-    modifiers: data.resource.modifiers,
+    modifiers: data.entity.modifiers,
   });
 
   const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     const { modifiers } = values;
 
-    switch (data.type) {
-      case 'character':
+    switch (data.entityType) {
+      case 'characters':
         dispatch(
           updateSheetStart(
             SheetType.characters,
-            charSheet._id,
+            data.entity._id,
             { modifiers },
             { modal: true, notification: { status: 'success', heading: 'Modifiers Updated', message: `You have successfully updated your modifiers.` } }
           )
         );
         return;
-      case 'player':
+      case 'players':
         dispatch(
           updateSheetStart(
             SheetType.characters,
-            data.resource._id,
+            data.entity._id,
             { modifiers },
             { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Modifers Updated', message: `You have successfully updated your player's modifiers.` } }
           )
         );
         return;
-      case 'npc':
+      case 'npcs':
         dispatch(
           updateSheetResourceStart(
             SheetType.campaigns,
-            campSheet._id,
+            (data.entity as Npc).sheetId,
             SheetResourceType.npcs,
-            data.resource._id,
+            data.entity._id,
             { modifiers },
             { modal: true, notification: { status: 'success', heading: 'Modifiers Updated', message: `You have successfully updated your npc's modifiers.` } }
           )
         );
         return;
-      case 'creature':
+      case 'creatures':
         dispatch(
           updateSheetResourceStart(
             SheetType.campaigns,
-            campSheet._id,
+            (data.entity as Creature).sheetId,
             SheetResourceType.creatures,
-            data.resource._id,
+            data.entity._id,
             { modifiers },
             { modal: true, notification: { status: 'success', heading: 'Modifiers Updated', message: `You have successfully updated your creature's modifiers.` } }
           )

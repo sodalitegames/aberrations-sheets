@@ -102,27 +102,27 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
           menu: [
             {
               text: 'Wallet',
-              click: () => setModal({ type: ModalTypes.editWallet, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editWallet, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Mortality',
-              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editMortality, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Experience',
-              click: () => setModal({ type: ModalTypes.editExperience, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editExperience, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Health',
-              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Milestones',
-              click: () => setModal({ type: ModalTypes.editMilestones, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Modifiers',
-              click: () => setModal({ type: ModalTypes.editModifiers, data: { type: 'npc', resource: npc } }),
+              click: () => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'npcs', entity: npc } }),
             },
           ],
         }}
@@ -134,10 +134,10 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           menu: [
-            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, id: 'strength', data: { type: 'npc', resource: npc } }) },
-            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'npc', resource: npc } }) },
-            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'npc', resource: npc } }) },
-            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'npc', resource: npc } }) },
+            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'strength', entityType: 'npcs', entity: npc } }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'agility', entityType: 'npcs', entity: npc } }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'persona', entityType: 'npcs', entity: npc } }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'aptitude', entityType: 'npcs', entity: npc } }) },
           ],
         }}
       >
@@ -156,10 +156,10 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'npc', resource: npc } }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'npc', resource: npc } }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'npc', resource: npc } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'npc', resource: npc } }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'slowed', entityType: 'npcs', entity: npc } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'agony', entityType: 'npcs', entity: npc } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'injured', entityType: 'npcs', entity: npc } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'disturbed', entityType: 'npcs', entity: npc } }) },
           ],
         }}
       >

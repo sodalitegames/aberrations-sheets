@@ -1,88 +1,79 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { useDispatch } from 'react-redux';
 
 import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../utils/helpers/strings';
 
-import { SheetResourceType, SheetType, ConditionType } from '../../../models/sheet';
+import { SheetResourceType, SheetType, ConditionType, EntityType, Entity } from '../../../models/sheet';
+import { Creature, Npc } from '../../../models/sheet/resources';
 
 import { ModalForm } from '../Modal';
 
 import Input from '../elements/Input';
 
-interface EditConditionProps {
-  id: ConditionType;
+interface Props {
   data: {
-    type: 'character' | 'player' | 'npc' | 'creature';
-    resource: {
-      _id: string;
-      conditions: {
-        slowed: number;
-        agony: number;
-        injured: number;
-        disturbed: number;
-      };
-    };
+    condition: ConditionType;
+    entityType: EntityType;
+    entity: Entity;
   };
 }
 
-const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
+const EditCondition: React.VFC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter)!;
-  const campSheet = useSelector(selectCurrentCampaign)!;
-
-  const [points, setPoints] = useState(data.resource.conditions[id]);
+  const [points, setPoints] = useState(data.entity.conditions[data.condition]);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    switch (data.type) {
-      case 'character':
+    switch (data.entityType) {
+      case 'characters':
         dispatch(
           updateSheetStart(
             SheetType.characters,
-            charSheet._id,
-            { conditions: { ...charSheet.conditions, [id]: points } },
-            { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your ${id.toLowerCase()} condition.` } }
+            data.entity._id,
+            { conditions: { ...data.entity.conditions, [data.condition]: points } },
+            { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your ${data.condition} condition.` } }
           )
         );
         return;
-      case 'player':
+      case 'players':
         dispatch(
           updateSheetStart(
             SheetType.characters,
-            data.resource._id,
-            { conditions: { ...data.resource.conditions, [id]: points } },
-            { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your player's ${id.toLowerCase()} condition.` } }
+            data.entity._id,
+            { conditions: { ...data.entity.conditions, [data.condition]: points } },
+            {
+              forPlayer: true,
+              modal: true,
+              notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your player's ${data.condition} condition.` },
+            }
           )
         );
         return;
-      case 'npc':
+      case 'npcs':
         dispatch(
           updateSheetResourceStart(
             SheetType.campaigns,
-            campSheet._id,
+            (data.entity as Npc).sheetId,
             SheetResourceType.npcs,
-            data.resource._id,
-            { conditions: { ...data.resource.conditions, [id]: points } },
-            { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your npc's ${id.toLowerCase()} condition.` } }
+            data.entity._id,
+            { conditions: { ...data.entity.conditions, [data.condition]: points } },
+            { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your npc's ${data.condition} condition.` } }
           )
         );
         return;
-      case 'creature':
+      case 'creatures':
         dispatch(
           updateSheetResourceStart(
             SheetType.campaigns,
-            campSheet._id,
+            (data.entity as Creature).sheetId,
             SheetResourceType.creatures,
-            data.resource._id,
-            { conditions: { ...data.resource.conditions, [id]: points } },
-            { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your creature's ${id.toLowerCase()} condition.` } }
+            data.entity._id,
+            { conditions: { ...data.entity.conditions, [data.condition]: points } },
+            { modal: true, notification: { status: 'success', heading: 'Conditions Updated', message: `You have successfully updated your creature's ${data.condition} condition.` } }
           )
         );
         return;
@@ -92,8 +83,8 @@ const EditCondition: React.VFC<EditConditionProps> = ({ id, data }) => {
   };
 
   return (
-    <ModalForm title={`Edit ${capitalize(id)} Condition`} submitText={`Save changes`} submitHandler={submitHandler}>
-      <Input label={`${capitalize(id)} Points`} name={id} type="number" value={points} changeHandler={setPoints} />
+    <ModalForm title={`Edit ${capitalize(data.condition)} Condition`} submitText={`Save changes`} submitHandler={submitHandler}>
+      <Input label={`${capitalize(data.condition)} Points`} name={data.condition} type="number" value={points} changeHandler={setPoints} />
     </ModalForm>
   );
 };
