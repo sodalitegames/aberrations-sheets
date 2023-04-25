@@ -29,21 +29,23 @@ interface PlayerDetailsProps {
 }
 
 const PlayerDetails: React.FC<PlayerDetailsProps> = ({ player, species }) => {
-  const modifiers = calculateModifiers(player.modifiers, player.wearables);
+  const equippedWearables = player.wearables.filter(wear => wear.equipped);
+
+  const modifiers = calculateModifiers(player.modifiers, equippedWearables);
   const abilities = getSpeciesAbility(player.speciesId, species);
 
   return (
     <DescriptionList
       list={[
         { name: 'Player Name', values: [player.playerNickname ? `${player.playerNickname} (${player.playerName})` : player.playerName], half: true },
-        { name: 'Shield Value', values: [calculateShieldValue(player.wearables)], half: true },
+        { name: 'Shield Value', values: [calculateShieldValue(equippedWearables)], half: true },
         { name: 'Species', values: [player.speciesName], half: true },
         { name: 'Mortality', values: [player.mortality], half: true },
         { name: 'Experience', values: [player.experience], half: true },
         { name: 'Wallet', values: [player.wallet], half: true },
         { name: 'Active', values: [player.active ? 'Yes' : 'No'], half: true },
         { name: 'Milestones', values: [player.milestones], half: true },
-        { name: 'Speed', values: [player.speed + calculateSpeedAdjustment(player.wearables)], half: true },
+        { name: 'Speed', values: [player.speed + calculateSpeedAdjustment(equippedWearables)], half: true },
         { name: 'Health', values: [`${player.currentHp}/${player.maxHp}`], half: true },
         { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
         {
@@ -150,10 +152,10 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'slowed', entityType: 'players', entity: player } }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'agony', entityType: 'players', entity: player } }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'injured', entityType: 'players', entity: player } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'disturbed', entityType: 'players', entity: player } }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'slowed', entityType: 'players', entity: player } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'agony', entityType: 'players', entity: player } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'injured', entityType: 'players', entity: player } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'players', entity: player } }) },
           ],
         }}
       >
@@ -182,7 +184,11 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
       <Heading
         edit={{
           text: 'Purchase',
-          click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: player._id, entity: player, entityType: 'players' } }),
+          click: () =>
+            setSlideOver({
+              type: SlideOverTypes.purchaseAugmentation,
+              data: { sheetType: 'characters', sheetId: player._id, entity: player, entityType: 'players', augmentations: player.augmentations },
+            }),
         }}
       >
         Augmentations
@@ -229,7 +235,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.wearables
           .filter(wearable => wearable.equipped)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={SheetType.characters} listItem />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={SheetType.characters} listItem condensed="view" />
           ))}
       </ul>
 

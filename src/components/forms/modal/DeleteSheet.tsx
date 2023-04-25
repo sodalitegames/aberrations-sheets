@@ -35,6 +35,7 @@ const DeleteSheet: React.FC<Props> = ({ data, nested }) => {
 
       dispatch(
         deleteSheetStart(SheetType.characters, charSheet!._id, {
+          slideOver: true,
           modal: nested ? false : true,
           nestedModal: nested ? true : false,
           notification: { status: 'alert', heading: 'Character Sheet Deleted', message: `You have successfully deleted ${charSheet!.characterName}.` },
@@ -51,6 +52,7 @@ const DeleteSheet: React.FC<Props> = ({ data, nested }) => {
 
       dispatch(
         deleteSheetStart(SheetType.campaigns, campSheet!._id, {
+          slideOver: true,
           modal: nested ? false : true,
           nestedModal: nested ? true : false,
           notification: { status: 'alert', heading: 'Campaign Sheet Deleted', message: `You have successfully deleted ${campSheet!.name}.` },

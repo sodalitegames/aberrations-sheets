@@ -53,6 +53,8 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
         current: {
           ...state.current,
           ...(action.payload.updatedSheet as CampaignSheet),
+          // prevent full players array from being overwritten by min players array
+          players: state.current.players,
         },
       };
     case SheetActionTypes.DELETE_SHEET_SUCCESS:
@@ -231,8 +233,8 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
         return state;
       }
 
-      // Transactions are not kept track of in players array
-      if (action.payload.resourceType === 'transactions') {
+      // Transactions, Logs, and Notes are not kept track of in players array
+      if (action.payload.resourceType === 'transactions' || action.payload.resourceType === 'logs' || action.payload.resourceType === 'notes') {
         return state;
       }
 
@@ -252,6 +254,11 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
       const oldPlayerUpdate = state.current.players.find(player => player._id === action.payload.playerId);
 
       if (!oldPlayerUpdate) {
+        return state;
+      }
+
+      // Transactions, Logs, and Notes are not kept track of in players array
+      if (action.payload.resourceType === 'transactions' || action.payload.resourceType === 'logs' || action.payload.resourceType === 'notes') {
         return state;
       }
 
@@ -275,6 +282,11 @@ const campaignReducer = (state: CampaignState = INITIAL_STATE, action: SheetActi
       const oldPlayerDelete = state.current.players.find(player => player._id === action.payload.playerId);
 
       if (!oldPlayerDelete) {
+        return state;
+      }
+
+      // Transactions, Logs, and Notes are not kept track of in players array
+      if (action.payload.resourceType === 'transactions' || action.payload.resourceType === 'logs' || action.payload.resourceType === 'notes') {
         return state;
       }
 

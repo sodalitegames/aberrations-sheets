@@ -7,6 +7,8 @@ import { ModalForm } from '../Modal';
 
 import Input from '../elements/Input';
 
+import { correctCurrentHp } from '../../../utils/functions/updateHealth';
+
 import { Entity, EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
 import { Creature, Npc } from '../../../models/sheet/resources';
 
@@ -32,7 +34,7 @@ const EditHealth: React.VFC<Props> = ({ data }) => {
           updateSheetStart(
             SheetType.characters,
             data.entity._id,
-            { currentHp: +currentHp, maxHp: +maxHp },
+            { currentHp: correctCurrentHp(+currentHp, +maxHp), maxHp: +maxHp },
             { modal: true, notification: { status: 'success', heading: 'Health Updated', message: `You have successfully updated your currentHp to ${currentHp} and maxHp to ${maxHp}.` } }
           )
         );
@@ -42,7 +44,7 @@ const EditHealth: React.VFC<Props> = ({ data }) => {
           updateSheetStart(
             SheetType.characters,
             data.entity._id,
-            { currentHp: +currentHp, maxHp: +maxHp },
+            { currentHp: correctCurrentHp(+currentHp, +maxHp), maxHp: +maxHp },
             {
               forPlayer: true,
               modal: true,
@@ -58,7 +60,7 @@ const EditHealth: React.VFC<Props> = ({ data }) => {
             (data.entity as Npc).sheetId,
             SheetResourceType.npcs,
             data.entity._id,
-            { currentHp: +currentHp, maxHp: +maxHp },
+            { currentHp: correctCurrentHp(+currentHp, +maxHp), maxHp: +maxHp },
             { modal: true, notification: { status: 'success', heading: 'Health Updated', message: `You have successfully updated your npc's currentHp to ${currentHp} and maxHp to ${maxHp}.` } }
           )
         );
@@ -70,7 +72,7 @@ const EditHealth: React.VFC<Props> = ({ data }) => {
             (data.entity as Creature).sheetId,
             SheetResourceType.creatures,
             data.entity._id,
-            { currentHp: +currentHp, maxHp: +maxHp },
+            { currentHp: correctCurrentHp(+currentHp, +maxHp), maxHp: +maxHp },
             {
               modal: true,
               notification: { status: 'success', heading: 'currentHp Updated', message: `You have successfully updated your creature's currentHp to ${currentHp} and maxHp to ${maxHp}.` },

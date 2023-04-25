@@ -1,9 +1,4 @@
 import { Conditions, Modifier, Stat } from '../_partials';
-import { Augmentation } from './Augmentation';
-import { Consumable } from './Consumable';
-import { Usable } from './Usable';
-import { Weapon } from './Weapon';
-import { Wearable } from './Wearable';
 
 export interface Npc {
   _id: string;
@@ -37,12 +32,6 @@ export interface Npc {
 
   speed: number;
   shieldValue: number;
-
-  augmentations: Augmentation[];
-  weapons: Weapon[];
-  wearables: Wearable[];
-  consumables: Consumable[];
-  usables: Usable[];
 
   active: boolean;
   archived: boolean;

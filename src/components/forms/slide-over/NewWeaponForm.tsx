@@ -90,8 +90,6 @@ const NewWeaponForm: React.FC<Props> = ({ data }) => {
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!weapon) return alert('Must provide a weapon');
-
     if (!damageModifier) return alert('Must provide damageModifier');
     if (!quantity) return alert('Must provide a quantity');
 
@@ -105,12 +103,14 @@ const NewWeaponForm: React.FC<Props> = ({ data }) => {
           data.sheetType,
           data.sheetId,
           SheetResourceType.weapons,
-          { type: weapon, name, nickname, associatedStat, damageModifier, range, ability, quantity, description },
+          { type: weaponId, name, nickname, associatedStat, damageModifier, range, ability, quantity, description },
           { slideOver: true, notification: { status: 'success', heading: 'Weapon Created', message: `You have successfully created ${nickname || name}.` } }
         )
       );
       return;
     }
+
+    if (!weapon) return alert('Must provide a weapon');
 
     dispatch(
       createSheetResourceStart(

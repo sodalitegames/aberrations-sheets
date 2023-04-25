@@ -41,6 +41,7 @@ export type ListItemAction = {
   text: string;
   dark?: boolean;
   click: () => void;
+  disabled?: boolean;
 };
 
 interface ListItemProps extends ButtonPanelProps {
@@ -83,7 +84,7 @@ const ListItem: React.FC<ListItemProps> = ({ heading, editable, deletable, editT
           {actions ? (
             <div className="space-x-4">
               {actions.map((button, index) => (
-                <Button key={index} rounded dark={button.dark} onClick={button.click}>
+                <Button key={index} rounded dark={button.dark} onClick={button.click} disabled={button.disabled}>
                   {button.text}
                 </Button>
               ))}

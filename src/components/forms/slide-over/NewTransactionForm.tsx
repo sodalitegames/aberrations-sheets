@@ -120,6 +120,14 @@ const NewTransactionForm: React.FC<Props> = ({ data }) => {
           message={`If sent and accepted, transferring this ${getBelongingType(data.documentType as unknown as BelongingType)} will unequip it from your person.`}
         />
       ) : null}
+
+      {(data.document as Belonging).npcId ? (
+        <Notice
+          noIcon
+          status={NoticeStatus.Warn}
+          message={`If sent and accepted, transferring this ${getBelongingType(data.documentType as unknown as BelongingType)} will unassign it from your npc.`}
+        />
+      ) : null}
     </SlideOverForm>
   );
 };

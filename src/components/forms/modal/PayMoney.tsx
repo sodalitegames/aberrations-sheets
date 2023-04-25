@@ -14,8 +14,8 @@ import TextArea from '../elements/TextArea';
 
 import { getRecipientList } from '../../../utils/functions/getRecipientList';
 
-import { SheetEntity, SheetEntityType, SheetResourceType, SheetType } from '../../../models/sheet';
-import { Npc } from '../../../models/sheet/resources';
+import { CharacterSheet, SheetEntity, SheetEntityType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Npc, Player } from '../../../models/sheet/resources';
 
 const getSheetType = (entityType: SheetEntityType) => {
   switch (entityType) {
@@ -48,7 +48,7 @@ const PayMoney: React.FC<Props> = ({ data }) => {
     npcs: campSheet,
   };
 
-  const [senderName, setSenderName] = useState('');
+  const [senderName, setSenderName] = useState((data.entity as Player | CharacterSheet).characterName || (data.entity as Npc).name);
   const [recipientId, setRecipientId] = useState('');
   const [amount, setAmount] = useState(0);
   const [message, setMessage] = useState('');
@@ -163,7 +163,7 @@ const PayMoney: React.FC<Props> = ({ data }) => {
             SheetType.characters,
             data.entity._id,
             { wallet: data.entity.wallet - +amount },
-            { modal: true, notification: { status: 'success', heading: 'Money Paid', message: `You have successfully paid ${amount} monies.` } }
+            { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Money Paid', message: `You have successfully paid ${amount} monies.` } }
           )
         );
         return;

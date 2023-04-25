@@ -88,7 +88,7 @@ const ErrorEquippingBelonging: React.FC<Props> = ({ data, nested }) => {
 
       // Unequip the chosen belonging to replace
       equipBelonging({
-        sheetType: 'characters',
+        sheetType: data.sheetType,
         sheet,
         belongingType: data.belongingType,
         belonging: wearableToReplace,
@@ -98,7 +98,7 @@ const ErrorEquippingBelonging: React.FC<Props> = ({ data, nested }) => {
       // Equip the belonging that is replacing the old equipped belonging
       equipBelonging(
         {
-          sheetType: 'characters',
+          sheetType: data.sheetType,
           sheet,
           belongingType: data.belongingType,
           belonging: data.belonging,
@@ -112,12 +112,12 @@ const ErrorEquippingBelonging: React.FC<Props> = ({ data, nested }) => {
     if (!belongingToReplace) return alert('You must select an equipped belonging to replace.');
 
     // Unequip the chosen belonging to replace
-    equipBelonging({ sheetType: 'characters', sheet, belongingType: data.belongingType, belonging: belongingToReplace, equippedList: equippedBelongings });
+    equipBelonging({ sheetType: data.sheetType, sheet, belongingType: data.belongingType, belonging: belongingToReplace, equippedList: equippedBelongings });
 
     // Equip the belonging that is replacing the old equipped belonging
     equipBelonging(
       {
-        sheetType: 'characters',
+        sheetType: data.sheetType,
         sheet,
         belongingType: data.belongingType,
         belonging: data.belonging,

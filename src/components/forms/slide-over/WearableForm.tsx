@@ -36,8 +36,6 @@ type FormValues = {
 const WearableForm: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  console.log('data', data);
-
   const [initialValues, setInitialValues] = useState<FormValues>({
     name: '',
     description: '',

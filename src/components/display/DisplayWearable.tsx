@@ -48,7 +48,6 @@ interface DisplayWearableProps extends DisplayProps, DisplayBelongingProps {
 }
 
 const DisplayWearable: React.FC<DisplayWearableProps> = ({ wearable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
-  console.log('sheet type:', sheetType);
   if (listItem) {
     if (condensed === 'view') {
       return (

@@ -18,6 +18,7 @@ import DisplayNpc from '../../display/DisplayNpc';
 
 import { Belonging, BelongingType, SheetResourceType, SheetType } from '../../../models/sheet';
 import { FetchedResourceType, Species } from '../../../models/resource';
+import { Weapon } from '../../../models/sheet/resources';
 
 interface Props {
   data: {
@@ -63,7 +64,12 @@ const AssignBelonging: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <ModalForm title={`Assign ${npc?.name}`} submitText={`Assign ${npc?.name} ${npc ? `to ${npc.name}` : ''}`} submitHandler={submitHandler} submitDisabled={!npcId}>
+    <ModalForm
+      title={`Assign ${(data.belonging as Weapon).nickname || data.belonging.name}`}
+      submitText={`Assign ${(data.belonging as Weapon).nickname || data.belonging.name} ${npc ? `to ${npc.name}` : ''}`}
+      submitHandler={submitHandler}
+      submitDisabled={!npcId}
+    >
       <Select label="Assign to Npc" name="npcId" value={npcId} options={campSheet.npcs.filter(npc => npc.active).map(npc => ({ name: npc.name, id: npc._id }))} changeHandler={setNpcId} required />
       {npc ? (
         <ListContainer list={[npc]} classes="mt-4">

@@ -69,14 +69,15 @@ const CampaignCombatPage = () => {
 
   const combat = combats.find(comb => comb._id === combatId) || combats[0];
 
-  const combatants: CombatantEntity[] = combat.combatants.map(comba => {
-    const entity = potentialCombatants.find(ent => ent._id === comba._id);
-    console.log('combatants mapped');
-    return {
-      ...comba,
-      doc: entity ? entity : null,
-    };
-  });
+  const combatants: CombatantEntity[] = combat
+    ? combat.combatants.map(comba => {
+        const entity = potentialCombatants.find(ent => ent._id === comba._id);
+        return {
+          ...comba,
+          doc: entity ? entity : null,
+        };
+      })
+    : [];
 
   const entity: CombatantEntity = combatants.find(ent => ent._id === entityId) || combatants[0];
 

@@ -7,6 +7,7 @@ import { useResource } from '../../../hooks/useResource';
 
 import { AugmentationGroup, FetchedResourceType } from '../../../models/resource';
 import { SheetEntity, SheetEntityType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Augmentation } from '../../../models/sheet/resources';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -23,6 +24,7 @@ interface Props {
     sheetId: string;
     entityType: SheetEntityType;
     entity: SheetEntity;
+    augmentations: Augmentation[];
   };
 }
 
@@ -31,13 +33,13 @@ const PurchaseAugmentation: React.FC<Props> = ({ data }) => {
 
   const augmentationGroups = useResource(FetchedResourceType.AugmentationGroups) as AugmentationGroup[];
 
-  const augmentationPoints = calculateAugmentationPoints(data.entity.milestones, data.entity.augmentations);
+  const augmentationPoints = calculateAugmentationPoints(data.entity.milestones, data.augmentations);
 
   const options = (augmentationGroups || []).map(group => {
     const children = group.augmentations.map(aug => {
       let purchased = false;
 
-      data.entity.augmentations.forEach(charsAug => {
+      data.augmentations.forEach(charsAug => {
         if (charsAug.universalId === aug.id) purchased = true;
       });
 
@@ -82,7 +84,11 @@ const PurchaseAugmentation: React.FC<Props> = ({ data }) => {
         data.sheetId,
         SheetResourceType.augmentations,
         { name, pointCost, description, universalId, npcId: data.sheetType === 'campaigns' ? data.entity._id : undefined },
-        { forPlayer: data.entityType === 'players' ? true : false, notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` } }
+        {
+          forPlayer: data.entityType === 'players' ? true : false,
+          slideOver: true,
+          notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` },
+        }
       )
     );
   };

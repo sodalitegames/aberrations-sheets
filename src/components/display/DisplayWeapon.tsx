@@ -59,7 +59,7 @@ const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, action
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem heading={`${weapon.name} (Mod +${weapon.damageModifier})`} view={{ type: ModalTypes.showBelonging, data: { belongingType: 'weapons', belonging: weapon } }}>
+        <ListItem heading={`${weapon.nickname || weapon.name} (Mod +${weapon.damageModifier})`} view={{ type: ModalTypes.showBelonging, data: { belongingType: 'weapons', belonging: weapon } }}>
           <InfoList list={createWeaponList(weapon.associatedStat, getWeaponRangeString(weapon.range), weapon.ability)} />
         </ListItem>
       );
@@ -86,7 +86,7 @@ const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, action
             resource: weapon,
             title: `Are you sure you want to delete ${weapon.nickname || weapon.name}?`,
             submitText: `Yes, delete ${weapon.nickname || weapon.name}`,
-            notification: { heading: 'Weapon Deleted', message: `You have successfully deleted ${weapon.name}.` },
+            notification: { heading: 'Weapon Deleted', message: `You have successfully deleted ${weapon.nickname || weapon.name}.` },
           },
         }}
       >

@@ -9,13 +9,13 @@ interface Props {
   sheetType: SheetType;
   sheetId: string;
   list: Interactable[];
-  interactable: Interactable;
+  interactable?: Interactable;
   type: InteractableType;
   label: string;
   show: string | null;
-  id: string;
-  Display: React.FC;
-  Actions: React.FC;
+  id?: string;
+  Display: React.FC | null;
+  Actions: React.FC | null;
   List?: React.FC;
 }
 
@@ -36,13 +36,9 @@ const InteractablesPageContent: React.FC<Props> = ({ sheetType, sheetId, show, i
       <SheetPagePanel title={`Selected ${label}`} colSpan={3}>
         {interactable ? (
           <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
-            <div className="col-span-2">
-              <Display />
-            </div>
+            <div className="col-span-2">{Display ? <Display /> : 'Loading...'}</div>
 
-            <div className="col-span-1 pl-8 space-y-4">
-              <Actions />
-            </div>
+            <div className="col-span-1 pl-8 space-y-4">{Actions ? <Actions /> : 'Loading...'}</div>
           </div>
         ) : (
           <p className="text-sm italic text-gray-400">Please create or select a {label} to get started.</p>

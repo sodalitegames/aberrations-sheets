@@ -37,7 +37,7 @@ const ManageAssignedBelongings: React.FC<Props> = ({ data }) => {
 
   const campSheet = useSelector(selectCurrentCampaign)!;
 
-  const belongings = (campSheet[data.belongingType] as Belonging[]).filter(belonging => belonging.npcId === data.npc._id || !belonging.npcId);
+  const belongings = (campSheet[data.belongingType] as Belonging[]).filter(bel => !bel.archived).filter(belonging => belonging.npcId === data.npc._id || !belonging.npcId);
 
   return (
     <SlideOverContainer title={`Manage assigned ${capitalize(data.belongingType)}`} description={`Manage assigned ${capitalize(data.belongingType)} below.`} cancelText="Done">
@@ -211,7 +211,7 @@ const ManageAssignedBelongings: React.FC<Props> = ({ data }) => {
             })}
           </ListContainer>
         ) : (
-          'You do not have any {belongingType}, create one now.'
+          <Notice status={NoticeStatus.Warn} message={`You do not have any unassigned ${data.belongingType}.`} classes="mt-4" />
         )}
       </div>
     </SlideOverContainer>

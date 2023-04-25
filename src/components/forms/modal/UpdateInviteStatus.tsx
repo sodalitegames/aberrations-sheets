@@ -34,7 +34,7 @@ const UpdateInviteStatus: React.FC<Props> = ({ data, nested }) => {
     dispatch(
       updateSheetResourceStart(
         data.sheetType,
-        data.invite.sheetId,
+        data.sheetType === 'characters' ? data.invite.charSheetId : data.invite.sheetId,
         SheetResourceType.invites,
         data.invite._id,
         { status: status },

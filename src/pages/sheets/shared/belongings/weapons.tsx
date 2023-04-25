@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { selectCurrentCharacter, selectWeapons as selectCharWeapons, selectArchivedWeapons as selectCharArchivedWeapons } from '../../../../redux/character/character.selectors';
+import { selectCurrentCharacter, selectWeapons as selectCharWeapons, selectArchivedWeapons as selectCharArchivedWeapons, selectEquippedWeapons } from '../../../../redux/character/character.selectors';
 import { selectCurrentCampaign, selectWeapons as selectCampWeapons, selectArchivedWeapons as selectCampArchivedWeapons } from '../../../../redux/campaign/campaign.selectors';
 
 import InteractablesPageContent from '../../../../components/content/InteractablesPageContent';
@@ -27,6 +27,7 @@ const SheetBelongingsWeaponsPage: React.FC<Props> = ({ sheetType }) => {
   };
 
   const charWeapons = useSelector(selectCharWeapons);
+  const equippedWeapons = useSelector(selectEquippedWeapons);
   const campWeapons = useSelector(selectCampWeapons);
   const charArchivedWeapons = useSelector(selectCharArchivedWeapons);
   const campArchivedWeapons = useSelector(selectCampArchivedWeapons);
@@ -43,15 +44,17 @@ const SheetBelongingsWeaponsPage: React.FC<Props> = ({ sheetType }) => {
   const list = getList();
   const weapon = list.find(weap => weap._id === id) || list[0];
 
-  const Display = () => <DisplayWeapon weapon={weapon} sheetType={sheetType} />;
-  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]!} belongingType={BelongingType.weapons} belonging={weapon} />;
+  const Display = weapon ? () => <DisplayWeapon weapon={weapon} sheetType={sheetType} /> : null;
+  const Actions = weapon
+    ? () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]!} belongingType={BelongingType.weapons} belonging={weapon} equippedBelongings={equippedWeapons} />
+    : null;
 
   return (
     <InteractablesPageContent
       sheetType={sheetType}
       sheetId={sheets[sheetType]!._id}
       show={show}
-      id={weapon._id}
+      id={weapon?._id}
       list={list}
       type={InteractableType.weapons}
       label="Weapon"

@@ -137,13 +137,7 @@ const CreatureForm: React.FC<Props> = ({ data }) => {
       {typesOptions ? (
         <CheckboxGroup slideOver label="Types">
           {typesOptions.map(type => (
-            <BasicCheckbox
-              key={type.universalId}
-              heading={type.name}
-              checked={data.creature ? !!types.find(tp => tp.universalId === type.universalId) : false}
-              description={type.description}
-              name={type.universalId}
-            />
+            <BasicCheckbox key={type.universalId} heading={type.name} checked={Boolean(types.find(tp => tp.universalId === type.universalId))} description={type.description} name={type.universalId} />
           ))}
         </CheckboxGroup>
       ) : (

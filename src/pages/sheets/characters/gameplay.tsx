@@ -349,14 +349,22 @@ const CharacterGameplayPage = () => {
           <ListContainer
             list={charSheet.augmentations}
             button={{
-              click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: charSheet._id, entityType: 'characters', entity: charSheet } }),
+              click: () =>
+                setSlideOver({
+                  type: SlideOverTypes.purchaseAugmentation,
+                  data: { sheetType: 'characters', sheetId: charSheet._id, entityType: 'characters', entity: charSheet, augmentations: charSheet.augmentations },
+                }),
               text: 'Purchase a new Augmentation',
             }}
             empty={{
               heading: 'No Augmentations',
               message: 'Get started by purchasing your first one now',
               button: {
-                click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: charSheet._id, entityType: 'characters', entity: charSheet } }),
+                click: () =>
+                  setSlideOver({
+                    type: SlideOverTypes.purchaseAugmentation,
+                    data: { sheetType: 'characters', sheetId: charSheet._id, entityType: 'characters', entity: charSheet, augmentations: charSheet.augmentations },
+                  }),
                 text: 'Purchase Augmentation',
               },
             }}

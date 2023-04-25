@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 
+import { useActions } from '../../hooks/useActions';
+
 import { getSpeciesAbility } from '../../utils/helpers/species';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
@@ -19,9 +21,8 @@ import DisplayConsumable from './DisplayConsumable';
 import DisplayUsable from './DisplayUsable';
 
 import Heading from '../Heading';
-import { useActions } from '../../hooks/useActions';
 
-import { Npc } from '../../models/sheet/resources';
+import { Npc, Wearable } from '../../models/sheet/resources';
 import { Species } from '../../models/resource';
 import { DisplayProps } from './display.types';
 import { SheetType } from '../../models/sheet';
@@ -29,26 +30,27 @@ import { SheetType } from '../../models/sheet';
 interface NpcDetailsProps {
   npc: Npc;
   species: Species[];
+  wearables: Wearable[];
 }
 
-const NpcDetails: React.FC<NpcDetailsProps> = ({ npc, species }) => {
-  const modifiers = calculateModifiers(npc.modifiers, npc.wearables);
+const NpcDetails: React.FC<NpcDetailsProps> = ({ npc, species, wearables }) => {
+  const modifiers = calculateModifiers(npc.modifiers, wearables);
   const abilities = getSpeciesAbility(npc.speciesId, species);
 
   return (
     <DescriptionList
       list={[
         { name: 'Species', values: [npc.speciesName], half: true },
-        { name: 'Shield Value', values: [calculateShieldValue(npc.wearables)], half: true },
+        { name: 'Shield Value', values: [calculateShieldValue(wearables)], half: true },
         { name: 'Diplomacy', values: [npc.diplomacy], half: true },
-        { name: 'Type', values: [npc.type], half: true },
+        npc.type ? { name: 'Type', values: [npc.type], half: true } : null,
         { name: 'Temperament', values: [npc.temperament], half: true },
         { name: 'Experience', values: [npc.experience], half: true },
         { name: 'Mortality', values: [npc.mortality], half: true },
         { name: 'Milestones', values: [npc.milestones], half: true },
         { name: 'Wallet', values: [npc.wallet], half: true },
         { name: 'Active', values: [npc.active ? 'Yes' : 'No'], half: true },
-        { name: 'Speed', values: [npc.speed + calculateSpeedAdjustment(npc.wearables)], half: true },
+        { name: 'Speed', values: [npc.speed + calculateSpeedAdjustment(wearables)], half: true },
         { name: 'Health', values: [`${npc.currentHp}/${npc.maxHp}`], half: true },
         { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
         {
@@ -83,14 +85,14 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
     if (condensed) {
       return (
         <ListItem heading={`${npc.name} (${npc.speciesName})`}>
-          <InfoList list={[`${npc.diplomacy} | ${npc.type}`]} />
+          <InfoList list={[`${npc.diplomacy} ${npc.type ? `| ${npc.type}` : ''}`]} />
         </ListItem>
       );
     }
 
     return (
       <ListItem heading={npc.name}>
-        <NpcDetails npc={npc} species={species} />
+        <NpcDetails npc={npc} species={species} wearables={campSheet.wearables.filter(wear => wear.npcId === npc._id)} />
       </ListItem>
     );
   }
@@ -129,7 +131,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       >
         {npc.name}
       </Heading>
-      <NpcDetails npc={npc} species={species} />
+      <NpcDetails npc={npc} species={species} wearables={campSheet.wearables.filter(wear => wear.npcId === npc._id)} />
 
       <Heading
         edit={{
@@ -156,10 +158,10 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'slowed', entityType: 'npcs', entity: npc } }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'agony', entityType: 'npcs', entity: npc } }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'injured', entityType: 'npcs', entity: npc } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { stat: 'disturbed', entityType: 'npcs', entity: npc } }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'slowed', entityType: 'npcs', entity: npc } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'agony', entityType: 'npcs', entity: npc } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'injured', entityType: 'npcs', entity: npc } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'npcs', entity: npc } }) },
           ],
         }}
       >
@@ -186,7 +188,14 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <InfoList list={[npc.background]} />
 
       <Heading
-        edit={{ text: 'Purchase', click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entityType: 'npcs', entity: npc } }) }}
+        edit={{
+          text: 'Purchase',
+          click: () =>
+            setSlideOver({
+              type: SlideOverTypes.purchaseAugmentation,
+              data: { sheetType: 'campaigns', sheetId: npc.sheetId, entityType: 'npcs', entity: npc, augmentations: campSheet.augmentations.filter(aug => aug.npcId === npc._id) },
+            }),
+        }}
       >
         Augmentations
       </Heading>

@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { useNavigate } from 'react-router-dom';
 
 import { PotentialCombatant, selectPotentialCombatants } from '../../../redux/campaign/campaign.selectors';
 
@@ -33,6 +34,7 @@ interface Props {
 
 const StartCombat: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const potentialCombatants = useSelector(selectPotentialCombatants);
 
@@ -82,6 +84,9 @@ const StartCombat: React.FC<Props> = ({ data }) => {
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (!description) return alert('You must provide a description');
+    if (!combatants.length) return alert('A combat must have combatants.');
+
     if (data.combat) {
       dispatch(
         updateSheetResourceStart(
@@ -106,6 +111,8 @@ const StartCombat: React.FC<Props> = ({ data }) => {
         { slideOver: true, notification: { status: 'success', heading: 'Combat Started', message: 'You have successfully started combat.' } }
       )
     );
+
+    navigate(`campaigns/${data.sheetId}/combat`);
   };
 
   return (

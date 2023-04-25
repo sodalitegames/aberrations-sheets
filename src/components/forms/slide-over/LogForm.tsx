@@ -37,6 +37,9 @@ const LogForm: React.FC<Props> = ({ data }) => {
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (!date) return alert('Must provide an date');
+    if (!content) return alert('Must provide content');
+
     if (data.log) {
       dispatch(
         updateSheetResourceStart(

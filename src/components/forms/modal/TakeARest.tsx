@@ -31,13 +31,13 @@ const TakeARest: React.FC<Props> = ({ data }) => {
     if (id === 'slumber') {
       let actionsArr = [`You'll Recover all your health points`, `All points in Injured and Disturbed will be removed`];
       setActions(actionsArr);
-      setRest(id);
     }
 
     if (id === 'nap') {
       setActions([`You will recover ${Math.floor(data.entity.maxHp / 2)} health`, `1 point in Injured and 1 point in Disturbed will be removed`]);
-      setRest(id);
     }
+
+    setRest(id);
   };
 
   const submitHandler = async (e: FormEvent) => {
@@ -105,7 +105,7 @@ const TakeARest: React.FC<Props> = ({ data }) => {
                 currentHp: correctCurrentHp(data.entity.currentHp + Math.floor(data.entity.maxHp / 2), data.entity.maxHp),
                 conditions: { ...data.entity.conditions, injured, disturbed },
               },
-              { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
+              { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
           );
 
@@ -146,7 +146,7 @@ const TakeARest: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <ModalForm title="Take a Rest" submitText={`Take my ${rest ? capitalize(rest) : 'rest'}`} submitHandler={submitHandler}>
+    <ModalForm title="Take a Rest" submitText={`Take a ${rest ? capitalize(rest) : 'Rest'}`} submitDisabled={!rest} submitHandler={submitHandler}>
       <Select
         label="How long is your rest?"
         name="rest"

@@ -102,9 +102,16 @@ const RollDice: React.FC<Props> = ({ data }) => {
   };
 
   return (
-    <SlideOverForm title="Roll Dice" description="Fill out the information below to make a roll." submitText={getSubmitText()} cancelText="Done" submitHandler={submitHandler}>
+    <SlideOverForm
+      title="Roll Dice"
+      description="Fill out the information below to make a roll."
+      submitDisabled={!statType}
+      submitText={getSubmitText()}
+      cancelText="Done"
+      submitHandler={submitHandler}
+    >
       {data.stat ? (
-        <Detail slideOver label="Which Stat?" detail={capitalize(statType)} />
+        <Detail slideOver label="Which Stat?" detail={capitalize(data.stat)} />
       ) : (
         <Select
           slideOver
@@ -116,7 +123,6 @@ const RollDice: React.FC<Props> = ({ data }) => {
             { name: 'Agility', id: 'agility' },
             { name: 'Persona', id: 'persona' },
             { name: 'Aptitude', id: 'aptitude' },
-            { name: 'None', id: '' },
           ]}
           changeHandler={setStatType}
         />

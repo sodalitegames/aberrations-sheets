@@ -41,7 +41,7 @@ const RollDice = () => {
   };
 
   return (
-    <SlideOverForm title="Roll Dice" description="Fill out the information below to make a roll." submitText={getSubmitText()} cancelText="Done" submitHandler={submitHandler}>
+    <SlideOverForm title="Roll Dice" description="Fill out the information below to make a roll." submitText={getSubmitText()} submitDisabled={!die} cancelText="Done" submitHandler={submitHandler}>
       <Select
         slideOver
         label="Die"

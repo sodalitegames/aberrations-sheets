@@ -40,10 +40,6 @@ const CharacterCharacterPage = () => {
 
   const charSpecies = getSpecies(charSheet.speciesId, species);
 
-  const log = charSheet.characterLogs[0];
-
-  console.log(typeof log.date);
-
   return (
     <SheetPageContent title="Character" columns={4}>
       {/* Character Species */}

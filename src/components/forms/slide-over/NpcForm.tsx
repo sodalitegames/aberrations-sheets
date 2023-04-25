@@ -44,7 +44,7 @@ const NpcForm: React.FC<Props> = ({ data }) => {
 
   const typesOptions = (fetchedTypes || []).map(type => {
     return {
-      id: type.id,
+      id: type.name,
       name: type.name,
     };
   });
@@ -59,8 +59,8 @@ const NpcForm: React.FC<Props> = ({ data }) => {
   const [typeId, setTypeId] = useState('');
   const [levelId, setLevelId] = useState('');
 
-  const type = fetchedTypes.find(type => type.name === typeId);
-  const species = fetchedSpecies.find(spec => spec.id === speciesId);
+  const type = (fetchedTypes || []).find(type => type.name === typeId);
+  const species = (fetchedSpecies || []).find(spec => spec.id === speciesId);
 
   useEffect(() => {
     if (data.npc) {

@@ -6,7 +6,7 @@ import { updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
 import { useActions } from '../../hooks/useActions';
 
 import { Belonging, Sheet, SheetType, SheetResourceType, BelongingType, CharacterSheet } from '../../models/sheet';
-import { Weapon } from '../../models/sheet/resources';
+import { Usable, Weapon } from '../../models/sheet/resources';
 
 import equipBelonging from '../../utils/functions/equipBelonging';
 import ModalTypes from '../../utils/ModalTypes';
@@ -20,7 +20,7 @@ interface BelongingActionsProps {
   sheet: Sheet;
   belongingType: BelongingType;
   belonging: Belonging;
-  equippedBelongings?: Belonging[];
+  equippedBelongings: Belonging[];
 }
 
 const editForm = {
@@ -39,14 +39,15 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
       {!belonging.archived ? (
         <Fragment>
           {/* Equip or Unequip */}
-          {sheetType === 'characters' ? (
+          {sheetType === 'characters' && (
             <Button
               dark={belonging.equipped}
-              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet as CharacterSheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings! })}
+              disabled={belongingType === 'usables' ? !(belonging as Usable).equippable : false}
+              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet as CharacterSheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings })}
             >
               {belonging.equipped ? 'Unequip' : 'Equip'}
             </Button>
-          ) : null}
+          )}
 
           {/* Assign or Unassign */}
           {sheetType === 'campaigns' ? (

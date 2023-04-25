@@ -24,17 +24,18 @@ import ModalTypes from '../../../utils/ModalTypes';
 
 import { FetchedResourceType, Species } from '../../../models/resource';
 import { SheetType } from '../../../models/sheet';
+import { LoadingSpinner } from '../elements/SubmitButton';
 
 const ManageCharacter = () => {
   const dispatch = useDispatch();
   const { setNestedModal } = useActions();
 
   const currentUser = useSelector(selectCurrentUser);
-  const charSheet = useSelector(selectCurrentCharacter)!;
+  const charSheet = useSelector(selectCurrentCharacter);
 
   const species = useResource(FetchedResourceType.Species) as Species[];
 
-  const charSpecies = getSpecies(charSheet.speciesId, species);
+  const charSpecies = getSpecies(charSheet?.speciesId || '', species);
 
   const [playerNickname, setPlayerNickname] = useState('');
   const [characterName, setCharacterName] = useState('');
@@ -60,7 +61,7 @@ const ManageCharacter = () => {
     dispatch(
       updateSheetStart(
         SheetType.characters,
-        charSheet._id,
+        charSheet!._id,
         {
           playerNickname,
           characterName,
@@ -78,7 +79,13 @@ const ManageCharacter = () => {
       <Input slideOver label="Player Nickname (Opt.)" type="text" name="playerName" value={playerNickname} changeHandler={setPlayerNickname} />
       <Input slideOver label="Character Name" type="text" name="characterName" value={characterName} changeHandler={setCharacterName} />
       <Row slideOver name="species" label="Character Species">
-        <ul className="mt-3 divide-y divide-gray-200">{charSpecies ? <DisplaySpecies species={charSpecies} /> : null}</ul>
+        {charSpecies ? (
+          <ul className="mt-3 divide-y divide-gray-200">
+            <DisplaySpecies species={charSpecies} />
+          </ul>
+        ) : (
+          <LoadingSpinner dark />
+        )}
       </Row>
       {/* <TextArea slideOver label="Character Description" name="charDescription" rows={6} value={charDescription} changeHandler={setCharDescription} />
       <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} /> */}
