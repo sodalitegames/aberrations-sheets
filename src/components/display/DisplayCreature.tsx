@@ -58,7 +58,7 @@ const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, 
       <ListItem
         heading={creature.name}
         noButtonPanel={noButtonPanel}
-        editable={{ type: SlideOverTypes.creatureForm, id: creature._id, data: { sheetType: 'campaigns' } }}
+        editable={{ type: SlideOverTypes.creatureForm, id: creature._id, data: { sheetId: creature.sheetId, creature } }}
         deletable={{
           type: ModalTypes.deleteResource,
           id: creature._id,

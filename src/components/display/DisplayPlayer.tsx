@@ -169,12 +169,12 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         classes="my-2"
       />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { type: 'player', description: player.charDescription, resourceId: player._id } }) }}>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { sheetType: 'campaigns', sheetId: player.campaign, entityType: 'players', entity: player } }) }}>
         Character Description
       </Heading>
       <InfoList list={[player.charDescription]} />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { type: 'player', background: player.charBackground, resourceId: player._id } }) }}>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { sheetType: 'campaigns', sheetId: player.campaign, entityType: 'players', entity: player } }) }}>
         Character Background
       </Heading>
       <InfoList list={[player.charBackground]} />
@@ -182,7 +182,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
       <Heading
         edit={{
           text: 'Purchase',
-          click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: player._id, entity: player, entityType: 'player' } }),
+          click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: player._id, entity: player, entityType: 'players' } }),
         }}
       >
         Augmentations

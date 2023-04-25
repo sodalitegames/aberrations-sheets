@@ -1,65 +1,71 @@
-import { FormEvent, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { FormEvent, useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../SlideOver';
 
 import TextArea from '../elements/TextArea';
-import { SheetResourceType, SheetType } from '../../../models/sheet';
+
+import { CharacterSheet, Entity, EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Npc, Player } from '../../../models/sheet/resources';
+
+import { capitalize } from '../../../utils/helpers/strings';
 
 interface Props {
   data: {
-    type: 'character' | 'player' | 'npc';
-    background: string;
-    resourceId: string;
+    sheetType: SheetType;
+    sheetId: string;
+    entityType: EntityType;
+    entity: Entity;
   };
 }
 
 const EditBackground: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const [background, setBackground] = useState('');
 
-  const [background, setBackground] = useState(data.background);
+  const label = data.entityType === 'npcs' ? 'npc' : data.entityType === 'players' ? 'player' : 'character';
+
+  useEffect(() => {
+    const backg = (data.entity as CharacterSheet | Player).charBackground || (data.entity as Npc).background;
+    setBackground(backg);
+  }, [data.entity]);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!background) return alert('Must provide background');
 
-    switch (data.type) {
-      case 'character':
+    switch (data.entityType) {
+      case 'characters':
         dispatch(
           updateSheetStart(
             SheetType.characters,
-            charSheet!._id,
+            data.sheetId,
             { charBackground: background },
             { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Updated', message: 'You have successfully updated your character background.' } }
           )
         );
         return;
-      case 'player':
+      case 'players':
         dispatch(
           updateSheetStart(
             SheetType.characters,
-            data.resourceId,
+            data.entity._id,
             { charBackground: background },
             { forPlayer: true, slideOver: true, notification: { status: 'success', heading: 'Player Updated', message: "You have successfully updated your player's character background." } }
           )
         );
         return;
-      case 'npc':
+      case 'npcs':
         dispatch(
           updateSheetResourceStart(
             SheetType.campaigns,
-            campSheet!._id,
+            data.sheetId,
             SheetResourceType.npcs,
-            data.resourceId,
+            data.entity._id,
             { background },
             { slideOver: true, notification: { status: 'success', heading: 'Npc Updated', message: "You have successfully updated your npc's background." } }
           )
@@ -72,12 +78,12 @@ const EditBackground: React.FC<Props> = ({ data }) => {
 
   return (
     <SlideOverForm
-      title={`Edit ${data.type === 'npc' ? 'Npc' : 'Character'} Background`}
-      description={`Update the information below to edit your ${data.type === 'npc' ? 'npc' : 'character'} background.`}
-      submitText={`Save ${data.type === 'npc' ? 'npc' : 'character'} background`}
+      title={`Edit ${capitalize(label)} Background`}
+      description={`Update the information below to edit your ${label} background.`}
+      submitText={`Save ${label} background`}
       submitHandler={submitHandler}
     >
-      <TextArea slideOver label={`${data.type === 'npc' ? 'Npc' : 'Character'} Background`} name="background" rows={12} value={background} changeHandler={setBackground} />
+      <TextArea slideOver label={`${capitalize(label)} Background`} name="background" rows={12} value={background} changeHandler={setBackground} />
     </SlideOverForm>
   );
 };

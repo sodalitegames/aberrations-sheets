@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { FormEvent, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -13,47 +10,40 @@ import { formatDate, isoStringDate } from '../../../utils/helpers/dates';
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 
-const LogForm = ({ id, data }) => {
-  const dispatch = useDispatch();
+import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { Log } from '../../../models/sheet/resources';
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+interface Props {
+  data: {
+    sheetType: SheetType;
+    sheetId: string;
+    log?: Log;
+  };
+}
+
+const LogForm: React.FC<Props> = ({ data }) => {
+  const dispatch = useDispatch();
 
   const [date, setDate] = useState('');
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    if (data.sheetType === 'characters') {
-      if (id && charSheet) {
-        const currentLog = charSheet.characterLogs.find(log => log._id === id);
-
-        setDate(isoStringDate(currentLog.date));
-        setContent(currentLog.content);
-      }
+    if (data.log) {
+      setDate(isoStringDate(data.log.date));
+      setContent(data.log.content);
     }
+  }, [data.log]);
 
-    if (data.sheetType === 'campaigns') {
-      if (id && campSheet) {
-        const currentLog = campSheet.captainsLogs.find(log => log._id === id);
-
-        setDate(isoStringDate(currentLog.date));
-        setContent(currentLog.content);
-      }
-    }
-  }, [data.sheetType, id, charSheet, campSheet]);
-
-  const submitHandler = async e => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
-
-    if (id) {
+    if (data.log) {
       dispatch(
         updateSheetResourceStart(
           data.sheetType,
-          sheetId,
-          'logs',
-          id,
+          data.sheetId,
+          SheetResourceType.logs,
+          data.log._id,
           { date, content },
           {
             slideOver: true,
@@ -71,8 +61,8 @@ const LogForm = ({ id, data }) => {
     dispatch(
       createSheetResourceStart(
         data.sheetType,
-        sheetId,
-        'logs',
+        data.sheetId,
+        SheetResourceType.logs,
         { date, content },
         {
           slideOver: true,
@@ -88,13 +78,13 @@ const LogForm = ({ id, data }) => {
 
   return (
     <SlideOverForm
-      title={id ? `Edit ${data.sheetType === 'campaigns' ? `Captain's` : 'Character'} Log` : `New ${data.sheetType === 'campaigns' ? `Captain's` : 'Character'} Log`}
+      title={data.log ? `Edit ${data.sheetType === 'campaigns' ? `Captain's` : 'Character'} Log` : `New ${data.sheetType === 'campaigns' ? `Captain's` : 'Character'} Log`}
       description={
-        id
+        data.log
           ? `Update the information below to edit your ${data.sheetType === 'campaigns' ? `captain's` : 'character'} log.`
           : `Fill out the information below to create your new ${data.sheetType === 'campaigns' ? `captain's` : 'character'} log.`
       }
-      submitText={id ? `Save ${data.sheetType === 'campaigns' ? `captain's` : 'character'} log` : `Create ${data.sheetType === 'campaigns' ? `captain's` : 'character'} log`}
+      submitText={data.log ? `Save ${data.sheetType === 'campaigns' ? `captain's` : 'character'} log` : `Create ${data.sheetType === 'campaigns' ? `captain's` : 'character'} log`}
       submitHandler={submitHandler}
     >
       <Input slideOver label="Date" name="date" type="date" value={date} changeHandler={setDate} />

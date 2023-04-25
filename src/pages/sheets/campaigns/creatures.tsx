@@ -40,7 +40,7 @@ const CampaignCreaturesPage = () => {
     <>
       {/* Edit */}
       <div className="pb-4 mb-4 border-b border-gray-200">
-        <Button onClick={() => setSlideOver({ type: SlideOverTypes.creatureForm, id: creature._id })}>Edit</Button>
+        <Button onClick={() => setSlideOver({ type: SlideOverTypes.creatureForm, data: { sheetId: campSheet._id, creature } })}>Edit</Button>
       </div>
 
       {/* Creature Actions */}

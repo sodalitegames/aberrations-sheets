@@ -175,13 +175,19 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         classes="my-2"
       />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { type: 'npc', description: npc.description, resourceId: npc._id } }) }}>Description</Heading>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entityType: 'npcs', entity: npc } }) }}>
+        Description
+      </Heading>
       <InfoList list={[npc.description]} />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { type: 'npc', background: npc.background, resourceId: npc._id } }) }}>Background</Heading>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entityType: 'npcs', entity: npc } }) }}>
+        Background
+      </Heading>
       <InfoList list={[npc.background]} />
 
-      <Heading edit={{ text: 'Purchase', click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entity: npc } }) }}>
+      <Heading
+        edit={{ text: 'Purchase', click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entityType: 'npcs', entity: npc } }) }}
+      >
         Augmentations
       </Heading>
       <ul className="grid">

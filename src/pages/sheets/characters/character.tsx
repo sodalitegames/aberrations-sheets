@@ -56,7 +56,7 @@ const CharacterCharacterPage = () => {
         <SheetPagePanel title="Character Description">
           <div className="flow-root">
             <InfoList list={[charSheet.charDescription]} />
-            <ButtonPanel editable={{ type: SlideOverTypes.editDescriptionForm, data: { type: 'character', description: charSheet.charDescription } }} />
+            <ButtonPanel editable={{ type: SlideOverTypes.editDescriptionForm, data: { sheetType: 'characters', sheetId: charSheet._id, entityType: 'characters', entity: charSheet } }} />
           </div>
         </SheetPagePanel>
 
@@ -64,7 +64,7 @@ const CharacterCharacterPage = () => {
         <SheetPagePanel title="Character Background">
           <div className="flow-root">
             <InfoList list={[charSheet.charBackground]} />
-            <ButtonPanel editable={{ type: SlideOverTypes.editBackgroundForm, data: { type: 'character', background: charSheet.charBackground } }} />
+            <ButtonPanel editable={{ type: SlideOverTypes.editBackgroundForm, data: { sheetType: 'characters', sheetId: charSheet._id, entityType: 'characters', entity: charSheet } }} />
           </div>
         </SheetPagePanel>
       </div>
@@ -77,11 +77,11 @@ const CharacterCharacterPage = () => {
           ) : (
             <ListContainer
               list={charSheet.characterLogs}
-              button={{ click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } }), text: 'Add a new Character Log' }}
+              button={{ click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters', sheetId: charSheet._id } }), text: 'Add a new Character Log' }}
               empty={{
                 heading: 'No Character Logs',
                 message: 'Get started by creating your first one now',
-                button: { click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters' } }), text: 'New Character Log' },
+                button: { click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'characters', sheetId: charSheet._id } }), text: 'New Character Log' },
               }}
             >
               {charSheet.characterLogs.map(log => (

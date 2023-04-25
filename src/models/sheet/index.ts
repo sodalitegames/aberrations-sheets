@@ -119,3 +119,11 @@ export enum InteractableType {
   creatures = 'creatures',
   players = 'players',
 }
+
+export type Entity = Npc | Player | CharacterSheet;
+
+export enum EntityType {
+  players = 'players',
+  npcs = 'npcs',
+  characters = 'characters',
+}

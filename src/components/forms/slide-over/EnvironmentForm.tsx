@@ -1,7 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { useDispatch } from 'react-redux';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -11,29 +9,27 @@ import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 
 import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { Environment } from '../../../models/sheet/resources';
 
 interface Props {
-  id: string;
+  data: {
+    sheetId: string;
+    environment?: Environment;
+  };
 }
 
-const EnvironmentForm: React.FC<Props> = ({ id }) => {
+const EnvironmentForm: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
-
-  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    if (id && campSheet) {
-      const currentEnvironment = campSheet.environments.find(envir => envir._id === id);
-
-      if (currentEnvironment) {
-        setName(currentEnvironment.name);
-        setDescription(currentEnvironment.description);
-      }
+    if (data.environment) {
+      setName(data.environment.name);
+      setDescription(data.environment.description);
     }
-  }, [id, campSheet]);
+  }, [data.environment]);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
@@ -41,13 +37,13 @@ const EnvironmentForm: React.FC<Props> = ({ id }) => {
     if (!name) return alert('Must provide a name');
     if (!description) return alert('Must provide a description');
 
-    if (id) {
+    if (data.environment) {
       dispatch(
         updateSheetResourceStart(
           SheetType.campaigns,
-          campSheet._id,
+          data.sheetId,
           SheetResourceType.environments,
-          id,
+          data.environment._id,
           { name, description },
           { slideOver: true, notification: { status: 'success', heading: 'Environment Updated', message: `You have successfully updated ${name}.` } }
         )
@@ -58,7 +54,7 @@ const EnvironmentForm: React.FC<Props> = ({ id }) => {
     dispatch(
       createSheetResourceStart(
         SheetType.campaigns,
-        campSheet._id,
+        data.sheetId,
         SheetResourceType.environments,
         { name, description },
         { slideOver: true, notification: { status: 'success', heading: 'Environment Created', message: `You have successfully created ${name}.` } }
@@ -68,9 +64,9 @@ const EnvironmentForm: React.FC<Props> = ({ id }) => {
 
   return (
     <SlideOverForm
-      title={id ? 'Edit Environment' : 'New Environment'}
-      description={id ? 'Update the information below to edit your environment.' : 'Fill out the information below to create your new environment.'}
-      submitText={id ? 'Save environment' : 'Create environment'}
+      title={data.environment ? 'Edit Environment' : 'New Environment'}
+      description={data.environment ? 'Update the information below to edit your environment.' : 'Fill out the information below to create your new environment.'}
+      submitText={data.environment ? 'Save environment' : 'Create environment'}
       submitHandler={submitHandler}
     >
       <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} />

@@ -1,7 +1,5 @@
 import { useState, useEffect, FormEvent } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { useDispatch } from 'react-redux';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -14,15 +12,17 @@ import TextArea from '../elements/TextArea';
 import Toggle from '../elements/Toggle';
 
 import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { Session } from '../../../models/sheet/resources';
 
 interface Props {
-  id: string;
+  data: {
+    sheetId: string;
+    session?: Session;
+  };
 }
 
-const SessionForm: React.FC<Props> = ({ id }) => {
+const SessionForm: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
-
-  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [name, setName] = useState('');
   const [dateScheduled, setDateScheduled] = useState('');
@@ -32,30 +32,26 @@ const SessionForm: React.FC<Props> = ({ id }) => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    if (id && campSheet) {
-      const currentSession = campSheet.sessions.find(session => session._id === id);
-
-      if (currentSession) {
-        setName(currentSession.name);
-        setDateScheduled(currentSession.dateScheduled ? isoStringDate(currentSession.dateScheduled) : '');
-        setDatePlayed(currentSession.datePlayed ? isoStringDate(currentSession.datePlayed) : '');
-        setActive(currentSession.active);
-        setCompleted(currentSession.completed);
-        setContent(currentSession.content);
-      }
+    if (data.session) {
+      setName(data.session.name);
+      setDateScheduled(data.session.dateScheduled ? isoStringDate(data.session.dateScheduled) : '');
+      setDatePlayed(data.session.datePlayed ? isoStringDate(data.session.datePlayed) : '');
+      setActive(data.session.active);
+      setCompleted(data.session.completed);
+      setContent(data.session.content);
     }
-  }, [id, campSheet]);
+  }, [data.session]);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (id) {
+    if (data.session) {
       dispatch(
         updateSheetResourceStart(
           SheetType.campaigns,
-          campSheet._id,
+          data.sheetId,
           SheetResourceType.sessions,
-          id,
+          data.session._id,
           { name, dateScheduled, datePlayed, active, completed, content },
           { slideOver: true, notification: { status: 'success', heading: 'Session Updated', message: `You have successfully updated ${name}.` } }
         )
@@ -66,7 +62,7 @@ const SessionForm: React.FC<Props> = ({ id }) => {
     dispatch(
       createSheetResourceStart(
         SheetType.campaigns,
-        campSheet._id,
+        data.sheetId,
         SheetResourceType.sessions,
         { name, dateScheduled, datePlayed, active, completed, content },
         { slideOver: true, notification: { status: 'success', heading: 'Session Created', message: `You have successfully created ${name}.` } }
@@ -76,9 +72,9 @@ const SessionForm: React.FC<Props> = ({ id }) => {
 
   return (
     <SlideOverForm
-      title={id ? 'Edit Session' : 'New Session'}
-      description={id ? 'Edit the information below to update your session."' : 'Fill out the information below to create your new session.'}
-      submitText={id ? 'Update Session' : 'Create session'}
+      title={data.session ? 'Edit Session' : 'New Session'}
+      description={data.session ? 'Edit the information below to update your session."' : 'Fill out the information below to create your new session.'}
+      submitText={data.session ? 'Update Session' : 'Create session'}
       submitHandler={submitHandler}
     >
       <Input slideOver label="Date Scheduled" name="dateScheduled" type="date" value={dateScheduled} changeHandler={setDateScheduled} />

@@ -1,27 +1,29 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { useDispatch } from 'react-redux';
 
 import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { SlideOverForm } from '../SlideOver';
 
 import TextArea from '../elements/TextArea';
-import { SheetType } from '../../../models/sheet';
 
-const CampDetails = () => {
+import { CampaignSheet, SheetType } from '../../../models/sheet';
+
+interface Props {
+  data: {
+    sheetId: string;
+    entity: CampaignSheet;
+  };
+}
+
+const CampDetails: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
-
-  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [details, setDetails] = useState('');
 
   useEffect(() => {
-    if (campSheet) {
-      setDetails(campSheet.details);
-    }
-  }, [campSheet]);
+    setDetails(data.entity.details);
+  }, [data.entity]);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
@@ -31,7 +33,7 @@ const CampDetails = () => {
     dispatch(
       updateSheetStart(
         SheetType.campaigns,
-        campSheet._id,
+        data.sheetId,
         { details },
         { slideOver: true, notification: { status: 'success', heading: 'Campaign Sheet Updated', message: 'You have successfully updated your campaign details.' } }
       )

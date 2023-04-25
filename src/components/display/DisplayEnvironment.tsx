@@ -42,7 +42,7 @@ const DisplayEnvironment: React.FC<DisplayEnvironmentProps> = ({ environment, co
       <ListItem
         heading={environment.name}
         noButtonPanel={noButtonPanel}
-        editable={{ type: SlideOverTypes.environmentForm, id: environment._id, data: { sheetType: 'campaigns' } }}
+        editable={{ type: SlideOverTypes.environmentForm, id: environment._id, data: { sheetId: environment.sheetId, environment } }}
         deletable={{
           type: ModalTypes.deleteResource,
           id: environment._id,

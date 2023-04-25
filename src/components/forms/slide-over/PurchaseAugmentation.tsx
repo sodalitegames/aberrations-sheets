@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
@@ -6,8 +6,7 @@ import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 import { useResource } from '../../../hooks/useResource';
 
 import { AugmentationGroup, FetchedResourceType } from '../../../models/resource';
-import { CharacterSheet, SheetResourceType, SheetType } from '../../../models/sheet';
-import { Npc, Player } from '../../../models/sheet/resources';
+import { Entity, EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -18,29 +17,12 @@ import Row from '../elements/Row';
 
 import { calculateAugmentationPoints } from '../../../utils/functions/calculations';
 
-type AugmentationOption = {
-  id: string;
-  universalId: string;
-  name: string;
-  displayName: string;
-  groupName: string;
-  description: string;
-  pointCost: number;
-  disabled: boolean;
-};
-
-type AugmentationGroupOption = {
-  id: string;
-  name: string;
-  children: AugmentationOption[];
-};
-
 interface Props {
   data: {
     sheetType: SheetType;
     sheetId: string;
-    entityType: 'player' | 'npc' | 'character';
-    entity: CharacterSheet | Player | Npc;
+    entityType: EntityType;
+    entity: Entity;
   };
 }
 
@@ -49,59 +31,41 @@ const PurchaseAugmentation: React.FC<Props> = ({ data }) => {
 
   const augmentationGroups = useResource(FetchedResourceType.AugmentationGroups) as AugmentationGroup[];
 
-  const [augmentationPoints] = useState(calculateAugmentationPoints(data.entity.milestones, data.entity.augmentations));
+  const augmentationPoints = calculateAugmentationPoints(data.entity.milestones, data.entity.augmentations);
 
-  const [augmentation, setAugmentation] = useState<AugmentationOption | null>(null);
-  const [augsList, setAugsList] = useState<AugmentationGroupOption[]>([]);
+  const options = (augmentationGroups || []).map(group => {
+    const children = group.augmentations.map(aug => {
+      let purchased = false;
 
-  useEffect(() => {
-    if (data.entity && augmentationGroups) {
-      const newAugsList = augmentationGroups.map(group => {
-        const children = group.augmentations.map(aug => {
-          let purchased = false;
-
-          data.entity.augmentations.forEach(charsAug => {
-            if (charsAug.universalId === aug.id) purchased = true;
-          });
-
-          return {
-            id: aug.id,
-            universalId: aug.id,
-            name: aug.name,
-            displayName: `${aug.name} (${aug.cost})`,
-            groupName: group.name,
-            description: aug.description,
-            pointCost: aug.cost,
-            disabled: purchased,
-          };
-        });
-
-        return {
-          id: group.id,
-          name: group.name,
-          children,
-        };
+      data.entity.augmentations.forEach(charsAug => {
+        if (charsAug.universalId === aug.id) purchased = true;
       });
 
-      setAugsList(newAugsList);
-    }
-  }, [data.entity, augmentationGroups]);
-
-  const selectAugmentation = (e: any) => {
-    if (!e.target.value) setAugmentation(null);
-
-    let ungrouped: AugmentationOption[] = [];
-
-    augsList.forEach(list => {
-      ungrouped = [...ungrouped, ...list.children];
+      return {
+        id: aug.id,
+        universalId: aug.id,
+        name: aug.name,
+        displayName: `${aug.name} (${aug.cost})`,
+        groupName: group.name,
+        description: aug.description,
+        pointCost: aug.cost,
+        disabled: purchased,
+      };
     });
 
-    const currAug = ungrouped.find(aug => aug.universalId === e.target.value);
+    return {
+      id: group.id,
+      name: group.name,
+      children,
+    };
+  });
 
-    if (!currAug) return setAugmentation(null);
+  const [augmentationId, setAugmentationId] = useState<string>('');
 
-    setAugmentation(currAug);
-  };
+  const augmentation = options
+    .map(opt => opt.children)
+    .flat()
+    .find(aug => aug.id === augmentationId);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
@@ -118,7 +82,7 @@ const PurchaseAugmentation: React.FC<Props> = ({ data }) => {
         data.sheetId,
         SheetResourceType.augmentations,
         { name, pointCost, description, universalId, npcId: data.sheetType === 'campaigns' ? data.entity._id : undefined },
-        { forPlayer: data.entityType === 'player' ? true : false, notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` } }
+        { forPlayer: data.entityType === 'players' ? true : false, notification: { status: 'success', heading: 'Augmentation Purchased', message: `You have successfully purchased ${name}.` } }
       )
     );
   };
@@ -132,17 +96,17 @@ const PurchaseAugmentation: React.FC<Props> = ({ data }) => {
       submitHandler={submitHandler}
     >
       <Detail slideOver label="Augmentation Points" detail={augmentationPoints} />
-      {augmentationGroups && augsList ? (
+      {options ? (
         <>
-          <Select slideOver label="Choose an Augmentation" name="augmentations" options={augsList} changeHandler={selectAugmentation} />
+          <Select slideOver label="Choose an Augmentation" name="augmentations" options={options} value={augmentationId} changeHandler={setAugmentationId} />
 
-          {augmentation ? (
+          {augmentation && (
             <>
               <Detail slideOver label="Name" detail={augmentation.name} />
               <Detail status={augmentationPoints < augmentation.pointCost ? 'error' : undefined} slideOver label="Cost" detail={augmentation.pointCost} />
               <Detail slideOver label="Description" detail={augmentation.description} />
             </>
-          ) : null}
+          )}
         </>
       ) : (
         <Row slideOver label="Choose an Augmentation" name="augmentations">

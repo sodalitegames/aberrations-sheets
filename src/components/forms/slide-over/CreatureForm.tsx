@@ -1,14 +1,12 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { useDispatch } from 'react-redux';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { useResource } from '../../../hooks/useResource';
 
 import { CreatureType, FetchedResourceType } from '../../../models/resource';
-import { Type } from '../../../models/sheet/resources';
+import { Creature, Type } from '../../../models/sheet/resources';
 import { SheetResourceType, SheetType, StatType } from '../../../models/sheet';
 
 import { SlideOverForm } from '../SlideOver';
@@ -21,17 +19,22 @@ import { LoadingSpinner } from '../elements/SubmitButton';
 import Row from '../elements/Row';
 
 interface Props {
-  id: string;
+  data: {
+    sheetId: string;
+    creature?: Creature;
+  };
 }
 
-const CreatureForm: React.FC<Props> = ({ id }) => {
+const CreatureForm: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
-
-  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const creatureTypes = useResource(FetchedResourceType.CreatureTypes) as CreatureType[];
 
-  const [typesList, setTypesList] = useState<Type[]>([]);
+  const typesOptions: Type[] = (creatureTypes || []).map(type => ({
+    universalId: type.id,
+    name: type.name,
+    description: type.summary,
+  }));
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -41,54 +44,29 @@ const CreatureForm: React.FC<Props> = ({ id }) => {
   const [health, setHealth] = useState(10);
   const [shieldValue, setShieldValue] = useState(0);
   const [speed, setSpeed] = useState(3);
-
-  // Only needed if creating
   const [strength, setStrength] = useState(2);
   const [agility, setAgility] = useState(2);
   const [persona, setPersona] = useState(2);
   const [aptitude, setAptitude] = useState(2);
 
   useEffect(() => {
-    if (creatureTypes) {
-      const newTypesList = creatureTypes.map(type => {
-        return {
-          universalId: type.id,
-          name: type.name,
-          description: type.summary,
-        };
-      });
-
-      setTypesList(newTypesList);
+    if (data.creature) {
+      setName(data.creature.name);
+      setDescription(data.creature.description);
+      setDamageLevel(data.creature.damageLevel);
+      setTypes(data.creature.types);
+      setAttackingStat(data.creature.attackingStat);
+      setShieldValue(data.creature.shieldValue);
+      setSpeed(data.creature.speed);
     }
-  }, [creatureTypes]);
-
-  useEffect(() => {
-    if (id && campSheet) {
-      const currentCreature = campSheet.creatures.find(creature => creature._id === id);
-
-      if (currentCreature) {
-        setName(currentCreature.name);
-        setDescription(currentCreature.description);
-        setDamageLevel(currentCreature.damageLevel);
-        setTypes(currentCreature.types);
-        setAttackingStat(currentCreature.attackingStat);
-        setShieldValue(currentCreature.shieldValue);
-        setSpeed(currentCreature.speed);
-      }
-    }
-  }, [id, campSheet]);
-
-  const selectStat = (e: any) => {
-    if (!e.target.value) return setAttackingStat('');
-    setAttackingStat(e.target.value);
-  };
+  }, [data.creature]);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     let types: Type[] = [];
 
-    typesList.forEach(type => {
+    typesOptions.forEach(type => {
       // @ts-ignore
       if (e.target[type.universalId].checked) {
         types.push(type);
@@ -114,9 +92,9 @@ const CreatureForm: React.FC<Props> = ({ id }) => {
       speed,
     };
 
-    if (id) {
+    if (data.creature) {
       dispatch(
-        updateSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.creatures, id, body, {
+        updateSheetResourceStart(SheetType.campaigns, data.sheetId, SheetResourceType.creatures, data.creature._id, body, {
           slideOver: true,
           notification: { status: 'success', heading: 'Creature Updated', message: `You have successfully updated ${name}.` },
         })
@@ -139,7 +117,7 @@ const CreatureForm: React.FC<Props> = ({ id }) => {
     };
 
     dispatch(
-      createSheetResourceStart(SheetType.campaigns, campSheet._id, SheetResourceType.creatures, body, {
+      createSheetResourceStart(SheetType.campaigns, data.sheetId, SheetResourceType.creatures, body, {
         slideOver: true,
         notification: { status: 'success', heading: 'Creature Created', message: `You have successfully created ${name}.` },
       })
@@ -148,21 +126,21 @@ const CreatureForm: React.FC<Props> = ({ id }) => {
 
   return (
     <SlideOverForm
-      title={id ? 'Edit Creature' : 'New Creature'}
-      description={id ? 'Update the information below to edit your creature.' : 'Fill out the information below to create your new creature.'}
-      submitText={id ? 'Save creature' : 'Create creature'}
+      title={data.creature ? 'Edit Creature' : 'New Creature'}
+      description={data.creature ? 'Update the information below to edit your creature.' : 'Fill out the information below to create your new creature.'}
+      submitText={data.creature ? 'Save creature' : 'Create creature'}
       submitHandler={submitHandler}
     >
       <Input slideOver label="Name" name="name" type="text" value={name} changeHandler={setName} required />
       <TextArea slideOver label="Description" name="description" rows={4} value={description} changeHandler={setDescription} required />
 
-      {creatureTypes && typesList ? (
+      {typesOptions ? (
         <CheckboxGroup slideOver label="Types">
-          {typesList.map(type => (
+          {typesOptions.map(type => (
             <BasicCheckbox
               key={type.universalId}
               heading={type.name}
-              checked={id ? !!types.find(tp => tp.universalId === type.universalId) : false}
+              checked={data.creature ? !!types.find(tp => tp.universalId === type.universalId) : false}
               description={type.description}
               name={type.universalId}
             />
@@ -185,7 +163,7 @@ const CreatureForm: React.FC<Props> = ({ id }) => {
           { name: 'Persona', id: 'persona' },
           { name: 'Aptitude', id: 'aptitude' },
         ]}
-        changeHandler={selectStat}
+        changeHandler={setAttackingStat}
         required
       />
 
@@ -195,7 +173,7 @@ const CreatureForm: React.FC<Props> = ({ id }) => {
       <Input slideOver label="Shield Value" name="shieldValue" type="number" value={shieldValue} changeHandler={setShieldValue} required />
       <Input slideOver label="Speed" name="speed" type="number" value={speed} changeHandler={setSpeed} required />
 
-      {!id && (
+      {!data.creature && (
         <>
           <Input slideOver label="Strength" name="strength" type="number" min="2" max="20" step="2" value={strength} changeHandler={setStrength} required />
           <Input slideOver label="Agility" name="agility" type="number" min="2" max="20" step="2" value={agility} changeHandler={setAgility} required />

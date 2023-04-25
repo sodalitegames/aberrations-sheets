@@ -45,7 +45,7 @@ const CampaignNpcsPage = () => {
     <>
       {/* Edit */}
       <div className="pb-4 mb-4 border-b border-gray-200">
-        <Button onClick={() => setSlideOver({ type: SlideOverTypes.npcForm, id: npc._id })}>Edit</Button>
+        <Button onClick={() => setSlideOver({ type: SlideOverTypes.npcForm, data: { sheetType: 'campaigns', sheetId: campSheet._id, npc } })}>Edit</Button>
       </div>
 
       {/* Npc Actions */}

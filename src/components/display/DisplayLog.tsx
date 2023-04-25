@@ -17,7 +17,7 @@ const DisplayLog: React.FC<Props> = ({ sheetType, log }) => {
   return (
     <ListItem
       heading={formatDate(log.date)}
-      editable={{ type: SlideOverTypes.logForm, id: log._id, data: { sheetType: sheetType } }}
+      editable={{ type: SlideOverTypes.logForm, data: { sheetType: sheetType, sheetId: log.sheetId, log } }}
       deletable={{
         type: ModalTypes.deleteResource,
         id: log._id,

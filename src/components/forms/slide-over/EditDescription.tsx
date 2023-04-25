@@ -1,8 +1,5 @@
-import { FormEvent, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { FormEvent, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { updateSheetResourceStart, updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
@@ -10,57 +7,64 @@ import { SlideOverForm } from '../SlideOver';
 
 import TextArea from '../elements/TextArea';
 
-import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { CharacterSheet, Entity, EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Npc, Player } from '../../../models/sheet/resources';
+import { capitalize } from '../../../utils/helpers/strings';
 
 interface Props {
   data: {
-    type: 'character' | 'player' | 'npc';
-    description: string;
-    resourceId: string;
+    sheetType: SheetType;
+    sheetId: string;
+    entityType: EntityType;
+    entity: Entity;
   };
 }
 
 const EditDescription: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+  const [description, setDescription] = useState('');
 
-  const [description, setDescription] = useState(data.description);
+  const label = data.entityType === 'npcs' ? 'npc' : data.entityType === 'players' ? 'player' : 'character';
+
+  useEffect(() => {
+    const desc = (data.entity as CharacterSheet | Player).charDescription || (data.entity as Npc).description;
+    setDescription(desc);
+  }, [data.entity]);
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
     if (!description) return alert('Must provide description');
 
-    switch (data.type) {
-      case 'character':
+    switch (data.entityType) {
+      case 'characters':
         dispatch(
           updateSheetStart(
             SheetType.characters,
-            charSheet!._id,
+            data.sheetId,
             { charDescription: description },
             { slideOver: true, notification: { status: 'success', heading: 'Character Sheet Updated', message: 'You have successfully updated your character description.' } }
           )
         );
         return;
-      case 'player':
+      case 'players':
         dispatch(
           updateSheetStart(
             SheetType.characters,
-            data.resourceId,
+            data.entity._id,
             { charDescription: description },
             { forPlayer: true, slideOver: true, notification: { status: 'success', heading: 'Player Updated', message: "You have successfully updated your player's character description." } }
           )
         );
         return;
-      case 'npc':
+      case 'npcs':
         dispatch(
           updateSheetResourceStart(
             SheetType.campaigns,
-            campSheet!._id,
+            data.sheetId,
             SheetResourceType.npcs,
-            data.resourceId,
+            data.entity._id,
             { description },
             { slideOver: true, notification: { status: 'success', heading: 'Npc Updated', message: "You have successfully updated your npc's description." } }
           )
@@ -73,12 +77,12 @@ const EditDescription: React.FC<Props> = ({ data }) => {
 
   return (
     <SlideOverForm
-      title={`Edit ${data.type === 'npc' ? 'Npc' : 'Character'} Description`}
-      description={`Update the information below to edit your ${data.type === 'npc' ? 'npc' : 'character'} description.`}
-      submitText={`Save ${data.type === 'npc' ? 'npc' : 'character'} description`}
+      title={`Edit ${capitalize(label)} Description`}
+      description={`Update the information below to edit your ${label} description.`}
+      submitText={`Save ${label} description`}
       submitHandler={submitHandler}
     >
-      <TextArea slideOver label={`${data.type === 'npc' ? 'Npc' : 'Character'} Description`} name="description" rows={12} value={description} changeHandler={setDescription} />
+      <TextArea slideOver label={`${capitalize(label)} Description`} name="description" rows={12} value={description} changeHandler={setDescription} />
     </SlideOverForm>
   );
 };

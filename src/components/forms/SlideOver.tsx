@@ -274,13 +274,13 @@ const SlideOver: React.FC = () => {
                 {/* Campaign Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCampaign ? <ManageCampaign /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.combatForm ? <CombatForm id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.sessionForm ? <SessionForm id={slideOver.id!} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm id={slideOver.id!} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm id={slideOver.id!} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm id={slideOver.id!} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.sessionForm ? <SessionForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageAssignedBelongings ? <ManageAssignedBelongings data={slideOver.data} /> : null}
                 {/* Shared */}
                 {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice data={slideOver.data} /> : null}
@@ -293,7 +293,7 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.usableForm ? <UsableForm data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newTransactionForm ? <NewTransactionForm data={slideOver.data} /> : null}
               </div>
             </Transition.Child>

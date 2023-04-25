@@ -7,6 +7,7 @@ import { SlideOverContainer } from '../SlideOver';
 import ListContainer from '../../data/ListContainer';
 
 import DisplayInvite from '../../display/DisplayInvite';
+
 import { SheetType } from '../../../models/sheet';
 
 const ManageInvites = () => {
