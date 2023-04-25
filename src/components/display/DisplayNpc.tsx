@@ -201,7 +201,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           text: 'Manage',
-          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'weapons', npc: npc } }),
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { belongingType: 'weapons', npc: npc } }),
         }}
       >
         Weapons
@@ -217,7 +217,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           text: 'Manage',
-          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'wearables', npc: npc } }),
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { belongingType: 'wearables', npc: npc } }),
         }}
       >
         Wearables
@@ -233,7 +233,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           text: 'Manage',
-          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'consumables', npc: npc } }),
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { belongingType: 'consumables', npc: npc } }),
         }}
       >
         Consumables
@@ -249,7 +249,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           text: 'Manage',
-          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'usables', npc: npc } }),
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { belongingType: 'usables', npc: npc } }),
         }}
       >
         Usables

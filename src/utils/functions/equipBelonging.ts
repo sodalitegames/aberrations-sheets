@@ -6,12 +6,12 @@ import { setModal, setNestedModal } from '../../redux/app/app.actions';
 import ModalTypes from '../ModalTypes';
 import { getBelongingTypeCapitalized } from '../helpers/belongings';
 
-import { Belonging, Sheet, BelongingType, SheetType, SheetResourceType } from '../../models/sheet';
-import { Usable, Weapon, Wearable } from '../../models/sheet/resources';
+import { CharacterSheet, Belonging, BelongingType, SheetType, SheetResourceType } from '../../models/sheet';
+import { Usable, Weapon, Wearable, Player } from '../../models/sheet/resources';
 
 interface Data {
   sheetType: SheetType;
-  sheet: Sheet;
+  sheet: CharacterSheet | Player;
   belongingType: BelongingType;
   belonging: Belonging;
   equippedList: Belonging[];

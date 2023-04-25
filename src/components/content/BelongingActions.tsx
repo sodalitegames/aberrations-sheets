@@ -5,7 +5,7 @@ import { updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
 
 import { useActions } from '../../hooks/useActions';
 
-import { Belonging, Sheet, SheetType, SheetResourceType, BelongingType } from '../../models/sheet';
+import { Belonging, Sheet, SheetType, SheetResourceType, BelongingType, CharacterSheet } from '../../models/sheet';
 import { Weapon } from '../../models/sheet/resources';
 
 import equipBelonging from '../../utils/functions/equipBelonging';
@@ -42,7 +42,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
           {sheetType === 'characters' ? (
             <Button
               dark={belonging.equipped}
-              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings! })}
+              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet as CharacterSheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings! })}
             >
               {belonging.equipped ? 'Unequip' : 'Equip'}
             </Button>
@@ -110,7 +110,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
           <Button
             disabled={belongingType === 'wearables' && (belonging.npcId || belonging.equipped) ? true : false}
             disabledMessage={belongingType === 'wearables' ? `You must unequip/unassign this wearable before you can give or sell it to anybody.` : ''}
-            onClick={() => setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: belongingType, document: belonging } })}
+            onClick={() => setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, sheet, documentType: belongingType, document: belonging } })}
           >
             Give or Sell
           </Button>

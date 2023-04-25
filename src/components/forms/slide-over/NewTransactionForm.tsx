@@ -1,8 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { FormEvent, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -14,53 +11,69 @@ import Input from '../elements/Input';
 import Select from '../elements/Select';
 import TextArea from '../elements/TextArea';
 import Row from '../elements/Row';
-import Notice from '../../Notice';
+import Notice, { NoticeStatus } from '../../Notice';
 
 import { DisplayTransactionDocument } from '../../display/DisplayTransaction';
 
-const NewTransactionForm = ({ data }) => {
-  const dispatch = useDispatch();
+import { Belonging, BelongingType, CampaignSheet, CharacterSheet, Sheet, SheetResourceType, SheetType } from '../../../models/sheet';
+import { TransactionDocument, TransactionDocumentType, Wallet, Weapon } from '../../../models/sheet/resources';
 
-  const charSheet = useSelector(selectCurrentCharacter);
-  const campSheet = useSelector(selectCurrentCampaign);
+interface Props {
+  data: {
+    sheetType: SheetType;
+    sheet: Sheet;
+    documentType: TransactionDocumentType;
+    document: TransactionDocument;
+  };
+}
+
+const NewTransactionForm: React.FC<Props> = ({ data }) => {
+  const dispatch = useDispatch();
 
   const [senderName, setSenderName] = useState('');
   const [recipientId, setRecipientId] = useState('');
   const [sellPrice, setSellPrice] = useState(0);
   const [message, setMessage] = useState('');
 
-  const [recipientList, setRecipientList] = useState([]);
-
-  useEffect(() => {
+  const getRecipientList = () => {
     if (data.sheetType === 'characters') {
-      setSenderName(charSheet.characterName);
+      const campaign = (data.sheet as CharacterSheet).campaign;
 
-      const newRecipientList = charSheet.campaign
-        ? charSheet.campaign.players.filter(player => player._id !== charSheet._id).map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }))
-        : [];
+      if (!campaign) return [];
 
-      if (charSheet.campaign) newRecipientList.push({ name: charSheet.campaign.ccNickname || charSheet.campaign.ccName, id: charSheet.campaign._id, sheetType: 'campaigns' });
+      const list = campaign.players.filter(player => player._id !== data.sheet._id).map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }));
 
-      setRecipientList(newRecipientList);
+      list.push({ name: `${campaign.ccNickname || campaign.ccName} (CC)`, id: campaign._id, sheetType: 'campaigns' });
+
+      return list;
     }
 
     if (data.sheetType === 'campaigns') {
-      setSenderName(campSheet.ccNickname || campSheet.ccName);
-
-      const newRecipientList = campSheet.players.map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }));
-      setRecipientList(newRecipientList);
+      return (data.sheet as CampaignSheet).players.map(player => ({ name: player.characterName, id: player._id, sheetType: 'characters' }));
     }
-  }, [data.sheetType, campSheet, charSheet]);
 
-  const selectRecipient = e => {
-    if (!e.target.value) return setRecipientId('');
-    setRecipientId(e.target.value);
+    return [];
   };
 
-  const submitHandler = async e => {
+  const recipientList = getRecipientList();
+
+  useEffect(() => {
+    if (data.sheetType === 'characters') {
+      setSenderName((data.sheet as CharacterSheet).characterName);
+      return;
+    }
+
+    if (data.sheetType === 'campaigns') {
+      const { ccNickname, ccName } = data.sheet as CampaignSheet;
+      setSenderName(ccNickname || ccName);
+      return;
+    }
+  }, [data.sheetType, data.sheet]);
+
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (data.documentType === 'wearables' && data.document.equipped) return alert('You cannot offer this wearable to anybody until you have unequipped it.');
+    if (data.documentType === 'wearables' && (data.document as Belonging).equipped) return alert('You cannot offer this wearable to anybody until you have unequipped it.');
 
     if (!senderName) return alert('Must provide a senderName');
     if (!recipientId) return alert('Must provide a recipientId');
@@ -69,15 +82,15 @@ const NewTransactionForm = ({ data }) => {
     if (!data.documentType) return alert('Must provide a documentType');
     if (!data.document) return alert('Must provide a document');
 
-    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
-
     const recipientInfo = recipientList.find(recip => recip.id === recipientId);
+
+    if (!recipientInfo) return alert('You must choose a recipient!');
 
     dispatch(
       createSheetResourceStart(
         data.sheetType,
-        sheetId,
-        'transactions',
+        data.sheet._id,
+        SheetResourceType.transactions,
         {
           sheetType: data.sheetType,
           senderName,
@@ -94,9 +107,9 @@ const NewTransactionForm = ({ data }) => {
           notification: {
             status: 'success',
             heading: 'Transaction Created',
-            message: `You have successfully offered ${data.documentType === 'wallet' ? `${data.document.amount} monies` : `your ${data.document.nickname || data.document.name}`} to ${
-              recipientInfo.name
-            }.`,
+            message: `You have successfully offered ${
+              data.documentType === 'wallet' ? `${(data.document as Wallet).amount} monies` : `your ${(data.document as Weapon).nickname || (data.document as Belonging).name}`
+            } to ${recipientInfo.name}.`,
           },
         }
       )
@@ -106,13 +119,13 @@ const NewTransactionForm = ({ data }) => {
   return (
     <SlideOverForm title="Create a New Transaction" description="Fill out the information below to create your new transaction." submitText="Create transaction" submitHandler={submitHandler}>
       <Input slideOver label="Sender Name" name="senderName" type="text" value={senderName} changeHandler={setSenderName} required />
-      <Select slideOver label="Recipient" name="recipientId" options={recipientList} changeHandler={selectRecipient} required />
+      <Select slideOver label="Recipient" name="recipientId" options={recipientList} value={recipientId} changeHandler={setRecipientId} required />
       <Input slideOver label="Sell Price (Opt.)" name="sellPrice" type="number" min="0" value={sellPrice} changeHandler={setSellPrice} />
       <TextArea slideOver label="Message (Opt.)" name="message" rows={4} value={message} changeHandler={setMessage} />
 
       {/* Display Document Being Sent */}
       {data.document ? (
-        <Row slideOver label={`${data.documentType === 'wallet' ? 'Amount' : getBelongingTypeCapitalized(data.documentType)} Being Sent`} name="document">
+        <Row slideOver label={`${data.documentType === 'wallet' ? 'Amount' : getBelongingTypeCapitalized(data.documentType as unknown as BelongingType)} Being Sent`} name="document">
           <DisplayTransactionDocument document={data.document} documentType={data.documentType} sheetType={data.sheetType} />
         </Row>
       ) : (
@@ -121,14 +134,14 @@ const NewTransactionForm = ({ data }) => {
         </Row>
       )}
 
-      {data.document.equipped ? (
+      {(data.document as Belonging).equipped ? (
         <Notice
           noIcon
-          status="warn"
+          status={NoticeStatus.Warn}
           message={
             data.documentType === 'wearables'
               ? `If sent and accepted, transferring this wearable will unequip it from your person, and will remove any modifiers it may be adding to your stats.`
-              : `If sent and accepted, transferring this ${getBelongingType(data.documentType)} will unequip it from your person.`
+              : `If sent and accepted, transferring this ${getBelongingType(data.documentType as unknown as BelongingType)} will unequip it from your person.`
           }
         />
       ) : null}

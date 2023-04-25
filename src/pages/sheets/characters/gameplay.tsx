@@ -234,14 +234,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedWeapons}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'weapons' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'weapons' } }),
                 text: 'Manage equipped Weapons',
               }}
               empty={{
                 heading: 'No Equipped Weapons',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'weapons' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'weapons' } }),
                   text: 'Equip Weapon',
                 },
               }}
@@ -262,7 +262,7 @@ const CharacterGameplayPage = () => {
                 click: () =>
                   setSlideOver({
                     type: SlideOverTypes.manageEquippedBelongings,
-                    data: { type: 'characters', belongingType: 'wearables' },
+                    data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'wearables' },
                   }),
                 text: 'Manage equipped Wearables',
               }}
@@ -273,7 +273,7 @@ const CharacterGameplayPage = () => {
                   click: () =>
                     setSlideOver({
                       type: SlideOverTypes.manageEquippedBelongings,
-                      data: { type: 'characters', belongingType: 'wearables' },
+                      data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'wearables' },
                     }),
                   text: 'Equip Wearable',
                 },
@@ -294,14 +294,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedConsumables}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'consumables' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'consumables' } }),
                 text: 'Manage equipped Consumables',
               }}
               empty={{
                 heading: 'No Equipped Consumables',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'consumables' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'consumables' } }),
                   text: 'Equip Consumable',
                 },
               }}
@@ -319,14 +319,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedUsables}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'usables' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'usables' } }),
                 text: 'Manage equipped Usables',
               }}
               empty={{
                 heading: 'No Equipped Usables',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'usables' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'usables' } }),
                   text: 'Equip Usable',
                 },
               }}

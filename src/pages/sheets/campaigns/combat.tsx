@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { selectCombats, selectPotentialCombatants } from '../../../redux/campaign/campaign.selectors';
+import { selectCombats, selectPotentialCombatants, selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { useActions } from '../../../hooks/useActions';
 
@@ -56,6 +56,7 @@ const CampaignCombatPage = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const campSheet = useSelector(selectCurrentCampaign)!;
   const combats = useSelector(selectCombats);
   const potentialCombatants = useSelector(selectPotentialCombatants);
 
@@ -133,7 +134,7 @@ const CampaignCombatPage = () => {
             <SheetPagePanel>
               <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
                 <h2 className="text-base font-medium text-gray-900">In Combat</h2>
-                <Button rounded onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, id: combat._id })}>
+                <Button rounded onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, data: { sheetId: combat.sheetId, combat } })}>
                   Edit Combat
                 </Button>
               </div>
@@ -216,7 +217,7 @@ const CampaignCombatPage = () => {
                 </div>
               </div>
               <div className="space-x-3 sm:pl-6">
-                <Button dark onClick={() => setSlideOver({ type: SlideOverTypes.combatForm })}>
+                <Button dark onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, data: { sheetId: campSheet._id } })}>
                   Create Combat
                 </Button>
               </div>

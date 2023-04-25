@@ -15,6 +15,8 @@ interface CreatureCombatant extends Creature {
   combatantType: CombatantType;
 }
 
+export type PotentialCombatant = PlayerCombatant | CreatureCombatant | NpcCombatant;
+
 const selectCampaign = (state: RootState) => state.campaign;
 
 export const selectCurrentCampaign = createSelector([selectCampaign], campaign => campaign.current);
@@ -38,7 +40,7 @@ export const selectEnvironments = createSelector([selectCurrentCampaign], curren
 
 export const selectCombats = createSelector([selectCurrentCampaign], current => (current ? current.combats : []));
 
-export const selectPotentialCombatants = createSelector([selectCurrentCampaign], (current): (PlayerCombatant | CreatureCombatant | NpcCombatant)[] =>
+export const selectPotentialCombatants = createSelector([selectCurrentCampaign], (current): PotentialCombatant[] =>
   current
     ? [
         ...current.players.map(player => ({ ...player, combatantType: CombatantType.players })),

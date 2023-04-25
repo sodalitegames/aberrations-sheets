@@ -274,7 +274,7 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
                 {/* Campaign Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCampaign ? <ManageCampaign /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.combatForm ? <CombatForm id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.combatForm ? <CombatForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}

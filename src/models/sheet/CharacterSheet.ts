@@ -11,6 +11,7 @@ import { Usable } from './resources/Usable';
 import { Consumable } from './resources/Consumable';
 
 export type Campaign = {
+  _id: string;
   name: string;
   overview: string;
   ccName: string;
@@ -19,6 +20,7 @@ export type Campaign = {
 };
 
 type PlayerMin = {
+  _id: string;
   characterName: string;
   playerName: string;
   playerNickname: string;

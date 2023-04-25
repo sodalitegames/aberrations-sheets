@@ -199,7 +199,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'players', playerId: player._id, belongingType: 'weapons' },
+              data: { entityType: 'players', entityId: player._id, belongingType: 'weapons' },
             }),
         }}
       >
@@ -219,7 +219,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'players', playerId: player._id, belongingType: 'wearables' },
+              data: { entityType: 'players', entityId: player._id, belongingType: 'wearables' },
             }),
         }}
       >
@@ -239,7 +239,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'players', playerId: player._id, belongingType: 'consumables' },
+              data: { entityType: 'players', entityId: player._id, belongingType: 'consumables' },
             }),
         }}
       >
@@ -259,7 +259,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'players', playerId: player._id, belongingType: 'usables' },
+              data: { entityType: 'players', entityId: player._id, belongingType: 'usables' },
             }),
         }}
       >

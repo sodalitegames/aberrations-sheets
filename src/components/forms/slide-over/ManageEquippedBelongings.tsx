@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
@@ -19,43 +19,51 @@ import DisplayWearable from '../../display/DisplayWearable';
 import DisplayConsumable from '../../display/DisplayConsumable';
 import DisplayUsable from '../../display/DisplayUsable';
 
-const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) => {
+import { Belonging, BelongingType, SheetType } from '../../../models/sheet';
+import { Consumable, Usable, Weapon, Wearable } from '../../../models/sheet/resources';
+
+interface Props {
+  data: {
+    belongingType: BelongingType;
+    entityType: 'players' | 'characters';
+    entityId: string;
+  };
+}
+
+const ManageEquippedBelongings: React.FC<Props> = ({ data }) => {
   const { setNestedModal } = useActions();
 
   const charSheet = useSelector(selectCurrentCharacter);
   const campSheet = useSelector(selectCurrentCampaign);
 
-  const [belongings, setBelongings] = useState([]);
-  const [player, setPlayer] = useState(null);
-
-  useEffect(() => {
-    switch (type) {
+  const getEntity = () => {
+    switch (data.entityType) {
       case 'players':
-        const player = campSheet.players.find(player => player._id === playerId);
-        setPlayer(player);
-        setBelongings(player[belongingType].filter(bel => !bel.archived));
-        return;
+        return campSheet!.players.find(player => player._id === data.entityId);
       case 'characters':
-        setBelongings(charSheet[belongingType].filter(bel => !bel.archived));
-        return;
+        return charSheet!;
       default:
         return;
     }
-  }, [charSheet, campSheet, type, belongingType, playerId]);
+  };
+
+  const entity = getEntity();
+  const belongings = entity ? (entity[data.belongingType] as Belonging[]).filter(bel => !bel.archived) : [];
 
   return (
-    <SlideOverContainer title={`Manage equipped ${capitalize(belongingType)}`} description={`Manage equipped ${belongingType} below.`} cancelText="Done">
+    <SlideOverContainer title={`Manage equipped ${capitalize(data.belongingType)}`} description={`Manage equipped ${data.belongingType} below.`} cancelText="Done">
       <div className="px-6">
-        {belongings.length ? (
-          <ListContainer>
+        {entity && belongings.length ? (
+          <ListContainer list={belongings}>
             {belongings
               .filter(belonging => !belonging.archived)
               .map(belonging => {
-                if (belongingType === 'weapons') {
+                if (data.belongingType === 'weapons') {
                   return (
                     <Fragment key={belonging._id}>
                       <DisplayWeapon
-                        weapon={belonging}
+                        weapon={belonging as Weapon}
+                        sheetType={SheetType.characters}
                         listItem
                         condensed
                         actions={[
@@ -64,18 +72,18 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                             dark: belonging.equipped,
                             click: () =>
                               equipBelonging({
-                                sheetType: 'characters',
-                                sheet: type === 'characters' ? charSheet : player,
-                                belongingType: 'weapons',
+                                sheetType: SheetType.characters,
+                                sheet: entity,
+                                belongingType: BelongingType.weapons,
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
-                                forPlayer: type === 'players' ? true : false,
+                                forPlayer: data.entityType === 'players' ? true : false,
                               }),
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType, belonging } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType: data.belongingType, belonging } }),
                           },
                         ]}
                       />
@@ -83,11 +91,12 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                   );
                 }
 
-                if (belongingType === 'wearables') {
+                if (data.belongingType === 'wearables') {
                   return (
                     <Fragment key={belonging._id}>
                       <DisplayWearable
-                        wearable={belonging}
+                        wearable={belonging as Wearable}
+                        sheetType={SheetType.characters}
                         listItem
                         condensed
                         actions={[
@@ -96,18 +105,18 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                             dark: belonging.equipped,
                             click: () =>
                               equipBelonging({
-                                sheetType: 'characters',
-                                sheet: type === 'characters' ? charSheet : player,
-                                belongingType: 'wearables',
+                                sheetType: SheetType.characters,
+                                sheet: entity,
+                                belongingType: BelongingType.wearables,
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
-                                forPlayer: type === 'players' ? true : false,
+                                forPlayer: data.entityType === 'players' ? true : false,
                               }),
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType, belonging } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType: data.belongingType, belonging } }),
                           },
                         ]}
                       />
@@ -115,11 +124,12 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                   );
                 }
 
-                if (belongingType === 'consumables') {
+                if (data.belongingType === 'consumables') {
                   return (
                     <Fragment key={belonging._id}>
                       <DisplayConsumable
-                        consumable={belonging}
+                        consumable={belonging as Consumable}
+                        sheetType={SheetType.characters}
                         listItem
                         condensed
                         actions={[
@@ -128,18 +138,18 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                             dark: belonging.equipped,
                             click: () =>
                               equipBelonging({
-                                sheetType: 'characters',
-                                sheet: type === 'characters' ? charSheet : player,
-                                belongingType: 'consumables',
+                                sheetType: SheetType.characters,
+                                sheet: entity,
+                                belongingType: BelongingType.consumables,
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
-                                forPlayer: type === 'players' ? true : false,
+                                forPlayer: data.entityType === 'players' ? true : false,
                               }),
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType, belonging } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType: data.belongingType, belonging } }),
                           },
                         ]}
                       />
@@ -147,11 +157,12 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                   );
                 }
 
-                if (belongingType === 'usables') {
+                if (data.belongingType === 'usables') {
                   return (
                     <Fragment key={belonging._id}>
                       <DisplayUsable
-                        usable={belonging}
+                        usable={belonging as Usable}
+                        sheetType={SheetType.characters}
                         listItem
                         condensed
                         actions={[
@@ -160,18 +171,18 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
                             dark: belonging.equipped,
                             click: () =>
                               equipBelonging({
-                                sheetType: 'characters',
-                                sheet: type === 'characters' ? charSheet : player,
-                                belongingType: 'usables',
+                                sheetType: SheetType.characters,
+                                sheet: entity,
+                                belongingType: BelongingType.usables,
                                 belonging: belonging,
                                 equippedList: belongings.filter(bel => bel.equipped),
                                 nested: true,
-                                forPlayer: type === 'players' ? true : false,
+                                forPlayer: data.entityType === 'players' ? true : false,
                               }),
                           },
                           {
                             text: 'View',
-                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType, belonging } }),
+                            click: () => setNestedModal({ type: ModalTypes.showBelonging, data: { belongingType: data.belongingType, belonging } }),
                           },
                         ]}
                       />
@@ -183,7 +194,7 @@ const ManageEquippedBelongings = ({ data: { type, belongingType, playerId } }) =
               })}
           </ListContainer>
         ) : (
-          'You do not have any {belongingType}, create one now.'
+          `You do not have any ${data.belongingType}, create one now.`
         )}
       </div>
     </SlideOverContainer>
