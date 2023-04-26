@@ -7,9 +7,10 @@ import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { useResource } from '../../../hooks/useResource';
 
-import { getBelongingTypeCapitalized } from '../../../utils/helpers/belongings';
-
 import { ModalForm } from '../Modal';
+
+import { capitalize } from '../../../utils/helpers/strings';
+import { ResourceType, getResourceLabel } from '../../../utils/helpers/resources';
 
 import ListContainer from '../../data/ListContainer';
 import Select from '../elements/Select';
@@ -55,7 +56,7 @@ const AssignBelonging: React.FC<Props> = ({ data }) => {
           modal: true,
           notification: {
             status: 'success',
-            heading: `${getBelongingTypeCapitalized(data.belongingType)} Assigned`,
+            heading: `${capitalize(getResourceLabel(ResourceType[data.belongingType]))} Assigned`,
             message: `You have successfully assigned ${data.belonging.name} to ${npc.name}.`,
           },
         }
