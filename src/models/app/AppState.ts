@@ -5,14 +5,14 @@ export interface Modal {
   type: ModalTypes;
   show?: boolean;
   id?: string;
-  data: any;
+  data?: any;
 }
 
 export interface SlideOver {
   type: SlideOverTypes;
   show?: boolean;
   id?: string;
-  data: any;
+  data?: any;
 }
 
 export interface Notification {

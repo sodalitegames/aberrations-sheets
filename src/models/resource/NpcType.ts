@@ -1,20 +1,14 @@
-interface NpcTableLevel {
+type Level = {
   id: string;
-  level: number;
+  milestone: number;
   strength: number;
   agility: number;
   persona: number;
   aptitude: number;
-  milestone: number;
-  experience: number;
-}
-
-interface NpcTable {
-  id: string;
-  npcType: string;
-  level: NpcTableLevel[];
-}
+};
 
 export interface NpcType {
-  npcTable: NpcTable[];
+  id: string;
+  name: string;
+  levels: Level[];
 }

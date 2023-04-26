@@ -1,5 +1,7 @@
 import { StatType } from '../_partials';
 
+export type WeaponRange = 'Close' | 'Short' | 'Long' | 'Far';
+
 export interface Weapon {
   _id: string;
   sheetId: string;
@@ -12,7 +14,7 @@ export interface Weapon {
   type: 'Standard' | 'Improvised' | 'Custom';
   damageModifier: number;
   associatedStat: StatType;
-  range: 'Close' | 'Short' | 'Long' | 'Far';
+  range: WeaponRange;
   quantity: number;
   equipped: boolean;
   active: boolean;

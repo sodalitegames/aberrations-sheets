@@ -7,6 +7,9 @@ import { selectCurrentCharacter } from '../../../redux/character/character.selec
 import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
 
 import { useActions } from '../../../hooks/useActions';
+import { useResource } from '../../../hooks/useResource';
+
+import { getSpecies } from '../../../utils/helpers/species';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -25,6 +28,10 @@ const ManageCharacter = () => {
 
   const currentUser = useSelector(selectCurrentUser);
   const charSheet = useSelector(selectCurrentCharacter);
+
+  const species = useResource('species');
+
+  const charSpecies = getSpecies(charSheet.speciesId, species);
 
   const [playerNickname, setPlayerNickname] = useState('');
   const [characterName, setCharacterName] = useState('');
@@ -68,7 +75,7 @@ const ManageCharacter = () => {
       <Input slideOver label="Player Nickname (Opt.)" type="text" name="playerName" value={playerNickname} changeHandler={setPlayerNickname} />
       <Input slideOver label="Character Name" type="text" name="characterName" value={characterName} changeHandler={setCharacterName} />
       <Row slideOver name="species" label="Character Species">
-        <ul className="mt-3 divide-y divide-gray-200">{charSheet ? <DisplaySpecies species={charSheet.species} /> : null}</ul>
+        <ul className="mt-3 divide-y divide-gray-200">{charSpecies ? <DisplaySpecies species={charSpecies} /> : null}</ul>
       </Row>
       {/* <TextArea slideOver label="Character Description" name="charDescription" rows={6} value={charDescription} changeHandler={setCharDescription} />
       <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} /> */}

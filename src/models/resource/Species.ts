@@ -1,10 +1,4 @@
-type Lore = {
-  worldTitle: string;
-  history: string;
-  current: string;
-};
-
-type Abilities = {
+export type Abilities = {
   activated: string;
   passive: string;
   detraction: string;
@@ -17,15 +11,16 @@ type Stats = {
   aptitude: number;
 };
 
+type Health = {
+  starting: number;
+  increment: number;
+};
+
 export interface Species {
   id: string;
   name: string;
-  ability: string;
-  abilities: Abilities;
-  basicInfo: string;
   appearance: string;
   stats: Stats;
-  health: number;
-  healthIncrement: number;
-  lore: Lore;
+  health: Health;
+  abilities: Abilities;
 }

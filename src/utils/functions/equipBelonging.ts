@@ -19,7 +19,7 @@ interface Data {
   forPlayer?: boolean;
 }
 
-export const correctStatMod = (mod: number) => {
+export const correctStatMod = (mod: number): number => {
   // Maximum modifier amount is five
   if (mod > 5) return 5;
 

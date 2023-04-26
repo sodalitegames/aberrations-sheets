@@ -16,7 +16,7 @@ interface DescriptionListItem {
 }
 
 interface DescriptionListProps {
-  list: DescriptionListItem[];
+  list: (DescriptionListItem | null)[];
   classes?: string;
 }
 

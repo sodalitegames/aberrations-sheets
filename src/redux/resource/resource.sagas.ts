@@ -1,5 +1,4 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
-import { AxiosResponse } from 'axios';
 
 import { fetchResourceSuccess, fetchResourceFailure } from './resource.actions';
 
@@ -8,7 +7,7 @@ import { FetchedResourceType, Species, Weapon, AugmentationGroup, ConsumableCate
 
 import { FetchResourceStartAction, ResourceActionTypes } from './resource.types';
 
-import { fetchSpecies, fetchWeapons, fetchAugmentationGroups, fetchConsumableCategories, fetchCreatureTypes, fetchNpcTypes } from '../../apis/aberrations.api';
+import { fetchSpecies, fetchWeapons, fetchAugmentationGroups, fetchConsumableCategories, fetchCreatureTypes, fetchNpcTypes } from '../../apis/database.api';
 
 export function* onFetchResourceStart() {
   yield takeLatest(ResourceActionTypes.FETCH_RESOURCE_START, fetchResource);
@@ -18,28 +17,40 @@ export function* fetchResource({ payload: { resourceType } }: FetchResourceStart
   try {
     switch (resourceType) {
       case FetchedResourceType.Species:
-        const { data: species }: AxiosResponse<Species[]> = yield fetchSpecies();
-        yield put(fetchResourceSuccess(resourceType, species));
+        const {
+          data: { docs: species },
+        } = yield fetchSpecies();
+        yield put(fetchResourceSuccess(resourceType, species as Species[]));
         break;
       case FetchedResourceType.Weapons:
-        const { data: weapons }: AxiosResponse<Weapon[]> = yield fetchWeapons();
-        yield put(fetchResourceSuccess(resourceType, weapons));
+        const {
+          data: { docs: weapons },
+        } = yield fetchWeapons();
+        yield put(fetchResourceSuccess(resourceType, weapons as Weapon[]));
         break;
       case FetchedResourceType.AugmentationGroups:
-        const { data: augmentationGroups }: AxiosResponse<AugmentationGroup[]> = yield fetchAugmentationGroups();
-        yield put(fetchResourceSuccess(resourceType, augmentationGroups));
+        const {
+          data: { docs: augmentationGroups },
+        } = yield fetchAugmentationGroups();
+        yield put(fetchResourceSuccess(resourceType, augmentationGroups as AugmentationGroup[]));
         break;
       case FetchedResourceType.ConsumableCategories:
-        const { data: consumableCategories }: AxiosResponse<ConsumableCategory[]> = yield fetchConsumableCategories();
-        yield put(fetchResourceSuccess(resourceType, consumableCategories));
+        const {
+          data: { docs: consumableCategories },
+        } = yield fetchConsumableCategories();
+        yield put(fetchResourceSuccess(resourceType, consumableCategories as ConsumableCategory[]));
         break;
       case FetchedResourceType.CreatureTypes:
-        const { data: creatureTypes }: AxiosResponse<CreatureType[]> = yield fetchCreatureTypes();
-        yield put(fetchResourceSuccess(resourceType, creatureTypes));
+        const {
+          data: { docs: creatureTypes },
+        } = yield fetchCreatureTypes();
+        yield put(fetchResourceSuccess(resourceType, creatureTypes as CreatureType[]));
         break;
       case FetchedResourceType.NpcTypes:
-        const { data: npcTypes }: AxiosResponse<NpcType[]> = yield fetchNpcTypes();
-        yield put(fetchResourceSuccess(resourceType, npcTypes));
+        const {
+          data: { docs: npcTypes },
+        } = yield fetchNpcTypes();
+        yield put(fetchResourceSuccess(resourceType, npcTypes as NpcType[]));
         break;
       default:
         break;

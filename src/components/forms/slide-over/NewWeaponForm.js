@@ -47,8 +47,8 @@ const NewWeaponForm = ({ data }) => {
     if (fetchedWeapons) {
       const mappedWeaponsList = fetchedWeapons.map(weap => {
         return {
-          id: weap._id,
-          universalId: weap._id,
+          id: weap.id,
+          universalId: weap.id,
           name: weap.name,
           ability: weap.ability,
           type: weap.type,

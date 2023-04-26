@@ -26,13 +26,11 @@ describe('resource reducer', () => {
     const mockCategories: ConsumableCategory[] = [
       {
         id: '1',
-        _id: '1',
         name: 'Fake Name 1',
         description: 'Fake description 1.',
       },
       {
         id: '2',
-        _id: '2',
         name: 'Fake Name 2',
         description: 'Fake description 2.',
       },

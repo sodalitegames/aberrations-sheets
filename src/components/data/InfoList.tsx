@@ -9,7 +9,7 @@ export interface InfoListItem {
 }
 
 interface InfoListProps {
-  list: string[] | InfoListItem[];
+  list: (string | InfoListItem)[];
 }
 
 const InfoList: React.FC<InfoListProps> = ({ list }) => {
