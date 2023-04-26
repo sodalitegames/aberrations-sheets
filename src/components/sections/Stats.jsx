@@ -19,7 +19,7 @@ const Stats = ({ stats, experience }) => {
     <div>
       <div className="flex flex-wrap justify-between mx-2 space-y-2">
         <h3 className="text-lg font-medium text-gray-900">Stats</h3>
-        <Chip color={experience === 0 ? 'yellow' : 'green'} editable={{ type: ModalTypes.editExperience, data: { type: 'character', entity: charSheet } }}>
+        <Chip color={experience === 0 ? 'yellow' : 'green'} editable={{ type: ModalTypes.editExperience, data: { entityType: 'characters', entity: charSheet } }}>
           Experience: {experience}
         </Chip>
       </div>
@@ -33,7 +33,7 @@ const Stats = ({ stats, experience }) => {
                 <div className="flex flex-col items-center text-5xl font-semibold text-gray-900 shrink-0">
                   <h5 className="flex items-center text-xl font-normal">
                     {stat.name}
-                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editStat, id: stat.name.toLowerCase(), data: { type: 'character', resource: charSheet } })}>
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editStat, data: { stat: stat.name.toLowerCase(), entityType: 'characters', entity: charSheet } })}>
                       <PencilIcon
                         className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"
@@ -44,10 +44,19 @@ const Stats = ({ stats, experience }) => {
                 </div>
 
                 <div className="flex flex-col mt-4 space-y-2">
-                  <Button rounded classes="justify-center" onClick={() => setModal({ type: ModalTypes.upgradeStat, id: stat.name.toLowerCase(), data: { type: 'character', resource: charSheet } })}>
+                  <Button
+                    rounded
+                    classes="justify-center"
+                    onClick={() => setModal({ type: ModalTypes.upgradeStat, data: { stat: stat.name.toLowerCase(), entityType: 'characters', entity: charSheet } })}
+                  >
                     Upgrade
                   </Button>
-                  <Button dark rounded classes="justify-center" onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character', rollingStat: stat.name.toLowerCase() } })}>
+                  <Button
+                    dark
+                    rounded
+                    classes="justify-center"
+                    onClick={() => setSlideOver({ type: SlideOverTypes.rollStat, data: { entityType: 'characters', entityId: charSheet._id, stat: stat.name.toLowerCase() } })}
+                  >
                     Roll
                   </Button>
                 </div>

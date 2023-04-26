@@ -11,10 +11,11 @@ interface BasicInputProps {
   value: string | number;
   name: string;
   type: string;
+  required?: boolean;
 }
 
-export const BasicInput: React.VFC<BasicInputProps> = ({ name, value, type, changeHandler }) => {
-  return <input className={INPUT_STYLES} name={name} value={value} type={type} onChange={e => changeHandler(e.target.value)} />;
+export const BasicInput: React.VFC<BasicInputProps> = ({ name, value, type, changeHandler, required }) => {
+  return <input className={INPUT_STYLES} name={name} value={value} type={type} onChange={e => changeHandler(e.target.value)} required={required} />;
 };
 
 interface FormikInputProps {
@@ -36,17 +37,21 @@ export const FormikInput: React.VFC<FormikInputProps> = ({ name, type }) => {
 interface InputProps {
   label: string;
   name: string;
-  type: 'number' | 'text';
+  type: 'number' | 'text' | 'date';
   changeHandler?: Function;
   value?: string | number;
   slideOver?: boolean;
   formik?: boolean;
+  min?: string;
+  max?: string;
+  step?: string;
+  required?: boolean;
 }
 
-const Input: React.VFC<InputProps> = ({ label, changeHandler, value, name, slideOver, formik, type }) => {
+const Input: React.VFC<InputProps> = ({ label, changeHandler, value, name, slideOver, formik, type, required }) => {
   return (
     <Row name={name} label={label} slideOver={slideOver}>
-      {formik ? <FormikInput name={name} type={type} /> : <BasicInput name={name} value={value!} type={type} changeHandler={changeHandler!} />}
+      {formik ? <FormikInput name={name} type={type} /> : <BasicInput name={name} value={value!} type={type} changeHandler={changeHandler!} required={required} />}
     </Row>
   );
 };

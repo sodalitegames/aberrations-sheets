@@ -10,12 +10,12 @@ import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
 import { Usable } from '../../models/sheet/resources';
-import { EntityType, SheetType } from '../../models/sheet';
+import { SheetType } from '../../models/sheet';
 import { DisplayBelongingProps, DisplayProps } from './display.types';
 
 interface UsableDetailsProps {
   usable: Usable;
-  sheetType: SheetType | EntityType;
+  sheetType: SheetType;
 }
 
 const UsableDetails: React.FC<UsableDetailsProps> = ({ usable, sheetType }) => {
@@ -41,14 +41,14 @@ const UsableDetails: React.FC<UsableDetailsProps> = ({ usable, sheetType }) => {
 
 interface DisplayUsableProps extends DisplayProps, DisplayBelongingProps {
   usable: Usable;
-  sheetType: SheetType | EntityType;
+  sheetType: SheetType;
 }
 
-const DisplayUsable: React.FC<DisplayUsableProps> = ({ usable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
+const DisplayUsable: React.FC<DisplayUsableProps> = ({ usable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.showBelonging, id: usable._id, data: { sheetType: sheetType, playerId, belongingType: 'usables' } }}>
+        <ListItem heading={`${usable.name} (${usable.type})`} view={{ type: ModalTypes.showBelonging, data: { belongingType: 'usables', belonging: usable } }}>
           <InfoList list={[{ tooltip: [usable.description], value: usable.description }]} />
         </ListItem>
       );
@@ -66,16 +66,15 @@ const DisplayUsable: React.FC<DisplayUsableProps> = ({ usable, condensed, action
       <ListItem
         heading={usable.name}
         noButtonPanel={noButtonPanel}
-        editable={{ type: SlideOverTypes.usableForm, id: usable._id, data: { sheetType: sheetType } }}
+        editable={{ type: SlideOverTypes.usableForm, data: { sheetType, sheetId: usable.sheetId, usable } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: usable._id,
           data: {
             sheetType: sheetType,
             resourceType: 'usables',
+            resource: usable,
             title: `Are you sure you want to delete ${usable.name}?`,
             submitText: `Yes, delete ${usable.name}`,
-            equipped: usable.equipped,
             notification: { heading: 'Usable Deleted', message: `You have successfully deleted ${usable.name}.` },
           },
         }}

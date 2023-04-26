@@ -1,7 +1,12 @@
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { selectCurrentCharacter, selectConsumables as selectCharConsumables, selectArchivedConsumables as selectCharArchivedConsumables } from '../../../../redux/character/character.selectors';
+import {
+  selectCurrentCharacter,
+  selectConsumables as selectCharConsumables,
+  selectArchivedConsumables as selectCharArchivedConsumables,
+  selectEquippedConsumables,
+} from '../../../../redux/character/character.selectors';
 import { selectCurrentCampaign, selectConsumables as selectCampConsumables, selectArchivedConsumables as selectCampArchivedConsumables } from '../../../../redux/campaign/campaign.selectors';
 
 import InteractablesPageContent from '../../../../components/content/InteractablesPageContent';
@@ -27,6 +32,7 @@ const SheetBelongingsConsumablesPage: React.FC<Props> = ({ sheetType }) => {
   };
 
   const charConsumables = useSelector(selectCharConsumables);
+  const equippedConsumables = useSelector(selectEquippedConsumables);
   const campConsumables = useSelector(selectCampConsumables);
   const charArchivedConsumables = useSelector(selectCharArchivedConsumables);
   const campArchivedConsumables = useSelector(selectCampArchivedConsumables);
@@ -42,14 +48,17 @@ const SheetBelongingsConsumablesPage: React.FC<Props> = ({ sheetType }) => {
   const list = getList();
   const consumable = list.find(cons => cons._id === id) || list[0];
 
-  const Display = () => <DisplayConsumable consumable={consumable} sheetType={sheetType} />;
-  const Actions = () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]!} belongingType={BelongingType.consumables} belonging={consumable} />;
+  const Display = consumable ? () => <DisplayConsumable consumable={consumable} sheetType={sheetType} /> : null;
+  const Actions = consumable
+    ? () => <BelongingActions sheetType={sheetType} sheet={sheets[sheetType]!} belongingType={BelongingType.consumables} belonging={consumable} equippedBelongings={equippedConsumables} />
+    : null;
 
   return (
     <InteractablesPageContent
       sheetType={sheetType}
+      sheetId={sheets[sheetType]!._id}
       show={show}
-      id={consumable._id}
+      id={consumable?._id}
       list={list}
       type={InteractableType.consumables}
       label="Consumable"

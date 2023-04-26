@@ -11,12 +11,12 @@ import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
 import { Consumable } from '../../models/sheet/resources';
-import { EntityType, SheetType } from '../../models/sheet';
+import { SheetType } from '../../models/sheet';
 import { DisplayBelongingProps, DisplayProps } from './display.types';
 
 interface ConsumableDetailsProps {
   consumable: Consumable;
-  sheetType: SheetType | EntityType;
+  sheetType: SheetType;
 }
 
 const ConsumableDetails: React.FC<ConsumableDetailsProps> = ({ consumable, sheetType }) => {
@@ -44,17 +44,14 @@ const ConsumableDetails: React.FC<ConsumableDetailsProps> = ({ consumable, sheet
 
 interface DisplayConsumableProps extends DisplayProps, DisplayBelongingProps {
   consumable: Consumable;
-  sheetType: SheetType | EntityType;
+  sheetType: SheetType;
 }
 
-const DisplayConsumable: React.FC<DisplayConsumableProps> = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
+const DisplayConsumable: React.FC<DisplayConsumableProps> = ({ consumable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem
-          heading={`${consumable.name} (Level ${consumable.level})`}
-          view={{ type: ModalTypes.showBelonging, id: consumable._id, data: { sheetType: sheetType, playerId, belongingType: 'consumables' } }}
-        >
+        <ListItem heading={`${consumable.name} (Level ${consumable.level})`} view={{ type: ModalTypes.showBelonging, data: { belongingType: 'consumables', belonging: consumable } }}>
           <InfoList
             list={[
               { tooltip: consumable.categories.map(cat => `${cat.name} - ${cat.description}`), value: `Categories: ${consumable.categories.map(cat => cat.name).join(', ')}` },
@@ -77,16 +74,15 @@ const DisplayConsumable: React.FC<DisplayConsumableProps> = ({ consumable, conde
       <ListItem
         heading={consumable.name}
         noButtonPanel={noButtonPanel}
-        editable={{ type: SlideOverTypes.consumableForm, id: consumable._id, data: { sheetType: sheetType } }}
+        editable={{ type: SlideOverTypes.consumableForm, data: { sheetType, sheetId: consumable.sheetId, consumable } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: consumable._id,
           data: {
             sheetType: sheetType,
             resourceType: 'consumables',
+            resource: consumable,
             title: `Are you sure you want to delete ${consumable.name}?`,
             submitText: `Yes, delete ${consumable.name}`,
-            equipped: consumable.equipped,
             notification: { heading: 'Consumable Deleted', message: `You have successfully deleted ${consumable.name}.` },
           },
         }}

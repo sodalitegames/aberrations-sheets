@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { selectCurrentUser } from '../../../redux/user/user.selectors';
@@ -14,51 +14,34 @@ import { SlideOverForm } from '../SlideOver';
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 import Row from '../elements/Row';
-import { BasicSelect, SelectOption } from '../elements/Select';
+import { BasicSelect } from '../elements/Select';
 import { LoadingSpinner } from '../elements/SubmitButton';
 import Detail from '../elements/Detail';
 
 import DisplaySpecies from '../../display/DisplaySpecies';
 
-const NewCharacter: React.FC = () => {
+const NewCharacter = () => {
   const dispatch = useDispatch();
 
   const currentUser = useSelector(selectCurrentUser);
 
   const fetchedSpecies = useResource(FetchedResourceType.Species) as Species[];
 
-  const [speciesList, setSpeciesList] = useState<SelectOption[]>([]);
+  const speciesOptions = (fetchedSpecies || []).map(spec => {
+    return {
+      id: spec.id,
+      name: spec.name,
+    };
+  });
 
   const [playerNickname, setPlayerNickname] = useState('');
   const [characterName, setCharacterName] = useState('');
   const [charDescription, setCharDescription] = useState('');
   const [charBackground, setCharBackground] = useState('');
-  const [species, setSpecies] = useState<Species | null>(null);
 
-  useEffect(() => {
-    if (fetchedSpecies) {
-      // Format the species list for the select component
-      const speciesList: SelectOption[] = fetchedSpecies.map(spec => {
-        return {
-          id: spec.id,
-          name: spec.name,
-        };
-      });
+  const [speciesId, setSpeciesId] = useState<string>('');
 
-      setSpeciesList(speciesList);
-    }
-  }, [fetchedSpecies]);
-
-  const selectCurrentSpecies = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (!event.target.value || !fetchedSpecies) {
-      setSpecies(null);
-      return;
-    }
-
-    const currSpec = fetchedSpecies.find(spec => spec.id === event.target.value);
-
-    setSpecies(currSpec || null);
-  };
+  const species = (fetchedSpecies || []).find(spec => spec.id === speciesId);
 
   const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -66,6 +49,7 @@ const NewCharacter: React.FC = () => {
     if (!characterName) return alert('Must provide a characterName');
     if (!charDescription) return alert('Must provide a charDescription');
     if (!charBackground) return alert('Must provide a charBackground');
+
     if (!species) return alert('Must select a species');
 
     dispatch(
@@ -97,9 +81,9 @@ const NewCharacter: React.FC = () => {
       <Input slideOver label="Player Nickname (Opt.)" type="text" name="playerName" value={playerNickname} changeHandler={setPlayerNickname} />
       <Input slideOver label="Character Name" type="text" name="characterName" value={characterName} changeHandler={setCharacterName} />
       <Row slideOver name="species" label="Character Species">
-        {fetchedSpecies && speciesList ? (
+        {speciesOptions ? (
           <>
-            <BasicSelect name="species" value={species ? species.id : ''} options={speciesList} changeHandler={selectCurrentSpecies} />
+            <BasicSelect name="species" value={speciesId} options={speciesOptions} changeHandler={setSpeciesId} />
             {species ? (
               <ul className="mt-3 divide-y divide-gray-200">
                 <DisplaySpecies species={species} />

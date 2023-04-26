@@ -58,13 +58,13 @@ const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, 
       <ListItem
         heading={creature.name}
         noButtonPanel={noButtonPanel}
-        editable={{ type: SlideOverTypes.creatureForm, id: creature._id, data: { sheetType: 'campaigns' } }}
+        editable={{ type: SlideOverTypes.creatureForm, id: creature._id, data: { sheetId: creature.sheetId, creature } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: creature._id,
           data: {
             sheetType: 'campaigns',
             resourceType: 'creatures',
+            resource: creature,
             title: `Are you sure you want to delete ${creature.name}?`,
             submitText: `Yes, delete ${creature.name}`,
             notification: { heading: 'Creature Deleted', message: `You have successfully deleted ${creature.name}.` },
@@ -83,15 +83,15 @@ const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, 
           menu: [
             {
               text: 'Mortality',
-              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'creature', entity: creature } }),
+              click: () => setModal({ type: ModalTypes.editMortality, data: { entityType: 'creatures', entity: creature } }),
             },
             {
               text: 'Health',
-              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'creature', entity: creature } }),
+              click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'creatures', entity: creature } }),
             },
             {
               text: 'Modifiers',
-              click: () => setModal({ type: ModalTypes.editModifiers, data: { type: 'creature', resource: creature } }),
+              click: () => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'creatures', entity: creature } }),
             },
           ],
         }}
@@ -103,10 +103,10 @@ const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, 
       <Heading
         edit={{
           menu: [
-            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, id: 'strength', data: { type: 'creature', resource: creature } }) },
-            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'creature', resource: creature } }) },
-            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'creature', resource: creature } }) },
-            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'creature', resource: creature } }) },
+            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'strength', entityType: 'creatures', entity: creature } }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'agility', entityType: 'creatures', entity: creature } }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'persona', entityType: 'creatures', entity: creature } }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'aptitude', entityType: 'creatures', entity: creature } }) },
           ],
         }}
       >
@@ -125,10 +125,10 @@ const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, 
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'creature', resource: creature } }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'creature', resource: creature } }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'creature', resource: creature } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'creature', resource: creature } }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'slowed', entityType: 'creatures', entity: creature } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'agony', entityType: 'creatures', entity: creature } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'injured', entityType: 'creatures', entity: creature } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'creatures', entity: creature } }) },
           ],
         }}
       >

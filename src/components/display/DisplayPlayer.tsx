@@ -21,7 +21,7 @@ import Heading from '../Heading';
 import { Player } from '../../models/sheet/resources';
 import { Species } from '../../models/resource';
 import { DisplayProps } from './display.types';
-import { EntityType } from '../../models/sheet';
+import { SheetType } from '../../models/sheet';
 
 interface PlayerDetailsProps {
   player: Player;
@@ -29,21 +29,23 @@ interface PlayerDetailsProps {
 }
 
 const PlayerDetails: React.FC<PlayerDetailsProps> = ({ player, species }) => {
-  const modifiers = calculateModifiers(player.modifiers, player.wearables);
+  const equippedWearables = player.wearables.filter(wear => wear.equipped);
+
+  const modifiers = calculateModifiers(player.modifiers, equippedWearables);
   const abilities = getSpeciesAbility(player.speciesId, species);
 
   return (
     <DescriptionList
       list={[
         { name: 'Player Name', values: [player.playerNickname ? `${player.playerNickname} (${player.playerName})` : player.playerName], half: true },
-        { name: 'Shield Value', values: [calculateShieldValue(player.wearables)], half: true },
+        { name: 'Shield Value', values: [calculateShieldValue(equippedWearables)], half: true },
         { name: 'Species', values: [player.speciesName], half: true },
         { name: 'Mortality', values: [player.mortality], half: true },
         { name: 'Experience', values: [player.experience], half: true },
         { name: 'Wallet', values: [player.wallet], half: true },
         { name: 'Active', values: [player.active ? 'Yes' : 'No'], half: true },
         { name: 'Milestones', values: [player.milestones], half: true },
-        { name: 'Speed', values: [player.speed + calculateSpeedAdjustment(player.wearables)], half: true },
+        { name: 'Speed', values: [player.speed + calculateSpeedAdjustment(equippedWearables)], half: true },
         { name: 'Health', values: [`${player.currentHp}/${player.maxHp}`], half: true },
         { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
         {
@@ -95,27 +97,27 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           menu: [
             {
               text: 'Wallet',
-              click: () => setModal({ type: ModalTypes.editWallet, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editWallet, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Mortality',
-              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editMortality, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Experience',
-              click: () => setModal({ type: ModalTypes.editExperience, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editExperience, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Health',
-              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Milestones',
-              click: () => setModal({ type: ModalTypes.editMilestones, data: { type: 'player', entity: player } }),
+              click: () => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Modifiers',
-              click: () => setModal({ type: ModalTypes.editModifiers, data: { type: 'player', resource: player } }),
+              click: () => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'players', entity: player } }),
             },
           ],
         }}
@@ -127,10 +129,10 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
       <Heading
         edit={{
           menu: [
-            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, id: 'strength', data: { type: 'player', resource: player } }) },
-            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'player', resource: player } }) },
-            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'player', resource: player } }) },
-            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'player', resource: player } }) },
+            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'strength', entityType: 'players', entity: player } }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'agility', entityType: 'players', entity: player } }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'persona', entityType: 'players', entity: player } }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'aptitude', entityType: 'players', entity: player } }) },
           ],
         }}
       >
@@ -150,10 +152,10 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'player', resource: player } }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'player', resource: player } }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'player', resource: player } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'player', resource: player } }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'slowed', entityType: 'players', entity: player } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'agony', entityType: 'players', entity: player } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'injured', entityType: 'players', entity: player } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'players', entity: player } }) },
           ],
         }}
       >
@@ -169,12 +171,12 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         classes="my-2"
       />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { type: 'player', description: player.charDescription, resourceId: player._id } }) }}>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { sheetType: 'campaigns', sheetId: player.campaign, entityType: 'players', entity: player } }) }}>
         Character Description
       </Heading>
       <InfoList list={[player.charDescription]} />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { type: 'player', background: player.charBackground, resourceId: player._id } }) }}>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { sheetType: 'campaigns', sheetId: player.campaign, entityType: 'players', entity: player } }) }}>
         Character Background
       </Heading>
       <InfoList list={[player.charBackground]} />
@@ -182,7 +184,11 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
       <Heading
         edit={{
           text: 'Purchase',
-          click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: player._id, entity: player, entityType: 'player' } }),
+          click: () =>
+            setSlideOver({
+              type: SlideOverTypes.purchaseAugmentation,
+              data: { sheetType: 'characters', sheetId: player._id, entity: player, entityType: 'players', augmentations: player.augmentations },
+            }),
         }}
       >
         Augmentations
@@ -199,7 +205,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'players', playerId: player._id, belongingType: 'weapons' },
+              data: { entityType: 'players', entityId: player._id, belongingType: 'weapons' },
             }),
         }}
       >
@@ -209,7 +215,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.weapons
           .filter(weapon => weapon.equipped)
           .map(weapon => (
-            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={EntityType.players} playerId={player._id} listItem condensed="view" />
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={SheetType.characters} listItem condensed="view" />
           ))}
       </ul>
 
@@ -219,7 +225,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'players', playerId: player._id, belongingType: 'wearables' },
+              data: { entityType: 'players', entityId: player._id, belongingType: 'wearables' },
             }),
         }}
       >
@@ -229,7 +235,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.wearables
           .filter(wearable => wearable.equipped)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={EntityType.players} playerId={player._id} listItem condensed="view" />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={SheetType.characters} listItem condensed="view" />
           ))}
       </ul>
 
@@ -239,7 +245,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'players', playerId: player._id, belongingType: 'consumables' },
+              data: { entityType: 'players', entityId: player._id, belongingType: 'consumables' },
             }),
         }}
       >
@@ -249,7 +255,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.consumables
           .filter(consumable => consumable.equipped)
           .map(consumable => (
-            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={EntityType.players} playerId={player._id} listItem condensed="view" />
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={SheetType.characters} listItem condensed="view" />
           ))}
       </ul>
 
@@ -259,7 +265,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           click: () =>
             setSlideOver({
               type: SlideOverTypes.manageEquippedBelongings,
-              data: { type: 'players', playerId: player._id, belongingType: 'usables' },
+              data: { entityType: 'players', entityId: player._id, belongingType: 'usables' },
             }),
         }}
       >
@@ -269,7 +275,7 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
         {player.usables
           .filter(usable => usable.equipped)
           .map(usable => (
-            <DisplayUsable key={usable._id} usable={usable} sheetType={EntityType.players} playerId={player._id} listItem condensed="view" />
+            <DisplayUsable key={usable._id} usable={usable} sheetType={SheetType.characters} listItem condensed="view" />
           ))}
       </ul>
     </div>

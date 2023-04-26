@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { selectCombats, selectPotentialCombatants } from '../../../redux/campaign/campaign.selectors';
+import { selectCombats, selectPotentialCombatants, selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { useActions } from '../../../hooks/useActions';
 
@@ -11,8 +11,8 @@ import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 import { useResource } from '../../../hooks/useResource';
 
 import { FetchedResourceType, Species } from '../../../models/resource';
-import { Combat, Combatant, Creature, Npc, Player } from '../../../models/sheet/resources';
-import { SheetResourceType, SheetType } from '../../../models/sheet';
+import { Combat, Combatant, CombatantType, Creature, Npc, Player } from '../../../models/sheet/resources';
+import { EntityType, SheetResourceType, SheetType } from '../../../models/sheet';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 import SheetPagePanel from '../../../layouts/components/sheet/SheetPagePanel';
@@ -39,10 +39,24 @@ const createOption = (combat: Combat) => {
   return { id: combat._id, title: combat.description, href: `?id=${combat._id}`, description: combat.combatants.map(combatant => combatant.name).join(', ') };
 };
 
+const getType = (type: CombatantType): EntityType | undefined => {
+  switch (type) {
+    case 'players':
+      return EntityType.players;
+    case 'npcs':
+      return EntityType.npcs;
+    case 'creatures':
+      return EntityType.creatures;
+    default:
+      break;
+  }
+};
+
 const CampaignCombatPage = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const campSheet = useSelector(selectCurrentCampaign)!;
   const combats = useSelector(selectCombats);
   const potentialCombatants = useSelector(selectPotentialCombatants);
 
@@ -55,14 +69,15 @@ const CampaignCombatPage = () => {
 
   const combat = combats.find(comb => comb._id === combatId) || combats[0];
 
-  const combatants: CombatantEntity[] = combat.combatants.map(comba => {
-    const entity = potentialCombatants.find(ent => ent._id === comba._id);
-    console.log('combatants mapped');
-    return {
-      ...comba,
-      doc: entity ? entity : null,
-    };
-  });
+  const combatants: CombatantEntity[] = combat
+    ? combat.combatants.map(comba => {
+        const entity = potentialCombatants.find(ent => ent._id === comba._id);
+        return {
+          ...comba,
+          doc: entity ? entity : null,
+        };
+      })
+    : [];
 
   const entity: CombatantEntity = combatants.find(ent => ent._id === entityId) || combatants[0];
 
@@ -120,7 +135,7 @@ const CampaignCombatPage = () => {
             <SheetPagePanel>
               <div className="flex flex-wrap justify-between md:space-y-2 lg:space-y-0">
                 <h2 className="text-base font-medium text-gray-900">In Combat</h2>
-                <Button rounded onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, id: combat._id })}>
+                <Button rounded onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, data: { sheetId: combat.sheetId, combat } })}>
                   Edit Combat
                 </Button>
               </div>
@@ -139,10 +154,10 @@ const CampaignCombatPage = () => {
                 onClick={() =>
                   setModal({
                     type: ModalTypes.deleteResource,
-                    id: combat._id,
                     data: {
                       sheetType: 'campaigns',
                       resourceType: 'combats',
+                      resource: combat,
                       title: `Are you sure you want to end this combat?`,
                       submitText: `Yes, end combat`,
                       notification: { heading: 'Combat Ended', message: `You have successfully ended combat.` },
@@ -177,13 +192,7 @@ const CampaignCombatPage = () => {
                   </div>
 
                   {/* Actions */}
-                  {entity.type === 'players' ? (
-                    <InteractableActions type="player" id={{ prop: 'playerId', value: entity._id }} entity={entity.doc!} />
-                  ) : entity.type === 'npcs' ? (
-                    <InteractableActions type="npc" id={{ prop: 'npcId', value: entity._id }} entity={entity.doc!} />
-                  ) : entity.type === 'creatures' ? (
-                    <InteractableActions type="creature" id={{ prop: 'creatureId', value: entity._id }} entity={entity.doc!} />
-                  ) : null}
+                  <InteractableActions type={getType(entity.type)!} entity={entity.doc!} />
 
                   {/* Leave Combat */}
                   <div className="pt-4 mt-4 border-t border-gray-200">
@@ -209,7 +218,7 @@ const CampaignCombatPage = () => {
                 </div>
               </div>
               <div className="space-x-3 sm:pl-6">
-                <Button dark onClick={() => setSlideOver({ type: SlideOverTypes.combatForm })}>
+                <Button dark onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, data: { sheetId: campSheet._id } })}>
                   Create Combat
                 </Button>
               </div>

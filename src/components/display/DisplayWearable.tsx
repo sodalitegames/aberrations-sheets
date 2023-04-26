@@ -11,12 +11,12 @@ import DescriptionList from '../data/DescriptionList';
 import InfoList from '../data/InfoList';
 
 import { Wearable } from '../../models/sheet/resources';
-import { EntityType, SheetType } from '../../models/sheet';
+import { SheetType } from '../../models/sheet';
 import { DisplayBelongingProps, DisplayProps } from './display.types';
 
 interface WearableDetailsProps {
   wearable: Wearable;
-  sheetType: SheetType | EntityType;
+  sheetType: SheetType;
 }
 
 const WearableDetails: React.FC<WearableDetailsProps> = ({ wearable, sheetType }) => {
@@ -44,17 +44,14 @@ const WearableDetails: React.FC<WearableDetailsProps> = ({ wearable, sheetType }
 
 interface DisplayWearableProps extends DisplayProps, DisplayBelongingProps {
   wearable: Wearable;
-  sheetType: SheetType | EntityType;
+  sheetType: SheetType;
 }
 
-const DisplayWearable: React.FC<DisplayWearableProps> = ({ wearable, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
+const DisplayWearable: React.FC<DisplayWearableProps> = ({ wearable, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem
-          heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`}
-          view={{ type: ModalTypes.showBelonging, id: wearable._id, data: { sheetType: sheetType, playerId, belongingType: 'wearables' } }}
-        >
+        <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} view={{ type: ModalTypes.showBelonging, data: { belongingType: 'wearables', belonging: wearable } }}>
           <InfoList
             list={[
               { tooltip: [`Shield Value: ${wearable.shieldValue} / Speed Adjustment: ${wearable.speedAdjustment}`], value: `SV: ${wearable.shieldValue} / SA: ${wearable.speedAdjustment}` },
@@ -95,16 +92,15 @@ const DisplayWearable: React.FC<DisplayWearableProps> = ({ wearable, condensed, 
       <ListItem
         heading={wearable.name}
         noButtonPanel={noButtonPanel}
-        editable={{ type: SlideOverTypes.wearableForm, id: wearable._id, data: { sheetType: sheetType } }}
+        editable={{ type: SlideOverTypes.wearableForm, data: { sheetType, sheetId: wearable.sheetId, wearable } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: wearable._id,
           data: {
             sheetType: sheetType,
             resourceType: 'wearables',
+            resource: wearable,
             title: `Are you sure you want to delete ${wearable.name}?`,
             submitText: `Yes, delete ${wearable.name}`,
-            equipped: wearable.equipped,
             notification: { heading: 'Wearable Deleted', message: `You have successfully deleted ${wearable.name}.` },
           },
         }}

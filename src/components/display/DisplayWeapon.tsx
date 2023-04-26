@@ -12,7 +12,7 @@ import DescriptionList from '../data/DescriptionList';
 import InfoList, { InfoListItem } from '../data/InfoList';
 
 import { Weapon } from '../../models/sheet/resources';
-import { EntityType, SheetType, StatType } from '../../models/sheet';
+import { SheetType, StatType } from '../../models/sheet';
 import { DisplayBelongingProps, DisplayProps } from './display.types';
 
 const createWeaponList = (stat: StatType, range: string, ability: string): (InfoListItem | string)[] => {
@@ -23,7 +23,7 @@ const createWeaponList = (stat: StatType, range: string, ability: string): (Info
 
 interface WeaponDetailsProps {
   weapon: Weapon;
-  sheetType: SheetType | EntityType;
+  sheetType: SheetType;
 }
 
 const WeaponDetails: React.FC<WeaponDetailsProps> = ({ weapon, sheetType }) => {
@@ -52,17 +52,14 @@ const WeaponDetails: React.FC<WeaponDetailsProps> = ({ weapon, sheetType }) => {
 
 interface DisplayWeaponProps extends DisplayProps, DisplayBelongingProps {
   weapon: Weapon;
-  sheetType: SheetType | EntityType;
+  sheetType: SheetType;
 }
 
-const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, actions, noButtonPanel, listItem, sheetType, playerId }) => {
+const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, actions, noButtonPanel, listItem, sheetType }) => {
   if (listItem) {
     if (condensed === 'view') {
       return (
-        <ListItem
-          heading={`${weapon.name} (Mod +${weapon.damageModifier})`}
-          view={{ type: ModalTypes.showBelonging, id: weapon._id, data: { sheetType: sheetType, playerId, belongingType: 'weapons' } }}
-        >
+        <ListItem heading={`${weapon.nickname || weapon.name} (Mod +${weapon.damageModifier})`} view={{ type: ModalTypes.showBelonging, data: { belongingType: 'weapons', belonging: weapon } }}>
           <InfoList list={createWeaponList(weapon.associatedStat, getWeaponRangeString(weapon.range), weapon.ability)} />
         </ListItem>
       );
@@ -80,17 +77,16 @@ const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, action
       <ListItem
         heading={weapon.nickname ? `${weapon.nickname} (${weapon.name})` : weapon.name}
         noButtonPanel={noButtonPanel}
-        editable={{ type: SlideOverTypes.editWeaponForm, id: weapon._id, data: { sheetType: sheetType } }}
+        editable={{ type: SlideOverTypes.editWeaponForm, data: { sheetType, sheetId: weapon.sheetId, weapon } }}
         deletable={{
           type: ModalTypes.deleteResource,
-          id: weapon._id,
           data: {
             sheetType: sheetType,
             resourceType: 'weapons',
+            resource: weapon,
             title: `Are you sure you want to delete ${weapon.nickname || weapon.name}?`,
             submitText: `Yes, delete ${weapon.nickname || weapon.name}`,
-            equipped: weapon.equipped,
-            notification: { heading: 'Weapon Deleted', message: `You have successfully deleted ${weapon.name}.` },
+            notification: { heading: 'Weapon Deleted', message: `You have successfully deleted ${weapon.nickname || weapon.name}.` },
           },
         }}
       >

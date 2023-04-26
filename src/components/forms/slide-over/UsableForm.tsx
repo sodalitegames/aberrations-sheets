@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { FormikHelpers } from 'formik';
-
-import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
-import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { createSheetResourceStart, updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
@@ -18,10 +15,12 @@ import TextArea from '../elements/TextArea';
 import Select from '../elements/Select';
 import Toggle from '../elements/Toggle';
 
-interface UsableFormProps {
-  id: string;
+import { Usable } from '../../../models/sheet/resources';
+interface Props {
   data: {
     sheetType: SheetType;
+    sheetId: string;
+    usable?: Usable;
   };
 }
 
@@ -34,11 +33,8 @@ type FormValues = {
   units: string;
 };
 
-const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
+const UsableForm: React.FC<Props> = ({ data }) => {
   const dispatch = useDispatch();
-
-  const charSheet = useSelector(selectCurrentCharacter)!;
-  const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [initialValues, setInitialValues] = useState<FormValues>({
     name: '',
@@ -50,55 +46,29 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
   });
 
   useEffect(() => {
-    if (data.sheetType === 'characters') {
-      if (id && charSheet) {
-        const usable = charSheet.usables.find(usable => usable._id === id);
-
-        if (usable) {
-          const { name, type, description, equippable, quantity, units = 'units' } = usable;
-          setInitialValues({
-            name,
-            type,
-            description,
-            equippable,
-            quantity,
-            units,
-          });
-        }
-      }
+    if (data.usable) {
+      const { name, type, description, equippable, quantity, units = 'units' } = data.usable;
+      setInitialValues({
+        name,
+        type,
+        description,
+        equippable,
+        quantity,
+        units,
+      });
     }
-
-    if (data.sheetType === 'campaigns') {
-      if (id && campSheet) {
-        const usable = campSheet.usables.find(usable => usable._id === id);
-
-        if (usable) {
-          const { name, type, description, equippable, quantity, units = 'units' } = usable;
-          setInitialValues({
-            name,
-            type,
-            description,
-            equippable,
-            quantity,
-            units,
-          });
-        }
-      }
-    }
-  }, [id, data.sheetType, charSheet, campSheet]);
+  }, [data.usable]);
 
   const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
     const { name, type, description, equippable, quantity, units } = values;
 
-    const sheetId = data.sheetType === 'campaigns' ? campSheet._id : charSheet._id;
-
-    if (id) {
+    if (data.usable) {
       dispatch(
         updateSheetResourceStart(
           data.sheetType,
-          sheetId,
+          data.sheetId,
           SheetResourceType.usables,
-          id,
+          data.usable._id,
           { name, type, description, equippable, quantity, units },
           { slideOver: true, notification: { status: 'success', heading: 'Usable Updated', message: `You have successfully updated ${name}.` } }
         )
@@ -109,7 +79,7 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
     dispatch(
       createSheetResourceStart(
         data.sheetType,
-        sheetId,
+        data.sheetId,
         SheetResourceType.usables,
         { name, type, description, equippable, quantity, units },
         { slideOver: true, notification: { status: 'success', heading: 'Usable Created', message: `You have successfully created ${name}.` } }
@@ -119,9 +89,9 @@ const UsableForm: React.FC<UsableFormProps> = ({ id, data }) => {
 
   return (
     <SlideOverForm
-      title={id ? 'Edit Usable' : 'New Usable'}
-      description={id ? 'Update the information below to edit your usable.' : 'Fill out the information below to create your new usable.'}
-      submitText={id ? 'Save usable' : 'Create usable'}
+      title={data.usable ? 'Edit Usable' : 'New Usable'}
+      description={data.usable ? 'Update the information below to edit your usable.' : 'Fill out the information below to create your new usable.'}
+      submitText={data.usable ? 'Save usable' : 'Create usable'}
       initialValues={initialValues}
       validationSchema={UsableFormSchema}
       submitHandler={submitHandler}

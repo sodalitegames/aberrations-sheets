@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Row from './Row';
 import Tooltip from '../../Tooltip';
 import { Field } from 'formik';
@@ -7,6 +7,11 @@ const CHECKBOX_STYLES = 'w-4 h-4 text-gray-900 border-gray-300 rounded focus:rin
 
 export const BasicCheckbox = ({ heading, description, name, checked }) => {
   const [selected, setSelected] = useState(checked);
+
+  useEffect(() => {
+    setSelected(checked);
+  }, [checked]);
+
   return (
     <div className="relative flex items-start">
       <div className="flex items-center h-5">

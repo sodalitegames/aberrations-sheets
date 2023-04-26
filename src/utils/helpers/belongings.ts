@@ -1,5 +1,5 @@
 import { BelongingType } from '../../models/sheet';
-import { WeaponRange } from '../../models/sheet/resources';
+import { Range } from '../../models/sheet/resources';
 
 import { capitalize } from './strings';
 
@@ -22,7 +22,7 @@ export const getBelongingTypeCapitalized = (type: BelongingType): string => {
   return capitalize(getBelongingType(type));
 };
 
-export const getWeaponRangeString = (range: WeaponRange): string => {
+export const getWeaponRangeString = (range: Range): string => {
   switch (range) {
     case 'Close':
       return 'Close (0 - 1)';

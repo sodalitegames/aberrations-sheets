@@ -35,16 +35,16 @@ const Sessions = ({ sessions, status }) => {
                 <div className="flex justify-between pt-4">
                   <NewlineText>{session.content}</NewlineText>
                   <span className="space-y-2">
-                    <Button onClick={() => setSlideOver({ type: SlideOverTypes.sessionForm, id: session._id })}>Edit</Button>
+                    <Button onClick={() => setSlideOver({ type: SlideOverTypes.sessionForm, data: { sheetId: session.sheetId, session } })}>Edit</Button>
                     <Button
                       alert
                       onClick={() =>
                         setModal({
                           type: ModalTypes.deleteResource,
-                          id: session._id,
                           data: {
                             sheetType: 'campaigns',
                             resourceType: 'sessions',
+                            resource: session,
                             title: `Are you sure you want to delete this session?`,
                             submitText: `Yes, delete this session`,
                             notification: {

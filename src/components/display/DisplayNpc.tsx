@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux';
 
 import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 
+import { useActions } from '../../hooks/useActions';
+
 import { getSpeciesAbility } from '../../utils/helpers/species';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
@@ -19,36 +21,36 @@ import DisplayConsumable from './DisplayConsumable';
 import DisplayUsable from './DisplayUsable';
 
 import Heading from '../Heading';
-import { useActions } from '../../hooks/useActions';
 
-import { Npc } from '../../models/sheet/resources';
+import { Npc, Wearable } from '../../models/sheet/resources';
 import { Species } from '../../models/resource';
 import { DisplayProps } from './display.types';
-import { EntityType } from '../../models/sheet';
+import { SheetType } from '../../models/sheet';
 
 interface NpcDetailsProps {
   npc: Npc;
   species: Species[];
+  wearables: Wearable[];
 }
 
-const NpcDetails: React.FC<NpcDetailsProps> = ({ npc, species }) => {
-  const modifiers = calculateModifiers(npc.modifiers, npc.wearables);
+const NpcDetails: React.FC<NpcDetailsProps> = ({ npc, species, wearables }) => {
+  const modifiers = calculateModifiers(npc.modifiers, wearables);
   const abilities = getSpeciesAbility(npc.speciesId, species);
 
   return (
     <DescriptionList
       list={[
         { name: 'Species', values: [npc.speciesName], half: true },
-        { name: 'Shield Value', values: [calculateShieldValue(npc.wearables)], half: true },
+        { name: 'Shield Value', values: [calculateShieldValue(wearables)], half: true },
         { name: 'Diplomacy', values: [npc.diplomacy], half: true },
-        { name: 'Type', values: [npc.type], half: true },
+        npc.type ? { name: 'Type', values: [npc.type], half: true } : null,
         { name: 'Temperament', values: [npc.temperament], half: true },
         { name: 'Experience', values: [npc.experience], half: true },
         { name: 'Mortality', values: [npc.mortality], half: true },
         { name: 'Milestones', values: [npc.milestones], half: true },
         { name: 'Wallet', values: [npc.wallet], half: true },
         { name: 'Active', values: [npc.active ? 'Yes' : 'No'], half: true },
-        { name: 'Speed', values: [npc.speed + calculateSpeedAdjustment(npc.wearables)], half: true },
+        { name: 'Speed', values: [npc.speed + calculateSpeedAdjustment(wearables)], half: true },
         { name: 'Health', values: [`${npc.currentHp}/${npc.maxHp}`], half: true },
         { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
         {
@@ -83,14 +85,14 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
     if (condensed) {
       return (
         <ListItem heading={`${npc.name} (${npc.speciesName})`}>
-          <InfoList list={[`${npc.diplomacy} | ${npc.type}`]} />
+          <InfoList list={[`${npc.diplomacy} ${npc.type ? `| ${npc.type}` : ''}`]} />
         </ListItem>
       );
     }
 
     return (
       <ListItem heading={npc.name}>
-        <NpcDetails npc={npc} species={species} />
+        <NpcDetails npc={npc} species={species} wearables={campSheet.wearables.filter(wear => wear.npcId === npc._id)} />
       </ListItem>
     );
   }
@@ -102,42 +104,42 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
           menu: [
             {
               text: 'Wallet',
-              click: () => setModal({ type: ModalTypes.editWallet, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editWallet, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Mortality',
-              click: () => setModal({ type: ModalTypes.editMortality, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editMortality, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Experience',
-              click: () => setModal({ type: ModalTypes.editExperience, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editExperience, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Health',
-              click: () => setModal({ type: ModalTypes.editHealth, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Milestones',
-              click: () => setModal({ type: ModalTypes.editMilestones, data: { type: 'npc', entity: npc } }),
+              click: () => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Modifiers',
-              click: () => setModal({ type: ModalTypes.editModifiers, data: { type: 'npc', resource: npc } }),
+              click: () => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'npcs', entity: npc } }),
             },
           ],
         }}
       >
         {npc.name}
       </Heading>
-      <NpcDetails npc={npc} species={species} />
+      <NpcDetails npc={npc} species={species} wearables={campSheet.wearables.filter(wear => wear.npcId === npc._id)} />
 
       <Heading
         edit={{
           menu: [
-            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, id: 'strength', data: { type: 'npc', resource: npc } }) },
-            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, id: 'agility', data: { type: 'npc', resource: npc } }) },
-            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, id: 'persona', data: { type: 'npc', resource: npc } }) },
-            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, id: 'aptitude', data: { type: 'npc', resource: npc } }) },
+            { text: 'Strength', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'strength', entityType: 'npcs', entity: npc } }) },
+            { text: 'Agility', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'agility', entityType: 'npcs', entity: npc } }) },
+            { text: 'Persona', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'persona', entityType: 'npcs', entity: npc } }) },
+            { text: 'Aptitude', click: () => setModal({ type: ModalTypes.editStat, data: { stat: 'aptitude', entityType: 'npcs', entity: npc } }) },
           ],
         }}
       >
@@ -156,10 +158,10 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           menu: [
-            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, id: 'slowed', data: { type: 'npc', resource: npc } }) },
-            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, id: 'agony', data: { type: 'npc', resource: npc } }) },
-            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, id: 'injured', data: { type: 'npc', resource: npc } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, id: 'disturbed', data: { type: 'npc', resource: npc } }) },
+            { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'slowed', entityType: 'npcs', entity: npc } }) },
+            { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'agony', entityType: 'npcs', entity: npc } }) },
+            { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'injured', entityType: 'npcs', entity: npc } }) },
+            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'npcs', entity: npc } }) },
           ],
         }}
       >
@@ -175,13 +177,26 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         classes="my-2"
       />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { type: 'npc', description: npc.description, resourceId: npc._id } }) }}>Description</Heading>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editDescriptionForm, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entityType: 'npcs', entity: npc } }) }}>
+        Description
+      </Heading>
       <InfoList list={[npc.description]} />
 
-      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { type: 'npc', background: npc.background, resourceId: npc._id } }) }}>Background</Heading>
+      <Heading edit={{ click: () => setSlideOver({ type: SlideOverTypes.editBackgroundForm, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entityType: 'npcs', entity: npc } }) }}>
+        Background
+      </Heading>
       <InfoList list={[npc.background]} />
 
-      <Heading edit={{ text: 'Purchase', click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'campaigns', sheetId: npc.sheetId, entity: npc } }) }}>
+      <Heading
+        edit={{
+          text: 'Purchase',
+          click: () =>
+            setSlideOver({
+              type: SlideOverTypes.purchaseAugmentation,
+              data: { sheetType: 'campaigns', sheetId: npc.sheetId, entityType: 'npcs', entity: npc, augmentations: campSheet.augmentations.filter(aug => aug.npcId === npc._id) },
+            }),
+        }}
+      >
         Augmentations
       </Heading>
       <ul className="grid">
@@ -195,7 +210,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
       <Heading
         edit={{
           text: 'Manage',
-          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'weapons', npc: npc } }),
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { belongingType: 'weapons', npc: npc } }),
         }}
       >
         Weapons
@@ -204,14 +219,14 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         {campSheet.weapons
           .filter(weap => weap.npcId === npc._id)
           .map(weapon => (
-            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={EntityType.campaigns} listItem condensed="view" />
+            <DisplayWeapon key={weapon._id} weapon={weapon} sheetType={SheetType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
       <Heading
         edit={{
           text: 'Manage',
-          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'wearables', npc: npc } }),
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { belongingType: 'wearables', npc: npc } }),
         }}
       >
         Wearables
@@ -220,14 +235,14 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         {campSheet.wearables
           .filter(wear => wear.npcId === npc._id)
           .map(wearable => (
-            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={EntityType.campaigns} listItem condensed="view" />
+            <DisplayWearable key={wearable._id} wearable={wearable} sheetType={SheetType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
       <Heading
         edit={{
           text: 'Manage',
-          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'consumables', npc: npc } }),
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { belongingType: 'consumables', npc: npc } }),
         }}
       >
         Consumables
@@ -236,14 +251,14 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         {campSheet.consumables
           .filter(cons => cons.npcId === npc._id)
           .map(consumable => (
-            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={EntityType.campaigns} listItem condensed="view" />
+            <DisplayConsumable key={consumable._id} consumable={consumable} sheetType={SheetType.campaigns} listItem condensed="view" />
           ))}
       </ul>
 
       <Heading
         edit={{
           text: 'Manage',
-          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { type: 'usables', npc: npc } }),
+          click: () => setSlideOver({ type: SlideOverTypes.manageAssignedBelongings, data: { belongingType: 'usables', npc: npc } }),
         }}
       >
         Usables
@@ -252,7 +267,7 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
         {campSheet.usables
           .filter(usab => usab.npcId === npc._id)
           .map(usable => (
-            <DisplayUsable key={usable._id} usable={usable} sheetType={EntityType.campaigns} listItem condensed="view" />
+            <DisplayUsable key={usable._id} usable={usable} sheetType={SheetType.campaigns} listItem condensed="view" />
           ))}
       </ul>
     </div>

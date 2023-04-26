@@ -13,11 +13,9 @@ import { useResource } from '../../../hooks/useResource';
 import ModalTypes from '../../../utils/ModalTypes';
 import SlideOverTypes from '../../../utils/SlideOverTypes';
 import classNames from '../../../utils/classNames';
-import { getSpecies } from '../../../utils/helpers/species';
 
 import { FetchedResourceType, Species } from '../../../models/resource';
-import { InteractableType, SheetType } from '../../../models/sheet';
-import { Player } from '../../../models/sheet/resources';
+import { EntityType, InteractableType, SheetType } from '../../../models/sheet';
 
 import ListContainer from '../../../components/data/ListContainer';
 
@@ -43,60 +41,65 @@ const CampaignPlayersPage = () => {
   const list = show === 'archived' ? campSheet.players : campSheet.players;
   const player = list.find(plyr => plyr._id === id) || list[0];
 
-  const Display = () => <DisplayPlayer player={player} species={species} />;
-  const Actions = () => (
-    <>
-      {/* External Link to Character Sheet */}
-      <div className="pb-4 mb-4 border-b border-gray-200">
-        <a href={`${process.env.REACT_APP_SELF}/characters/${player._id}/gameplay`} target="_blank" rel="noreferrer">
-          <Button dark>
-            {player.characterName} <ExternalLinkIcon className="w-4 h-4 ml-2 text-white" aria-hidden="true" />
-          </Button>
-        </a>
-      </div>
+  const Display = player ? () => <DisplayPlayer player={player} species={species} /> : null;
+  const Actions = player
+    ? () => (
+        <>
+          {/* External Link to Character Sheet */}
+          <div className="pb-4 mb-4 border-b border-gray-200">
+            <a href={`${process.env.REACT_APP_SELF}/characters/${player._id}/gameplay`} target="_blank" rel="noreferrer">
+              <Button dark>
+                {player.characterName} <ExternalLinkIcon className="w-4 h-4 ml-2 text-white" aria-hidden="true" />
+              </Button>
+            </a>
+          </div>
 
-      {/* Player Actions */}
-      <InteractableActions type="player" id={{ prop: 'playerId', value: player._id }} entity={{ ...player, species: getSpecies(player.speciesId, species) } as Player} />
+          {/* Player Actions */}
+          <InteractableActions type={EntityType.players} entity={player} />
 
-      {/* Activate or Deactivate */}
-      <div className="pt-4 mt-4 border-t border-gray-200">
-        <Button
-          dark={player.active}
-          onClick={() =>
-            dispatch(
-              updateSheetStart(
-                SheetType.characters,
-                player._id,
-                { active: !player.active },
-                {
-                  forPlayer: true,
-                  notification: {
-                    status: 'success',
-                    heading: `Player ${player.active ? 'Deactivated' : 'Activated'}`,
-                    message: `You have successfully ${player.active ? 'deactivated' : 'activated'} ${player.characterName}.`,
-                  },
-                }
-              )
-            )
-          }
-        >
-          {player.active ? 'Deactivate' : 'Activate'}
-        </Button>
-      </div>
+          {/* Activate or Deactivate */}
+          <div className="pt-4 mt-4 border-t border-gray-200">
+            <Button
+              dark={player.active}
+              onClick={() =>
+                dispatch(
+                  updateSheetStart(
+                    SheetType.characters,
+                    player._id,
+                    { active: !player.active },
+                    {
+                      forPlayer: true,
+                      notification: {
+                        status: 'success',
+                        heading: `Player ${player.active ? 'Deactivated' : 'Activated'}`,
+                        message: `You have successfully ${player.active ? 'deactivated' : 'activated'} ${player.characterName}.`,
+                      },
+                    }
+                  )
+                )
+              }
+            >
+              {player.active ? 'Deactivate' : 'Activate'}
+            </Button>
+          </div>
 
-      {/* Remove from Campaign */}
-      <div className="pt-4 mt-4 border-t border-gray-200">
-        <Button
-          alert
-          onClick={() =>
-            setModal({ type: ModalTypes.removeCharacterFromCampaign, data: { sheetType: 'campaigns', playerName: player.playerNickname || player.playerName, body: { charId: player._id } } })
-          }
-        >
-          Remove From Campaign
-        </Button>
-      </div>
-    </>
-  );
+          {/* Remove from Campaign */}
+          <div className="pt-4 mt-4 border-t border-gray-200">
+            <Button
+              alert
+              onClick={() =>
+                setModal({
+                  type: ModalTypes.removeCharacterFromCampaign,
+                  data: { sheetType: 'campaigns', campaignName: campSheet.name, characterName: player.playerNickname || player.playerName, characterId: player._id },
+                })
+              }
+            >
+              Remove From Campaign
+            </Button>
+          </div>
+        </>
+      )
+    : null;
 
   const List = () => (
     <>
@@ -136,8 +139,9 @@ const CampaignPlayersPage = () => {
   return (
     <InteractablesPageContent
       sheetType={SheetType.campaigns}
+      sheetId={campSheet._id}
       show={show}
-      id={player._id}
+      id={player?._id}
       list={list}
       type={InteractableType.players}
       label="Player"

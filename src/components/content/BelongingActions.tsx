@@ -5,13 +5,13 @@ import { updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
 
 import { useActions } from '../../hooks/useActions';
 
-import { Belonging, Sheet, SheetType, SheetResourceType, BelongingType } from '../../models/sheet';
-import { Weapon } from '../../models/sheet/resources';
+import { Belonging, Sheet, SheetType, SheetResourceType, BelongingType, CharacterSheet } from '../../models/sheet';
+import { Usable, Weapon } from '../../models/sheet/resources';
 
 import equipBelonging from '../../utils/functions/equipBelonging';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
-import { getBelongingTypeCapitalized } from '../../utils/helpers/belongings';
+import { getBelongingType, getBelongingTypeCapitalized } from '../../utils/helpers/belongings';
 
 import Button from '../Button';
 
@@ -20,7 +20,7 @@ interface BelongingActionsProps {
   sheet: Sheet;
   belongingType: BelongingType;
   belonging: Belonging;
-  equippedBelongings?: Belonging[];
+  equippedBelongings: Belonging[];
 }
 
 const editForm = {
@@ -39,14 +39,15 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
       {!belonging.archived ? (
         <Fragment>
           {/* Equip or Unequip */}
-          {sheetType === 'characters' ? (
+          {sheetType === 'characters' && (
             <Button
               dark={belonging.equipped}
-              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings! })}
+              disabled={belongingType === 'usables' ? !(belonging as Usable).equippable : false}
+              onClick={() => equipBelonging({ sheetType: sheetType, sheet: sheet as CharacterSheet, belongingType: belongingType, belonging: belonging, equippedList: equippedBelongings })}
             >
               {belonging.equipped ? 'Unequip' : 'Equip'}
             </Button>
-          ) : null}
+          )}
 
           {/* Assign or Unassign */}
           {sheetType === 'campaigns' ? (
@@ -75,7 +76,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                 Unassign
               </Button>
             ) : (
-              <Button onClick={() => setModal({ type: ModalTypes.assignBelonging, id: belonging._id, data: { type: belongingType, name: belonging.name } })}>Assign</Button>
+              <Button onClick={() => setModal({ type: ModalTypes.assignBelonging, id: belonging._id, data: { belongingType, belonging } })}>Assign</Button>
             )
           ) : null}
 
@@ -107,23 +108,15 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
           ) : null}
 
           {/* Give or Sell */}
-          <Button
-            disabled={belongingType === 'wearables' && (belonging.npcId || belonging.equipped) ? true : false}
-            disabledMessage={belongingType === 'wearables' ? `You must unequip/unassign this wearable before you can give or sell it to anybody.` : ''}
-            onClick={() => setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, documentType: belongingType, document: belonging } })}
-          >
-            Give or Sell
-          </Button>
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.newTransactionForm, data: { sheetType, sheet, documentType: belongingType, document: belonging } })}>Give or Sell</Button>
         </Fragment>
       ) : null}
 
       {/* Edit */}
-      <Button onClick={() => setSlideOver({ type: editForm[belongingType], id: belonging._id, data: { sheetType: sheetType } })}>Edit</Button>
+      <Button onClick={() => setSlideOver({ type: editForm[belongingType], data: { sheetType, sheetId: sheet._id, [getBelongingType(belongingType)]: belonging } })}>Edit</Button>
 
       {/* Archive or Restore */}
       <Button
-        disabled={belongingType === 'wearables' && (belonging.npcId || belonging.equipped) ? true : false}
-        disabledMessage={belongingType === 'wearables' ? `You must unequip/unassign this wearable before you can archive it.` : ''}
         onClick={() =>
           dispatch(
             updateSheetResourceStart(
@@ -150,18 +143,15 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
       {belonging.archived ? (
         <Button
           alert
-          disabled={belongingType === 'wearables' && (belonging.equipped || belonging.npcId) ? true : false}
-          disabledMessage={belongingType === 'wearables' ? 'You must unequip/unassign this wearable before you can delete it.' : ''}
           onClick={() =>
             setModal({
               type: ModalTypes.deleteResource,
-              id: belonging._id,
               data: {
                 sheetType: sheetType,
                 resourceType: belongingType,
+                resource: belonging,
                 title: `Are you sure you want to delete ${(belonging as Weapon).nickname || belonging.name}?`,
                 submitText: `Yes, delete ${(belonging as Weapon).nickname || belonging.name}`,
-                equipped: belonging.equipped,
                 notification: { heading: `${getBelongingTypeCapitalized(belongingType)} Deleted`, message: `You have successfully deleted ${belonging.name}.` },
               },
             })

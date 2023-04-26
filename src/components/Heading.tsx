@@ -18,7 +18,7 @@ type Edit = {
 };
 
 interface Props {
-  edit: Edit;
+  edit?: Edit;
   secondary?: string;
 }
 

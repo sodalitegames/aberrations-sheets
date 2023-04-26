@@ -32,13 +32,13 @@ const CampaignCampaignPage = () => {
       <div className="space-y-4">
         {/* Actions */}
         <SheetPagePanel title="Actions">
-          <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'campaign' } })} classes="mt-2">
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })} classes="mt-2">
             Roll Dice
           </Button>
           <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCampaign })} classes="mt-2">
             Manage Campaign
           </Button>
-          <Button onClick={() => setSlideOver({ type: SlideOverTypes.combatForm })} classes="mt-2">
+          <Button onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, data: { sheetId: campSheet._id } })} classes="mt-2">
             Start Combat
           </Button>
         </SheetPagePanel>
@@ -47,7 +47,7 @@ const CampaignCampaignPage = () => {
         <SheetPagePanel title="Campaign Overview">
           <div className="flow-root">
             <InfoList list={[campSheet.overview]} />
-            <ButtonPanel editable={{ type: SlideOverTypes.campOverviewForm }} />
+            <ButtonPanel editable={{ type: SlideOverTypes.campOverviewForm, data: { sheetId: campSheet._id, entity: campSheet } }} />
           </div>
         </SheetPagePanel>
 
@@ -55,7 +55,7 @@ const CampaignCampaignPage = () => {
         <SheetPagePanel title="Campaign Details">
           <div className="flow-root">
             <InfoList list={[campSheet.details]} />
-            <ButtonPanel editable={{ type: SlideOverTypes.campDetailsForm }} />
+            <ButtonPanel editable={{ type: SlideOverTypes.campDetailsForm, data: { sheetId: campSheet._id, entity: campSheet } }} />
           </div>
         </SheetPagePanel>
       </div>
@@ -70,7 +70,7 @@ const CampaignCampaignPage = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center mt-5 ml-5 space-y-2 shrink-0 sm:mt-0">
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.sessionForm })}>Create New Session</Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.sessionForm, data: { sheetId: campSheet._id } })}>Create New Session</Button>
             </div>
           </div>
         </SheetPagePanel>
@@ -102,11 +102,11 @@ const CampaignCampaignPage = () => {
         <div className="flow-root mt-2">
           <ListContainer
             list={campSheet.captainsLogs}
-            button={{ click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } }), text: `Add a new Captain's Log` }}
+            button={{ click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns', sheetId: campSheet._id } }), text: `Add a new Captain's Log` }}
             empty={{
               heading: `No Captain's Logs`,
               message: 'Get started by creating your first one now',
-              button: { click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns' } }), text: `New Captain's Log` },
+              button: { click: () => setSlideOver({ type: SlideOverTypes.logForm, data: { sheetType: 'campaigns', sheetId: campSheet._id } }), text: `New Captain's Log` },
             }}
           >
             {campSheet.captainsLogs.map(log => (

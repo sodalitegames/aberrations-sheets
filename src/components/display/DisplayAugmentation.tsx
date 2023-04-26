@@ -17,10 +17,10 @@ const DisplayAugmentation: React.FC<Props> = ({ aug, noButtonPanel }) => {
       deleteText="Remove"
       deletable={{
         type: ModalTypes.deleteResource,
-        id: aug._id,
         data: {
           sheetType: 'characters',
           resourceType: 'augmentations',
+          resource: aug,
           title: `Are you sure you want to remove ${aug.name}?`,
           message: 'You will not be able to undo this action.',
           submitText: `Yes, remove ${aug.name}`,

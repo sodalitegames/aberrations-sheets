@@ -45,12 +45,13 @@ interface BasicSelectProps {
   name: string;
   value: string;
   options: SelectOption[];
-  changeHandler: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
+  changeHandler: Function;
+  required?: boolean;
 }
 
-export const BasicSelect: React.FC<BasicSelectProps> = ({ name, value, options, changeHandler }) => {
+export const BasicSelect: React.FC<BasicSelectProps> = ({ name, value, options, changeHandler, required }) => {
   return (
-    <select className={SELECT_STYLES} name={name} value={value} onChange={(event: React.ChangeEvent<HTMLSelectElement>) => changeHandler(event)}>
+    <select className={SELECT_STYLES} name={name} value={value} onChange={e => changeHandler(e.target.value)} required={required}>
       <SelectOptions options={options} />
     </select>
   );
@@ -80,15 +81,16 @@ interface SelectProps {
   name: string;
   value?: string;
   options: SelectOption[];
-  changeHandler?: ($event: React.ChangeEvent<HTMLSelectElement>) => void;
+  changeHandler?: Function;
   slideOver?: boolean;
   formik?: boolean;
+  required?: boolean;
 }
 
-const Select: React.FC<SelectProps> = ({ label, changeHandler, value, name, options, formik, slideOver }) => {
+const Select: React.FC<SelectProps> = ({ label, changeHandler, value, name, options, formik, slideOver, required }) => {
   return (
     <Row name={name} label={label} slideOver={slideOver}>
-      {formik ? <FormikSelect name={name} options={options} /> : <BasicSelect name={name} value={value!} options={options} changeHandler={changeHandler!} />}
+      {formik ? <FormikSelect name={name} options={options} /> : <BasicSelect name={name} value={value!} options={options} changeHandler={changeHandler!} required={required} />}
     </Row>
   );
 };

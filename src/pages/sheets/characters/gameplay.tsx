@@ -81,13 +81,13 @@ const CharacterGameplayPage = () => {
               </div>
             </div>
             <div className="flex flex-col justify-center mt-5 ml-5 space-y-2 shrink-0 sm:mt-0">
-              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice, data: { type: 'character' } })}>Roll Dice</Button>
+              <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>Roll Dice</Button>
             </div>
           </div>
 
           <h3 className="flex items-center text-lg font-medium text-gray-900">
             Modifiers
-            <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editModifiers, data: { type: 'character', resource: charSheet } })}>
+            <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'characters', entity: charSheet } })}>
               <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
             </span>
           </h3>
@@ -147,7 +147,7 @@ const CharacterGameplayPage = () => {
                   {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
                   <h4 className="flex items-center uppercase text-md">
                     Milestones
-                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMilestones, data: { type: 'character', entity: charSheet } })}>
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'characters', entity: charSheet } })}>
                       <PencilIcon
                         className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"
@@ -164,7 +164,7 @@ const CharacterGameplayPage = () => {
                   {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
                   <h4 className="flex items-center uppercase text-md">
                     Mortality
-                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMortality, data: { type: 'character', entity: charSheet } })}>
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMortality, data: { entityType: 'characters', entity: charSheet } })}>
                       <PencilIcon
                         className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"
@@ -184,8 +184,8 @@ const CharacterGameplayPage = () => {
       <div className="grid grid-cols-1 gap-4 md:col-span-4 lg:col-span-1 md:grid-cols-2 lg:grid-cols-1">
         {/* Actions */}
         <SheetPagePanel classes="md:col-span-2 lg:col-span-1">
-          <Button onClick={() => setModal({ type: ModalTypes.reachMilestone, data: { type: 'character', entity: charSheet } })}>Reach Milestone</Button>
-          <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { type: 'character' } })} classes="mt-2">
+          <Button onClick={() => setModal({ type: ModalTypes.reachMilestone, data: { entityType: 'characters', entity: charSheet } })}>Reach Milestone</Button>
+          <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { entityType: 'characters', entity: charSheet } })} classes="mt-2">
             Take a Rest
           </Button>
           <Button onClick={() => setSlideOver({ type: SlideOverTypes.manageCharacter })} classes="mt-2">
@@ -204,8 +204,8 @@ const CharacterGameplayPage = () => {
           </div>
 
           <div className="mt-6">
-            <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { type: 'character' } })}>Take Damage</Button>
-            <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { type: 'character' } })} classes="mt-2">
+            <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { entityType: 'characters', entity: charSheet } })}>Take Damage</Button>
+            <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { entityType: 'characters', entity: charSheet } })} classes="mt-2">
               Heal Damage
             </Button>
           </div>
@@ -219,8 +219,8 @@ const CharacterGameplayPage = () => {
             <span className="text-sm font-medium text-gray-500 uppercase">{getWalletMessage(charSheet.wallet)}</span>
           </div>
           <div className="mt-6">
-            <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { type: 'character' } })}>Receive Money</Button>
-            <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { type: 'character' } })} classes="mt-2">
+            <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { entityType: 'characters', entity: charSheet } })}>Receive Money</Button>
+            <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { entityType: 'characters', entity: charSheet } })} classes="mt-2">
               Pay Money
             </Button>
           </div>
@@ -234,14 +234,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedWeapons}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'weapons' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'weapons' } }),
                 text: 'Manage equipped Weapons',
               }}
               empty={{
                 heading: 'No Equipped Weapons',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'weapons' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'weapons' } }),
                   text: 'Equip Weapon',
                 },
               }}
@@ -262,7 +262,7 @@ const CharacterGameplayPage = () => {
                 click: () =>
                   setSlideOver({
                     type: SlideOverTypes.manageEquippedBelongings,
-                    data: { type: 'characters', belongingType: 'wearables' },
+                    data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'wearables' },
                   }),
                 text: 'Manage equipped Wearables',
               }}
@@ -273,7 +273,7 @@ const CharacterGameplayPage = () => {
                   click: () =>
                     setSlideOver({
                       type: SlideOverTypes.manageEquippedBelongings,
-                      data: { type: 'characters', belongingType: 'wearables' },
+                      data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'wearables' },
                     }),
                   text: 'Equip Wearable',
                 },
@@ -294,14 +294,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedConsumables}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'consumables' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'consumables' } }),
                 text: 'Manage equipped Consumables',
               }}
               empty={{
                 heading: 'No Equipped Consumables',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'consumables' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'consumables' } }),
                   text: 'Equip Consumable',
                 },
               }}
@@ -319,14 +319,14 @@ const CharacterGameplayPage = () => {
             <ListContainer
               list={equippedUsables}
               button={{
-                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'usables' } }),
+                click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'usables' } }),
                 text: 'Manage equipped Usables',
               }}
               empty={{
                 heading: 'No Equipped Usables',
                 message: 'Get started by equipping your first one now',
                 button: {
-                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { type: 'characters', belongingType: 'usables' } }),
+                  click: () => setSlideOver({ type: SlideOverTypes.manageEquippedBelongings, data: { entityType: 'characters', entityId: charSheet._id, belongingType: 'usables' } }),
                   text: 'Equip Usable',
                 },
               }}
@@ -349,14 +349,22 @@ const CharacterGameplayPage = () => {
           <ListContainer
             list={charSheet.augmentations}
             button={{
-              click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: charSheet._id, entity: charSheet } }),
+              click: () =>
+                setSlideOver({
+                  type: SlideOverTypes.purchaseAugmentation,
+                  data: { sheetType: 'characters', sheetId: charSheet._id, entityType: 'characters', entity: charSheet, augmentations: charSheet.augmentations },
+                }),
               text: 'Purchase a new Augmentation',
             }}
             empty={{
               heading: 'No Augmentations',
               message: 'Get started by purchasing your first one now',
               button: {
-                click: () => setSlideOver({ type: SlideOverTypes.purchaseAugmentation, data: { sheetType: 'characters', sheetId: charSheet._id, entity: charSheet } }),
+                click: () =>
+                  setSlideOver({
+                    type: SlideOverTypes.purchaseAugmentation,
+                    data: { sheetType: 'characters', sheetId: charSheet._id, entityType: 'characters', entity: charSheet, augmentations: charSheet.augmentations },
+                  }),
                 text: 'Purchase Augmentation',
               },
             }}

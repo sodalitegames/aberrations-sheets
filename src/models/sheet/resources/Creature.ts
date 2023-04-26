@@ -1,6 +1,6 @@
 import { Conditions, Modifier, Stat, StatType } from '../_partials';
 
-type Type = {
+export type Type = {
   universalId: string;
   name: string;
   description: string;

@@ -25,7 +25,6 @@ import NewCampaign from './slide-over/NewCampaign';
 
 // Character Sheet
 import ManageCharacter from './slide-over/ManageCharacter';
-import RollDice from './slide-over/RollDice';
 import ManageEquippedBelongings from './slide-over/ManageEquippedBelongings';
 import PurchaseAugmentation from './slide-over/PurchaseAugmentation';
 
@@ -42,6 +41,8 @@ import EnvironmentForm from './slide-over/EnvironmentForm';
 import ManageAssignedBelongings from './slide-over/ManageAssignedBelongings';
 
 // Shared
+import RollDice from './slide-over/RollDice';
+import RollStat from './slide-over/RollStat';
 import LogForm from './slide-over/LogForm';
 import NewWeaponForm from './slide-over/NewWeaponForm';
 import EditWeaponForm from './slide-over/EditWeaponForm';
@@ -273,27 +274,28 @@ const SlideOver: React.FC = () => {
                 {slideOver && slideOver.type === SlideOverTypes.manageCharacter ? <ManageCharacter /> : null}
                 {/* Campaign Sheet */}
                 {slideOver && slideOver.type === SlideOverTypes.manageCampaign ? <ManageCampaign /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.combatForm ? <CombatForm id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.combatForm ? <CombatForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.campOverviewForm ? <CampOverview data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.campDetailsForm ? <CampDetails data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageSentInvites ? <ManageInvites /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.sessionForm ? <SessionForm id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm id={slideOver.id} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm id={slideOver.id} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.sessionForm ? <SessionForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.npcForm ? <NpcForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.creatureForm ? <CreatureForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.environmentForm ? <EnvironmentForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageAssignedBelongings ? <ManageAssignedBelongings data={slideOver.data} /> : null}
                 {/* Shared */}
-                {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.rollDice ? <RollDice /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.rollStat ? <RollStat data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.manageEquippedBelongings ? <ManageEquippedBelongings data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.purchaseAugmentation ? <PurchaseAugmentation data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editDescriptionForm ? <EditDescription data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.editBackgroundForm ? <EditBackground data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newWeaponForm ? <NewWeaponForm data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm id={slideOver.id} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm id={slideOver.id!} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm id={slideOver.id!} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <UsableForm id={slideOver.id!} data={slideOver.data} /> : null}
-                {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm id={slideOver.id} data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.editWeaponForm ? <EditWeaponForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.wearableForm ? <WearableForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.consumableForm ? <ConsumableForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.usableForm ? <UsableForm data={slideOver.data} /> : null}
+                {slideOver && slideOver.type === SlideOverTypes.logForm ? <LogForm data={slideOver.data} /> : null}
                 {slideOver && slideOver.type === SlideOverTypes.newTransactionForm ? <NewTransactionForm data={slideOver.data} /> : null}
               </div>
             </Transition.Child>
