@@ -31,8 +31,8 @@ import DisplayPlayer from '../../../components/display/DisplayPlayer';
 import DisplayNpc from '../../../components/display/DisplayNpc';
 import DisplayCreature from '../../../components/display/DisplayCreature';
 
-interface CombatantEntity extends Combatant {
-  doc: (Player | Npc | Creature) | null;
+export interface CombatantEntity extends Combatant {
+  entity: (Player | Npc | Creature) | null;
 }
 
 const createOption = (combat: Combat) => {
@@ -65,7 +65,7 @@ const CampaignCombatPage = () => {
   const species = useResource(FetchedResourceType.Species) as Species[];
 
   const combatId = searchParams.get('combat');
-  const entityId = searchParams.get('combatant');
+  const combatantId = searchParams.get('combatant');
 
   const combat = combats.find(comb => comb._id === combatId) || combats[0];
 
@@ -74,12 +74,12 @@ const CampaignCombatPage = () => {
         const entity = potentialCombatants.find(ent => ent._id === comba._id);
         return {
           ...comba,
-          doc: entity ? entity : null,
+          entity: entity ? entity : null,
         };
       })
     : [];
 
-  const entity: CombatantEntity = combatants.find(ent => ent._id === entityId) || combatants[0];
+  const combatant: CombatantEntity = combatants.find(ent => ent._id === combatantId) || combatants[0];
 
   const endTurn = (entId: string) => {
     const index = combatants.findIndex(comb => comb._id === entId);
@@ -113,8 +113,8 @@ const CampaignCombatPage = () => {
         {
           notification: {
             status: 'success',
-            heading: `${(entity.doc as Npc | Creature).name || (entity.doc as Player).characterName} Left Combat`,
-            message: `You have successfully taken ${(entity.doc as Npc | Creature).name || (entity.doc as Player).characterName} out of combat.`,
+            heading: `${(combatant.entity as Npc | Creature).name || (combatant.entity as Player).characterName} Left Combat`,
+            message: `You have successfully taken ${(combatant.entity as Npc | Creature).name || (combatant.entity as Player).characterName} out of combat.`,
           },
         }
       )
@@ -140,9 +140,9 @@ const CampaignCombatPage = () => {
                 </Button>
               </div>
               <div className="mt-6 space-y-4">
-                {combatants.map((ent, index) => (
-                  <div key={ent._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')} onClick={() => setEntity(ent._id)}>
-                    <CombatCard entity={ent} index={index} active={entity?._id === ent._id} inCombat />
+                {combatants.map(comba => (
+                  <div key={comba._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')} onClick={() => setEntity(comba._id)}>
+                    <CombatCard combatant={comba} active={combatant?._id === comba._id} />
                   </div>
                 ))}
               </div>
@@ -171,32 +171,32 @@ const CampaignCombatPage = () => {
           </div>
 
           <SheetPagePanel title="Active Combatant" colSpan={2}>
-            {entity ? (
+            {combatant && combatant.entity ? (
               <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
                 <div className="col-span-2">
-                  {entity.type === 'players' ? (
-                    <DisplayPlayer player={entity.doc as Player} species={species} />
-                  ) : entity.type === 'npcs' ? (
-                    <DisplayNpc npc={entity.doc as Npc} species={species} />
-                  ) : entity.type === 'creatures' ? (
-                    <DisplayCreature creature={entity.doc as Creature} />
+                  {combatant.type === 'players' ? (
+                    <DisplayPlayer player={combatant.entity as Player} species={species} />
+                  ) : combatant.type === 'npcs' ? (
+                    <DisplayNpc npc={combatant.entity as Npc} species={species} />
+                  ) : combatant.type === 'creatures' ? (
+                    <DisplayCreature creature={combatant.entity as Creature} />
                   ) : null}
                 </div>
 
                 <div className="col-span-1 pl-8 space-y-4">
                   {/* End Turn */}
                   <div className="pb-4 mb-4 border-b border-gray-200">
-                    <Button dark onClick={() => endTurn(entity._id)}>
+                    <Button dark onClick={() => endTurn(combatant._id)}>
                       End Turn
                     </Button>
                   </div>
 
                   {/* Actions */}
-                  <InteractableActions type={getType(entity.type)!} entity={entity.doc!} />
+                  <InteractableActions type={getType(combatant.type)!} entity={combatant.entity} />
 
                   {/* Leave Combat */}
                   <div className="pt-4 mt-4 border-t border-gray-200">
-                    <Button alert onClick={() => leaveCombat(entity._id)}>
+                    <Button alert onClick={() => leaveCombat(combatant._id)}>
                       Leave Combat
                     </Button>
                   </div>
