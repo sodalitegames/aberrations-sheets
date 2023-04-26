@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 
 import { createSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
-import { getBelongingType, getBelongingTypeCapitalized } from '../../../utils/helpers/belongings';
 import { getRecipientList } from '../../../utils/functions/getRecipientList';
 
 import { SlideOverForm } from '../SlideOver';
@@ -16,8 +15,10 @@ import Notice, { NoticeStatus } from '../../Notice';
 
 import { DisplayTransactionDocument } from '../../display/DisplayTransaction';
 
-import { Belonging, BelongingType, CampaignSheet, CharacterSheet, Sheet, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Belonging, CampaignSheet, CharacterSheet, Sheet, SheetResourceType, SheetType } from '../../../models/sheet';
 import { TransactionDocument, TransactionDocumentType, Wallet, Weapon } from '../../../models/sheet/resources';
+import { capitalize } from '../../../utils/helpers/strings';
+import { ResourceType, getResourceLabel } from '../../../utils/helpers/resources';
 
 interface Props {
   data: {
@@ -104,7 +105,7 @@ const NewTransactionForm: React.FC<Props> = ({ data }) => {
 
       {/* Display Document Being Sent */}
       {data.document ? (
-        <Row slideOver label={`${data.documentType === 'wallet' ? 'Amount' : getBelongingTypeCapitalized(data.documentType as unknown as BelongingType)} Being Sent`} name="document">
+        <Row slideOver label={`${data.documentType === 'wallet' ? 'Amount' : capitalize(getResourceLabel(ResourceType[data.documentType]))} Being Sent`} name="document">
           <DisplayTransactionDocument document={data.document} documentType={data.documentType} sheetType={data.sheetType} />
         </Row>
       ) : (
@@ -113,20 +114,12 @@ const NewTransactionForm: React.FC<Props> = ({ data }) => {
         </Row>
       )}
 
-      {(data.document as Belonging).equipped ? (
-        <Notice
-          noIcon
-          status={NoticeStatus.Warn}
-          message={`If sent and accepted, transferring this ${getBelongingType(data.documentType as unknown as BelongingType)} will unequip it from your person.`}
-        />
+      {data.documentType !== 'wallet' && (data.document as Belonging).equipped ? (
+        <Notice noIcon status={NoticeStatus.Warn} message={`If sent and accepted, transferring this ${getResourceLabel(ResourceType[data.documentType])} will unequip it from your person.`} />
       ) : null}
 
-      {(data.document as Belonging).npcId ? (
-        <Notice
-          noIcon
-          status={NoticeStatus.Warn}
-          message={`If sent and accepted, transferring this ${getBelongingType(data.documentType as unknown as BelongingType)} will unassign it from your npc.`}
-        />
+      {data.documentType !== 'wallet' && (data.document as Belonging).npcId ? (
+        <Notice noIcon status={NoticeStatus.Warn} message={`If sent and accepted, transferring this ${getResourceLabel(ResourceType[data.documentType])} will unassign it from your npc.`} />
       ) : null}
     </SlideOverForm>
   );

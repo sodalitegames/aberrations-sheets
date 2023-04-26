@@ -11,7 +11,8 @@ import { Usable, Weapon } from '../../models/sheet/resources';
 import equipBelonging from '../../utils/functions/equipBelonging';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
-import { getBelongingType, getBelongingTypeCapitalized } from '../../utils/helpers/belongings';
+import { getResourceLabel, ResourceType } from '../../utils/helpers/resources';
+import { capitalize } from '../../utils/helpers/strings';
 
 import Button from '../Button';
 
@@ -59,13 +60,13 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                     updateSheetResourceStart(
                       sheetType,
                       sheet._id,
-                      belongingType as unknown as SheetResourceType,
+                      SheetResourceType[belongingType],
                       belonging._id,
                       { npcId: null },
                       {
                         notification: {
                           status: 'success',
-                          heading: `${getBelongingTypeCapitalized(belongingType)} Unassigned`,
+                          heading: `${getResourceLabel(ResourceType[belongingType])} Unassigned`,
                           message: `You have successfully unassigned ${(belonging as Weapon).nickname || belonging.name}.`,
                         },
                       }
@@ -89,13 +90,13 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                   updateSheetResourceStart(
                     sheetType,
                     sheet._id,
-                    belongingType as unknown as SheetResourceType,
+                    SheetResourceType[belongingType],
                     belonging._id,
                     { active: !belonging.active },
                     {
                       notification: {
                         status: 'success',
-                        heading: `${getBelongingTypeCapitalized(belongingType)} ${belonging.active ? 'Deactivated' : 'Activated'}`,
+                        heading: `${capitalize(getResourceLabel(ResourceType[belongingType]))} ${belonging.active ? 'Deactivated' : 'Activated'}`,
                         message: `You have successfully ${belonging.active ? 'deactivated' : 'activated'} ${(belonging as Weapon).nickname || belonging.name}.`,
                       },
                     }
@@ -113,7 +114,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
       ) : null}
 
       {/* Edit */}
-      <Button onClick={() => setSlideOver({ type: editForm[belongingType], data: { sheetType, sheetId: sheet._id, [getBelongingType(belongingType)]: belonging } })}>Edit</Button>
+      <Button onClick={() => setSlideOver({ type: editForm[belongingType], data: { sheetType, sheetId: sheet._id, [getResourceLabel(ResourceType[belongingType])]: belonging } })}>Edit</Button>
 
       {/* Archive or Restore */}
       <Button
@@ -122,13 +123,13 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
             updateSheetResourceStart(
               sheetType,
               sheet._id,
-              belongingType as unknown as SheetResourceType,
+              SheetResourceType[belongingType],
               belonging._id,
               { archived: !belonging.archived, equipped: false, active: false, npcId: null },
               {
                 notification: {
                   status: 'success',
-                  heading: `${getBelongingTypeCapitalized(belongingType)} ${belonging.archived ? 'Restored' : 'Archived'}`,
+                  heading: `${capitalize(getResourceLabel(ResourceType[belongingType]))} ${belonging.archived ? 'Restored' : 'Archived'}`,
                   message: `You have successfully ${belonging.archived ? 'restored' : 'archived'} ${(belonging as Weapon).nickname || belonging.name}.`,
                 },
               }
@@ -152,7 +153,7 @@ const BelongingActions: React.VFC<BelongingActionsProps> = ({ sheetType, sheet, 
                 resource: belonging,
                 title: `Are you sure you want to delete ${(belonging as Weapon).nickname || belonging.name}?`,
                 submitText: `Yes, delete ${(belonging as Weapon).nickname || belonging.name}`,
-                notification: { heading: `${getBelongingTypeCapitalized(belongingType)} Deleted`, message: `You have successfully deleted ${belonging.name}.` },
+                notification: { heading: `${capitalize(getResourceLabel(ResourceType[belongingType]))} Deleted`, message: `You have successfully deleted ${belonging.name}.` },
               },
             })
           }

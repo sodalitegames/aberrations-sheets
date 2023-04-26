@@ -4,7 +4,7 @@ import { selectCurrentCampaign } from '../../redux/campaign/campaign.selectors';
 import SlideOverTypes from '../../utils/SlideOverTypes';
 import ModalTypes from '../../utils/ModalTypes';
 import { capitalize } from '../../utils/helpers/strings';
-import { getWeaponRangeString } from '../../utils/helpers/belongings';
+import { getWeaponRangeLabel } from '../../utils/helpers/belongings';
 import { getNpcName } from '../../utils/helpers/npcs';
 
 import ListItem from '../data/ListItem';
@@ -35,7 +35,7 @@ const WeaponDetails: React.FC<WeaponDetailsProps> = ({ weapon, sheetType }) => {
         { name: 'Type', values: [weapon.type], half: true },
         { name: 'Associated Stat', values: [capitalize(weapon.associatedStat)], half: true },
         { name: 'Damage Modifier', values: [`+${weapon.damageModifier}`], half: true },
-        { name: 'Range', values: [getWeaponRangeString(weapon.range)], half: true },
+        { name: 'Range', values: [getWeaponRangeLabel(weapon.range)], half: true },
         sheetType === 'characters' ? { name: 'Equipped', values: [weapon.equipped ? 'Yes' : 'No'], half: true } : null,
         sheetType === 'campaigns' ? { name: 'Active', values: [weapon.active ? 'Yes' : 'No'], half: true } : null,
         { name: 'Quantity', values: [weapon.quantity], half: true },
@@ -60,7 +60,7 @@ const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, action
     if (condensed === 'view') {
       return (
         <ListItem heading={`${weapon.nickname || weapon.name} (Mod +${weapon.damageModifier})`} view={{ type: ModalTypes.showBelonging, data: { belongingType: 'weapons', belonging: weapon } }}>
-          <InfoList list={createWeaponList(weapon.associatedStat, getWeaponRangeString(weapon.range), weapon.ability)} />
+          <InfoList list={createWeaponList(weapon.associatedStat, getWeaponRangeLabel(weapon.range), weapon.ability)} />
         </ListItem>
       );
     }
@@ -68,7 +68,7 @@ const DisplayWeapon: React.FC<DisplayWeaponProps> = ({ weapon, condensed, action
     if (condensed) {
       return (
         <ListItem heading={`${weapon.nickname || weapon.name} (Mod +${weapon.damageModifier})`} actions={actions}>
-          <InfoList list={[`${capitalize(weapon.associatedStat)} | ${getWeaponRangeString(weapon.range)} Range`]} />
+          <InfoList list={[`${capitalize(weapon.associatedStat)} | ${getWeaponRangeLabel(weapon.range)} Range`]} />
         </ListItem>
       );
     }

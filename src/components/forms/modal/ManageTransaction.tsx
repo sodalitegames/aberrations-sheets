@@ -3,7 +3,8 @@ import { useDispatch } from 'react-redux';
 
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
-import { getBelongingType, getBelongingTypeCapitalized } from '../../../utils/helpers/belongings';
+import { capitalize } from '../../../utils/helpers/strings';
+import { ResourceType, getResourceLabel } from '../../../utils/helpers/resources';
 
 import { ModalForm } from '../Modal';
 
@@ -15,7 +16,7 @@ import Notice, { NoticeStatus } from '../../Notice';
 import { DisplayTransactionDocument } from '../../display/DisplayTransaction';
 
 import { Transaction, Wallet } from '../../../models/sheet/resources';
-import { Belonging, BelongingType, SheetResourceType, SheetType } from '../../../models/sheet';
+import { Belonging, SheetResourceType, SheetType } from '../../../models/sheet';
 
 interface Props {
   data: {
@@ -67,9 +68,7 @@ const ManageTransaction: React.FC<Props> = ({ data }) => {
       submitText={
         status === 'Accepted'
           ? `${data.transaction.sellPrice ? 'Purchase' : 'Accept'} ${
-              data.transaction.documentType === 'wallet'
-                ? `${(data.transaction.document as Wallet).amount} Monies`
-                : getBelongingTypeCapitalized(data.transaction.documentType as unknown as BelongingType)
+              data.transaction.documentType === 'wallet' ? `${(data.transaction.document as Wallet).amount} Monies` : capitalize(getResourceLabel(ResourceType[data.transaction.documentType]))
             } ${data.transaction.sellPrice ? `for ${data.transaction.sellPrice} Monies` : ''}`
           : status === 'Declined'
           ? 'Yes, I want to decline this transaction'
@@ -104,7 +103,7 @@ const ManageTransaction: React.FC<Props> = ({ data }) => {
 
       {/* Display Document Being Sent */}
       {data.transaction.document ? (
-        <Row label={`${data.transaction.documentType === 'wallet' ? 'Amount' : getBelongingTypeCapitalized(data.transaction.documentType as unknown as BelongingType)} Being Offered`} name="document">
+        <Row label={`${data.transaction.documentType === 'wallet' ? 'Amount' : capitalize(getResourceLabel(ResourceType[data.transaction.documentType]))} Being Offered`} name="document">
           <DisplayTransactionDocument document={data.transaction.document} documentType={data.transaction.documentType} sheetType={data.sheetType} />
         </Row>
       ) : (
@@ -113,13 +112,11 @@ const ManageTransaction: React.FC<Props> = ({ data }) => {
         </Row>
       )}
 
-      {data.sent && (data.transaction.document as Belonging).equipped ? (
+      {data.sent && data.transaction.documentType !== 'wallet' && (data.transaction.document as Belonging).equipped ? (
         <Notice
           noIcon
           status={NoticeStatus.Warn}
-          message={`If ${data.transaction.recipientName} accepts, transferring this ${getBelongingType(
-            data.transaction.documentType as unknown as BelongingType
-          )} will also unequip it from your person.`}
+          message={`If ${data.transaction.recipientName} accepts, transferring this ${getResourceLabel(ResourceType[data.transaction.documentType])} will also unequip it from your person.`}
         />
       ) : null}
 

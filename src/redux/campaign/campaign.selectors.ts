@@ -46,7 +46,7 @@ export const selectPotentialCombatants = createSelector([selectCurrentCampaign],
         ...current.players.map(player => ({ ...player, combatantType: CombatantType.players })),
         ...current.npcs.map(npc => ({ ...npc, combatantType: CombatantType.npcs })),
         ...current.creatures.map(creature => ({ ...creature, combatantType: CombatantType.creatures })),
-      ].filter(combatant => !combatant.archived)
+      ]
     : []
 );
 

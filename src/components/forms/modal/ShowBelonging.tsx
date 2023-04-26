@@ -8,8 +8,8 @@ import DisplayUsable from '../../display/DisplayUsable';
 import { Belonging, BelongingType, SheetType } from '../../../models/sheet';
 import { Consumable, Usable, Weapon, Wearable } from '../../../models/sheet/resources';
 
-import { getBelongingTypeCapitalized } from '../../../utils/helpers/belongings';
-
+import { capitalize } from '../../../utils/helpers/strings';
+import { ResourceType, getResourceLabel } from '../../../utils/helpers/resources';
 interface Props {
   nested?: boolean;
   data: {
@@ -20,7 +20,7 @@ interface Props {
 
 const ShowBelonging: React.FC<Props> = ({ data, nested }) => {
   return (
-    <ModalContainer title={`View ${getBelongingTypeCapitalized(data.belongingType)}`} nested={nested}>
+    <ModalContainer title={`View ${capitalize(getResourceLabel(ResourceType[data.belongingType]))}`} nested={nested}>
       {data.belongingType === 'weapons' ? (
         <DisplayWeapon weapon={data.belonging as Weapon} sheetType={SheetType.characters} />
       ) : data.belongingType === 'wearables' ? (

@@ -4,10 +4,12 @@ import { updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
 import { setModal, setNestedModal } from '../../redux/app/app.actions';
 
 import ModalTypes from '../ModalTypes';
-import { getBelongingTypeCapitalized } from '../helpers/belongings';
 
 import { CharacterSheet, Belonging, BelongingType, SheetResourceType, SheetType } from '../../models/sheet';
 import { Usable, Weapon, Wearable, Player } from '../../models/sheet/resources';
+
+import { capitalize } from '../helpers/strings';
+import { ResourceType, getResourceLabel } from '../helpers/resources';
 
 interface Data {
   sheetType: 'characters' | 'players';
@@ -35,7 +37,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
           forPlayer: sheetType === 'players' ? true : false,
           notification: {
             status: 'success',
-            heading: `${getBelongingTypeCapitalized(belongingType)} Unequipped`,
+            heading: `${capitalize(getResourceLabel(ResourceType[belongingType]))} Unequipped`,
             message: `You have successfully unequipped ${(belonging as Weapon).nickname || belonging.name}.`,
           },
         }
@@ -101,7 +103,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
         forPlayer: sheetType === 'players' ? true : false,
         notification: {
           status: 'success',
-          heading: `${getBelongingTypeCapitalized(belongingType)} Equipped`,
+          heading: `${capitalize(getResourceLabel(ResourceType[belongingType]))} Equipped`,
           message: `You have successfully equipped ${(belonging as Weapon).nickname || belonging.name}.`,
         },
       }

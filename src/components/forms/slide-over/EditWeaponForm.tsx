@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { updateSheetResourceStart } from '../../../redux/sheet/sheet.actions';
 
 import { capitalize } from '../../../utils/helpers/strings';
-import { getWeaponRangeString } from '../../../utils/helpers/belongings';
+import { getWeaponRangeLabel } from '../../../utils/helpers/belongings';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -137,7 +137,7 @@ const EditWeaponForm: React.FC<Props> = ({ data }) => {
           <Input slideOver label="Nickname (Opt.)" name="nickname" type="text" value={nickname} changeHandler={setNickname} />
           <Detail slideOver label="Associated Stat" detail={capitalize(associatedStat)} />
           <Input slideOver label="Damage Modifier" name="damageModifier" type="number" value={damageModifier} changeHandler={setDamageModifier} required />
-          <Detail slideOver label="Range" detail={getWeaponRangeString(range as Range)} />
+          <Detail slideOver label="Range" detail={getWeaponRangeLabel(range as Range)} />
           <Detail slideOver label="Ability" detail={ability} />
           <Input slideOver label="Quantity" name="quantity" type="number" value={quantity} changeHandler={setQuantity} required />
           <TextArea slideOver label="Description (Opt.)" name="description" rows={5} value={description} changeHandler={setDescription} />

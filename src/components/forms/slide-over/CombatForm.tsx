@@ -43,6 +43,7 @@ const StartCombat: React.FC<Props> = ({ data }) => {
   const [combatants, setCombatants] = useState(data.combat ? data.combat.combatants : []);
   const [nonCombatants, setNonCombatants] = useState<Combatant[]>(
     potentialCombatants
+      .filter(combatant => !combatant.archived)
       .filter(combatant => combatant.active)
       .map(createCombatant)
       .filter(comba => {
