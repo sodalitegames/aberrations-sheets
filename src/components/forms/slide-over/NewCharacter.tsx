@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentUser } from '../../../redux/user/user.selectors';
+import { selectCurrentUser, selectUserError } from '../../../redux/user/user.selectors';
 
 import { createSheetForUserStart } from '../../../redux/user/user.actions';
 
@@ -20,10 +20,13 @@ import Detail from '../elements/Detail';
 
 import DisplaySpecies from '../../display/DisplaySpecies';
 
+import Notice from '../../Notice';
+
 const NewCharacter = () => {
   const dispatch = useDispatch();
 
   const currentUser = useSelector(selectCurrentUser);
+  const error = useSelector(selectUserError);
 
   const fetchedSpecies = useResource(FetchedResourceType.Species) as Species[];
 
@@ -98,6 +101,7 @@ const NewCharacter = () => {
       </Row>
       <TextArea slideOver label="Character Description" name="charDescription" rows={4} value={charDescription} changeHandler={setCharDescription} formik={false} />
       <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} formik={false} />
+      {error.characters.create && <Notice status={error.characters.create.status} message={error.characters.create.message} />}
     </SlideOverForm>
   );
 };

@@ -1,34 +1,24 @@
 import UserActionTypes from './user.types';
 
+// AUTH STATE CHANGE
+export const authStateChange = (token, user) => ({
+  type: UserActionTypes.AUTH_STATE_CHANGE,
+  payload: { token, user },
+});
+
 // USER SIGN IN
 export const signInStart = userCredentials => ({
   type: UserActionTypes.SIGN_IN_START,
   payload: userCredentials,
 });
 
-export const signInSuccess = token => ({
+export const signInSuccess = message => ({
   type: UserActionTypes.SIGN_IN_SUCCESS,
-  payload: token,
+  payload: message,
 });
 
 export const signInFailure = error => ({
   type: UserActionTypes.SIGN_IN_FAILURE,
-  payload: error,
-});
-
-// USER SIGN UP
-export const signUpStart = userCredentials => ({
-  type: UserActionTypes.SIGN_UP_START,
-  payload: userCredentials,
-});
-
-export const signUpSuccess = token => ({
-  type: UserActionTypes.SIGN_UP_SUCCESS,
-  payload: token,
-});
-
-export const signUpFailure = error => ({
-  type: UserActionTypes.SIGN_UP_FAILURE,
   payload: error,
 });
 
@@ -39,22 +29,6 @@ export const signOutStart = () => ({
 
 export const signOutSuccess = () => ({
   type: UserActionTypes.SIGN_OUT_SUCCESS,
-});
-
-// FETCH CURRENT USER
-export const fetchCurrentUserStart = token => ({
-  type: UserActionTypes.FETCH_CURRENT_USER_START,
-  payload: { token },
-});
-
-export const fetchCurrentUserSuccess = currentUser => ({
-  type: UserActionTypes.FETCH_CURRENT_USER_SUCCESS,
-  payload: currentUser,
-});
-
-export const fetchCurrentUserFailure = error => ({
-  type: UserActionTypes.FETCH_CURRENT_USER_FAILURE,
-  payload: error,
 });
 
 // FETCH SHEETS FOR USER
@@ -68,9 +42,9 @@ export const fetchSheetsForUserSuccess = (sheetType, sheetsList) => ({
   payload: { sheetType, sheetsList },
 });
 
-export const fetchSheetsForUserFailure = error => ({
+export const fetchSheetsForUserFailure = (sheetType, error) => ({
   type: UserActionTypes.FETCH_SHEETS_FOR_USER_FAILURE,
-  payload: error,
+  payload: { sheetType, error },
 });
 
 // CREATE SHEET FOR USER
@@ -84,7 +58,7 @@ export const createSheetForUserSuccess = (sheetType, newSheet) => ({
   payload: { sheetType, newSheet },
 });
 
-export const createSheetForUserFailure = error => ({
+export const createSheetForUserFailure = (sheetType, error) => ({
   type: UserActionTypes.CREATE_SHEET_FOR_USER_FAILURE,
-  payload: error,
+  payload: { sheetType, error },
 });

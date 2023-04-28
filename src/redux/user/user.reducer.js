@@ -1,64 +1,77 @@
-import Cookies from 'js-cookie';
-
 import UserActionTypes from './user.types';
+import { SheetActionTypes } from '../sheet/sheet.types';
 
 const INITIAL_STATE = {
-  token: Cookies.get('token'),
+  token: null,
   current: null,
+  loading: true,
+  signin: {
+    error: null,
+    message: null,
+  },
   characters: [],
   campaigns: [],
   fetched: {
     characters: false,
     campaigns: false,
   },
-  errors: {
-    characters: null,
-    campaigns: null,
+  error: {
+    characters: {
+      fetch: null,
+      create: null,
+    },
+    campaigns: {
+      fetch: null,
+      create: null,
+    },
   },
-  error: null,
 };
 
 const userReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case UserActionTypes.SIGN_UP_SUCCESS:
+    case SheetActionTypes.UPDATE_SHEET_SUCCESS:
+      console.log('from user reducer', action.payload);
+      console.log('whats up!');
+      return state;
+    case UserActionTypes.AUTH_STATE_CHANGE:
       return {
         ...state,
         token: action.payload.token,
-        error: null,
+        current: action.payload.user,
+        loading: false,
       };
     case UserActionTypes.SIGN_IN_SUCCESS:
       return {
         ...state,
-        token: action.payload.token,
-        error: null,
+        signin: {
+          message: action.payload,
+          error: null,
+        },
+      };
+    case UserActionTypes.SIGN_IN_FAILURE:
+      return {
+        ...state,
+        signin: {
+          message: null,
+          error: action.payload,
+        },
       };
     case UserActionTypes.SIGN_OUT_SUCCESS:
       return {
-        ...state,
-        current: null,
-        token: null,
-        characters: [],
-        campaigns: [],
-        error: null,
-      };
-    case UserActionTypes.FETCH_CURRENT_USER_SUCCESS:
-      return {
-        ...state,
-        current: action.payload,
-        error: null,
-      };
-    case UserActionTypes.SIGN_IN_FAILURE:
-    case UserActionTypes.SIGN_UP_FAILURE:
-    case UserActionTypes.FETCH_CURRENT_USER_FAILURE:
-      return {
-        ...state,
-        token: null,
-        error: action.payload,
+        ...INITIAL_STATE,
+        loading: false,
       };
     case UserActionTypes.FETCH_SHEETS_FOR_USER_SUCCESS:
       return {
         ...state,
         [action.payload.sheetType]: action.payload.sheetsList,
+        error: {
+          ...state.error,
+          [action.payload.sheetType]: {
+            ...state.error[action.payload.sheetType],
+            fetch: null,
+          },
+        },
         fetched: {
           ...state.fetched,
           [action.payload.sheetType]: true,
@@ -68,12 +81,43 @@ const userReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         [action.payload.sheetType]: [action.payload.newSheet, ...state[action.payload.sheetType]],
+        error: {
+          ...state.error,
+          [action.payload.sheetType]: {
+            ...state.error[action.payload.sheetType],
+            create: null,
+          },
+        },
       };
     case UserActionTypes.FETCH_SHEETS_FOR_USER_FAILURE:
+      return {
+        ...state,
+        error: {
+          ...state.error,
+          [action.payload.sheetType]: {
+            ...state.error[action.payload.sheetType],
+            fetch: action.payload.error,
+          },
+        },
+        fetched: {
+          ...state.fetched,
+          [action.payload.sheetType]: true,
+        },
+      };
     case UserActionTypes.CREATE_SHEET_FOR_USER_FAILURE:
       return {
         ...state,
-        error: action.payload,
+        error: {
+          ...state.error,
+          [action.payload.sheetType]: {
+            ...state.error[action.payload.sheetType],
+            create: action.payload.error,
+          },
+        },
+        fetched: {
+          ...state.fetched,
+          [action.payload.sheetType]: true,
+        },
       };
     default:
       return state;

@@ -1,11 +1,8 @@
-import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { selectNotifications, selectAlert } from './redux/app/app.selectors';
-import { selectToken, selectCurrentUser } from './redux/user/user.selectors';
-
-import { fetchCurrentUserStart } from './redux/user/user.actions';
+import { selectToken, selectCurrentUser, selectUserLoading } from './redux/user/user.selectors';
 
 import AuthenticatePage from './pages/auth/authenticate';
 
@@ -18,25 +15,18 @@ import Modal from './components/forms/Modal';
 import Loading from './components/Loading';
 
 function App() {
-  const dispatch = useDispatch();
-
   const token = useSelector(selectToken);
   const currentUser = useSelector(selectCurrentUser);
+  const loading = useSelector(selectUserLoading);
   const notifications = useSelector(selectNotifications);
   const alert = useSelector(selectAlert);
 
-  useEffect(() => {
-    if (token) {
-      dispatch(fetchCurrentUserStart(token));
-    }
-  }, [dispatch, token]);
-
-  if (!token) {
-    return <AuthenticatePage />;
+  if (loading) {
+    return <Loading />;
   }
 
-  if (!currentUser) {
-    return <Loading />;
+  if (!token || !currentUser) {
+    return <AuthenticatePage />;
   }
 
   return (

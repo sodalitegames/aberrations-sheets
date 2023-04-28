@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentUser } from '../../../redux/user/user.selectors';
+import { selectCurrentUser, selectUserError } from '../../../redux/user/user.selectors';
 
 import { createSheetForUserStart } from '../../../redux/user/user.actions';
 
@@ -11,9 +11,12 @@ import Detail from '../elements/Detail';
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 
+import Notice from '../../Notice';
+
 const NewCampaign = () => {
   const dispatch = useDispatch();
   const currentUser = useSelector(selectCurrentUser);
+  const error = useSelector(selectUserError);
 
   const [ccNickname, setCcNickname] = useState('');
   const [name, setName] = useState('');
@@ -43,6 +46,7 @@ const NewCampaign = () => {
       <Input slideOver label="Campaign Name" type="text" name="name" value={name} changeHandler={setName} />
       <TextArea slideOver label="Campaign Overview" name="overview" rows={4} value={overview} changeHandler={setOverview} />
       <TextArea slideOver label="Campaign Details" name="details" rows={8} value={details} changeHandler={setDetails} />
+      {error.campaigns.create && <Notice status={error.campaigns.create.status} message={error.campaigns.create.message} />}
     </SlideOverForm>
   );
 };

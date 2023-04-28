@@ -1,50 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 import SigninForm from '../../components/auth/SigninForm';
-import SignupForm from '../../components/auth/SignupForm';
 
 const AuthenticatePage = () => {
-  const [hasAccount, setHasAccount] = useState(!!localStorage.getItem('hasAccount'));
-
   useEffect(() => {
-    if (hasAccount) {
-      document.title = 'Sign in | Aberrations RPG Sheets';
-    } else {
-      document.title = 'Sign up | Aberrations RPG Sheets';
-    }
-  }, [hasAccount]);
+    document.title = 'Sign in | Aberrations RPG Sheets';
+  }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black dark:text-gray-300 relative flex flex-col justify-between">
+    <div className="relative flex flex-col justify-between min-h-screen bg-white dark:bg-black dark:text-gray-300">
       <div>
-        <div className="max-w-7xl mx-auto">
-          <main className="px-4 sm:px-6 lg:px-8 py-10">
-            {hasAccount ? (
-              <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <h2 className="mt-6 text-center text-3xl font-extrabold">Sign in to Aberrations RPG</h2>
+        <div className="mx-auto max-w-7xl">
+          <main className="px-4 py-10 sm:px-6 lg:px-8">
+            <div className="sm:mx-auto sm:w-full sm:max-w-md">
+              <h2 className="mt-6 text-3xl font-extrabold text-center">Sign in to Aberrations RPG</h2>
 
-                <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
-                  Or{' '}
-                  <button className="text-link-accent3 font-normal" onClick={() => setHasAccount(false)}>
-                    create an account
-                  </button>{' '}
-                  if you haven&lsquo;t already
-                </p>
-              </div>
-            ) : (
-              <div className="sm:mx-auto sm:w-full sm:max-w-md">
-                <h2 className="mt-6 text-center text-3xl font-extrabold">Create my Aberrations RPG account</h2>
-                <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
-                  Or{' '}
-                  <button className="text-link-accent3 font-normal" onClick={() => setHasAccount(true)}>
-                    sign in
-                  </button>{' '}
-                  if you already have an account
-                </p>
-              </div>
-            )}
-            {/* Signin and Signup Forms */}
-            {hasAccount ? <SigninForm /> : <SignupForm />}
+              <p className="mt-2 text-sm text-center text-gray-600 dark:text-gray-300">
+                Or{' '}
+                <a href="https://aberrations-rpg.com/auth/signup" target="_blank" rel="noreferrer" className="font-normal text-link-accent3">
+                  create an account
+                </a>{' '}
+                if you haven&lsquo;t already
+              </p>
+            </div>
+
+            {/* Signin Form */}
+            <SigninForm />
           </main>
         </div>
       </div>
