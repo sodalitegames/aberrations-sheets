@@ -7,12 +7,12 @@ import { fetchSheetsForUserStart } from '../../redux/user/user.actions';
 
 import Loading from '../../components/Loading';
 import PageContent from '../../layouts/components/home/PageContent';
-import Notice from '../../components/Notice';
+import Notice, { NoticeStatus } from '../../components/Notice';
 import CampSheetCard from '../../components/home/CampSheetCard';
 
 import SlideOverTypes from '../../utils/SlideOverTypes';
 
-import { CampaignSheet } from '../../models/sheet';
+import { CampaignSheet, SheetType } from '../../models/sheet';
 
 const Campaigns = () => {
   const dispatch = useDispatch();
@@ -23,14 +23,18 @@ const Campaigns = () => {
 
   useEffect(() => {
     if (!fetched.campaigns) {
-      dispatch(fetchSheetsForUserStart('campaigns'));
+      dispatch(fetchSheetsForUserStart(SheetType.campaigns));
     }
   });
 
   return (
     <PageContent heading="My Campaigns" primary={{ text: 'Create New Campaign', slideOver: { type: SlideOverTypes.newCampaign } }}>
       {error.campaigns.fetch && (
-        <Notice status={error.campaigns.fetch.status} message={error.campaigns.fetch.message} action={{ text: 'Retry', click: () => dispatch(fetchSheetsForUserStart('campaigns')) }} />
+        <Notice
+          status={error.campaigns.fetch.status as NoticeStatus}
+          message={error.campaigns.fetch.message}
+          action={{ text: 'Retry', click: () => dispatch(fetchSheetsForUserStart(SheetType.campaigns)) }}
+        />
       )}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">{fetched.campaigns ? campaigns.map(campSheet => <CampSheetCard key={campSheet._id} campSheet={campSheet} />) : <Loading />}</div>
     </PageContent>

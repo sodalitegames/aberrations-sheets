@@ -1,4 +1,6 @@
 import { store } from '../../redux/store';
+import { SheetAction } from '../../redux/sheet/sheet.types';
+import { AppAction } from '../../redux/app/app.types';
 
 import { updateSheetResourceStart } from '../../redux/sheet/sheet.actions';
 import { setModal, setNestedModal } from '../../redux/app/app.actions';
@@ -41,7 +43,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
             message: `You have successfully unequipped ${(belonging as Weapon).nickname || belonging.name}.`,
           },
         }
-      )
+      ) as SheetAction
     );
     return;
   }
@@ -51,11 +53,11 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
     case 'weapons':
       if (equippedList.length >= 2) {
         if (nested) {
-          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
+          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }) as AppAction);
           return;
         }
 
-        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
+        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }) as AppAction);
         return;
       }
 
@@ -64,11 +66,11 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
     case 'wearables':
       if ((equippedList as Wearable[]).find(wear => wear.bodyArea === (belonging as Wearable).bodyArea)) {
         if (nested) {
-          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
+          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }) as AppAction);
           return;
         }
 
-        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
+        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }) as AppAction);
         return;
       }
 
@@ -78,11 +80,11 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
     case 'usables':
       if (equippedList.length >= 3) {
         if (nested) {
-          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
+          store.dispatch(setNestedModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }) as AppAction);
           return;
         }
 
-        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }));
+        store.dispatch(setModal({ type: ModalTypes.errorEquippingBelonging, data: { belongingType, belonging, sheetType, sheetId: sheet._id } }) as AppAction);
         return;
       }
       break;
@@ -107,7 +109,7 @@ const equipBelonging = ({ sheetType, sheet, belongingType, belonging, equippedLi
           message: `You have successfully equipped ${(belonging as Weapon).nickname || belonging.name}.`,
         },
       }
-    )
+    ) as SheetAction
   );
 };
 

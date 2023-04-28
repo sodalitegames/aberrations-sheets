@@ -1,11 +1,11 @@
 import { takeLatest, put, all, call } from 'redux-saga/effects';
-
+import { AxiosResponse } from 'axios';
 import { signInWithEmailAndPassword, onAuthStateChanged, signOut as _signOut } from 'firebase/auth';
 import { getDoc, doc } from 'firebase/firestore';
 
 import { store } from '../store';
 
-import UserActionTypes from './user.types';
+import { CreateSheetForUserStartAction, FetchSheetsForUserStartAction, SignInStartAction, UserAction, UserActionTypes } from './user.types';
 
 import {
   authStateChange,
@@ -23,7 +23,7 @@ import sheetsApi, { getSheetsForPlayer, createSheetForPlayer } from '../../apis/
 
 import { auth, firestore } from '../../firebase';
 
-import { getResourceLabel } from '../../utils/helpers/resources';
+import { ResourceType, getResourceLabel } from '../../utils/helpers/resources';
 
 onAuthStateChanged(auth, async user => {
   if (user) {
@@ -33,21 +33,22 @@ onAuthStateChanged(auth, async user => {
     const data = userSnap.data();
 
     if (!token || !data) {
-      store.dispatch(authStateChange(null, null));
+      store.dispatch(authStateChange(null, null) as UserAction);
       return;
     }
 
+    // @ts-expect-error //
     sheetsApi.defaults.headers.Authorization = `Bearer ${token}`;
 
     store.dispatch(
       authStateChange(token, {
-        name: user.displayName,
-        email: user.email,
+        name: user.displayName!,
+        email: user.email!,
         subscription: Boolean(data.stripe_subscription_id),
-      })
+      }) as UserAction
     );
   } else {
-    store.dispatch(authStateChange(null, null));
+    store.dispatch(authStateChange(null, null) as UserAction);
   }
 });
 
@@ -56,13 +57,13 @@ export function* onSignInStart() {
   yield takeLatest(UserActionTypes.SIGN_IN_START, signIn);
 }
 
-export function* signIn({ payload: { email, password } }) {
+export function* signIn({ payload: { email, password } }: SignInStartAction) {
   try {
     yield signInWithEmailAndPassword(auth, email, password);
 
     // dispatch sign in success
     yield put(signInSuccess({ status: 'success', message: 'You have successfully signed in.' }));
-  } catch (err) {
+  } catch (err: any) {
     console.log(err);
 
     let response;
@@ -106,12 +107,12 @@ export function* onFetchSheetsForUserStart() {
   yield takeLatest(UserActionTypes.FETCH_SHEETS_FOR_USER_START, fetchSheetsForUser);
 }
 
-export function* fetchSheetsForUser({ payload: { sheetType } }) {
+export function* fetchSheetsForUser({ payload: { sheetType } }: FetchSheetsForUserStartAction) {
   try {
-    const response = yield getSheetsForPlayer(sheetType);
+    const response: AxiosResponse<any> = yield getSheetsForPlayer(sheetType);
 
     yield put(fetchSheetsForUserSuccess(sheetType, response.data.data.sheets));
-  } catch (err) {
+  } catch (err: any) {
     let error;
 
     console.log(err.response);
@@ -133,9 +134,9 @@ export function* onCreateSheetForUserStart() {
   yield takeLatest(UserActionTypes.CREATE_SHEET_FOR_USER_START, createSheetForUser);
 }
 
-export function* createSheetForUser({ payload: { sheetType, body, config } }) {
+export function* createSheetForUser({ payload: { sheetType, body, config } }: CreateSheetForUserStartAction) {
   try {
-    const response = yield createSheetForPlayer(sheetType, body);
+    const response: AxiosResponse<any> = yield createSheetForPlayer(sheetType, body);
 
     yield put(createSheetForUserSuccess(sheetType, response.data.data.sheet));
 
@@ -146,7 +147,7 @@ export function* createSheetForUser({ payload: { sheetType, body, config } }) {
     if (config?.slideOver) yield put(closeSlideOver());
     if (config?.modal) yield put(closeModal());
     if (config?.nestedModal) yield put(closeModal());
-  } catch (err) {
+  } catch (err: any) {
     let error;
 
     console.log(err.response);
@@ -156,7 +157,7 @@ export function* createSheetForUser({ payload: { sheetType, body, config } }) {
     }
 
     if (!error) {
-      error = { status: 'error', message: `An error occurred attempting to create your ${getResourceLabel(sheetType)}. Please try again later.` };
+      error = { status: 'error', message: `An error occurred attempting to create your ${getResourceLabel(ResourceType[sheetType])}. Please try again later.` };
     }
 
     yield put(createSheetForUserFailure(sheetType, error));

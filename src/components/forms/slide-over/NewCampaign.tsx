@@ -5,17 +5,19 @@ import { selectCurrentUser, selectUserError } from '../../../redux/user/user.sel
 
 import { createSheetForUserStart } from '../../../redux/user/user.actions';
 
+import { SheetType } from '../../../models/sheet';
+
 import { SlideOverForm } from '../SlideOver';
 
 import Detail from '../elements/Detail';
 import Input from '../elements/Input';
 import TextArea from '../elements/TextArea';
 
-import Notice from '../../Notice';
+import Notice, { NoticeStatus } from '../../Notice';
 
 const NewCampaign = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector(selectCurrentUser);
+  const currentUser = useSelector(selectCurrentUser)!;
   const error = useSelector(selectUserError);
 
   const [ccNickname, setCcNickname] = useState('');
@@ -32,7 +34,7 @@ const NewCampaign = () => {
 
     dispatch(
       createSheetForUserStart(
-        'campaigns',
+        SheetType.campaigns,
         { name, ccName: currentUser.name, ccNickname, overview, details },
         { slideOver: true, notification: { status: 'success', heading: 'Campaign Sheet Created', message: `You have successfully created ${name}.` } }
       )
@@ -46,7 +48,7 @@ const NewCampaign = () => {
       <Input slideOver label="Campaign Name" type="text" name="name" value={name} changeHandler={setName} />
       <TextArea slideOver label="Campaign Overview" name="overview" rows={4} value={overview} changeHandler={setOverview} />
       <TextArea slideOver label="Campaign Details" name="details" rows={8} value={details} changeHandler={setDetails} />
-      {error.campaigns.create && <Notice status={error.campaigns.create.status} message={error.campaigns.create.message} />}
+      {error.campaigns.create && <Notice status={error.campaigns.create.status as NoticeStatus} message={error.campaigns.create.message} />}
     </SlideOverForm>
   );
 };

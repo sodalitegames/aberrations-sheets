@@ -1,5 +1,34 @@
-import UserActionTypes from './user.types';
-import { SheetActionTypes } from '../sheet/sheet.types';
+import { UserAction, UserActionTypes } from './user.types';
+// import { SheetActionTypes } from '../sheet/sheet.types';
+import { User } from '../../models/user';
+import { AppError } from '../../models/app';
+import { CampaignSheet, CharacterSheet } from '../../models/sheet';
+
+export interface UserState {
+  token: string | null;
+  current: User | null;
+  loading: boolean;
+  signin: {
+    error: AppError | null;
+    message: AppError | null;
+  };
+  characters: CharacterSheet[];
+  campaigns: CampaignSheet[];
+  fetched: {
+    characters: boolean;
+    campaigns: boolean;
+  };
+  error: {
+    characters: {
+      fetch: AppError | null;
+      create: AppError | null;
+    };
+    campaigns: {
+      fetch: AppError | null;
+      create: AppError | null;
+    };
+  };
+}
 
 const INITIAL_STATE = {
   token: null,
@@ -27,12 +56,12 @@ const INITIAL_STATE = {
   },
 };
 
-const userReducer = (state = INITIAL_STATE, action) => {
+const userReducer = (state: UserState = INITIAL_STATE, action: UserAction): UserState => {
   switch (action.type) {
-    case SheetActionTypes.UPDATE_SHEET_SUCCESS:
-      console.log('from user reducer', action.payload);
-      console.log('whats up!');
-      return state;
+    // case SheetActionTypes.UPDATE_SHEET_SUCCESS:
+    //   console.log('from user reducer', action.payload);
+    //   console.log('whats up!');
+    //   return state;
     case UserActionTypes.AUTH_STATE_CHANGE:
       return {
         ...state,

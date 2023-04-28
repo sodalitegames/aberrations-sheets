@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentUser } from '../../../redux/user/user.selectors';
 import { selectCurrentCharacter } from '../../../redux/character/character.selectors';
 
 import { updateSheetStart } from '../../../redux/sheet/sheet.actions';
@@ -30,8 +29,7 @@ const ManageCharacter = () => {
   const dispatch = useDispatch();
   const { setNestedModal } = useActions();
 
-  const currentUser = useSelector(selectCurrentUser);
-  const charSheet = useSelector(selectCurrentCharacter);
+  const charSheet = useSelector(selectCurrentCharacter)!;
 
   const species = useResource(FetchedResourceType.Species) as Species[];
 
@@ -75,7 +73,7 @@ const ManageCharacter = () => {
 
   return (
     <SlideOverForm title="Manage Character" description="Edit the information below to update your character." submitText="Save character" submitHandler={submitHandler}>
-      <Detail slideOver label="Player Name" detail={currentUser.name} />
+      <Detail slideOver label="Player Name" detail={charSheet.playerName} />
       <Input slideOver label="Player Nickname (Opt.)" type="text" name="playerName" value={playerNickname} changeHandler={setPlayerNickname} />
       <Input slideOver label="Character Name" type="text" name="characterName" value={characterName} changeHandler={setCharacterName} />
       <Row slideOver name="species" label="Character Species">

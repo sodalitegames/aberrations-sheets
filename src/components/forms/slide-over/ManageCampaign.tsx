@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentUser } from '../../../redux/user/user.selectors';
 import { selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
 
 import { useActions } from '../../../hooks/useActions';
@@ -24,7 +23,6 @@ const ManageCampaign = () => {
   const dispatch = useDispatch();
   const { setNestedModal } = useActions();
 
-  const currentUser = useSelector(selectCurrentUser);
   const campSheet = useSelector(selectCurrentCampaign)!;
 
   const [ccNickname, setCcNickname] = useState('');
@@ -66,7 +64,7 @@ const ManageCampaign = () => {
 
   return (
     <SlideOverForm title="Manage Campaign" description="Edit the information below to update your campaign." submitText="Save campaign" submitHandler={submitHandler}>
-      <Detail slideOver label="CC Name" detail={currentUser.name} />
+      <Detail slideOver label="CC Name" detail={campSheet.ccName} />
       <Input slideOver label="CC Nickname (Opt.)" type="text" name="ccNickname" value={ccNickname} changeHandler={setCcNickname} />
       <Input slideOver label="Campaign Name" type="text" name="name" value={name} changeHandler={setName} />
       {/* <TextArea slideOver label="Campaign Overview" name="overview" rows={4} value={overview} changeHandler={setOverview} />
