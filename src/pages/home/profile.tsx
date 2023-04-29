@@ -12,7 +12,7 @@ const ProfilePage = () => {
       <PagePanel
         heading="My Information"
         subheading="You can update your information at our website on your account dashboard."
-        footer={[{ text: 'Edit Information on Dashboard', to: 'https://aberrations-rpg.com/dashboard/account-settings', external: true }]}
+        footer={[{ text: 'Edit Information on Dashboard', to: `${process.env.REACT_APP_WEBSITE_URL}/dashboard/account-settings`, external: true }]}
       >
         <dl className="divide-y divide-gray-200">
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">

@@ -90,7 +90,7 @@ export default function SigninForm() {
           </div>
 
           <div className="text-sm text-center">
-            <a href="https://aberrations-rpg.com/auth/forgot-password" target="_blank" rel="noreferrer" className="text-link-accent3">
+            <a href={`${process.env.REACT_APP_WEBSITE_URL}/auth/forgot-password`} target="_blank" rel="noreferrer" className="text-link-accent3">
               Forgot your password?
             </a>
           </div>

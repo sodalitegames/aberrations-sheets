@@ -32,8 +32,13 @@ onAuthStateChanged(auth, async user => {
     const userSnap = await getDoc(doc(firestore, 'users', user.uid));
     const data = userSnap.data();
 
-    if (!token || !data) {
+    if (!token) {
       store.dispatch(authStateChange(null, null) as UserAction);
+      return;
+    }
+
+    if (!data) {
+      store.dispatch(authStateChange(token, null) as UserAction);
       return;
     }
 
