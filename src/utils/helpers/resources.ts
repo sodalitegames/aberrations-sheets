@@ -15,6 +15,7 @@ export enum ResourceType {
   transactions = 'transactions',
   players = 'players',
   characters = 'characters',
+  campaigns = 'campaigns',
 }
 
 export const getResourceLabel = (resourceType: ResourceType): string => {
@@ -51,6 +52,8 @@ export const getResourceLabel = (resourceType: ResourceType): string => {
       return 'player';
     case ResourceType.characters:
       return 'character';
+    case ResourceType.campaigns:
+      return 'campaign';
     default:
       return '[resource]';
   }

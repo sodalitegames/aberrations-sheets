@@ -8,7 +8,7 @@ import PagePanel from '../../layouts/components/home/PagePanel';
 import Notice, { NoticeStatus } from '../../components/Notice';
 
 const HomePage = () => {
-  const currentUser = useSelector(selectCurrentUser);
+  const currentUser = useSelector(selectCurrentUser)!;
   return (
     <PageContent heading={`Welcome back, ${currentUser.name}`}>
       <Notice status={NoticeStatus.Warn} heading="Under Construction" message="This page is currently under construction." />

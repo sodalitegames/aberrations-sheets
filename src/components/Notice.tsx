@@ -21,11 +21,17 @@ interface NoticeLink {
   inline?: boolean;
 }
 
+type NoticeAction = {
+  text: string;
+  click: () => void;
+};
+
 interface NoticeProps {
   status: NoticeStatus;
   heading?: string;
   message: string | string[];
   link?: NoticeLink;
+  action?: NoticeAction;
   accent?: boolean;
   hideable?: boolean;
   noIcon?: boolean;
@@ -43,7 +49,14 @@ const NoticeIcon: React.FC<{ status: NoticeStatus }> = ({ status }) => {
   );
 };
 
-const NoticeText: React.FC<{ status: NoticeStatus; heading?: string; message?: string | string[]; link?: NoticeLink; bold?: boolean }> = ({ status, message, link, bold, heading }) => {
+const NoticeText: React.FC<{ status: NoticeStatus; heading?: string; message?: string | string[]; link?: NoticeLink; action?: NoticeAction; bold?: boolean }> = ({
+  status,
+  message,
+  link,
+  action,
+  bold,
+  heading,
+}) => {
   if (heading || !message) {
     return (
       <h3
@@ -86,7 +99,25 @@ const NoticeText: React.FC<{ status: NoticeStatus; heading?: string; message?: s
           <NoticeLinkComp status={status} link={link} />
         </>
       ) : null}
+      {action && <NoticeActionComp status={status} action={action} />}
     </div>
+  );
+};
+
+const NoticeActionComp: React.FC<{ status: NoticeStatus; action: NoticeAction }> = ({ status, action }) => {
+  return (
+    <button
+      onClick={action.click}
+      className={classNames(
+        status === 'success' ? 'text-green-700 dark:text-green-400 hover:text-green-600 dark:hover:text-green-500' : '',
+        status === 'info' ? 'text-blue-700 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-500' : '',
+        status === 'warn' ? 'text-yellow-700 dark:text-yellow-400 hover:text-yellow-600 dark:hover:text-yellow-500' : '',
+        status === 'error' || status === 'fail' ? 'text-red-700 dark:text-red-400 hover:text-red-600 dark:hover:text-red-500' : '',
+        'font-semibold underline'
+      )}
+    >
+      {action.text}
+    </button>
   );
 };
 
@@ -214,7 +245,7 @@ const NoticeCloseButton: React.FC<{ status: NoticeStatus; setShowNotice: (bool: 
   );
 };
 
-const Notice: React.FC<NoticeProps> = ({ message, status = NoticeStatus.Info, link, accent, heading, hideable, noIcon, classes }) => {
+const Notice: React.FC<NoticeProps> = ({ message, status = NoticeStatus.Info, link, action, accent, heading, hideable, noIcon, classes }) => {
   const [showNotice, setShowNotice] = useState(true);
 
   if (!showNotice) {
@@ -272,6 +303,13 @@ const Notice: React.FC<NoticeProps> = ({ message, status = NoticeStatus.Info, li
             <NoticeText status={status} message={message} />
             <p className="mt-3 text-sm md:mt-0 md:ml-6">
               <NoticeLinkComp status={status} link={link} arrow />
+            </p>
+          </div>
+        ) : !heading && action ? (
+          <div className="flex-1 ml-3 md:flex md:justify-between">
+            <NoticeText status={status} message={message} />
+            <p className="mt-3 text-sm md:mt-0 md:ml-6">
+              <NoticeActionComp status={status} action={action} />
             </p>
           </div>
         ) : !heading ? (

@@ -3,7 +3,9 @@ import { AppActionTypes, AppAction } from './app.types';
 import { Modal, SlideOver, Notification, Alert } from '../../models/app';
 
 import { replaceItemById } from '../../utils/helpers/arrays';
+
 import { store } from '../store';
+
 import { dismissNotification } from './app.actions';
 
 export interface AppState {
@@ -81,7 +83,7 @@ const appReducer = (state: AppState = INITIAL_STATE, action: AppAction): AppStat
 
       // Set a timeout for dismissing the notification
       setTimeout(() => {
-        store.dispatch(dismissNotification(notification));
+        store.dispatch(dismissNotification(notification) as AppAction);
       }, 6000);
 
       // Add the notification into redux state

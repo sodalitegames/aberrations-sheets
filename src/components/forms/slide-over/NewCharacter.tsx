@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentUser } from '../../../redux/user/user.selectors';
+import { selectCurrentUser, selectUserError } from '../../../redux/user/user.selectors';
 
 import { createSheetForUserStart } from '../../../redux/user/user.actions';
 
 import { useResource } from '../../../hooks/useResource';
 
 import { FetchedResourceType, Species } from '../../../models/resource';
+import { SheetType } from '../../../models/sheet';
 
 import { SlideOverForm } from '../SlideOver';
 
@@ -20,10 +21,13 @@ import Detail from '../elements/Detail';
 
 import DisplaySpecies from '../../display/DisplaySpecies';
 
+import Notice, { NoticeStatus } from '../../Notice';
+
 const NewCharacter = () => {
   const dispatch = useDispatch();
 
-  const currentUser = useSelector(selectCurrentUser);
+  const currentUser = useSelector(selectCurrentUser)!;
+  const error = useSelector(selectUserError);
 
   const fetchedSpecies = useResource(FetchedResourceType.Species) as Species[];
 
@@ -54,7 +58,7 @@ const NewCharacter = () => {
 
     dispatch(
       createSheetForUserStart(
-        'characters',
+        SheetType.characters,
         {
           playerName: currentUser.name,
           playerNickname,
@@ -98,6 +102,7 @@ const NewCharacter = () => {
       </Row>
       <TextArea slideOver label="Character Description" name="charDescription" rows={4} value={charDescription} changeHandler={setCharDescription} formik={false} />
       <TextArea slideOver label="Character Background" name="charBackground" rows={8} value={charBackground} changeHandler={setCharBackground} formik={false} />
+      {error.characters.create && <Notice status={error.characters.create.status as NoticeStatus} message={error.characters.create.message} />}
     </SlideOverForm>
   );
 };

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { signInStart } from '../../redux/user/user.actions';
 
-import { selectUserError } from '../../redux/user/user.selectors';
+import { selectUserSignin } from '../../redux/user/user.selectors';
 
 import Notice from '../Notice';
 import SubmitButton from '../forms/elements/SubmitButton';
@@ -11,20 +11,25 @@ import SubmitButton from '../forms/elements/SubmitButton';
 export default function SigninForm() {
   const dispatch = useDispatch();
 
-  const error = useSelector(selectUserError);
+  const signin = useSelector(selectUserSignin);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [notice, setNotice] = useState('');
 
   const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
-    if (error) {
-      setMessage({ status: error.status, message: error.message });
+    if (signin.message) {
+      setNotice({ status: signin.message.status, message: signin.message.message });
       setProcessing(false);
     }
-  }, [error]);
+
+    if (signin.error) {
+      setNotice({ status: signin.error.status, message: signin.error.message });
+      setProcessing(false);
+    }
+  }, [signin]);
 
   const submitHandler = async e => {
     e.preventDefault();
@@ -32,7 +37,7 @@ export default function SigninForm() {
     setProcessing(true);
 
     if (!email || !password) {
-      setMessage({ message: 'You must provide both an email and a password.', status: 'error' });
+      setNotice({ message: 'You must provide both an email and a password.', status: 'error' });
       setProcessing(false);
       return;
     }
@@ -78,31 +83,16 @@ export default function SigninForm() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary dark:focus:ring-primary-fade dark:bg-dark-400 dark:border-gray-800"
-                checked
-              />
-              <label htmlFor="remember-me" className="block ml-2 text-sm">
-                Remember me
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <a href="https://aberrations-rpg.com/auth/forgot-password" target="_blank" rel="noreferrer" className="text-link-accent3">
-                Forgot your password?
-              </a>
-            </div>
-          </div>
-
-          {message ? <Notice message={message.message} status={message.status} /> : null}
+          {notice ? <Notice message={notice.message} status={notice.status} /> : null}
 
           <div>
             <SubmitButton type="primary" text="Sign in" loading={processing} />
+          </div>
+
+          <div className="text-sm text-center">
+            <a href={`${process.env.REACT_APP_WEBSITE_URL}/auth/forgot-password`} target="_blank" rel="noreferrer" className="text-link-accent3">
+              Forgot your password?
+            </a>
           </div>
         </form>
       </div>
