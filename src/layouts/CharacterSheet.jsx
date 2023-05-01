@@ -7,7 +7,6 @@ import { selectCurrentCharacter, selectCharacterError, selectLoading, selectPerm
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
 import charSocket from '../sockets/character';
-import campSocket from '../sockets/campaign';
 
 import Loading from '../components/Loading';
 
@@ -33,13 +32,10 @@ const CharacterSheet = () => {
     if (charId) {
       // Join room for character sheet
       charSocket.emit('joinRoom', charId);
-      // Join room for the connected campaign the player is a part of
-      campSocket.emit('joinRoom', charId);
     }
 
     return () => {
       charSocket.emit('leaveRoom', charId);
-      campSocket.emit('leaveRoom', charId);
     };
   }, [charId]);
 

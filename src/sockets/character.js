@@ -22,11 +22,11 @@ let charSocket = io.connect(`${process.env.REACT_APP_SOCKET_SERVER}/characters`,
 });
 
 charSocket.on('message', message => {
-  console.log('socket:message:', message);
+  console.log('character:socket:message:', message);
 });
 
 charSocket.on('updates', ({ sheet, room, type, args }) => {
-  console.log('socket:updates:', sheet, room, type, args);
+  console.log('character:socket:updates:', sheet, room, type, args);
 
   switch (type) {
     case ChangesTypes.updateSheet:

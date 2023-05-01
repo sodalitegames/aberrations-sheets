@@ -26,11 +26,11 @@ let campSocket = io.connect(`${process.env.REACT_APP_SOCKET_SERVER}/campaigns`, 
 });
 
 campSocket.on('message', message => {
-  console.log('socket:message:', message);
+  console.log('campaign:socket:message:', message);
 });
 
 campSocket.on('updates', ({ sheet, room, type, args }) => {
-  console.log('socket:updates:', sheet, room, type, args);
+  console.log('campaign:socket:updates:', sheet, room, type, args);
 
   switch (type) {
     case ChangesTypes.updateSheet:

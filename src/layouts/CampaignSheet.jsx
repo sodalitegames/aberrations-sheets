@@ -7,6 +7,7 @@ import { selectCurrentCampaign, selectCampaignError, selectLoading, selectReload
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
 import campSocket from '../sockets/campaign';
+import playerSocket from '../sockets/player';
 
 import Loading from '../components/Loading';
 
@@ -37,7 +38,7 @@ export default function CharacterSheet() {
     if (campSheet) {
       // Join room for each player's character sheet
       campSheet.players.forEach(character => {
-        campSocket.emit('joinRoom', character._id);
+        playerSocket.emit('joinRoom', character._id);
       });
     }
 
@@ -46,7 +47,7 @@ export default function CharacterSheet() {
 
       if (campSheet) {
         campSheet.players.forEach(character => {
-          campSocket.emit('leaveRoom', character._id);
+          playerSocket.emit('leaveRoom', character._id);
         });
       }
     };
