@@ -41,10 +41,9 @@ const PlayerDetails: React.FC<PlayerDetailsProps> = ({ player, species }) => {
         { name: 'Shield Value', values: [calculateShieldValue(equippedWearables)], half: true },
         { name: 'Species', values: [player.speciesName], half: true },
         { name: 'Mortality', values: [player.mortality], half: true },
-        { name: 'Experience', values: [player.experience], half: true },
+        { name: 'Level', values: [player.level], half: true },
         { name: 'Wallet', values: [player.wallet], half: true },
         { name: 'Active', values: [player.active ? 'Yes' : 'No'], half: true },
-        { name: 'Milestones', values: [player.milestones], half: true },
         { name: 'Speed', values: [player.speed + calculateSpeedAdjustment(equippedWearables)], half: true },
         { name: 'Health', values: [`${player.currentHp}/${player.maxHp}`], half: true },
         { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
@@ -104,16 +103,12 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
               click: () => setModal({ type: ModalTypes.editMortality, data: { entityType: 'players', entity: player } }),
             },
             {
-              text: 'Experience',
-              click: () => setModal({ type: ModalTypes.editExperience, data: { entityType: 'players', entity: player } }),
+              text: 'Level',
+              click: () => setModal({ type: ModalTypes.editLevel, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Health',
               click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'players', entity: player } }),
-            },
-            {
-              text: 'Milestones',
-              click: () => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Modifiers',

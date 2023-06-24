@@ -39,15 +39,13 @@ import DeleteResource from './modal/DeleteResource';
 import UpdateInviteStatus from './modal/UpdateInviteStatus';
 import ManageTransaction from './modal/ManageTransaction';
 import RemoveCharacterFromCampaign from './modal/RemoveCharacterFromCampaign';
-import EditExperience from './modal/EditExperience';
+import EditLevel from './modal/EditLevel';
 import EditMortality from './modal/EditMortality';
 import EditStat from './modal/EditStat';
-import UpgradeStat from './modal/UpgradeStat';
 import EditCondition from './modal/EditCondition';
 import EditHealth from './modal/EditHealth';
 import EditWallet from './modal/EditWallet';
 import ReachMilestone from './modal/ReachMilestone';
-import EditMilestones from './modal/EditMilestones';
 import EditModifiers from './modal/EditModifiers';
 
 interface ModalFormProps {
@@ -89,15 +87,13 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.updateInviteStatus ? <UpdateInviteStatus data={modal.data} nested={nested} /> : null}
       {modal && modal.type === ModalTypes.manageTransaction ? <ManageTransaction data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.removeCharacterFromCampaign ? <RemoveCharacterFromCampaign data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editExperience ? <EditExperience data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editLevel ? <EditLevel data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editMortality ? <EditMortality data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editStat ? <EditStat data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.upgradeStat ? <UpgradeStat data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editCondition ? <EditCondition data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editHealth ? <EditHealth data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editWallet ? <EditWallet data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.reachMilestone ? <ReachMilestone data={modal.data} /> : null}
-      {modal && modal.type === ModalTypes.editMilestones ? <EditMilestones data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editModifiers ? <EditModifiers data={modal.data} /> : null}
     </Fragment>
   );

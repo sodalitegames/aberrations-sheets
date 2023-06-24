@@ -21,8 +21,7 @@ export interface Npc {
   modifiers: Modifier[];
   currentHp: number;
   maxHp: number;
-  milestones: number;
-  experience: number;
+  level: number;
   conditions: Conditions;
 
   strength: Stat;

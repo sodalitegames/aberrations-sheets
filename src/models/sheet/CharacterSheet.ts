@@ -46,8 +46,7 @@ export interface CharacterSheet {
 
   currentHp: number;
   maxHp: number;
-  milestones: number;
-  experience: number;
+  level: number;
 
   conditions: Conditions;
 
@@ -57,6 +56,7 @@ export interface CharacterSheet {
   aptitude: Stat;
 
   slug: string;
+  version: number;
   active: boolean;
 
   speed: number;

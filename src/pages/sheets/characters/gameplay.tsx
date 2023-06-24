@@ -115,7 +115,6 @@ const CharacterGameplayPage = () => {
               { name: 'Persona', ...charSheet.persona },
               { name: 'Aptitude', ...charSheet.aptitude },
             ]}
-            experience={charSheet.experience}
           />
           <div className="mt-8">
             <div className="mx-2">
@@ -141,23 +140,6 @@ const CharacterGameplayPage = () => {
                 </div>
               </div>
 
-              {/* Milestones */}
-              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
-                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
-                  <h4 className="flex items-center uppercase text-md">
-                    Milestones
-                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'characters', entity: charSheet } })}>
-                      <PencilIcon
-                        className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </h4>
-                  <p className="text-lg font-bold">{charSheet.milestones}</p>
-                </div>
-              </div>
-
               {/* Mortality */}
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center w-full py-3 rounded-md bg-gray-50">
@@ -172,6 +154,23 @@ const CharacterGameplayPage = () => {
                     </span>
                   </h4>
                   <p className="text-lg font-bold">{charSheet.mortality}</p>
+                </div>
+              </div>
+
+              {/* Level */}
+              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
+                <div className="flex flex-col items-center w-full py-3 rounded-md bg-gray-50">
+                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
+                  <h4 className="flex items-center uppercase text-md">
+                    Level
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editLevel, data: { entityType: 'characters', entity: charSheet } })}>
+                      <PencilIcon
+                        className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </h4>
+                  <p className="text-lg font-bold">{charSheet.level}</p>
                 </div>
               </div>
             </dl>

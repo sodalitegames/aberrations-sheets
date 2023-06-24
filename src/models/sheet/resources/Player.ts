@@ -25,8 +25,7 @@ export interface Player {
 
   currentHp: number;
   maxHp: number;
-  milestones: number;
-  experience: number;
+  level: number;
 
   conditions: Conditions;
 

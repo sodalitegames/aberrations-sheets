@@ -45,9 +45,8 @@ const NpcDetails: React.FC<NpcDetailsProps> = ({ npc, species, wearables }) => {
         { name: 'Diplomacy', values: [npc.diplomacy], half: true },
         npc.type ? { name: 'Type', values: [npc.type], half: true } : null,
         { name: 'Temperament', values: [npc.temperament], half: true },
-        { name: 'Experience', values: [npc.experience], half: true },
+        { name: 'Level', values: [npc.level], half: true },
         { name: 'Mortality', values: [npc.mortality], half: true },
-        { name: 'Milestones', values: [npc.milestones], half: true },
         { name: 'Wallet', values: [npc.wallet], half: true },
         { name: 'Active', values: [npc.active ? 'Yes' : 'No'], half: true },
         { name: 'Speed', values: [npc.speed + calculateSpeedAdjustment(wearables)], half: true },
@@ -111,16 +110,12 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
               click: () => setModal({ type: ModalTypes.editMortality, data: { entityType: 'npcs', entity: npc } }),
             },
             {
-              text: 'Experience',
-              click: () => setModal({ type: ModalTypes.editExperience, data: { entityType: 'npcs', entity: npc } }),
+              text: 'Level',
+              click: () => setModal({ type: ModalTypes.editLevel, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Health',
               click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'npcs', entity: npc } }),
-            },
-            {
-              text: 'Milestones',
-              click: () => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Modifiers',

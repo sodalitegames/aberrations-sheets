@@ -29,7 +29,7 @@ export const selectEquippedUsables = createSelector([selectCurrentCharacter], cu
 
 export const selectAugmentationPoints = createSelector([selectCurrentCharacter], current => {
   if (!current) return 0;
-  return calculateAugmentationPoints(current.milestones, current.augmentations);
+  return calculateAugmentationPoints(current.level, current.augmentations);
 });
 
 export const selectShieldValue = createSelector([selectEquippedWearables], equippedWearables => calculateShieldValue(equippedWearables));

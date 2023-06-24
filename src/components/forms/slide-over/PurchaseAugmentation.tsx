@@ -33,7 +33,7 @@ const PurchaseAugmentation: React.FC<Props> = ({ data }) => {
 
   const augmentationGroups = useResource(FetchedResourceType.AugmentationGroups) as AugmentationGroup[];
 
-  const augmentationPoints = calculateAugmentationPoints(data.entity.milestones, data.augmentations);
+  const augmentationPoints = calculateAugmentationPoints(data.entity.level, data.augmentations);
 
   const options = (augmentationGroups || []).map(group => {
     const children = group.augmentations.map(aug => {

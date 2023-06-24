@@ -6,6 +6,11 @@ export const calculateAugmentationPoints = (milestones: number, augmentations: A
   return milestones - spentPoints;
 };
 
+export const calculateLifeHackPoints = (level: number, hacks: any[]): number => {
+  const availablePoints = Array.from({ length: level }, (_, i) => i + 1).reduce((points: number, level: number) => points + level, 0);
+  return availablePoints;
+};
+
 export const calculateShieldValue = (wearables: Wearable[]): number => {
   return wearables.reduce((shieldValue: number, wearable) => (wearable.shieldValue || 0) + shieldValue, 0);
 };
