@@ -14,6 +14,7 @@ import classNames from '../../../utils/classNames';
 const navigation = {
   characters: [
     { name: 'Gameplay', href: 'gameplay' },
+    { name: 'Combat', href: 'combat' },
     { name: 'Character', href: 'character' },
     { name: 'Belongings', href: 'belongings' },
     { name: 'Notes', href: 'notes' },

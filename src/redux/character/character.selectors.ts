@@ -17,6 +17,8 @@ export const selectWearables = createSelector([selectCurrentCharacter], current 
 export const selectConsumables = createSelector([selectCurrentCharacter], current => (current ? current.consumables.filter(consumable => !consumable.archived) : []));
 export const selectUsables = createSelector([selectCurrentCharacter], current => (current ? current.usables.filter(usable => !usable.archived) : []));
 
+export const selectCombats = createSelector([selectCurrentCharacter], current => (current ? current.combats : []));
+
 export const selectArchivedWeapons = createSelector([selectCurrentCharacter], current => (current ? current.weapons.filter(weapon => weapon.archived) : []));
 export const selectArchivedWearables = createSelector([selectCurrentCharacter], current => (current ? current.wearables.filter(wearable => wearable.archived) : []));
 export const selectArchivedConsumables = createSelector([selectCurrentCharacter], current => (current ? current.consumables.filter(consumable => consumable.archived) : []));

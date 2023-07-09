@@ -9,6 +9,7 @@ import { Wearable } from './resources/Wearable';
 import { Modifier, Conditions, Stat } from './_partials';
 import { Usable } from './resources/Usable';
 import { Consumable } from './resources/Consumable';
+import { Combat } from './resources';
 
 export type Campaign = {
   _id: string;
@@ -76,4 +77,6 @@ export interface CharacterSheet {
   wearables: Wearable[];
   consumables: Consumable[];
   usables: Usable[];
+
+  combats: Combat[];
 }

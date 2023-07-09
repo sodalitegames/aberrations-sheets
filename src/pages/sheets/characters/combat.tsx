@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 
-import { selectCombats, selectPotentialCombatants, selectCurrentCampaign } from '../../../redux/campaign/campaign.selectors';
+import { selectCombats, selectCurrentCharacter } from '../../../redux/character/character.selectors';
 
 import { useActions } from '../../../hooks/useActions';
 
@@ -28,8 +28,8 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 import ModalTypes from '../../../utils/ModalTypes';
 
 import DisplayPlayer from '../../../components/display/DisplayPlayer';
-import DisplayNpc from '../../../components/display/DisplayNpc';
-import DisplayCreature from '../../../components/display/DisplayCreature';
+import { capitalize } from '../../../utils/helpers/strings';
+import { ResourceType, getResourceLabel } from '../../../utils/helpers/resources';
 
 export interface CombatantEntity extends Combatant {
   entity: (Player | Npc | Creature) | null;
@@ -39,77 +39,48 @@ const createOption = (combat: Combat) => {
   return { id: combat._id, title: combat.description, href: `?id=${combat._id}`, description: combat.combatants.map(combatant => combatant.name).join(', ') };
 };
 
-const getType = (type: CombatantType): EntityType | undefined => {
-  switch (type) {
-    case 'players':
-      return EntityType.players;
-    case 'npcs':
-      return EntityType.npcs;
-    case 'creatures':
-      return EntityType.creatures;
-    default:
-      break;
-  }
-};
-
-const CampaignCombatPage = () => {
+const CharacterCombatPage = () => {
   const dispatch = useDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const campSheet = useSelector(selectCurrentCampaign)!;
+  const charSheet = useSelector(selectCurrentCharacter)!;
   const combats = useSelector(selectCombats);
-  const potentialCombatants = useSelector(selectPotentialCombatants);
 
   const { setSlideOver, setModal } = useActions();
 
   const species = useResource(FetchedResourceType.Species) as Species[];
 
   const combatId = searchParams.get('combat');
-  const combatantId = searchParams.get('combatant');
 
   const combat = combats.find(comb => comb._id === combatId) || combats[0];
 
-  const combatants: CombatantEntity[] = combat
-    ? combat.combatants.map(comba => {
-        const entity = potentialCombatants.find(ent => ent._id === comba._id);
-        return {
-          ...comba,
-          entity: entity ? entity : null,
-        };
-      })
-    : [];
-
-  const combatant: CombatantEntity = combatants.find(ent => ent._id === combatantId) || combatants[0];
-
-  const endTurn = (entId: string) => {
-    const index = combatants.findIndex(comb => comb._id === entId);
+  const endTurn = () => {
+    const index = combat.combatants.findIndex(comb => comb._id === charSheet._id);
 
     let nextActiveTurn;
 
-    if (index + 1 === combatants.length) {
-      nextActiveTurn = combatants[0]._id;
+    if (index + 1 === combat.combatants.length) {
+      nextActiveTurn = combat.combatants[0]._id;
     } else {
-      nextActiveTurn = combatants[index + 1]._id;
+      nextActiveTurn = combat.combatants[index + 1]._id;
     }
 
     dispatch(
       updateSheetResourceStart(
-        SheetType.campaigns,
-        campSheet._id,
+        SheetType.characters,
+        charSheet._id,
         SheetResourceType.combats,
         combat._id,
         { activeTurn: nextActiveTurn },
         {
           notification: {
             status: 'success',
-            heading: `You Ended ${combatant.name}'s Turn`,
-            message: `You have successfully ended ${combatant.name}'s turn.`,
+            heading: `You Ended Your Turn`,
+            message: `You have successfully ended your turn.`,
           },
         }
       )
     );
-
-    setEntity(nextActiveTurn);
   };
 
   const setCombat = (id: string) => {
@@ -117,24 +88,19 @@ const CampaignCombatPage = () => {
     setSearchParams({ ...Object.fromEntries([...searchParams]), combat: id });
   };
 
-  const setEntity = (id: string) => {
-    // @ts-expect-error
-    setSearchParams({ ...Object.fromEntries([...searchParams]), combatant: id });
-  };
-
-  const leaveCombat = (entId: string) => {
+  const leaveCombat = () => {
     dispatch(
       updateSheetResourceStart(
-        SheetType.campaigns,
-        combat.sheetId,
+        SheetType.characters,
+        charSheet._id,
         SheetResourceType.combats,
         combat._id,
-        { combatants: combat.combatants.filter(com => com._id !== entId) },
+        { combatants: combat.combatants.filter(com => com._id !== charSheet._id) },
         {
           notification: {
             status: 'success',
-            heading: `${(combatant.entity as Npc | Creature).name || (combatant.entity as Player).characterName} Left Combat`,
-            message: `You have successfully taken ${(combatant.entity as Npc | Creature).name || (combatant.entity as Player).characterName} out of combat.`,
+            heading: `You Left Combat`,
+            message: `You have successfully taken yourself out of combat.`,
           },
         }
       )
@@ -160,9 +126,19 @@ const CampaignCombatPage = () => {
                 </Button>
               </div>
               <div className="mt-6 space-y-4">
-                {combatants.map(comba => (
-                  <div key={comba._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')} onClick={() => setEntity(comba._id)}>
-                    <CombatCard combatant={comba} active={combatant?._id === comba._id} />
+                {combat.combatants.map(comba => (
+                  <div key={comba._id} className={classNames('hover:shadow-sm rounded-md cursor-pointer bg-white')}>
+                    <div className={classNames('col-span-1 divide-y divide-gray-200 rounded-lg shadow', comba._id === combat.activeTurn ? 'border-2 border-gray-300' : '')}>
+                      <div className="flex items-center justify-between w-full p-6 space-x-6">
+                        <div className="flex-1 truncate">
+                          <div className="flex items-center space-x-3">
+                            <h3 className="text-sm font-medium text-gray-900 truncate">
+                              {comba.name} / {capitalize(getResourceLabel(ResourceType[comba.type]))} {comba._id === charSheet._id ? '(Me)' : ''}
+                            </h3>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -191,49 +167,40 @@ const CampaignCombatPage = () => {
           </div>
 
           <SheetPagePanel title="Active Combatant" colSpan={2}>
-            {combatant._id === combat.activeTurn && (
+            {combat.activeTurn === charSheet._id && (
               <div className="flex justify-between px-4 py-2 my-4 bg-black rounded-md">
-                <p className="text-white">It is currently {combatant.name}'s turn.</p>
-                <Button rounded dark onClick={() => endTurn(combatant._id)}>
+                <p className="text-white">It is currently your turn.</p>
+                <Button rounded dark onClick={() => endTurn()}>
                   End Turn
                 </Button>
               </div>
             )}
+            <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
+              <div className="col-span-2">
+                <DisplayPlayer player={charSheet as unknown as Player} species={species} />
+              </div>
 
-            {combatant && combatant.entity ? (
-              <div className="grid grid-cols-3 gap-8 divide-x divide-gray-200">
-                <div className="col-span-2">
-                  {combatant.type === 'players' ? (
-                    <DisplayPlayer player={combatant.entity as Player} species={species} />
-                  ) : combatant.type === 'npcs' ? (
-                    <DisplayNpc npc={combatant.entity as Npc} species={species} />
-                  ) : combatant.type === 'creatures' ? (
-                    <DisplayCreature creature={combatant.entity as Creature} />
-                  ) : null}
-                </div>
+              <div className="col-span-1 pl-8 mt-4 space-y-4">
+                {/* Actions */}
+                <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollDice })}>Roll Dice</Button>
+                <Button onClick={() => setSlideOver({ type: SlideOverTypes.rollStat, data: { entityType: 'characters', entityId: charSheet._id } })}>Roll Stat</Button>
+                <Button onClick={() => setModal({ type: ModalTypes.takeDamage, data: { entityType: 'characters', entity: charSheet } })}>Take Damage</Button>
+                <Button onClick={() => setModal({ type: ModalTypes.healDamage, data: { entityType: 'characters', entity: charSheet } })}>Heal Damage</Button>
+                <Button onClick={() => setModal({ type: ModalTypes.payMoney, data: { entityType: 'characters', entity: charSheet } })}>Pay Money</Button>
+                <Button onClick={() => setModal({ type: ModalTypes.receiveMoney, data: { entityType: 'characters', entity: charSheet } })}>Recieve Money</Button>
+                <Button onClick={() => setModal({ type: ModalTypes.takeARest, data: { entityType: 'characters', entity: charSheet } })}>Take A Rest</Button>
+                <Button onClick={() => setModal({ type: ModalTypes.reachMilestone, data: { entityType: 'characters', entity: charSheet } })}>Reach Milestone</Button>
 
-                <div className="col-span-1 pl-8 space-y-4">
-                  {/* End Turn */}
-                  <div className="pb-4 mb-4 border-b border-gray-200">
-                    <Button dark onClick={() => endTurn(combatant._id)}>
-                      End Turn
-                    </Button>
-                  </div>
-
-                  {/* Actions */}
-                  <InteractableActions type={getType(combatant.type)!} entity={combatant.entity} />
-
-                  {/* Leave Combat */}
+                {/* Leave Combat */}
+                {combat.activeTurn === charSheet._id && (
                   <div className="pt-4 mt-4 border-t border-gray-200">
-                    <Button alert onClick={() => leaveCombat(combatant._id)}>
+                    <Button alert onClick={() => leaveCombat()}>
                       Leave Combat
                     </Button>
                   </div>
-                </div>
+                )}
               </div>
-            ) : (
-              <p className="text-sm italic text-gray-400">Please create or select a combatant to get started.</p>
-            )}
+            </div>
           </SheetPagePanel>
         </Fragment>
       ) : (
@@ -243,13 +210,8 @@ const CampaignCombatPage = () => {
               <div className="items-center sm:flex">
                 <div>
                   <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">No Combats</h1>
-                  <p className="mt-1 text-base text-gray-500">You do not have any combats. Create one to get started.</p>
+                  <p className="mt-1 text-base text-gray-500">You are not part of any combats. When your Campaign Captain creates one, it will show up here.</p>
                 </div>
-              </div>
-              <div className="space-x-3 sm:pl-6">
-                <Button dark onClick={() => setSlideOver({ type: SlideOverTypes.combatForm, data: { sheetId: campSheet._id } })}>
-                  Create Combat
-                </Button>
               </div>
             </div>
           </SheetPagePanel>
@@ -259,4 +221,4 @@ const CampaignCombatPage = () => {
   );
 };
 
-export default CampaignCombatPage;
+export default CharacterCombatPage;

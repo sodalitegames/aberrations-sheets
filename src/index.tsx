@@ -29,6 +29,7 @@ import PrivacyPage from './pages/home/privacy';
 
 // Character Pages
 import CharacterGameplayPage from './pages/sheets/characters/gameplay';
+import CharacterCombatPage from './pages/sheets/characters/combat';
 import CharacterCharacterPage from './pages/sheets/characters/character';
 
 // Campaign Pages
@@ -73,6 +74,7 @@ ReactDOM.render(
                 <Route path="characters/:charId" element={<CharacterSheet />}>
                   <Route index element={<Navigate to="gameplay" />} />
                   <Route path="gameplay" element={<CharacterGameplayPage />} />
+                  <Route path="combat" element={<CharacterCombatPage />} />
                   <Route path="character" element={<CharacterCharacterPage />} />
                   <Route path="belongings" element={<SheetBelongingsPage sheetType={SheetType.characters} />}>
                     <Route index element={<Navigate to="weapons" />} />

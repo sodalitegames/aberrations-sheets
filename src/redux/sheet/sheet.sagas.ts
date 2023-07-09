@@ -57,6 +57,7 @@ import campSocket from '../../sockets/campaign';
 import playerSocket from '../../sockets/player';
 
 import { SheetType } from '../../models/sheet';
+import { Combatant } from '../../models/sheet/resources';
 
 const socket = {
   characters: charSocket,
@@ -373,6 +374,30 @@ export function* updateSheetResource({ payload: { sheetType, sheetId, resourceTy
           type: ChangesTypes.updateSheetResource,
           room: response.data.data.doc.sheetId,
           args: [response.data.data.doc.sheetType, resourceType, response.data.data.doc],
+        });
+      }
+    }
+
+    if (resourceType === 'combats') {
+      if (sheetId === response.data.data.doc.sheetId) {
+        response.data.data.doc.combatants.forEach((comba: Combatant) => {
+          if (comba.type === 'players') {
+            socket['characters'].emit('changes', {
+              sheet: 'characters',
+              type: ChangesTypes.updateSheetResource,
+              room: comba._id,
+              args: ['characters', resourceType, response.data.data.doc],
+            });
+          }
+        });
+      }
+
+      if (response.data.data.doc.combatants.map((comba: Combatant) => comba._id).includes(sheetId)) {
+        socket['campaigns'].emit('changes', {
+          sheet: 'campaigns',
+          type: ChangesTypes.updateSheetResource,
+          room: response.data.data.doc.sheetId,
+          args: ['campaigns', resourceType, response.data.data.doc],
         });
       }
     }
