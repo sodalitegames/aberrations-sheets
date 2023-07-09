@@ -26,6 +26,8 @@ export const selectLoading = createSelector([selectCampaign], campaign => campai
 export const selectPermissions = createSelector([selectCampaign], campaign => campaign.reload);
 export const selectReload = createSelector([selectCampaign], campaign => campaign.reload);
 
+export const selectPlayers = createSelector([selectCurrentCampaign], current => (current ? current.players : []));
+
 export const selectCompletedSessions = createSelector([selectCurrentCampaign], current => (current ? current.sessions.filter(session => session.completed) : []));
 export const selectFutureSessions = createSelector([selectCurrentCampaign], current => (current ? current.sessions.filter(session => !session.completed && !session.active) : []));
 export const selectActiveSessions = createSelector([selectCurrentCampaign], current => (current ? current.sessions.filter(session => session.active) : []));

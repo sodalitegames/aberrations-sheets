@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { selectCurrentCampaign, selectCampaignError, selectLoading, selectReload, selectPendingTransactions, selectResolvedTransactions } from '../redux/campaign/campaign.selectors';
+import { selectCurrentCampaign, selectCampaignError, selectLoading, selectReload, selectPendingTransactions, selectResolvedTransactions, selectPlayers } from '../redux/campaign/campaign.selectors';
 
 import { fetchCurrentSheetStart } from '../redux/sheet/sheet.actions';
 
@@ -26,6 +26,7 @@ export default function CharacterSheet() {
   const error = useSelector(selectCampaignError);
   const loading = useSelector(selectLoading);
   const reload = useSelector(selectReload);
+  const players = useSelector(selectPlayers);
   const pendingTransactions = useSelector(selectPendingTransactions);
   const resolvedTransactions = useSelector(selectResolvedTransactions);
 
@@ -35,39 +36,39 @@ export default function CharacterSheet() {
       campSocket.emit('joinRoom', campId);
     }
 
-    if (campSheet) {
+    return () => {
+      campSocket.emit('leaveRoom', campId);
+    };
+  }, [campId]);
+
+  useEffect(() => {
+    if (players.length) {
       // Join room for each player's character sheet
-      campSheet.players.forEach(character => {
+      players.forEach(character => {
         playerSocket.emit('joinRoom', character._id);
       });
     }
 
     return () => {
-      campSocket.emit('leaveRoom', campId);
-
-      if (campSheet) {
-        campSheet.players.forEach(character => {
+      if (players.length) {
+        players.forEach(character => {
           playerSocket.emit('leaveRoom', character._id);
         });
       }
     };
-  }, [campId, campSheet]);
+  }, [players]);
 
   useEffect(() => {
-    if (loading) return;
-    if (error) return;
-
     if (campId) {
-      // Fetch current campaign sheet if not already or data is stale
-      if (!campSheet || campSheet?._id !== campId) {
-        dispatch(fetchCurrentSheetStart('campaigns', campId));
-      }
+      dispatch(fetchCurrentSheetStart('campaigns', campId));
     }
+  }, [campId, dispatch]);
 
+  useEffect(() => {
     if (campSheet) {
       document.title = `${campSheet.name} | Aberrations RPG Sheets`;
     }
-  });
+  }, [campSheet]);
 
   return (
     <div className="flex flex-col justify-between min-h-screen">
@@ -79,17 +80,7 @@ export default function CharacterSheet() {
             transactions={{ pending: pendingTransactions, resolved: resolvedTransactions }}
             type="campaigns"
           />
-          <main className="pb-8 -mt-24">
-            {!loading && campSheet ? (
-              <React.Suspense fallback={<Loading />}>
-                <Outlet />
-              </React.Suspense>
-            ) : !loading && error ? (
-              <SheetPageError type="campaigns" error={error} />
-            ) : (
-              <Loading />
-            )}
-          </main>
+          <main className="pb-8 -mt-24">{!loading && campSheet ? <Outlet /> : !loading && error ? <SheetPageError type="campaigns" error={error} /> : <Loading />}</main>
         </div>
       </div>
       <Footer />
