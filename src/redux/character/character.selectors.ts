@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { calculateAugmentationPoints, calculateModifiers, calculateShieldValue, calculateSpeedAdjustment } from '../../utils/functions/calculations';
+import { calculateAugmentationPoints, calculateModifiers, calculateShieldValueAdjustment, calculateSpeedAdjustment } from '../../utils/functions/calculations';
 
 import { RootState } from '../root-reducer';
 
@@ -32,11 +32,21 @@ export const selectAugmentationPoints = createSelector([selectCurrentCharacter],
   return calculateAugmentationPoints(current.level, current.augmentations);
 });
 
-export const selectShieldValue = createSelector([selectEquippedWearables], equippedWearables => calculateShieldValue(equippedWearables));
-export const selectSpeedAdjustment = createSelector([selectEquippedWearables], equippedWearables => calculateSpeedAdjustment(equippedWearables));
+export const selectShieldValue = createSelector([selectCurrentCharacter, selectEquippedWearables], (current, equippedWearables) => {
+  if (!current) return 0;
+  return current.shieldValue + calculateShieldValueAdjustment(equippedWearables);
+});
+export const selectSpeed = createSelector([selectCurrentCharacter, selectEquippedWearables], (current, equippedWearables) => {
+  if (!current) return 0;
+  return current.speed + calculateSpeedAdjustment(equippedWearables);
+});
 export const selectModifiers = createSelector([selectCurrentCharacter, selectEquippedWearables], (current, equippedWearables) => {
   if (!current) return [];
   return calculateModifiers(current.modifiers, equippedWearables);
+});
+export const selectSkills = createSelector([selectCurrentCharacter], current => {
+  if (!current) return [];
+  return current.skills || [];
 });
 
 export const selectPendingTransactions = createSelector([selectCurrentCharacter], current =>

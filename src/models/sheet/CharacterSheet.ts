@@ -5,10 +5,10 @@ import { Log } from './resources/Log';
 import { Note } from './resources/Note';
 import { Transaction } from './resources/Transaction';
 import { Wearable } from './resources/Wearable';
-
-import { Modifier, Conditions, Stat } from './_partials';
 import { Usable } from './resources/Usable';
 import { Consumable } from './resources/Consumable';
+
+import { Modifier, Skill, Conditions, Stat } from './_partials';
 
 export type Campaign = {
   _id: string;
@@ -43,6 +43,7 @@ export interface CharacterSheet {
   mortality: number;
 
   modifiers: Modifier[];
+  skills: Skill[];
 
   currentHp: number;
   maxHp: number;

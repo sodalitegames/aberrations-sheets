@@ -28,7 +28,7 @@ type FormValues = {
   description: string;
   bodyArea: 'head' | 'face' | 'torso' | 'arms' | 'hands' | 'legs' | 'feet' | '';
   shieldValue: number;
-  speedAdjustment: number;
+  speed: number;
   quantity: number;
   modifiers: { modifier: string; amount: number }[];
 };
@@ -41,20 +41,20 @@ const WearableForm: React.FC<Props> = ({ data }) => {
     description: '',
     bodyArea: '',
     shieldValue: 0,
-    speedAdjustment: 0,
+    speed: 0,
     quantity: 1,
     modifiers: [],
   });
 
   useEffect(() => {
     if (data.wearable) {
-      const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = data.wearable;
+      const { name, description, bodyArea, shieldValue, speed, quantity, modifiers } = data.wearable;
       setInitialValues({
         name,
         description,
         bodyArea,
         shieldValue,
-        speedAdjustment,
+        speed,
         quantity,
         modifiers: modifiers || [],
       });
@@ -62,7 +62,7 @@ const WearableForm: React.FC<Props> = ({ data }) => {
   }, [data.wearable]);
 
   const submitHandler = async (values: FormValues, actions: FormikHelpers<FormValues>) => {
-    const { name, description, bodyArea, shieldValue, speedAdjustment, quantity, modifiers } = values;
+    const { name, description, bodyArea, shieldValue, speed, quantity, modifiers } = values;
 
     if (data.wearable) {
       dispatch(
@@ -71,7 +71,7 @@ const WearableForm: React.FC<Props> = ({ data }) => {
           data.sheetId,
           SheetResourceType.wearables,
           data.wearable._id,
-          { name, bodyArea, description, shieldValue, speedAdjustment, quantity, modifiers },
+          { name, bodyArea, description, shieldValue, speed, quantity, modifiers },
           { slideOver: true, notification: { status: 'success', heading: 'Wearable Updated', message: `You have successfully updated ${name}.` } }
         )
       );
@@ -83,7 +83,7 @@ const WearableForm: React.FC<Props> = ({ data }) => {
         data.sheetType,
         data.sheetId,
         SheetResourceType.wearables,
-        { name, bodyArea, description, shieldValue, speedAdjustment, quantity, modifiers },
+        { name, bodyArea, description, shieldValue, speed, quantity, modifiers },
         { slideOver: true, notification: { status: 'success', heading: 'Wearable Created', message: `You have successfully created ${name}.` } }
       )
     );
@@ -117,7 +117,7 @@ const WearableForm: React.FC<Props> = ({ data }) => {
       />
       <TextArea slideOver label="Description" name="description" rows={4} formik />
       <Input slideOver label="Shield Value" name="shieldValue" type="number" formik />
-      <Input slideOver label="Speed Adjustment" name="speedAdjustment" type="number" formik />
+      <Input slideOver label="Speed" name="speed" type="number" formik />
       <List
         slideOver
         label="Modifiers"

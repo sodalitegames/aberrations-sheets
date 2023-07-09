@@ -26,6 +26,9 @@ enum ModalTypes {
   editWallet = 'EDIT_WALLET',
   reachMilestone = 'REACH_MILESTONE',
   editModifiers = 'EDIT_MODIFIERS',
+  editSkills = 'EDIT_SKILLS',
+  editShieldValue = 'EDIT_SHIELD_VALUE',
+  editSpeed = 'EDIT_SPEED',
 }
 
 export default ModalTypes;

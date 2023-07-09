@@ -3,8 +3,9 @@ import { useActions } from '../../hooks/useActions';
 import { getSpeciesAbility } from '../../utils/helpers/species';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
-import { calculateModifiers, calculateShieldValue, calculateSpeedAdjustment } from '../../utils/functions/calculations';
+import { calculateModifiers, calculateShieldValueAdjustment, calculateSpeedAdjustment } from '../../utils/functions/calculations';
 import { displayModifier } from '../../utils/helpers/modifiers';
+import { displaySkill } from '../../utils/helpers/skills';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -33,12 +34,13 @@ const PlayerDetails: React.FC<PlayerDetailsProps> = ({ player, species }) => {
 
   const modifiers = calculateModifiers(player.modifiers, equippedWearables);
   const abilities = getSpeciesAbility(player.speciesId, species);
+  const skills = player.skills || [];
 
   return (
     <DescriptionList
       list={[
         { name: 'Player Name', values: [player.playerNickname ? `${player.playerNickname} (${player.playerName})` : player.playerName], half: true },
-        { name: 'Shield Value', values: [calculateShieldValue(equippedWearables)], half: true },
+        { name: 'Shield Value', values: [player.shieldValue + calculateShieldValueAdjustment(equippedWearables)], half: true },
         { name: 'Species', values: [player.speciesName], half: true },
         { name: 'Mortality', values: [player.mortality], half: true },
         { name: 'Level', values: [player.level], half: true },
@@ -46,6 +48,7 @@ const PlayerDetails: React.FC<PlayerDetailsProps> = ({ player, species }) => {
         { name: 'Active', values: [player.active ? 'Yes' : 'No'], half: true },
         { name: 'Speed', values: [player.speed + calculateSpeedAdjustment(equippedWearables)], half: true },
         { name: 'Health', values: [`${player.currentHp}/${player.maxHp}`], half: true },
+        { name: 'Skills', values: skills.length ? skills.map(skill => displaySkill(skill)) : ['No skills'], columns: 2 },
         { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
         {
           name: 'Activated Ability',
@@ -107,12 +110,24 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
               click: () => setModal({ type: ModalTypes.editLevel, data: { entityType: 'players', entity: player } }),
             },
             {
+              text: 'Shield Value',
+              click: () => setModal({ type: ModalTypes.editShieldValue, data: { entityType: 'players', entity: player } }),
+            },
+            {
+              text: 'Speed',
+              click: () => setModal({ type: ModalTypes.editSpeed, data: { entityType: 'players', entity: player } }),
+            },
+            {
               text: 'Health',
               click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'players', entity: player } }),
             },
             {
               text: 'Modifiers',
               click: () => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'players', entity: player } }),
+            },
+            {
+              text: 'Skills',
+              click: () => setModal({ type: ModalTypes.editSkills, data: { entityType: 'players', entity: player } }),
             },
           ],
         }}
@@ -150,7 +165,6 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
             { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'slowed', entityType: 'players', entity: player } }) },
             { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'agony', entityType: 'players', entity: player } }) },
             { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'injured', entityType: 'players', entity: player } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'players', entity: player } }) },
           ],
         }}
       >
@@ -161,7 +175,6 @@ const DisplayPlayer: React.FC<DisplayPlayerProps> = ({ player, species, condense
           { name: 'Slowed', values: [player.conditions.slowed], half: true },
           { name: 'Agony', values: [player.conditions.agony], half: true },
           { name: 'Injured', values: [player.conditions.injured], half: true },
-          { name: 'Disturbed', values: [player.conditions.disturbed], half: true },
         ]}
         classes="my-2"
       />

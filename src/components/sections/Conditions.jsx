@@ -57,19 +57,6 @@ const Conditions = ({ conditions }) => {
             <p className="text-lg font-bold">{conditions.injured}</p>
           </div>
         </div>
-
-        {/* Disturbed */}
-        <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
-          <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-            <h4 className="flex items-center uppercase text-md" title="Take this much disadvantage on all Persona and Aptitude tests">
-              Disturbed
-              <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'characters', entity: charSheet } })}>
-                <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
-              </span>
-            </h4>
-            <p className="text-lg font-bold">{conditions.disturbed}</p>
-          </div>
-        </div>
       </dl>
     </div>
   );

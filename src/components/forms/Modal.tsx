@@ -47,6 +47,9 @@ import EditHealth from './modal/EditHealth';
 import EditWallet from './modal/EditWallet';
 import ReachMilestone from './modal/ReachMilestone';
 import EditModifiers from './modal/EditModifiers';
+import EditSkills from './modal/EditSkills';
+import EditShieldValue from './modal/EditShieldValue';
+import EditSpeed from './modal/EditSpeed';
 
 interface ModalFormProps {
   title: string;
@@ -95,6 +98,9 @@ const ModalForms: React.VFC<{ modal: IModal; nested?: boolean }> = ({ modal, nes
       {modal && modal.type === ModalTypes.editWallet ? <EditWallet data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.reachMilestone ? <ReachMilestone data={modal.data} /> : null}
       {modal && modal.type === ModalTypes.editModifiers ? <EditModifiers data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editSkills ? <EditSkills data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editShieldValue ? <EditShieldValue data={modal.data} /> : null}
+      {modal && modal.type === ModalTypes.editSpeed ? <EditSpeed data={modal.data} /> : null}
     </Fragment>
   );
 };

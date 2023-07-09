@@ -7,8 +7,9 @@ import { useActions } from '../../hooks/useActions';
 import { getSpeciesAbility } from '../../utils/helpers/species';
 import ModalTypes from '../../utils/ModalTypes';
 import SlideOverTypes from '../../utils/SlideOverTypes';
-import { calculateShieldValue, calculateSpeedAdjustment, calculateModifiers } from '../../utils/functions/calculations';
+import { calculateSpeedAdjustment, calculateModifiers, calculateShieldValueAdjustment } from '../../utils/functions/calculations';
 import { displayModifier } from '../../utils/helpers/modifiers';
+import { displaySkill } from '../../utils/helpers/skills';
 
 import ListItem from '../data/ListItem';
 import DescriptionList from '../data/DescriptionList';
@@ -36,12 +37,13 @@ interface NpcDetailsProps {
 const NpcDetails: React.FC<NpcDetailsProps> = ({ npc, species, wearables }) => {
   const modifiers = calculateModifiers(npc.modifiers, wearables);
   const abilities = getSpeciesAbility(npc.speciesId, species);
+  const skills = npc.skills || [];
 
   return (
     <DescriptionList
       list={[
         { name: 'Species', values: [npc.speciesName], half: true },
-        { name: 'Shield Value', values: [calculateShieldValue(wearables)], half: true },
+        { name: 'Shield Value', values: [npc.shieldValue + calculateShieldValueAdjustment(wearables)], half: true },
         { name: 'Diplomacy', values: [npc.diplomacy], half: true },
         npc.type ? { name: 'Type', values: [npc.type], half: true } : null,
         { name: 'Temperament', values: [npc.temperament], half: true },
@@ -51,6 +53,7 @@ const NpcDetails: React.FC<NpcDetailsProps> = ({ npc, species, wearables }) => {
         { name: 'Active', values: [npc.active ? 'Yes' : 'No'], half: true },
         { name: 'Speed', values: [npc.speed + calculateSpeedAdjustment(wearables)], half: true },
         { name: 'Health', values: [`${npc.currentHp}/${npc.maxHp}`], half: true },
+        { name: 'Skills', values: skills.length ? skills.map(skill => displaySkill(skill)) : ['No skills'], columns: 2 },
         { name: 'Modifiers', values: modifiers.length ? modifiers.map(modifier => displayModifier(modifier)) : ['No modifiers'], columns: 2 },
         {
           name: 'Activated Ability',
@@ -114,12 +117,24 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
               click: () => setModal({ type: ModalTypes.editLevel, data: { entityType: 'npcs', entity: npc } }),
             },
             {
+              text: 'Shield Value',
+              click: () => setModal({ type: ModalTypes.editShieldValue, data: { entityType: 'npcs', entity: npc } }),
+            },
+            {
+              text: 'Speed',
+              click: () => setModal({ type: ModalTypes.editSpeed, data: { entityType: 'npcs', entity: npc } }),
+            },
+            {
               text: 'Health',
               click: () => setModal({ type: ModalTypes.editHealth, data: { entityType: 'npcs', entity: npc } }),
             },
             {
               text: 'Modifiers',
               click: () => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'npcs', entity: npc } }),
+            },
+            {
+              text: 'Skills',
+              click: () => setModal({ type: ModalTypes.editSkills, data: { entityType: 'npcs', entity: npc } }),
             },
           ],
         }}
@@ -156,7 +171,6 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
             { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'slowed', entityType: 'npcs', entity: npc } }) },
             { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'agony', entityType: 'npcs', entity: npc } }) },
             { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'injured', entityType: 'npcs', entity: npc } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'npcs', entity: npc } }) },
           ],
         }}
       >
@@ -167,7 +181,6 @@ const DisplayNpc: React.FC<DisplayNpcProps> = ({ npc, species, condensed, listIt
           { name: 'Slowed', values: [npc.conditions.slowed], half: true },
           { name: 'Agony', values: [npc.conditions.agony], half: true },
           { name: 'Injured', values: [npc.conditions.injured], half: true },
-          { name: 'Disturbed', values: [npc.conditions.disturbed], half: true },
         ]}
         classes="my-2"
       />

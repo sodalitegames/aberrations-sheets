@@ -164,11 +164,11 @@ const CreatureForm: React.FC<Props> = ({ data }) => {
       <Input slideOver label="Damage Level" name="damageLevel" type="number" min="1" max="10" value={damageLevel} changeHandler={setDamageLevel} required />
       <Input slideOver label="Health (Max)" name="health" type="number" value={health} changeHandler={setHealth} required />
 
-      <Input slideOver label="Shield Value" name="shieldValue" type="number" value={shieldValue} changeHandler={setShieldValue} required />
-      <Input slideOver label="Speed" name="speed" type="number" value={speed} changeHandler={setSpeed} required />
-
       {!data.creature && (
         <>
+          <Input slideOver label="Shield Value" name="shieldValue" type="number" value={shieldValue} changeHandler={setShieldValue} required />
+          <Input slideOver label="Speed" name="speed" type="number" value={speed} changeHandler={setSpeed} required />
+
           <Input slideOver label="Strength" name="strength" type="number" min="2" max="20" step="2" value={strength} changeHandler={setStrength} required />
           <Input slideOver label="Agility" name="agility" type="number" min="2" max="20" step="2" value={agility} changeHandler={setAgility} required />
           <Input slideOver label="Persona" name="persona" type="number" min="2" max="20" step="2" value={persona} changeHandler={setPersona} required />

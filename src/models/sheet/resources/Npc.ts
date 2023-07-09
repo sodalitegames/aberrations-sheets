@@ -1,4 +1,4 @@
-import { Conditions, Modifier, Stat } from '../_partials';
+import { Conditions, Modifier, Skill, Stat } from '../_partials';
 
 export interface Npc {
   _id: string;
@@ -19,6 +19,7 @@ export interface Npc {
   wallet: number;
   mortality: number;
   modifiers: Modifier[];
+  skills: Skill[];
   currentHp: number;
   maxHp: number;
   level: number;

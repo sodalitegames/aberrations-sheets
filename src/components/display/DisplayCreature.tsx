@@ -93,6 +93,14 @@ const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, 
               text: 'Modifiers',
               click: () => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'creatures', entity: creature } }),
             },
+            {
+              text: 'Shield Value',
+              click: () => setModal({ type: ModalTypes.editShieldValue, data: { entityType: 'creatures', entity: creature } }),
+            },
+            {
+              text: 'Speed',
+              click: () => setModal({ type: ModalTypes.editSpeed, data: { entityType: 'creatures', entity: creature } }),
+            },
           ],
         }}
       >
@@ -128,7 +136,6 @@ const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, 
             { text: 'Slowed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'slowed', entityType: 'creatures', entity: creature } }) },
             { text: 'Agony', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'agony', entityType: 'creatures', entity: creature } }) },
             { text: 'Injured', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'injured', entityType: 'creatures', entity: creature } }) },
-            { text: 'Disturbed', click: () => setModal({ type: ModalTypes.editCondition, data: { condition: 'disturbed', entityType: 'creatures', entity: creature } }) },
           ],
         }}
       >
@@ -139,7 +146,6 @@ const DisplayCreature: React.FC<DisplayCreatureProps> = ({ creature, condensed, 
           { name: 'Slowed', values: [creature.conditions.slowed], half: true },
           { name: 'Agony', values: [creature.conditions.agony], half: true },
           { name: 'Injured', values: [creature.conditions.injured], half: true },
-          { name: 'Disturbed', values: [creature.conditions.disturbed], half: true },
         ]}
         classes="my-2"
       />

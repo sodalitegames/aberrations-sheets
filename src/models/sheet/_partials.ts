@@ -3,18 +3,26 @@ export type Modifier = {
   amount: number;
 };
 
+export type Skill = {
+  skill: string;
+  type: SkillType;
+};
+
+export enum SkillType {
+  skilled = 'skilled',
+  expert = 'expert',
+}
+
 export type Conditions = {
   slowed: number;
   agony: number;
   injured: number;
-  disturbed: number;
 };
 
 export enum ConditionType {
   slowed = 'slowed',
   agony = 'agony',
   injured = 'injured',
-  disturbed = 'disturbed',
 }
 
 export type Stat = {

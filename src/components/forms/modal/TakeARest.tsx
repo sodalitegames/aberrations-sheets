@@ -29,12 +29,12 @@ const TakeARest: React.FC<Props> = ({ data }) => {
 
   const selectRest = (id: string) => {
     if (id === 'slumber') {
-      let actionsArr = [`You'll Recover all your health points`, `All points in Injured and Disturbed will be removed`];
+      let actionsArr = [`You'll Recover all your health points`, `All points in Injured will be removed`];
       setActions(actionsArr);
     }
 
     if (id === 'nap') {
-      setActions([`You will recover ${Math.floor(data.entity.maxHp / 2)} health`, `1 point in Injured and 1 point in Disturbed will be removed`]);
+      setActions([`You will recover ${Math.floor(data.entity.maxHp / 2)} health`, `1 point in Injured will be removed`]);
     }
 
     setRest(id);
@@ -52,7 +52,7 @@ const TakeARest: React.FC<Props> = ({ data }) => {
               data.entity._id,
               {
                 currentHp: data.entity.maxHp,
-                conditions: { ...data.entity.conditions, injured: 0, disturbed: 0 },
+                conditions: { ...data.entity.conditions, injured: 0 },
               },
               { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -65,7 +65,7 @@ const TakeARest: React.FC<Props> = ({ data }) => {
               data.entity._id,
               {
                 currentHp: data.entity.maxHp,
-                conditions: { ...data.entity.conditions, injured: 0, disturbed: 0 },
+                conditions: { ...data.entity.conditions, injured: 0 },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -80,7 +80,7 @@ const TakeARest: React.FC<Props> = ({ data }) => {
               data.entity._id,
               {
                 currentHp: data.entity.maxHp,
-                conditions: { ...data.entity.conditions, injured: 0, disturbed: 0 },
+                conditions: { ...data.entity.conditions, injured: 0 },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -93,7 +93,6 @@ const TakeARest: React.FC<Props> = ({ data }) => {
 
     if (rest === 'nap') {
       let injured = data.entity.conditions.injured === 0 ? 0 : data.entity.conditions.injured - 1;
-      let disturbed = data.entity.conditions.disturbed === 0 ? 0 : data.entity.conditions.disturbed - 1;
 
       switch (data.entityType) {
         case 'players':
@@ -103,7 +102,7 @@ const TakeARest: React.FC<Props> = ({ data }) => {
               data.entity._id,
               {
                 currentHp: correctCurrentHp(data.entity.currentHp + Math.floor(data.entity.maxHp / 2), data.entity.maxHp),
-                conditions: { ...data.entity.conditions, injured, disturbed },
+                conditions: { ...data.entity.conditions, injured },
               },
               { forPlayer: true, modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -117,7 +116,7 @@ const TakeARest: React.FC<Props> = ({ data }) => {
               data.entity._id,
               {
                 currentHp: correctCurrentHp(data.entity.currentHp + Math.floor(data.entity.maxHp / 2), data.entity.maxHp),
-                conditions: { ...data.entity.conditions, injured, disturbed },
+                conditions: { ...data.entity.conditions, injured },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )
@@ -133,7 +132,7 @@ const TakeARest: React.FC<Props> = ({ data }) => {
               data.entity._id,
               {
                 currentHp: correctCurrentHp(data.entity.currentHp + Math.floor(data.entity.maxHp / 2), data.entity.maxHp),
-                conditions: { ...data.entity.conditions, injured, disturbed },
+                conditions: { ...data.entity.conditions, injured },
               },
               { modal: true, notification: { status: 'success', heading: 'Rest Taken', message: `You have successfully taken a ${rest}.` } }
             )

@@ -11,12 +11,12 @@ export const calculateLifeHackPoints = (level: number, hacks: any[]): number => 
   return availablePoints;
 };
 
-export const calculateShieldValue = (wearables: Wearable[]): number => {
-  return wearables.reduce((shieldValue: number, wearable) => (wearable.shieldValue || 0) + shieldValue, 0);
+export const calculateShieldValueAdjustment = (wearables: Wearable[]): number => {
+  return wearables.reduce((shieldValueAdjustment: number, wearable) => (wearable.shieldValue || 0) + shieldValueAdjustment, 0);
 };
 
 export const calculateSpeedAdjustment = (wearables: Wearable[]): number => {
-  return wearables.reduce((speedAdjustment: number, wearable) => (wearable.speedAdjustment || 0) + speedAdjustment, 0);
+  return wearables.reduce((speedAdjustment: number, wearable) => (wearable.speed || 0) + speedAdjustment, 0);
 };
 
 export const calculateModifiers = (characterModifiers: Modifier[], wearables: Wearable[]): Modifier[] => {
@@ -24,7 +24,22 @@ export const calculateModifiers = (characterModifiers: Modifier[], wearables: We
 
   const modifiers = [...characterModifiers, ...wearableModifiers];
 
-  // TODO: Check if any modifers are the same and combine them if so
+  const result: { [modifier: string]: number } = {};
 
-  return modifiers;
+  for (const mod of modifiers) {
+    const { modifier, amount } = mod;
+
+    if (result.hasOwnProperty(modifier)) {
+      result[modifier] += amount;
+    } else {
+      result[modifier] = amount;
+    }
+  }
+
+  const combinedModifiers: Modifier[] = Object.entries(result).map(([modifier, amount]) => ({
+    modifier,
+    amount,
+  }));
+
+  return combinedModifiers;
 };
