@@ -18,7 +18,7 @@ export interface Wearable {
   description: string;
   bodyArea: BodyArea;
   modifiers: Modifier[];
-  speedAdjustment: number;
+  speed: number;
   shieldValue: number;
   quantity: number;
   equipped: boolean;

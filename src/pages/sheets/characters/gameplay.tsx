@@ -10,9 +10,10 @@ import {
   selectEquippedConsumables,
   selectEquippedUsables,
   selectShieldValue,
-  selectSpeedAdjustment,
+  selectSpeed,
   selectAugmentationPoints,
   selectModifiers,
+  selectSkills,
 } from '../../../redux/character/character.selectors';
 
 import { useActions } from '../../../hooks/useActions';
@@ -24,6 +25,7 @@ import SlideOverTypes from '../../../utils/SlideOverTypes';
 import { getHealthMessage, getWalletMessage } from '../../../utils/helpers/messages';
 import { displayModifier } from '../../../utils/helpers/modifiers';
 import { getSpecies } from '../../../utils/helpers/species';
+import { displaySkill } from '../../../utils/helpers/skills';
 
 import SheetPageContent from '../../../layouts/components/sheet/SheetPageContent';
 
@@ -60,10 +62,11 @@ const CharacterGameplayPage = () => {
   const equippedConsumables = useSelector(selectEquippedConsumables);
   const equippedUsables = useSelector(selectEquippedUsables);
 
-  const speedAdjustment = useSelector(selectSpeedAdjustment);
+  const speed = useSelector(selectSpeed);
   const shieldValue = useSelector(selectShieldValue);
   const augmentationPoints = useSelector(selectAugmentationPoints);
   const modifiers = useSelector(selectModifiers);
+  const skills = useSelector(selectSkills);
 
   return (
     <SheetPageContent title="Gameplay" columns={3}>
@@ -86,6 +89,26 @@ const CharacterGameplayPage = () => {
           </div>
 
           <h3 className="flex items-center text-lg font-medium text-gray-900">
+            Skills
+            <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editSkills, data: { entityType: 'characters', entity: charSheet } })}>
+              <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
+            </span>
+          </h3>
+          {skills.length ? (
+            <div className="space-y-1 columns-4">
+              {skills.map(({ skill, type }) => (
+                <p key={type + '_' + skill} className="text-sm">
+                  {displaySkill({ skill, type })}
+                </p>
+              ))}
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm">You do not have any skills.</p>
+            </div>
+          )}
+
+          <h3 className="flex items-center mt-4 text-lg font-medium text-gray-900">
             Modifiers
             <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editModifiers, data: { entityType: 'characters', entity: charSheet } })}>
               <PencilIcon className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full" aria-hidden="true" />
@@ -115,7 +138,6 @@ const CharacterGameplayPage = () => {
               { name: 'Persona', ...charSheet.persona },
               { name: 'Aptitude', ...charSheet.aptitude },
             ]}
-            experience={charSheet.experience}
           />
           <div className="mt-8">
             <div className="mx-2">
@@ -127,34 +149,33 @@ const CharacterGameplayPage = () => {
               <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
                 <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
                   {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
-                  <h4 className="flex items-center uppercase text-md">Shield Value</h4>
-                  <p className="text-lg font-bold">{charSheet.shieldValue + shieldValue}</p>
-                </div>
-              </div>
-
-              {/* Movement Speed */}
-              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
-                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
-                  <h4 className="flex items-center uppercase text-md">Movement Speed</h4>
-                  <p className="text-lg font-bold">{charSheet.speed + speedAdjustment}</p>
-                </div>
-              </div>
-
-              {/* Milestones */}
-              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
-                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
-                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
                   <h4 className="flex items-center uppercase text-md">
-                    Milestones
-                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editMilestones, data: { entityType: 'characters', entity: charSheet } })}>
+                    Shield Value
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editShieldValue, data: { entityType: 'characters', entity: charSheet } })}>
                       <PencilIcon
                         className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
                         aria-hidden="true"
                       />
                     </span>
                   </h4>
-                  <p className="text-lg font-bold">{charSheet.milestones}</p>
+                  <p className="text-lg font-bold">{shieldValue}</p>
+                </div>
+              </div>
+
+              {/* Speed */}
+              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
+                <div className="flex flex-col items-center py-3 rounded-md bg-gray-50">
+                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
+                  <h4 className="flex items-center uppercase text-md">
+                    Speed
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editSpeed, data: { entityType: 'characters', entity: charSheet } })}>
+                      <PencilIcon
+                        className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </h4>
+                  <p className="text-lg font-bold">{speed}</p>
                 </div>
               </div>
 
@@ -172,6 +193,23 @@ const CharacterGameplayPage = () => {
                     </span>
                   </h4>
                   <p className="text-lg font-bold">{charSheet.mortality}</p>
+                </div>
+              </div>
+
+              {/* Level */}
+              <div className="flex flex-col justify-between mx-2 border border-gray-100 rounded-md md:border-0">
+                <div className="flex flex-col items-center w-full py-3 rounded-md bg-gray-50">
+                  {/* <InformationCircleIcon className="self-center w-8 h-8 p-1 ml-2 mr-2 text-base text-gray-900 cursor-pointer shrink-0 justify-self-end" aria-hidden="true" /> */}
+                  <h4 className="flex items-center uppercase text-md">
+                    Level
+                    <span title="Edit manually" onClick={() => setModal({ type: ModalTypes.editLevel, data: { entityType: 'characters', entity: charSheet } })}>
+                      <PencilIcon
+                        className="ml-2 mr-2 shrink-0 self-center justify-self-end h-4 w-4 cursor-pointer text-base border border-gray-900 text-gray-900 p-0.5 rounded-full"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </h4>
+                  <p className="text-lg font-bold">{charSheet.level}</p>
                 </div>
               </div>
             </dl>

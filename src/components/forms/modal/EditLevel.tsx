@@ -17,10 +17,10 @@ interface Props {
   };
 }
 
-const EditExperience: React.VFC<Props> = ({ data }) => {
+const EditLevel: React.VFC<Props> = ({ data }) => {
   const dispatch = useDispatch();
 
-  const [experience, setExperience] = useState(data.entity.experience);
+  const [level, setLevel] = useState(data.entity.level);
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,8 +31,8 @@ const EditExperience: React.VFC<Props> = ({ data }) => {
           updateSheetStart(
             SheetType.characters,
             data.entity._id,
-            { experience },
-            { modal: true, notification: { status: 'success', heading: 'Experience Updated', message: `You have successfully updated your spent experience to ${experience}.` } }
+            { level },
+            { modal: true, notification: { status: 'success', heading: 'Level Updated', message: `You have successfully updated your level to ${level}.` } }
           )
         );
         return;
@@ -41,11 +41,11 @@ const EditExperience: React.VFC<Props> = ({ data }) => {
           updateSheetStart(
             SheetType.characters,
             data.entity._id,
-            { experience },
+            { level },
             {
               forPlayer: true,
               modal: true,
-              notification: { status: 'success', heading: 'Experience Updated', message: `You have successfully updated your player's spent experience to ${experience}.` },
+              notification: { status: 'success', heading: 'Level Updated', message: `You have successfully updated your player's level to ${level}.` },
             }
           )
         );
@@ -57,8 +57,8 @@ const EditExperience: React.VFC<Props> = ({ data }) => {
             (data.entity as Npc).sheetId,
             SheetResourceType.npcs,
             data.entity._id,
-            { experience },
-            { modal: true, notification: { status: 'success', heading: 'Experience Updated', message: `You have successfully updated your spent experience to ${experience}.` } }
+            { level },
+            { modal: true, notification: { status: 'success', heading: 'Level Updated', message: `You have successfully updated your level to ${level}.` } }
           )
         );
         return;
@@ -68,10 +68,10 @@ const EditExperience: React.VFC<Props> = ({ data }) => {
   };
 
   return (
-    <ModalForm title="Edit Experience" submitText={`Save changes`} submitDisabled={data.entity.experience === experience} submitHandler={submitHandler}>
-      <Input label="Experience" name="experience" type="number" value={experience} changeHandler={setExperience} />
+    <ModalForm title="Edit Level" submitText={`Save changes`} submitDisabled={data.entity.level === level} submitHandler={submitHandler}>
+      <Input label="Level" name="level" type="number" value={level} changeHandler={setLevel} />
     </ModalForm>
   );
 };
 
-export default EditExperience;
+export default EditLevel;

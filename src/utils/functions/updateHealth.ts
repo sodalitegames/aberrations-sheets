@@ -35,8 +35,8 @@ export const takeDamage = (current: number, updated: number, max: number): TakeD
   }
 
   // Check if they just became mauled
-  if (current >= max / 5) {
-    if (updated < max / 5) {
+  if (current >= max / 4) {
+    if (updated < max / 4) {
       results.justMauled = true;
       results.injured = results.injured + 1;
     }

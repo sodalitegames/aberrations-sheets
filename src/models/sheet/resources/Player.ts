@@ -1,4 +1,4 @@
-import { Conditions, Modifier, Stat } from '../_partials';
+import { Conditions, Modifier, Skill, Stat } from '../_partials';
 import { Augmentation } from './Augmentation';
 import { Consumable } from './Consumable';
 import { Usable } from './Usable';
@@ -22,11 +22,11 @@ export interface Player {
   mortality: number;
 
   modifiers: Modifier[];
+  skills: Skill[];
 
   currentHp: number;
   maxHp: number;
-  milestones: number;
-  experience: number;
+  level: number;
 
   conditions: Conditions;
 

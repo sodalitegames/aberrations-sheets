@@ -36,7 +36,9 @@ const CharactersPage = () => {
           action={{ text: 'Retry', click: () => dispatch(fetchSheetsForUserStart(SheetType.characters)) }}
         />
       )}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">{fetched.characters ? characters.map(charSheet => <CharSheetCard key={charSheet._id} charSheet={charSheet} />) : <Loading />}</div>
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {fetched.characters ? characters.filter(char => char.version > 2).map(charSheet => <CharSheetCard key={charSheet._id} charSheet={charSheet} />) : <Loading />}
+      </div>
     </PageContent>
   );
 };

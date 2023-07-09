@@ -32,7 +32,7 @@ const WearableDetails: React.FC<WearableDetailsProps> = ({ wearable, sheetType }
         sheetType === 'campaigns' ? { name: 'Assigned Npc', values: [wearable.npcId ? getNpcName(wearable.npcId, campSheet?.npcs || []) : 'Unassigned'], half: true } : null,
         { name: 'Description', values: [wearable.description] },
         { name: 'Shield Value', values: [wearable.shieldValue], half: true },
-        { name: 'Speed Adjustment', values: [wearable.speedAdjustment], half: true },
+        { name: 'Speed', values: [wearable.speed], half: true },
         { name: 'Modifiers', values: wearable.modifiers.length ? wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`) : ['No modifiers'] },
         wearable.metadata?.givenBy ? { name: 'Received From', values: [wearable.metadata.givenBy], half: true } : null,
         wearable.metadata?.givenTo ? { name: 'Given To', values: [wearable.metadata.givenTo], half: true } : null,
@@ -54,7 +54,7 @@ const DisplayWearable: React.FC<DisplayWearableProps> = ({ wearable, condensed, 
         <ListItem heading={`${wearable.name} (${capitalize(wearable.bodyArea)})`} view={{ type: ModalTypes.showBelonging, data: { belongingType: 'wearables', belonging: wearable } }}>
           <InfoList
             list={[
-              { tooltip: [`Shield Value: ${wearable.shieldValue} / Speed Adjustment: ${wearable.speedAdjustment}`], value: `SV: ${wearable.shieldValue} / SA: ${wearable.speedAdjustment}` },
+              { tooltip: [`Shield Value: ${wearable.shieldValue} / Speed: ${wearable.speed}`], value: `SV: ${wearable.shieldValue} / SP: ${wearable.speed}` },
               wearable.modifiers.length
                 ? {
                     tooltip: wearable.modifiers.map(mod => `${mod.modifier} ${mod.amount > 0 ? `+${mod.amount}` : mod.amount}`),
@@ -73,8 +73,8 @@ const DisplayWearable: React.FC<DisplayWearableProps> = ({ wearable, condensed, 
           <InfoList
             list={[
               {
-                tooltip: [`Shield Value: ${wearable.shieldValue}`, `Speed Adjustment: ${wearable.speedAdjustment}`],
-                value: `SV: ${wearable.shieldValue} / SA: ${wearable.speedAdjustment}`,
+                tooltip: [`Shield Value: ${wearable.shieldValue}`, `Speed: ${wearable.speed}`],
+                value: `SV: ${wearable.shieldValue} / SP: ${wearable.speed}`,
               },
               wearable.modifiers.length
                 ? {
